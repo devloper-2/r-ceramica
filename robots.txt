@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://yourwebsite.com/sitemap.xml
+
+# Crawl delay (optional)
+Crawl-delay: 1
+
+# Disallow crawling of these files/directories if needed
+# Disallow: /admin/
+# Disallow: /private/
+
+# Allow crawling of important resources
+Allow: /css/
+Allow: /js/
+Allow: /images/
+Allow: /logo/
+Allow: /pdf/
