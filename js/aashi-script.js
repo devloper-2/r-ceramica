@@ -3,13 +3,6 @@
 $(document).ready(function() {
     'use strict';
 
-    // ===== PRELOADER =====
-    $(window).on('load', function() {
-        $('#preloader').fadeOut('slow', function() {
-            $(this).remove();
-        });
-    });
-
     // ===== HERO CAROUSEL =====
     $('.hero-carousel').owlCarousel({
         items: 1,
