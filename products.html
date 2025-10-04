@@ -43,44 +43,22 @@
     <link rel="stylesheet" href="css/aashi-style.css">
     <link rel="stylesheet" href="css/products-style.css">
 </head>
-<body>
-
-    <!-- Header Section -->
-    <header class="header-area">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <a href="index_new.html">
-                        <img src="logo/logo.png" alt="R CERAMICA Logo">
-                    </a>
-                </div>
-                <nav class="main-nav">
-                    <ul>
-                        <li><a href="index_new.html">Home</a></li>
-                        <li><a href="#categories" class="active">Products</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-
-        <!-- Mobile Menu Toggle -->
-        <div class="mobile-menu-toggle">
-            <button class="toggle-btn" id="mobile-menu-btn">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </header>
+<body style="background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%); color: #fff;">
 
     <!-- Breadcrumb Section -->
     <section class="breadcrumb-section">
         <div class="container">
-            <div class="breadcrumb">
-                <a href="index_new.html">Home</a>
-                <span class="separator">/</span>
-                <span class="current">Premium Sanitaryware</span>
+            <div class="breadcrumb-container">
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a>
+                    <span class="separator">/</span>
+                    <span class="current">Premium Sanitaryware</span>
+                </div>
+                <div class="breadcrumb-logo">
+                    <a href="javascript:history.back()">
+                        <img src="logo/logo.png" alt="R CERAMICA Logo" class="logo-img">
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -91,278 +69,143 @@
             <div class="products-layout">
                 <!-- Left Sidebar - Sub Categories -->
                 <div class="products-sidebar">
-                    <div class="sidebar-widget">
-                        <h3 class="widget-title">Categories</h3>
-                        <ul class="category-list">
-                            <li class="category-item active">
-                                <a href="#toilets">
-                                    <i class="fas fa-toilet"></i>
-                                    Toilets
-                                    <span class="count">(25)</span>
-                                </a>
-                            </li>
-                            <li class="category-item">
-                                <a href="#faucets">
-                                    <i class="fas fa-faucet"></i>
-                                    Faucets
-                                    <span class="count">(18)</span>
-                                </a>
-                            </li>
-                            <li class="category-item">
-                                <a href="#basins">
-                                    <i class="fas fa-sink"></i>
-                                    Wash Basins
-                                    <span class="count">(32)</span>
-                                </a>
-                            </li>
-                            <li class="category-item">
-                                <a href="#manhole">
-                                    <i class="fas fa-circle"></i>
-                                    Manhole Covers
-                                    <span class="count">(12)</span>
-                                </a>
-                            </li>
-                            <li class="category-item">
-                                <a href="#accessories">
-                                    <i class="fas fa-tools"></i>
-                                    Accessories
-                                    <span class="count">(15)</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                        <div class="sidebar-widget">
+                            <h3 class="widget-title">Categories</h3>
+                            <div class="accordion" id="categoriesAccordion">
+                                <!-- Wash Basins Category -->
+                                <div class="accordion-item">
+                                    <h4 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#basinsCollapse" aria-expanded="true" aria-controls="basinsCollapse">
+                                            <i class="fas fa-sink"></i>
+                                            Wash Basins
+                                        </button>
+                                    </h4>
+                                    <div id="basinsCollapse" class="accordion-collapse collapse show" data-bs-parent="#categoriesAccordion">
+                                        <div class="accordion-body">
+                                            <ul class="subcategory-list">
+                                                <li><a href="#all-basins" class="active">All Wash Basins</a></li>
+                                                <li><a href="#table-top-basin">Table Top Basin</a></li>
+                                                <li><a href="#wall-hung-basin">Wall Hung Basin</a></li>
+                                                <li><a href="#counter-basin">Counter Basin</a></li>
+                                                <li><a href="#full-pedestal-basin">Full Pedestal Basin</a></li>
+                                                <li><a href="#half-pedestal-basin">Half Pedestal Basin</a></li>
+                                                <li><a href="#under-counter-basin">Under Counter Basin</a></li>
+                                                <li><a href="#corner-basin">Corner Basin</a></li>
+                                                <li><a href="#one-piece-basin">One Piece Basin</a></li>
+                                                <li><a href="#art-basin">Art Basin</a></li>
+                                                <li><a href="#bowl-basin">Bowl Basin</a></li>
+                                                <li><a href="#cabinet-basin">Cabinet Basin</a></li>
+                                                <li><a href="#counter-top-basin">Counter Top Basin</a></li>
+                                                <li><a href="#wall-mounted-basin">Wall Mounted Basin</a></li>
+                                                <li><a href="#designer-basin">Designer Basin</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
 
-                    <!-- Filter Widget -->
-                    <div class="sidebar-widget">
-                        <h3 class="widget-title">Filter by Collection</h3>
-                        <ul class="collection-list">
-                            <li><a href="#toro">TORO Collection</a></li>
-                            <li><a href="#aris">ARIS Collection</a></li>
-                            <li><a href="#latra">LATRA Collection</a></li>
-                            <li><a href="#strom">STROM Collection</a></li>
-                            <li><a href="#lava">LAVA Collection</a></li>
-                            <li><a href="#levis">LEVIS Collection</a></li>
-                        </ul>
-                    </div>
+                                <!-- Fusion Tiles Category -->
+                                <div class="accordion-item">
+                                    <h4 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fusionCollapse" aria-expanded="false" aria-controls="fusionCollapse">
+                                            <i class="fas fa-faucet"></i>
+                                            Faucets & Taps
+                                        </button>
+                                    </h4>
+                                    <div id="fusionCollapse" class="accordion-collapse collapse" data-bs-parent="#categoriesAccordion">
+                                        <div class="accordion-body">
+                                            <ul class="subcategory-list">
+                                                <li><a href="#all-fusion">All Faucets & Taps</a></li>
+                                                <li><a href="#rivo-collection">Rivo Collection</a></li>
+                                                <li><a href="#curve-collection">Curve Collection</a></li>
+                                                <li><a href="#eva-collection">Eva Collection</a></li>
+                                                <li><a href="#roma-collection">Roma Collection</a></li>
+                                                <li><a href="#artiz-collection">Artiz Collection</a></li>
+                                                <li><a href="#metro-collection">Metro Collection</a></li>
+                                                <li><a href="#iris-collection">Iris Collection</a></li>
+                                                <li><a href="#cadiz-collection">Cadiz Collection</a></li>
+                                                <li><a href="#amaze-collection">Amaze Collection</a></li>
+                                                <li><a href="#rossa-collection">Rossa Collection</a></li>
+                                                <li><a href="#punch-collection">Punch Collection</a></li>
+                                                <li><a href="#jazz-collection">Jazz Collection</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Toilets Category -->
+                                <div class="accordion-item">
+                                    <h4 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#toiletsCollapse" aria-expanded="false" aria-controls="toiletsCollapse">
+                                            <i class="fas fa-toilet"></i>
+                                            Toilets
+                                        </button>
+                                    </h4>
+                                    <div id="toiletsCollapse" class="accordion-collapse collapse" data-bs-parent="#categoriesAccordion">
+                                        <div class="accordion-body">
+                                            <ul class="subcategory-list">
+                                                <li><a href="#all-toilets">All Toilets</a></li>
+                                                <li><a href="#table-top">TABLE TOP</a></li>
+                                                <li><a href="#one-piece-basin">ONE PIECE BASIN</a></li>
+                                                <li><a href="#wash-basin-pedestal">WASH BASIN PEDESTAL</a></li>
+                                                <li><a href="#wash-basin">WASH BASIN</a></li>
+                                                <li><a href="#counter-basin">COUNTER BASIN</a></li>
+                                                <li><a href="#designer-table-top">DESIGNER TABLE TOP</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Manhole Covers Category -->
+                                <div class="category-item">
+                                    <a href="#all-manhole" class="category-link">
+                                        <i class="fas fa-circle-notch"></i>
+                                        Manhole Covers
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                 </div>
 
                 <!-- Right Content - Products Grid -->
                 <div class="products-content">
+                    <!-- Mobile Actions: Filter & Catalog -->
+                    <div class="mobile-filter-toggle" aria-label="Mobile actions">
+                        <div class="mobile-actions-bar">
+                            <button class="filter-toggle-btn" type="button" aria-label="Show filters" aria-expanded="false">
+                                <i class="fas fa-filter"></i>
+                            </button>
+                            <a href="pdf/R CERAMICA CP.pdf" class="download-btn primary download-btn-compact" target="_blank" aria-label="Download catalog">
+                                <i class="fas fa-download"></i>
+                                <span>Catalog</span>
+                            </a>
+                        </div>
+                    </div>
+
                     <div class="products-header">
-                        <h1 class="page-title">Premium Sanitaryware Collections</h1>
-                        <p class="page-subtitle">Discover our comprehensive range of high-quality sanitaryware products</p>
-                        <div class="products-count">
-                            <span>Showing 1-12 of 104 products</span>
+                        <div class="header-left">
+                            <h1 class="page-title">Premium Sanitaryware Collections</h1>
+                            <p class="page-subtitle">Discover our comprehensive range of high-quality sanitaryware products</p>
+                            <div class="products-count">
+                                <span>Showing 1-12 of 104 products</span>
+                            </div>
+                        </div>
+                        <div class="header-right">
+                            <a href="pdf/R CERAMICA CP.pdf" class="download-btn primary" target="_blank">
+                                <i class="fas fa-download"></i>
+                                Download Catalog
+                            </a>
                         </div>
                     </div>
 
                     <!-- Products Grid -->
-                    <div class="products-grid">
-                        <!-- Product Item 1 -->
-                        <div class="product-item">
-                            <div class="product-image">
-                                <img src="images/TORO M-1001.jpg" alt="TORO M-1001" loading="lazy">
-                                <div class="product-overlay">
-                                    <a href="#" class="view-product-btn">View Details</a>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title">TORO M-1001</h3>
-                                <p class="product-category">Floor Mounted Toilet</p>
-                                <div class="product-meta">
-                                    <span class="collection">TORO Collection</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Product Item 2 -->
-                        <div class="product-item">
-                            <div class="product-image">
-                                <img src="images/ARIS M-1102.jpg" alt="ARIS M-1102" loading="lazy">
-                                <div class="product-overlay">
-                                    <a href="#" class="view-product-btn">View Details</a>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title">ARIS M-1102</h3>
-                                <p class="product-category">Wall Hung Toilet</p>
-                                <div class="product-meta">
-                                    <span class="collection">ARIS Collection</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Product Item 3 -->
-                        <div class="product-item">
-                            <div class="product-image">
-                                <img src="images/LATRA M-1701.jpg" alt="LATRA M-1701" loading="lazy">
-                                <div class="product-overlay">
-                                    <a href="#" class="view-product-btn">View Details</a>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title">LATRA M-1701</h3>
-                                <p class="product-category">Designer Toilet</p>
-                                <div class="product-meta">
-                                    <span class="collection">LATRA Collection</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Product Item 4 -->
-                        <div class="product-item">
-                            <div class="product-image">
-                                <img src="images/STROM M-1403.jpg" alt="STROM M-1403" loading="lazy">
-                                <div class="product-overlay">
-                                    <a href="#" class="view-product-btn">View Details</a>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title">STROM M-1403</h3>
-                                <p class="product-category">Smart Toilet</p>
-                                <div class="product-meta">
-                                    <span class="collection">STROM Collection</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Product Item 5 -->
-                        <div class="product-item">
-                            <div class="product-image">
-                                <img src="images/LAVA M-1201.jpg" alt="LAVA M-1201" loading="lazy">
-                                <div class="product-overlay">
-                                    <a href="#" class="view-product-btn">View Details</a>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title">LAVA M-1201</h3>
-                                <p class="product-category">Modern Toilet</p>
-                                <div class="product-meta">
-                                    <span class="collection">LAVA Collection</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Product Item 6 -->
-                        <div class="product-item">
-                            <div class="product-image">
-                                <img src="images/LEVIS M-1801.jpg" alt="LEVIS M-1801" loading="lazy">
-                                <div class="product-overlay">
-                                    <a href="#" class="view-product-btn">View Details</a>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title">LEVIS M-1801</h3>
-                                <p class="product-category">Luxury Toilet</p>
-                                <div class="product-meta">
-                                    <span class="collection">LEVIS Collection</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Add more products as needed -->
-                        <div class="product-item">
-                            <div class="product-image">
-                                <img src="images/TORO M-1003.jpg" alt="TORO M-1003" loading="lazy">
-                                <div class="product-overlay">
-                                    <a href="#" class="view-product-btn">View Details</a>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title">TORO M-1003</h3>
-                                <p class="product-category">Compact Toilet</p>
-                                <div class="product-meta">
-                                    <span class="collection">TORO Collection</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-item">
-                            <div class="product-image">
-                                <img src="images/ARIS M-1105.jpg" alt="ARIS M-1105" loading="lazy">
-                                <div class="product-overlay">
-                                    <a href="#" class="view-product-btn">View Details</a>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title">ARIS M-1105</h3>
-                                <p class="product-category">Elegant Toilet</p>
-                                <div class="product-meta">
-                                    <span class="collection">ARIS Collection</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-item">
-                            <div class="product-image">
-                                <img src="images/LATRA M-1703.jpg" alt="LATRA M-1703" loading="lazy">
-                                <div class="product-overlay">
-                                    <a href="#" class="view-product-btn">View Details</a>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title">LATRA M-1703</h3>
-                                <p class="product-category">Premium Toilet</p>
-                                <div class="product-meta">
-                                    <span class="collection">LATRA Collection</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-item">
-                            <div class="product-image">
-                                <img src="images/STROM M-1405.jpg" alt="STROM M-1405" loading="lazy">
-                                <div class="product-overlay">
-                                    <a href="#" class="view-product-btn">View Details</a>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title">STROM M-1405</h3>
-                                <p class="product-category">Tech Toilet</p>
-                                <div class="product-meta">
-                                    <span class="collection">STROM Collection</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-item">
-                            <div class="product-image">
-                                <img src="images/LAVA M-1202.jpg" alt="LAVA M-1202" loading="lazy">
-                                <div class="product-overlay">
-                                    <a href="#" class="view-product-btn">View Details</a>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title">LAVA M-1202</h3>
-                                <p class="product-category">Contemporary Toilet</p>
-                                <div class="product-meta">
-                                    <span class="collection">LAVA Collection</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-item">
-                            <div class="product-image">
-                                <img src="images/LEVIS M-1802.jpg" alt="LEVIS M-1802" loading="lazy">
-                                <div class="product-overlay">
-                                    <a href="#" class="view-product-btn">View Details</a>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title">LEVIS M-1802</h3>
-                                <p class="product-category">Deluxe Toilet</p>
-                                <div class="product-meta">
-                                    <span class="collection">LEVIS Collection</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="products-grid" id="productsGrid">
+                        <!-- Products will be dynamically loaded here -->
                     </div>
 
                     <!-- Load More Button -->
-                    <div class="load-more-container">
-                        <button class="load-more-btn">
-                            <i class="fas fa-plus"></i>
-                            Load More Products
+                    <div class="text-center mt-4">
+                        <button class="load-more-btn" id="loadMoreBtn">
+                            <i class="fas fa-plus"></i> Load More Products
                         </button>
                     </div>
                 </div>
@@ -420,6 +263,9 @@
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+
+    <!-- Product Data -->
+    <script src="js/product-data.js" defer></script>
 
     <!-- Custom JavaScript -->
     <script src="js/aashi-script.js" defer></script>

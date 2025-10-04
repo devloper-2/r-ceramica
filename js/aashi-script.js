@@ -84,6 +84,41 @@ $(document).ready(function() {
         }
     });
 
+    // Randomize featured carousel images
+    var imagePaths = [
+        'images/wash-basin/TORO M-1001.jpg',
+        'images/wash-basin/ARIS M-1102.jpg',
+        'images/wash-basin/LATRA M-1701.jpg',
+        'images/wash-basin/STROM M-1403.jpg',
+        'images/wash-basin/LAVA M-1201.jpg',
+        'images/wash-basin/LEVIS M-1801.jpg',
+        'images/wash-basin/TORO M-1003.jpg',
+        'images/wash-basin/ARIS M-1103.jpg',
+        'images/wash-basin/LATRA M-1703.jpg',
+        'images/wash-basin/STROM M-1405.jpg',
+        'images/wash-basin/LAVA M-1202.jpg',
+        'images/wash-basin/LEVIS M-1802.jpg',
+        'images/wash-basin/TORO M-1004.jpg',
+        'images/wash-basin/ARIS M-1105.jpg',
+        'images/wash-basin/LATRA M-1704.jpg',
+        'images/wash-basin/STROM M-1406.jpg',
+        'images/wash-basin/BEETLE M-1301.jpg',
+        'images/wash-basin/LEVIS M-1803.jpg'
+    ];
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    var shuffledImages = shuffle(imagePaths.slice());
+    $('.featured-carousel .carousel-item img').each(function(index) {
+        $(this).attr('src', shuffledImages[index % shuffledImages.length]);
+    });
+
     // ===== FEATURED PRODUCTS CAROUSEL =====
     setTimeout(function() {
         if ($('.featured-carousel').length > 0) {
