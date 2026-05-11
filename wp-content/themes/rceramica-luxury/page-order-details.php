@@ -1,0 +1,203 @@
+<?php
+/**
+ * Template for the Order Details page.
+ */
+get_header();
+?>
+<main id="site-content" role="main">
+
+
+    <!-- Global Navigation Integration -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 font-sans font-light bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-white/5">
+        <div class="relative flex justify-between items-center px-4 md:px-12 h-20 md:h-28">
+            <div id="logo-container" class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 pointer-events-none transition-all duration-700">
+                <a href="<?php echo esc_url( home_url( "/" ) ); ?>" class="pointer-events-auto">
+                    <img id="navbar-logo" src="https://rceramica.com/logo/logo.png" alt="R Ceramica Logo" class="h-10 md:h-16 w-auto object-contain">
+                </a>
+            </div>
+
+            <div id="nav-right" class="flex-1 flex justify-end items-center relative z-20">
+                <div class="hidden lg:flex items-center gap-10">
+                    <a href="<?php echo esc_url( home_url( "/orders/" ) ); ?>" class="text-[10px] uppercase tracking-[0.4em] opacity-40 hover:opacity-100 transition-opacity">Return to History</a>
+                    <button onclick="toggleLoginDropdown(event)" class="focus:outline-none">
+                        <span class="material-symbols-outlined font-light text-3xl">account_circle</span>
+                    </button>
+                </div>
+                <!-- Mobile Icons -->
+                <div class="lg:hidden flex items-center gap-6">
+                    <a href="<?php echo esc_url( home_url( "/orders/" ) ); ?>" class="text-white/40">
+                        <i data-lucide="arrow-left" size="24"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Global Login Dropdown -->
+        <div id="login-dropdown" class="hidden absolute right-4 md:right-12 top-[80px] md:top-[96px] w-56 bg-black/60 backdrop-blur-2xl border border-white/10 p-1.5 rounded-sm shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] z-[110]">
+            <div id="logged-out-view">
+                <a href="<?php echo esc_url( home_url( "/login/" ) ); ?>" class="block w-full text-left px-6 py-5 text-[11px] md:text-[10px] text-white/80 hover:text-white hover:bg-white/10 transition-all uppercase tracking-[0.3em] font-medium">
+                    Sign In
+                </a>
+            </div>
+            <div id="logged-in-view" class="hidden">
+                <div class="px-6 py-4 border-b border-white/5">
+                    <p id="user-display-name" class="text-[10px] uppercase tracking-[0.2em] text-white font-medium truncate">Client User</p>
+                </div>
+                <a href="<?php echo esc_url( home_url( "/orders/" ) ); ?>" class="block w-full text-left px-6 py-4 text-[11px] md:text-[10px] text-white/60 hover:text-[#c5a059] hover:bg-white/5 transition-all uppercase tracking-[0.3em] font-medium flex items-center gap-3">
+                    <span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                    Orders
+                </a>
+                <button onclick="logout()" class="w-full text-left px-6 py-4 text-[11px] md:text-[10px] text-white/80 hover:text-white hover:bg-white/10 transition-all uppercase tracking-[0.3em] font-medium flex items-center gap-3">
+                    <span class="material-symbols-outlined text-[18px]">logout</span>
+                    Sign Out
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-32 md:pt-48 pb-24 px-6 md:px-12 lg:px-24">
+        <div class="max-w-[1000px] mx-auto">
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16 px-4">
+                <div>
+                    <h1 class="text-4xl md:text-6xl font-serif italic mb-4">Acquisition Record</h1>
+                    <p class="text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-white/30">Order: #RC-721589-EX • April 05, 2026</p>
+                </div>
+                <div class="flex items-center gap-4 py-2 px-6 bg-white/5 rounded-full border border-white/10">
+                    <div class="w-1.5 h-1.5 rounded-full bg-[#c5a059]"></div>
+                    <span class="text-[10px] uppercase tracking-[0.3em] font-medium">Delivered & Inspected</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
+                <!-- Items List -->
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="glass-panel rounded-3xl overflow-hidden">
+                        <div class="p-6 md:p-8 border-b border-white/5">
+                            <h2 class="text-lg font-light uppercase tracking-widest">Curation Details</h2>
+                        </div>
+                        
+                        <!-- Item 1 -->
+                        <div class="p-6 md:p-8 flex gap-6 border-b border-white/5 bg-white/[0.01]">
+                            <div class="w-24 h-24 md:w-32 md:h-32 bg-white/5 rounded-xl overflow-hidden shrink-0">
+                                <img src="https://rceramica.com/products/tiles/marble-1.jpg" alt="Marble Slab" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1 flex flex-col justify-between py-1">
+                                <div>
+                                    <h3 class="text-sm md:text-base font-light mb-1 uppercase tracking-wider">Statuario Signature Slab</h3>
+                                    <p class="text-[10px] text-white/30 uppercase tracking-widest">Matte Finish • 2400x1200mm</p>
+                                </div>
+                                <div class="flex justify-between items-end">
+                                    <span class="text-[10px] text-white/40 uppercase tracking-widest font-medium">Qty: 02</span>
+                                    <span class="text-lg font-light">$6,400.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="p-6 md:p-8 flex gap-6 border-b border-white/5">
+                            <div class="w-24 h-24 md:w-32 md:h-32 bg-white/5 rounded-xl overflow-hidden shrink-0">
+                                <img src="https://rceramica.com/products/faucets/gold-1.jpg" alt="Gold Faucet" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1 flex flex-col justify-between py-1">
+                                <div>
+                                    <h3 class="text-sm md:text-base font-light mb-1 uppercase tracking-wider">Aurum Vessel Filler</h3>
+                                    <p class="text-[10px] text-white/30 uppercase tracking-widest">24K Brushed Gold • Limited Series</p>
+                                </div>
+                                <div class="flex justify-between items-end">
+                                    <span class="text-[10px] text-white/40 uppercase tracking-widest font-medium">Qty: 01</span>
+                                    <span class="text-lg font-light">$4,250.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item 3 -->
+                        <div class="p-6 md:p-8 flex gap-6">
+                            <div class="w-24 h-24 md:w-32 md:h-32 bg-white/5 rounded-xl overflow-hidden shrink-0">
+                                <img src="https://rceramica.com/products/accessories/mirror-1.jpg" alt="Mirror" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1 flex flex-col justify-between py-1">
+                                <div>
+                                    <h3 class="text-sm md:text-base font-light mb-1 uppercase tracking-wider">Eclipse Floating Mirror</h3>
+                                    <p class="text-[10px] text-white/30 uppercase tracking-widest">Backlit LED • Smoked Black Frame</p>
+                                </div>
+                                <div class="flex justify-between items-end">
+                                    <span class="text-[10px] text-white/40 uppercase tracking-widest font-medium">Qty: 01</span>
+                                    <span class="text-lg font-light">$1,800.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Internal Note -->
+                    <div class="p-8 rounded-3xl glass-panel border-white/10 bg-[#c5a059]/5">
+                        <div class="flex gap-4 items-start">
+                            <i data-lucide="shield-check" class="text-[#c5a059] shrink-0" size="20"></i>
+                            <div>
+                                <h4 class="text-[10px] uppercase tracking-[0.2em] font-bold text-[#c5a059] mb-2 uppercase tracking-widest">Post-Delivery Inspection Report</h4>
+                                <p class="text-xs text-white/60 leading-relaxed font-light">AllStatue marble slabs were inspected and verified for structural integrity upon arrival. Curation signatures provided by agent Marco V. on delivery.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary & Info -->
+                <div class="lg:col-span-4 space-y-8">
+                    <!-- Cost Summary -->
+                    <div class="glass-panel p-8 rounded-3xl">
+                        <h3 class="text-xs uppercase tracking-[0.3em] font-bold mb-8">Financial Summary</h3>
+                        <div class="space-y-4 mb-8 pb-8 border-b border-white/5">
+                            <div class="flex justify-between text-[10px] uppercase tracking-widest text-white/40 font-medium">
+                                <span>Subtotal</span>
+                                <span class="text-white">$12,450.00</span>
+                            </div>
+                            <div class="flex justify-between text-[10px] uppercase tracking-widest text-white/40 font-medium">
+                                <span>Shipping</span>
+                                <span class="text-[#c5a059]">Managed (Free)</span>
+                            </div>
+                            <div class="flex justify-between text-[10px] uppercase tracking-widest text-white/40 font-medium">
+                                <span>Tax (0%)</span>
+                                <span class="text-white">$0.00</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <span class="text-[10px] uppercase tracking-[0.4em] text-white/30 font-bold">Total Acquisition</span>
+                            <span class="text-3xl font-light">$12,450.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Address -->
+                    <div class="glass-panel p-8 rounded-3xl">
+                        <h3 class="text-xs uppercase tracking-[0.3em] font-bold mb-6 flex items-center gap-3">
+                            <i data-lucide="map-pin" size="16" class="text-white/40"></i>
+                            Destination
+                        </h3>
+                        <p class="text-[11px] leading-relaxed uppercase tracking-[0.2em] font-light text-white/60">
+                            Winter Nightingale<br>
+                            Avenue Montage 42, Suite 800<br>
+                            Houston, TX 77002<br>
+                            United States
+                        </p>
+                    </div>
+
+                    <!-- Payment Info -->
+                    <div class="glass-panel p-8 rounded-3xl">
+                        <h3 class="text-xs uppercase tracking-[0.3em] font-bold mb-6 flex items-center gap-3">
+                            <i data-lucide="credit-card" size="16" class="text-white/40"></i>
+                            Transaction
+                        </h3>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-6 bg-white/[0.03] border border-white/10 rounded flex items-center justify-center p-1">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" class="h-2 w-auto grayscale opacity-50">
+                            </div>
+                            <div>
+                                <p class="text-[11px] uppercase tracking-[0.2em] font-light">Visa Ending in 8901</p>
+                                <p class="text-[9px] uppercase tracking-widest text-white/20">Authorized on 04/05/26</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</main>
+<?php get_footer(); ?>

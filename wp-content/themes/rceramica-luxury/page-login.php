@@ -1,0 +1,178 @@
+<?php
+/**
+ * Template for the Login page.
+ */
+get_header();
+?>
+<main id="site-content" role="main">
+
+
+    <!-- Ambient Mobile Background (Visible only on small screens) -->
+    <div class="fixed inset-0 z-0 md:hidden opacity-20">
+        <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80" alt="Background" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black"></div>
+    </div>
+
+    <!-- Navigation (Overlay) -->
+    <nav class="absolute top-0 left-0 w-full z-50 py-8 px-8 md:px-16 flex justify-between items-center pointer-events-none">
+        <a href="<?php echo esc_url( home_url( "/" ) ); ?>" class="group flex flex-col items-center pointer-events-auto">
+            <img src="https://rceramica.com/logo/logo.png" alt="R CERAMICA" class="h-10 md:h-14 w-auto object-contain transition-all group-hover:opacity-80">
+        </a>
+        <a href="<?php echo esc_url( home_url( "/" ) ); ?>" class="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-white/40 hover:text-white transition-all flex items-center gap-2 pointer-events-auto">
+            <span class="material-symbols-outlined text-[14px]">arrow_back</span>
+            <span class="hidden xs:inline">Back</span>
+        </a>
+    </nav>
+
+    <main class="flex-grow flex flex-col md:flex-row min-h-[calc(100vh-100px)] relative z-10 transition-all duration-1000">
+        <!-- Left Side: Cinematic Visual (Landscape Emphasis - Desktop Only) -->
+        <div class="hidden md:block md:w-1/2 lg:w-3/5 h-full min-h-[600px] relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80" alt="Architecture" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
+            <div class="absolute bottom-16 left-16 max-w-sm">
+                <h2 class="text-4xl font-display font-light uppercase tracking-[0.2em] mb-4 text-white">Elevating <br>Spaces</h2>
+                <p class="text-[10px] uppercase tracking-[0.3em] text-white/40 leading-relaxed">Exquisite surfaces for the modern architectural masterpiece.</p>
+            </div>
+        </div>
+
+        <!-- Right Side: Login Interface -->
+        <div class="w-full md:w-1/2 lg:w-2/5 h-full min-h-[600px] flex items-center justify-center bg-[#0a0a0a]/80 md:bg-[#0a0a0a] backdrop-blur-sm md:backdrop-blur-none md:border-l border-white/5 relative">
+            <!-- Decorative Subtle Accent -->
+            <div class="absolute top-1/2 left-0 w-32 h-px bg-gradient-to-r from-[#c5a059]/40 to-transparent transform -translate-x-1/2 hidden lg:block"></div>
+
+            <div class="w-full max-w-[400px] px-10 flex flex-col justify-start md:justify-center pt-32 md:pt-0 pb-20 md:pb-0">
+                <header class="mb-10 md:mb-12 text-center md:text-left">
+                    <h1 class="text-4xl md:text-5xl font-display font-light uppercase tracking-[0.15em] mb-4">Sign In</h1>
+                    <p class="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-white/20 leading-relaxed mx-auto md:mx-0 max-w-[240px] md:max-w-none">Access the exclusive <br class="hidden md:block">architectural catalogue</p>
+                </header>
+
+                <form id="loginForm" class="space-y-8 md:space-y-10">
+                    <div class="group/input relative flex items-end">
+                        <div class="pb-4 border-b border-white/10 text-white/40 text-sm font-light tracking-[0.2em] pr-4">+91</div>
+                        <div class="flex-grow relative">
+                            <label for="mobile" class="absolute -top-6 left-0 text-[8px] md:text-[9px] uppercase tracking-[0.4em] text-white/20 group-focus-within/input:text-[#c5a059] transition-all">Mobile Number</label>
+                            <input type="tel" id="mobile" required 
+                                class="w-full bg-transparent border-b border-white/10 py-4 text-sm font-light tracking-[0.2em] outline-none transition-all gold-glow focus:border-white/40"
+                                placeholder="000 000 0000"
+                                maxlength="10">
+                        </div>
+                    </div>
+
+                    <div class="group/input relative">
+                        <label for="password" class="absolute -top-6 left-0 text-[8px] md:text-[9px] uppercase tracking-[0.4em] text-white/20 group-focus-within/input:text-[#c5a059] transition-all">Password</label>
+                        <input type="password" id="password" required 
+                            class="w-full bg-transparent border-b border-white/10 py-4 text-sm font-light tracking-[0.2em] outline-none transition-all gold-glow focus:border-white/40"
+                            placeholder="••••••••">
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2">
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" class="w-3.5 h-3.5 rounded-none border border-white/20 bg-transparent checked:bg-[#c5a059] transition-all appearance-none cursor-pointer">
+                            <span class="text-[9px] uppercase tracking-[0.3em] text-white/30 hover:text-white transition-colors">Remember</span>
+                        </label>
+                        <a href="#" class="text-[9px] uppercase tracking-[0.3em] text-white/30 hover:text-[#c5a059] transition-colors">Recovery</a>
+                    </div>
+
+                    <div class="pt-6">
+                        <button type="submit" class="w-full py-5 md:py-6 bg-white text-black text-[10px] uppercase tracking-[0.5em] font-medium hover:bg-[#c5a059] hover:text-white transition-all duration-700 relative overflow-hidden group/btn shadow-[0_20px_40px_-15px_rgba(255,255,255,0.1)]">
+                            <span class="relative z-10">Login</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Professional Architecture Footer -->
+    <footer class="relative bg-[#0c0c0c] pt-24 pb-12 border-t border-white/5 overflow-hidden">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-24 mb-24">
+                <!-- Column 1: Brand Profile -->
+                <div class="space-y-10">
+                    <img src="https://rceramica.com/logo/logo.png" alt="R Ceramica Logo" class="h-16 w-auto object-contain">
+                    <p class="text-white/40 text-[13px] leading-relaxed font-light font-sans max-w-sm">
+                        R Ceramica is a brand that believes in continuous development and growth. We always try to innovate and bring something new to reform the approach of the market and the certificates that we have achieved over the years are proof of our creativity and credibility.
+                    </p>
+                    <div class="flex items-center gap-6 pt-4">
+                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="facebook" size="18"></i></a>
+                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="instagram" size="18"></i></a>
+                        <a href="#" class="text-white/30 hover:text-white transition-colors">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+                        </a>
+                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="linkedin" size="18"></i></a>
+                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="youtube" size="18"></i></a>
+                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="hash" size="18"></i></a>
+                    </div>
+                </div>
+
+                <!-- Column 2: Quick Links -->
+                <div class="space-y-10">
+                    <h4 class="text-white font-display text-lg tracking-wider font-light">Quick Links</h4>
+                    <ul class="space-y-5 text-[13px] text-white/40 font-sans tracking-wide">
+                        <li><a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Tiles</a></li>
+                        <li><a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Bathware</a></li>
+                        <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Visualizer</a></li>
+                        <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Projects</a></li>
+                        <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Blogs</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Corporate -->
+                <div class="space-y-10">
+                    <h4 class="text-white font-display text-lg tracking-wider font-light">Corporate</h4>
+                    <ul class="space-y-5 text-[13px] text-white/40 font-sans tracking-wide">
+                        <li><a href="<?php echo esc_url( home_url( "/about/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Our Story</a></li>
+                        <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Chairman Message</a></li>
+                        <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">News & Media</a></li>
+                        <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Career</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Contact Us -->
+                <div class="space-y-10">
+                    <h4 class="text-white font-display text-lg tracking-wider font-light">Contact Us</h4>
+                    <div class="space-y-6 text-[13px] text-white/40 font-sans leading-relaxed">
+                        <div class="flex items-start gap-4 border-b border-white/5 pb-6">
+                            <i data-lucide="map-pin" size="18" class="shrink-0 text-white/20 mt-1"></i>
+                            <p>Opp. Ceramic City, B/h. Meldi Ma Temple, Lalpar, 8-A National Highway, Morbi-363642. Gujarat (INDIA)</p>
+                        </div>
+                        <div class="flex items-center gap-4 group cursor-pointer hover:text-white transition-colors">
+                            <i data-lucide="phone" size="18" class="text-white/20"></i>
+                            <span>PH: +91 94274 10127</span>
+                        </div>
+                        <div class="flex items-center gap-4 group cursor-pointer">
+                            <svg class="w-4 h-4 fill-white/20 shrink-0 group-hover:fill-white transition-colors" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .004 5.412.001 12.046c0 2.121.554 4.191 1.606 6.034L0 24l6.117-1.604a11.803 11.803 0 005.93 1.587h.005c6.634 0 12.043-5.413 12.046-12.049a11.796 11.796 0 00-3.417-8.412z"/></svg>
+                            <span class="hover:text-white transition-colors">+91 94274 10127</span>
+                        </div>
+                        <div class="flex items-center gap-4 group cursor-pointer hover:text-white transition-colors">
+                            <i data-lucide="mail" size="18" class="text-white/20"></i>
+                            <span>info@rceramica.com</span>
+                        </div>
+                        <div class="flex items-center gap-4 group cursor-pointer hover:text-white transition-colors">
+                            <i data-lucide="link" size="18" class="text-white/20"></i>
+                            <span>PH: +91 99985 28523</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section Container -->
+            <div class="pt-16 border-t border-white/5 flex flex-col items-center gap-10">
+                <!-- Copyright Bar -->
+                <div class="w-full flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-white/20 uppercase tracking-[0.3em] font-medium text-center">
+                    <p>© 2024 R Ceramica Global. All Rights Reserved.</p>
+                    <div class="flex gap-8">
+                        <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                        <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    </div>
+                </div>
+                
+                <!-- Developer Credit -->
+                <div class="text-[9px] text-white/10 uppercase tracking-[0.4em] font-light italic">
+                    Developed by <a href="https://codezpark.com/" target="_blank" class="text-white/30 hover:text-white transition-all underline decoration-white/5 underline-offset-8">CODEZPARK</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</main>
+<?php get_footer(); ?>

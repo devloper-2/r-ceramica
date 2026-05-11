@@ -1,0 +1,42 @@
+<?php
+/**
+ * Theme functions and definitions for R Ceramica Luxury Surfaces.
+ */
+
+if ( ! function_exists( 'rceramica_luxury_setup' ) ) {
+    function rceramica_luxury_setup() {
+        add_theme_support( 'title-tag' );
+        add_theme_support( 'post-thumbnails' );
+        add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption' ) );
+        add_theme_support( 'custom-logo' );
+        add_theme_support( 'responsive-embeds' );
+
+        register_nav_menus( array(
+            'primary' => __( 'Primary Menu', 'rceramica-luxury' ),
+        ) );
+    }
+}
+add_action( 'after_setup_theme', 'rceramica_luxury_setup' );
+
+function rceramica_luxury_scripts() {
+    wp_enqueue_style( 'rceramica-luxury-style', get_stylesheet_uri(), array(), wp_get_theme()->get( 'Version' ) );
+    wp_enqueue_style( 'rceramica-luxury-google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Outfit:wght@300;400;500&family=Plus+Jakarta+Sans:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,200,0,0&display=swap', array(), null );
+    wp_enqueue_style( 'rceramica-luxury-theme', get_theme_file_uri( '/assets/css/theme.css' ), array( 'rceramica-luxury-style' ), wp_get_theme()->get( 'Version' ) );
+
+    wp_enqueue_script( 'rceramica-luxury-tailwind', 'https://cdn.tailwindcss.com', array(), null, false );
+    wp_add_inline_script( 'rceramica-luxury-tailwind', "tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'], }, }, }, };" );
+    wp_script_add_data( 'rceramica-luxury-tailwind', 'defer', true );
+
+    wp_enqueue_script( 'rceramica-luxury-lucide', 'https://unpkg.com/lucide@latest', array(), null, true );
+    wp_script_add_data( 'rceramica-luxury-lucide', 'defer', true );
+    wp_enqueue_script( 'rceramica-luxury-theme', get_theme_file_uri( '/assets/js/theme.js' ), array( 'rceramica-luxury-lucide' ), wp_get_theme()->get( 'Version' ), true );
+    wp_script_add_data( 'rceramica-luxury-theme', 'defer', true );
+}
+add_action( 'wp_enqueue_scripts', 'rceramica_luxury_scripts' );
+
+function rceramica_luxury_preconnect_hints() {
+    echo '<link rel="preconnect" href="https://fonts.googleapis.com">' . "\n";
+    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
+    echo '<link rel="preconnect" href="https://unpkg.com">' . "\n";
+}
+add_action( 'wp_head', 'rceramica_luxury_preconnect_hints', 1 );
