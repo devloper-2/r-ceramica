@@ -142,12 +142,8 @@ get_header();
             <button onclick="selectLang('EN', 'English')" class="w-full text-left px-5 py-3 md:py-3 text-[10px] text-white/70 hover:text-white hover:bg-white/10 transition-all flex justify-between items-center uppercase tracking-[0.25em] font-medium">
                 English <div class="lang-indicator w-1.5 h-1.5 bg-white rounded-full"></div>
             </button>
-            <button onclick="selectLang('FR', 'Français')" class="w-full text-left px-5 py-3 md:py-3 text-[10px] text-white/70 hover:text-white hover:bg-white/10 transition-all flex justify-between items-center uppercase tracking-[0.25em] font-medium">
-                Français <div class="lang-indicator hidden w-1.5 h-1.5 bg-white rounded-full"></div>
-            </button>
-            <button onclick="selectLang('IT', 'Italiano')" class="w-full text-left px-5 py-3 md:py-3 text-[10px] text-white/70 hover:text-white hover:bg-white/10 transition-all flex justify-between items-center uppercase tracking-[0.25em] font-medium">
-                Italiano <div class="lang-indicator hidden w-1.5 h-1.5 bg-white rounded-full"></div>
-            </button>
+            <button onclick="selectLang('AR', 'Arabic')" class="w-full text-left px-5 py-3 md:py-3 text-[10px] text-white/70 hover:text-white hover:bg-white/10 transition-all uppercase tracking-[0.25em] font-medium">Arabic</button>
+            <button onclick="selectLang('HI', 'Hindi')" class="w-full text-left px-5 py-3 md:py-3 text-[10px] text-white/70 hover:text-white hover:bg-white/10 transition-all uppercase tracking-[0.25em] font-medium">Hindi</button>
         </div>
 
         <!-- Global Login Dropdown -->
