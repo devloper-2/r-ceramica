@@ -62,7 +62,7 @@ get_header();
 
                     fusionCollections.forEach(item => {
                         document.write(`
-                            <a href="products.html?category=${item.id}" class="product-card group cursor-pointer scroll-reveal">
+                            <a href="<?php echo esc_url( home_url( '/shop/' ) ); ?>?category=${item.id}" class="product-card group cursor-pointer scroll-reveal">
                                 <div class="aspect-[4/5] overflow-hidden bg-[#111] mb-6 relative">
                                     <img src="${item.img}" class="product-img w-full h-full object-cover transition-all duration-1000" alt="${item.name}">
                                     <div class="product-overlay absolute inset-0 bg-black/40 opacity-0 transition-opacity flex items-center justify-center">
@@ -98,21 +98,21 @@ get_header();
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <a href="products.html?category=showers" class="product-card group cursor-pointer scroll-reveal relative aspect-video overflow-hidden">
+                <a href="<?php echo esc_url( add_query_arg( 'category', 'showers', home_url( '/shop/' ) ) ); ?>" class="product-card group cursor-pointer scroll-reveal relative aspect-video overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1620626014330-f99a0937285d?auto=format&fit=crop&q=80&w=800" class="product-img w-full h-full object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-1000" alt="Overhead Showers">
                     <div class="absolute inset-0 bg-black/40 flex flex-col justify-end p-8">
                          <h3 class="text-2xl font-display font-light uppercase tracking-widest text-white">Overhead Series</h3>
                          <p class="text-[9px] text-[#c5a059] uppercase tracking-[0.4em] mt-2">View Models</p>
                     </div>
                 </a>
-                <a href="products.html?category=showers" class="product-card group cursor-pointer scroll-reveal relative aspect-video overflow-hidden">
+                <a href="<?php echo esc_url( add_query_arg( 'category', 'showers', home_url( '/shop/' ) ) ); ?>" class="product-card group cursor-pointer scroll-reveal relative aspect-video overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1584622781514-f670c2269a84?auto=format&fit=crop&q=80&w=800" class="product-img w-full h-full object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-1000" alt="Body Jets">
                     <div class="absolute inset-0 bg-black/40 flex flex-col justify-end p-8">
                          <h3 class="text-2xl font-display font-light uppercase tracking-widest text-white">Body Jets</h3>
                          <p class="text-[9px] text-[#c5a059] uppercase tracking-[0.4em] mt-2">View Models</p>
                     </div>
                 </a>
-                <a href="products.html?category=showers" class="product-card group cursor-pointer scroll-reveal relative aspect-video overflow-hidden">
+                <a href="<?php echo esc_url( add_query_arg( 'category', 'showers', home_url( '/shop/' ) ) ); ?>" class="product-card group cursor-pointer scroll-reveal relative aspect-video overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=800" class="product-img w-full h-full object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-1000" alt="Hand Showers">
                     <div class="absolute inset-0 bg-black/40 flex flex-col justify-end p-8">
                          <h3 class="text-2xl font-display font-light uppercase tracking-widest text-white">Hand Showers</h3>
@@ -134,14 +134,14 @@ get_header();
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <a href="products.html?category=sanitary" class="product-card group cursor-pointer scroll-reveal relative h-[400px] overflow-hidden">
+                <a href="<?php echo esc_url( add_query_arg( 'category', 'sanitary', home_url( '/shop/' ) ) ); ?>" class="product-card group cursor-pointer scroll-reveal relative h-[400px] overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1584622781564-1d9876a13d00?auto=format&fit=crop&q=80&w=1200" class="product-img w-full h-full object-cover opacity-50 transition-all duration-1000" alt="Water Closets">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-12">
                          <h3 class="text-3xl font-display font-light uppercase tracking-widest text-white">Water Closets</h3>
                          <p class="text-[9px] text-[#c5a059] uppercase tracking-[0.4em] mt-4">Explore Series</p>
                     </div>
                 </a>
-                <a href="products.html?category=basins" class="product-card group cursor-pointer scroll-reveal relative h-[400px] overflow-hidden">
+                <a href="<?php echo esc_url( add_query_arg( 'category', 'basins', home_url( '/shop/' ) ) ); ?>" class="product-card group cursor-pointer scroll-reveal relative h-[400px] overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200" class="product-img w-full h-full object-cover opacity-50 transition-all duration-1000" alt="Artisan Basins">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-12">
                          <h3 class="text-3xl font-display font-light uppercase tracking-widest text-white">Artisan Basins</h3>
@@ -169,8 +169,7 @@ get_header();
                 <div class="space-y-10">
                     <h4 class="text-white font-display text-lg tracking-wider font-light">Quick Links</h4>
                     <ul class="space-y-5 text-[13px] text-white/40 font-sans tracking-wide">
-                        <li><a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Tiles</a></li>
-                        <li><a href="<?php echo esc_url( home_url( "/faucets/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Bathware</a></li>
+                        <li><a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Explore</a></li>
                         <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Projects</a></li>
                     </ul>
                 </div>

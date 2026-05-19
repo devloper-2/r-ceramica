@@ -7,7 +7,7 @@ get_header();
 <main id="site-content" role="main">
 
 
-    <?php $rc_nav_active = 'tiles'; include get_template_directory() . '/partials/nav.php'; ?>
+    <?php $rc_nav_active = 'explore'; include get_template_directory() . '/partials/nav.php'; ?>
 
     <main class="relative">
         <!-- Architectural Surfaces Section -->
@@ -24,7 +24,7 @@ get_header();
                         <p class="text-white/40 text-[12px] md:text-[13px] uppercase tracking-[0.3em] mb-12 max-w-sm leading-relaxed">
                             Curated porcelain systems for high-envelope architecture.
                         </p>
-                        <a href="products.html?category=tiles" class="inline-flex items-center gap-6 group/link">
+                        <a href="<?php echo esc_url( add_query_arg( 'category', 'tiles', home_url( '/shop/' ) ) ); ?>" class="inline-flex items-center gap-6 group/link">
                             <span class="text-[11px] uppercase tracking-[0.5em] border-b border-white/20 pb-2 group-hover/link:border-white transition-all">View Collection</span>
                             <i data-lucide="arrow-right" size="18" class="group-hover:translate-x-2 transition-transform"></i>
                         </a>
@@ -43,7 +43,7 @@ get_header();
                         <span class="text-[10px] md:text-[11px] uppercase tracking-[0.5em] text-[#c5a059] mb-6 block font-medium opacity-80">Designer Range</span>
                         <h2 class="text-4xl md:text-7xl lg:text-8xl font-display font-light uppercase tracking-widest mb-8 leading-tight">Luxury <br>Showers</h2>
                         <p class="text-white/40 text-[12px] md:text-[13px] uppercase tracking-[0.3em] mb-12 max-w-md leading-relaxed">Advanced hydro-therapy systems designed for the ultimate wellness experience.</p>
-                        <a href="<?php echo esc_url( home_url( "/faucets/" ) ); ?>" class="inline-flex items-center gap-6 text-[11px] uppercase tracking-[0.5em] text-white/60 hover:text-white transition-all font-medium border-b border-white/10 pb-2 hover:border-white transition-all">
+                        <a href="<?php echo esc_url( add_query_arg( 'category', 'showers', home_url( '/shop/' ) ) ); ?>" class="inline-flex items-center gap-6 text-[11px] uppercase tracking-[0.5em] text-white/60 hover:text-white transition-all font-medium border-b border-white/10 pb-2 hover:border-white transition-all">
                             Explore Models <i data-lucide="chevron-right" size="16" class="mt-0.5"></i>
                         </a>
                     </div>
@@ -60,7 +60,7 @@ get_header();
                         <span class="text-[12px] uppercase tracking-[0.7em] text-[#c5a059] mb-8 block font-medium">Geometric Precision</span>
                         <h2 class="text-4xl md:text-8xl font-display font-light uppercase tracking-tight mb-10 leading-[1]">Artisan <br class="hidden md:block">Faucets</h2>
                         <p class="text-white/40 text-[14px] uppercase tracking-[0.4em] mb-16 max-w-md leading-relaxed">Precision engineered hardware defining the intersection of fluid dynamics and sculpture.</p>
-                        <a href="<?php echo esc_url( home_url( "/faucets/" ) ); ?>" class="inline-flex items-center gap-8 group/link">
+                        <a href="<?php echo esc_url( add_query_arg( 'category', 'faucets', home_url( '/shop/' ) ) ); ?>" class="inline-flex items-center gap-8 group/link">
                             <span class="text-[12px] uppercase tracking-[0.6em] border-b border-white/20 pb-3 group-hover/link:border-[#c5a059] transition-all">Technical Series</span>
                             <i data-lucide="arrow-right" size="20" class="group-hover/link:translate-x-3 transition-transform text-[#c5a059]"></i>
                         </a>
@@ -78,7 +78,7 @@ get_header();
                     <span class="text-[12px] uppercase tracking-[0.7em] text-[#c5a059] mb-8 block font-medium">Hygiene Systems</span>
                     <h2 class="text-4xl md:text-8xl font-display font-light uppercase tracking-widest mb-10 leading-[1]">Sanitary <br class="hidden md:block">Form</h2>
                     <p class="text-white/40 text-[14px] uppercase tracking-[0.5em] mb-16 max-w-2xl leading-relaxed">High-performance water closets connecting ergonomic form and sustainability for contemporary living.</p>
-                    <a href="<?php echo esc_url( home_url( "/faucets/" ) ); ?>" class="inline-block py-5 px-16 border border-white/10 hover:bg-white hover:text-black transition-all text-[12px] uppercase tracking-[0.5em] font-medium">Browse Complete Series</a>
+                    <a href="<?php echo esc_url( add_query_arg( 'category', 'sanitary', home_url( '/shop/' ) ) ); ?>" class="inline-block py-5 px-16 border border-white/10 hover:bg-white hover:text-black transition-all text-[12px] uppercase tracking-[0.5em] font-medium">Browse Complete Series</a>
                 </div>
             </div>
         </section>
@@ -92,7 +92,7 @@ get_header();
                     <span class="text-[12px] uppercase tracking-[0.7em] text-[#c5a059] mb-8 block font-medium">Vessel Works</span>
                     <h2 class="text-4xl md:text-8xl font-display font-light uppercase tracking-widest mb-10 leading-[1]">Minimal <br>Basins</h2>
                     <p class="text-white/40 text-[14px] uppercase tracking-[0.5em] mb-16 max-w-2xl leading-relaxed">Hand-crafted artisan basins that redefine the morning ritual through stone and ceramic textures.</p>
-                    <a href="<?php echo esc_url( home_url( "/faucets/" ) ); ?>" class="inline-block py-5 px-16 border border-white/10 hover:bg-white hover:text-black transition-all text-[12px] uppercase tracking-[0.5em] font-medium">Explore Gallery</a>
+                    <a href="<?php echo esc_url( add_query_arg( 'category', 'basins', home_url( '/shop/' ) ) ); ?>" class="inline-block py-5 px-16 border border-white/10 hover:bg-white hover:text-black transition-all text-[12px] uppercase tracking-[0.5em] font-medium">Explore Gallery</a>
                 </div>
             </div>
         </section>
@@ -109,7 +109,7 @@ get_header();
                         <p class="text-[14px] text-white/50 mb-1 font-light tracking-[0.3em] uppercase">a blend of durability</p>
                         <p class="text-[14px] text-white/50 font-light tracking-[0.3em] uppercase">and sustainable performance</p>
                     </div>
-                    <a href="<?php echo esc_url( home_url( "/login/" ) ); ?>" class="inline-flex items-center gap-8 group/link">
+                    <a href="<?php echo esc_url( add_query_arg( 'category', 'frp', home_url( '/shop/' ) ) ); ?>" class="inline-flex items-center gap-8 group/link">
                         <span class="text-[12px] uppercase tracking-[0.6em] border-b border-white/20 pb-3 group-hover/link:border-[#c5a059] transition-all">Technical Spec</span>
                         <i data-lucide="arrow-right" size="20" class="group-hover/link:translate-x-3 transition-transform text-[#c5a059]"></i>
                     </a>
@@ -145,8 +145,7 @@ get_header();
                 <div class="space-y-10">
                     <h4 class="text-white font-display text-lg tracking-wider font-light">Quick Links</h4>
                     <ul class="space-y-5 text-[13px] text-white/40 font-sans tracking-wide">
-                        <li><a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Tiles</a></li>
-                        <li><a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Bathware</a></li>
+                        <li><a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Explore</a></li>
                         <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Visualizer</a></li>
                         <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Projects</a></li>
                         <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Blogs</a></li>

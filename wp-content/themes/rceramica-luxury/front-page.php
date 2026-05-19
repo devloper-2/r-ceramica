@@ -130,9 +130,7 @@ get_header();
         <div id="desktop-nav-links" class="hidden lg:flex justify-center items-center py-4 border-t border-white/5 space-x-12 xl:space-x-16 text-[11px] uppercase tracking-[0.3em] font-medium text-white/80 transition-all duration-500">
             <a href="<?php echo esc_url( home_url( "/" ) ); ?>" class="text-white relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-px after:bg-white transition-colors">HOME</a>
             <a href="<?php echo esc_url( home_url( "/about/" ) ); ?>" class="hover:text-white transition-colors">ABOUT US</a>
-            <a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="hover:text-white transition-colors">TILES</a>
-            <a href="<?php echo esc_url( home_url( "/faucets/" ) ); ?>" class="hover:text-white transition-colors">BATHROOMS</a>
-            <a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="hover:text-white transition-colors">ACCESSORIES</a>
+            <a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="hover:text-white transition-colors">EXPLORE</a>
             <a href="#" class="hover:text-white transition-colors">CATALOGUE</a>
             <a href="<?php echo esc_url( home_url( "/contact/" ) ); ?>" class="hover:text-white transition-colors">CONTACT US</a>
         </div>
@@ -206,9 +204,7 @@ get_header();
         <div class="flex flex-col space-y-1 gap-2 mb-12">
             <a href="<?php echo esc_url( home_url( "/" ) ); ?>" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">HOME</a>
             <a href="<?php echo esc_url( home_url( "/about/" ) ); ?>" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">ABOUT US</a>
-            <a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">TILES</a>
-            <a href="<?php echo esc_url( home_url( "/faucets/" ) ); ?>" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">BATHROOMS</a>
-            <a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">ACCESSORIES</a>
+            <a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">EXPLORE</a>
             <a href="<?php echo esc_url( home_url( "/orders/" ) ); ?>" id="mobile-orders-link" class="hidden text-xl font-light tracking-widest hover:text-[#c5a059] py-3 border-b border-white/5 uppercase">ORDERS</a>
             <a href="#" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">CATALOGUE</a>
             <a href="<?php echo esc_url( home_url( "/contact/" ) ); ?>" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">CONTACT US</a>
@@ -254,7 +250,7 @@ get_header();
                     <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex flex-col justify-end p-12">
                         <span class="text-[9px] uppercase tracking-[0.5em] text-[#c5a059] mb-4">Materiality</span>
                         <h2 class="text-3xl md:text-4xl font-display font-light uppercase tracking-widest mb-6">Culinary <br>Studios</h2>
-                        <a href="products.html?category=culinary" class="w-fit flex items-center gap-6 text-[10px] uppercase tracking-[0.3em] text-white group-hover:gap-10 transition-all">
+                        <a href="<?php echo esc_url( home_url( '/explore/' ) ); ?>" class="w-fit flex items-center gap-6 text-[10px] uppercase tracking-[0.3em] text-white group-hover:gap-10 transition-all">
                             View Collection <i data-lucide="chevron-right" size="14"></i>
                         </a>
                     </div>
@@ -266,7 +262,7 @@ get_header();
                     <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex flex-col justify-end p-12">
                         <span class="text-[9px] uppercase tracking-[0.5em] text-[#c5a059] mb-4">Precision</span>
                         <h2 class="text-3xl md:text-4xl font-display font-light uppercase tracking-widest mb-6">Expansive <br>Living</h2>
-                        <a href="products.html?category=living" class="w-fit flex items-center gap-6 text-[10px] uppercase tracking-[0.3em] text-white group-hover:gap-10 transition-all">
+                        <a href="<?php echo esc_url( home_url( '/explore/' ) ); ?>" class="w-fit flex items-center gap-6 text-[10px] uppercase tracking-[0.3em] text-white group-hover:gap-10 transition-all">
                             View Collection <i data-lucide="chevron-right" size="14"></i>
                         </a>
                     </div>

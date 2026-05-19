@@ -97,9 +97,7 @@ function rc_mobile_link_class( $link, $active ) {
     <div id="desktop-nav-links" class="hidden lg:flex justify-center items-center py-4 border-t border-white/5 space-x-12 xl:space-x-16 text-[11px] uppercase tracking-[0.3em] font-medium text-white/80 transition-all duration-500">
         <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="<?php echo rc_nav_link_class( 'home', $rc_nav_active ); ?>">HOME</a>
         <a href="<?php echo esc_url( home_url( '/about/' ) ); ?>" class="<?php echo rc_nav_link_class( 'about', $rc_nav_active ); ?>">ABOUT US</a>
-        <a href="<?php echo esc_url( home_url( '/explore/' ) ); ?>" class="<?php echo rc_nav_link_class( 'tiles', $rc_nav_active ); ?>">TILES</a>
-        <a href="<?php echo esc_url( home_url( '/faucets/' ) ); ?>" class="<?php echo rc_nav_link_class( 'bathrooms', $rc_nav_active ); ?>">BATHROOMS</a>
-        <a href="<?php echo esc_url( home_url( '/explore/' ) ); ?>" class="<?php echo rc_nav_link_class( 'accessories', $rc_nav_active ); ?>">ACCESSORIES</a>
+        <a href="<?php echo esc_url( home_url( '/explore/' ) ); ?>" class="<?php echo rc_nav_link_class( 'explore', $rc_nav_active ); ?>">EXPLORE</a>
         <a href="#" class="<?php echo rc_nav_link_class( 'catalogue', $rc_nav_active ); ?>">CATALOGUE</a>
         <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="<?php echo rc_nav_link_class( 'contact', $rc_nav_active ); ?>">CONTACT US</a>
     </div>
@@ -173,9 +171,7 @@ function rc_mobile_link_class( $link, $active ) {
     <div class="flex flex-col space-y-1 gap-2 mb-12">
         <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="<?php echo rc_mobile_link_class( 'home', $rc_nav_active ); ?>">HOME</a>
         <a href="<?php echo esc_url( home_url( '/about/' ) ); ?>" class="<?php echo rc_mobile_link_class( 'about', $rc_nav_active ); ?>">ABOUT US</a>
-        <a href="<?php echo esc_url( home_url( '/explore/' ) ); ?>" class="<?php echo rc_mobile_link_class( 'tiles', $rc_nav_active ); ?>">TILES</a>
-        <a href="<?php echo esc_url( home_url( '/faucets/' ) ); ?>" class="<?php echo rc_mobile_link_class( 'bathrooms', $rc_nav_active ); ?>">BATHROOMS</a>
-        <a href="<?php echo esc_url( home_url( '/explore/' ) ); ?>" class="<?php echo rc_mobile_link_class( 'accessories', $rc_nav_active ); ?>">ACCESSORIES</a>
+        <a href="<?php echo esc_url( home_url( '/explore/' ) ); ?>" class="<?php echo rc_mobile_link_class( 'explore', $rc_nav_active ); ?>">EXPLORE</a>
         <a href="<?php echo esc_url( home_url( '/orders/' ) ); ?>" id="mobile-orders-link" class="hidden text-xl font-light tracking-widest hover:text-[#c5a059] py-3 border-b border-white/5 uppercase">ORDERS</a>
         <a href="#" class="<?php echo rc_mobile_link_class( 'catalogue', $rc_nav_active ); ?>">CATALOGUE</a>
         <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="<?php echo rc_mobile_link_class( 'contact', $rc_nav_active ); ?>">CONTACT US</a>
