@@ -6,9 +6,6 @@ get_header();
 ?>
 <main id="site-content" role="main">
 
-
-    <?php $rc_nav_active = 'bathrooms'; include get_template_directory() . '/partials/nav.php'; ?>
-
     <main class="pt-32 md:pt-48 pb-24">
         <div class="max-w-[1720px] mx-auto px-6 md:px-12 lg:px-24">
             

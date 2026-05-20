@@ -11,3 +11,4 @@
 </head>
 <body <?php body_class( 'bg-[#0a0a0a] text-white font-sans font-light selection:bg-white/20' ); ?>>
 <?php wp_body_open(); ?>
+<?php get_template_part( 'partials/nav' ); ?>

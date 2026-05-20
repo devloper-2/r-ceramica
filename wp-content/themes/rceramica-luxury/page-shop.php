@@ -122,8 +122,6 @@ function rc_shop_url( $params = [] ) {
 ?>
 <main id="site-content" role="main" class="bg-[#0a0a0a] min-h-screen font-sans text-white">
 
-    <?php include get_template_directory() . '/partials/nav.php'; ?>
-
     <div class="pt-32 md:pt-48">
 
     <!-- ── Sticky Filter Bar ──────────────────────────────────────────────── -->
@@ -399,59 +397,7 @@ function rc_shop_url( $params = [] ) {
 
     <!-- ── Footer ────────────────────────────────────────────────────────────── -->
     </div><!-- /pt-32 wrapper -->
-    <footer class="relative bg-[#0c0c0c] pt-24 pb-12 border-t border-white/5 overflow-hidden mt-24">
-        <div class="max-w-[1440px] mx-auto px-6 md:px-16">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-24 mb-24">
-                <!-- Brand -->
-                <div class="space-y-10">
-                    <img src="https://rceramica.com/logo/logo.png" alt="R Ceramica Logo" class="h-16 w-auto object-contain">
-                    <p class="text-white/40 text-[13px] leading-relaxed font-light max-w-sm">
-                        R Ceramica is a brand that believes in continuous development and growth. We always try to innovate and bring something new to reform the approach of the market.
-                    </p>
-                    <div class="flex items-center gap-6 pt-4">
-                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="facebook" size="18"></i></a>
-                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="instagram" size="18"></i></a>
-                        <a href="#" class="text-white/30 hover:text-white transition-colors">
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
-                        </a>
-                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="linkedin" size="18"></i></a>
-                    </div>
-                </div>
-                <!-- Quick Links -->
-                <div class="space-y-10">
-                    <h4 class="text-white font-display text-lg tracking-wider font-light">Quick Links</h4>
-                    <ul class="space-y-5 text-[13px] text-white/40 font-sans tracking-wide">
-                        <li><a href="<?php echo esc_url( home_url( '/explore/' ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Explore</a></li>
-                        <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Visualizer</a></li>
-                        <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Projects</a></li>
-                        <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Blogs</a></li>
-                    </ul>
-                </div>
-                <!-- Corporate -->
-                <div class="space-y-10">
-                    <h4 class="text-white font-display text-lg tracking-wider font-light">Corporate</h4>
-                    <ul class="space-y-5 text-[13px] text-white/40 font-sans tracking-wide">
-                        <li><a href="<?php echo esc_url( home_url( '/about/' ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Our Story</a></li>
-                        <li><a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Contact Us</a></li>
-                    </ul>
-                </div>
-                <!-- Contact -->
-                <div class="space-y-10">
-                    <h4 class="text-white font-display text-lg tracking-wider font-light">Contact Us</h4>
-                    <div class="space-y-6 text-[13px] text-white/40 font-sans leading-relaxed">
-                        <div class="flex items-start gap-4 border-b border-white/5 pb-6">
-                            <i data-lucide="map-pin" size="18" class="shrink-0 text-white/20 mt-1"></i>
-                            <p>Morbi, Gujarat (INDIA)</p>
-                        </div>
-                        <p>PH: +91 94274 10127</p>
-                    </div>
-                </div>
-            </div>
-            <div class="pt-16 border-t border-white/5">
-                <p class="text-[10px] text-white/20 uppercase tracking-[0.3em]">© <?php echo date('Y'); ?> R Ceramica Global. All Rights Reserved.</p>
-            </div>
-        </div>
-    </footer>
+    
 
 </main>
 

@@ -40,3 +40,63 @@ function rceramica_luxury_preconnect_hints() {
     echo '<link rel="preconnect" href="https://unpkg.com">' . "\n";
 }
 add_action( 'wp_head', 'rceramica_luxury_preconnect_hints', 1 );
+
+function rc_custom_woocommerce_placeholder_img( $image, $product ) {
+
+    if ( has_post_thumbnail( $product->get_id() ) ) {
+        return $image;
+    }
+
+    $placeholder = get_template_directory_uri() . '/assets/images/placeholder.webp';
+
+    return '<img src="' . esc_url( $placeholder ) . '" alt="Placeholder" class="w-full h-full object-cover" />';
+
+}
+
+add_filter( 'woocommerce_product_get_image', 'rc_custom_woocommerce_placeholder_img', 10, 2 );
+add_filter( 'woocommerce_placeholder_img_src', 'rc_custom_placeholder_img' );
+
+function rc_custom_placeholder_img() {
+
+    return get_template_directory_uri() . '/assets/images/placeholder.webp';
+
+}
+
+add_action( 'wp_footer', 'rc_refresh_cart_fragments' );
+
+function rc_refresh_cart_fragments() {
+
+    if ( is_cart() ) :
+    ?>
+
+    <script>
+    jQuery(function($){
+
+        $(document.body).on('updated_cart_totals removed_from_cart', function(){
+
+            $.ajax({
+                url: wc_cart_fragments_params.wc_ajax_url
+                    .toString()
+                    .replace('%%endpoint%%', 'get_refreshed_fragments'),
+                type: 'POST',
+                success: function(data){
+
+                    if (data && data.fragments) {
+
+                        $.each(data.fragments, function(key, value) {
+                            $(key).replaceWith(value);
+                        });
+
+                    }
+
+                }
+            });
+
+        });
+
+    });
+    </script>
+
+    <?php
+    endif;
+}

@@ -6,9 +6,6 @@ get_header();
 ?>
 <main id="site-content" role="main">
 
-
-    <?php $rc_nav_active = 'bathrooms'; include get_template_directory() . '/partials/nav.php'; ?>
-
     <!-- Faucets Hero -->
     <section class="relative h-[80vh] w-full flex items-center overflow-hidden bg-[#080808]">
         <div class="absolute inset-0 z-0">
@@ -153,54 +150,6 @@ get_header();
 
         <!-- Technical Excellence Section -->
     </main>
-
-    <!-- Professional Architecture Footer (Consistent with Index) -->
-    <footer class="relative bg-[#0c0c0c] pt-24 pb-12 border-t border-white/5 overflow-hidden">
-        <div class="max-w-[1440px] mx-auto px-6 md:px-16 text-center md:text-left">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-24 mb-24">
-                <!-- Column 1: Brand Profile -->
-                <div class="space-y-10">
-                    <img src="https://rceramica.com/logo/logo.png" alt="R Ceramica Logo" class="h-16 w-auto object-contain mx-auto md:mx-0">
-                    <p class="text-white/40 text-[13px] leading-relaxed font-light font-sans max-w-sm mx-auto md:mx-0">
-                        R Ceramica is a brand that believes in continuous development and growth. We always try to innovate and bring something new to reform the approach of the market.
-                    </p>
-                </div>
-                <!-- Column 2: Quick Links -->
-                <div class="space-y-10">
-                    <h4 class="text-white font-display text-lg tracking-wider font-light">Quick Links</h4>
-                    <ul class="space-y-5 text-[13px] text-white/40 font-sans tracking-wide">
-                        <li><a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Explore</a></li>
-                        <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Projects</a></li>
-                    </ul>
-                </div>
-                <!-- Column 3: Corporate -->
-                <div class="space-y-10">
-                    <h4 class="text-white font-display text-lg tracking-wider font-light">Corporate</h4>
-                    <ul class="space-y-5 text-[13px] text-white/40 font-sans tracking-wide">
-                        <li><a href="<?php echo esc_url( home_url( "/about/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Our Story</a></li>
-                        <li><a href="<?php echo esc_url( home_url( "/contact/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Contact Us</a></li>
-                    </ul>
-                </div>
-                <!-- Column 4: Contact -->
-                <div class="space-y-10">
-                    <h4 class="text-white font-display text-lg tracking-wider font-light">Contact Us</h4>
-                    <div class="space-y-6 text-[13px] text-white/40 font-sans leading-relaxed">
-                        <div class="flex items-start gap-4 border-b border-white/5 pb-6">
-                            <i data-lucide="map-pin" size="18" class="shrink-0 text-white/20 mt-1"></i>
-                            <p>Morbi, Gujarat (INDIA)</p>
-                        </div>
-                        <p>PH: +91 94274 10127</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="pt-16 border-t border-white/5 flex flex-col items-center gap-10">
-                <div class="w-full flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-white/20 uppercase tracking-[0.3em] font-medium">
-                    <p>© 2024 R Ceramica Global. All Rights Reserved.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
 
     <!-- Scripts -->
 </main>

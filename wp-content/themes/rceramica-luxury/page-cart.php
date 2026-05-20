@@ -3,62 +3,15 @@
  * Template for the Cart page.
  */
 get_header();
+
 ?>
+
 <main id="site-content" role="main">
 
 
-    <!-- Navigation -->
-    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-white/5">
-        <div class="relative flex justify-between items-center px-4 md:px-12 h-20 md:h-28">
-            <div class="flex-1 flex items-center">
-                <a href="<?php echo esc_url( home_url( "/products/" ) ); ?>" class="flex items-center gap-2 text-[10px] uppercase tracking-[0.4em] opacity-60 hover:opacity-100 transition-opacity">
-                    <i data-lucide="arrow-left" size="14"></i>
-                    <span class="hidden sm:inline">Continue Shopping</span>
-                    <span class="sm:hidden">Back</span>
-                </a>
-            </div>
-            <div class="absolute left-1/2 -translate-x-1/2 flex justify-center w-auto">
-                <a href="<?php echo esc_url( home_url( "/" ) ); ?>">
-                    <img src="https://rceramica.com/logo/logo.png" alt="R Ceramica" class="h-8 md:h-16 w-auto">
-                </a>
-            </div>
-            <div class="flex-1 flex justify-end gap-4 md:gap-8 items-center">
-                <button class="hidden md:block text-[11px] font-medium uppercase tracking-[0.2em] opacity-80">Help</button>
-                <button onclick="toggleLoginDropdown(event)" class="focus:outline-none">
-                    <span class="material-symbols-outlined font-light text-2xl md:text-3xl">account_circle</span>
-                </button>
-                <div class="relative flex items-center">
-                    <i data-lucide="shopping-cart" size="20" class="md:hidden" stroke-width="1.2"></i>
-                    <i data-lucide="shopping-cart" size="24" class="hidden md:block" stroke-width="1.2"></i>
-                    <span id="cart-count" class="absolute -top-2 -right-3 bg-white text-black text-[8px] md:text-[9px] font-bold w-4 h-4 md:w-5 md:h-5 rounded-full flex items-center justify-center">2</span>
-                </div>
-            </div>
-        </div>
+   
 
-        <!-- Global Login Dropdown -->
-        <div id="login-dropdown" class="hidden absolute right-4 md:right-12 top-[80px] md:top-[96px] w-56 bg-black/60 backdrop-blur-2xl border border-white/10 p-1.5 rounded-sm shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] z-[110]">
-            <div id="logged-out-view">
-                <a href="<?php echo esc_url( home_url( "/login/" ) ); ?>" class="block w-full text-left px-6 py-5 text-[11px] md:text-[10px] text-white/80 hover:text-white hover:bg-white/10 transition-all uppercase tracking-[0.3em] font-medium">
-                    Sign In
-                </a>
-            </div>
-            <div id="logged-in-view" class="hidden">
-                <div class="px-6 py-4 border-b border-white/5">
-                    <p id="user-display-name" class="text-[10px] uppercase tracking-[0.2em] text-white font-medium truncate">Client User</p>
-                </div>
-                <a href="<?php echo esc_url( home_url( "/orders/" ) ); ?>" class="block w-full text-left px-6 py-4 text-[11px] md:text-[10px] text-white/60 hover:text-[#c5a059] hover:bg-white/5 transition-all uppercase tracking-[0.3em] font-medium flex items-center gap-3">
-                    <span class="material-symbols-outlined text-[18px]">receipt_long</span>
-                    Orders
-                </a>
-                <button onclick="logout()" class="w-full text-left px-6 py-4 text-[11px] md:text-[10px] text-white/80 hover:text-white hover:bg-white/10 transition-all uppercase tracking-[0.3em] font-medium flex items-center gap-3">
-                    <span class="material-symbols-outlined text-[18px]">logout</span>
-                    Sign Out
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <main class="pt-24 md:pt-48 pb-16 min-h-screen">
+    <main class="pt-24 md:pt-64 pb-16 min-h-screen">
         <div class="max-w-[1440px] mx-auto px-4 md:px-12">
             <header class="mb-8 md:mb-20">
                 <h1 class="text-3xl md:text-6xl font-serif italic mb-2 opacity-95">Your Order</h1>
@@ -75,90 +28,117 @@ get_header();
                         <div class="col-span-2 text-right">Total</div>
                     </div>
 
-                    <div id="cart-items-container" class="divide-y divide-white/5">
-                        <!-- Item 1 -->
-                        <div class="item-row py-4 md:py-10">
-                            <div class="flex flex-row gap-4 md:gap-0 md:items-center relative">
-                                <!-- Image Slot -->
-                                <div class="w-20 h-24 md:w-32 md:h-44 bg-[#111] overflow-hidden flex-shrink-0">
-                                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80" class="w-full h-full object-cover grayscale" alt="Product">
-                                </div>
+                    <?php foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) :
 
-                                <!-- Content Slot -->
-                                <div class="flex flex-col md:flex-row flex-1 md:items-center min-w-0">
-                                    <div class="md:w-[50%] lg:w-[45%] pr-4">
-                                        <span class="text-[8px] md:text-[10px] uppercase tracking-[0.2em] text-[#c5a059] mb-1 block">Faucets</span>
-                                        <h3 class="text-sm md:text-xl font-light tracking-wide md:mb-2 uppercase truncate">AURA MATTE BLACK TAP</h3>
-                                        <div class="md:hidden mt-1 flex items-center gap-3">
-                                            <span class="text-xs font-light text-white/60">$2,450.00</span>
-                                        </div>
-                                    </div>
+    $_product   = $cart_item['data'];
+    $product_id = $cart_item['product_id'];
 
-                                    <div class="hidden md:block w-[15%] text-center text-sm font-light">$2,450.00</div>
-                                    
-                                    <div class="mt-3 md:mt-0 md:w-[20%] flex items-center md:justify-center">
-                                        <div class="flex items-center border border-white/10 rounded-full px-2 py-1 md:px-4 md:py-2">
-                                            <button class="text-white/30 hover:text-white p-1"><i data-lucide="minus" size="12"></i></button>
-                                            <input type="number" value="1" class="w-8 md:w-12 bg-transparent text-center text-xs focus:outline-none">
-                                            <button class="text-white/30 hover:text-white p-1"><i data-lucide="plus" size="12"></i></button>
-                                        </div>
-                                    </div>
+    if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 ) :
 
-                                    <div class="hidden md:block w-[20%] text-right text-base font-medium text-[#c5a059]">$2,450.00</div>
-                                    
-                                    <!-- Mobile Total & Remove -->
-                                    <div class="md:hidden flex justify-between items-center mt-3 pt-3 border-t border-white/5">
-                                        <span class="text-sm font-semibold text-[#c5a059]">$2,450.00</span>
-                                        <button class="text-red-500/80 hover:text-red-500 p-2"><i data-lucide="trash-2" size="16"></i></button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Desktop Remove Button -->
-                                <button class="hidden md:flex absolute -right-8 top-1/2 -translate-y-1/2 text-red-500/40 hover:text-red-500 transition-colors">
-                                    <i data-lucide="x" size="18"></i>
-                                </button>
-                            </div>
-                        </div>
+        $product_permalink = $_product->is_visible()
+            ? $_product->get_permalink( $cart_item )
+            : '';
 
-                        <!-- Item 2 -->
-                        <div class="item-row py-4 md:py-10">
-                            <div class="flex flex-row gap-4 md:gap-0 md:items-center relative">
-                                <div class="w-20 h-24 md:w-32 md:h-44 bg-[#111] overflow-hidden flex-shrink-0">
-                                    <img src="https://images.unsplash.com/photo-1615529182906-134d12bbd61c?auto=format&fit=crop&q=80" class="w-full h-full object-cover grayscale" alt="Product">
-                                </div>
+?>
 
-                                <div class="flex flex-col md:flex-row flex-1 md:items-center min-w-0">
-                                    <div class="md:w-[50%] lg:w-[45%] pr-4">
-                                        <span class="text-[8px] md:text-[10px] uppercase tracking-[0.2em] text-[#c5a059] mb-1 block">Tiles</span>
-                                        <h3 class="text-sm md:text-xl font-light tracking-wide md:mb-2 uppercase truncate">VENATO CARRARA MARBLE</h3>
-                                        <div class="md:hidden mt-1 flex items-center gap-3">
-                                            <span class="text-xs font-light text-white/60">$1,890.00</span>
-                                        </div>
-                                    </div>
+<div class="item-row py-4 md:py-10">
 
-                                    <div class="hidden md:block w-[15%] text-center text-sm font-light">$1,890.00</div>
-                                    
-                                    <div class="mt-3 md:mt-0 md:w-[20%] flex items-center md:justify-center">
-                                        <div class="flex items-center border border-white/10 rounded-full px-2 py-1 md:px-4 md:py-2">
-                                            <button class="text-white/30 hover:text-white p-1"><i data-lucide="minus" size="12"></i></button>
-                                            <input type="number" value="1" class="w-8 md:w-12 bg-transparent text-center text-xs focus:outline-none">
-                                            <button class="text-white/30 hover:text-white p-1"><i data-lucide="plus" size="12"></i></button>
-                                        </div>
-                                    </div>
+    <div class="flex flex-row gap-4 md:gap-10 md:items-center relative">
 
-                                    <div class="hidden md:block w-[20%] text-right text-base font-medium text-[#c5a059]">$1,890.00</div>
-                                    
-                                    <div class="md:hidden flex justify-between items-center mt-3 pt-3 border-t border-white/5">
-                                        <span class="text-sm font-semibold text-[#c5a059]">$1,890.00</span>
-                                        <button class="text-red-500/80 hover:text-red-400 p-2"><i data-lucide="trash-2" size="16"></i></button>
-                                    </div>
-                                </div>
-                                <button class="hidden md:flex absolute -right-8 top-1/2 -translate-y-1/2 text-red-500/40 hover:text-red-500 transition-colors">
-                                    <i data-lucide="x" size="18"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+        <!-- Image -->
+        <div class="w-20 h-24 md:w-32 md:h-44 bg-[#111] overflow-hidden flex-shrink-0">
+
+            <a href="<?php echo esc_url( $product_permalink ); ?>">
+
+                <?php echo $_product->get_image( 'woocommerce_thumbnail', array(
+                    'class' => 'w-full h-full object-cover grayscale'
+                ) ); ?>
+
+            </a>
+
+        </div>
+
+        <!-- Content -->
+        <div class="flex flex-col md:flex-row flex-1 md:items-center min-w-0">
+
+            <!-- Product Info -->
+            <div class="md:w-[50%] lg:w-[45%] pr-4">
+
+                <span class="text-[8px] md:text-[10px] uppercase tracking-[0.2em] text-[#c5a059] mb-1 block">
+
+                    <?php
+                    echo wc_get_product_category_list(
+                        $product_id,
+                        ', '
+                    );
+                    ?>
+
+                </span>
+
+                <h3 class="text-sm md:text-xl font-light tracking-wide md:mb-2 uppercase truncate">
+
+                    <a href="<?php echo esc_url( $product_permalink ); ?>">
+
+                        <?php echo $_product->get_name(); ?>
+
+                    </a>
+
+                </h3>
+
+            </div>
+
+            <!-- Price -->
+            <div class="hidden md:block w-[15%] text-center text-sm font-light">
+
+                <?php echo WC()->cart->get_product_price( $_product ); ?>
+
+            </div>
+
+            <!-- Quantity -->
+            <div class="mt-3 md:mt-0 md:w-[20%] flex items-center md:justify-center">
+
+                <?php
+                woocommerce_quantity_input(
+                    array(
+                        'input_name'  => "cart[{$cart_item_key}][qty]",
+                        'input_value' => $cart_item['quantity'],
+                        'min_value'   => '0',
+                        'max_value'   => $_product->get_max_purchase_quantity(),
+                    ),
+                    $_product,
+                    false
+                );
+                ?>
+
+            </div>
+
+            <!-- Total -->
+            <div class="hidden md:block w-[20%] text-right text-base font-medium text-[#c5a059]">
+
+                <?php
+                echo WC()->cart->get_product_subtotal(
+                    $_product,
+                    $cart_item['quantity']
+                );
+                ?>
+
+            </div>
+
+        </div>
+
+        <!-- Remove -->
+        <a href="<?php echo esc_url( wc_get_cart_remove_url( $cart_item_key ) ); ?>"
+           class="hidden md:flex absolute -right-8 top-1/2 -translate-y-1/2 text-red-500/40 hover:text-red-500 transition-colors">
+
+            <i data-lucide="x" size="18"></i>
+
+        </a>
+
+    </div>
+
+</div>
+
+<?php endif; endforeach; ?>
 
                     <!-- Additional Services - More compact -->
                     <div class="mt-12 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8">
@@ -227,17 +207,5 @@ get_header();
             </div>
         </div>
     </main>
-
-    <!-- Footer Mock (Minimized) -->
-    <footer class="bg-black py-12 border-t border-white/5">
-        <div class="max-w-[1440px] mx-auto px-12 flex flex-col md:flex-row justify-between items-center gap-8">
-            <p class="text-[9px] text-white/30 tracking-[0.4em] uppercase">© 2026 R Ceramica. Crafted with Excellence.</p>
-            <div class="flex gap-12 text-[9px] text-white/30 tracking-[0.4em] uppercase">
-                <a href="#" class="hover:text-white transition-colors">Privacy</a>
-                <a href="#" class="hover:text-white transition-colors">Terms</a>
-                <a href="#" class="hover:text-white transition-colors">Shipping</a>
-            </div>
-        </div>
-    </footer>
 </main>
 <?php get_footer(); ?>

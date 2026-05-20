@@ -27,7 +27,17 @@ function rc_mobile_link_class( $link, $active ) {
 <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 font-sans font-light">
     <!-- Top Row -->
     <div class="relative flex justify-between items-center px-4 md:px-12 h-20 md:h-32 lg:h-36">
+<?php if ( is_cart() ) : ?>
 
+<div class="flex-1 flex items-center">
+    <a href="<?php echo esc_url( home_url( "/products/" ) ); ?>" class="flex items-center gap-2 text-[10px] uppercase tracking-[0.4em] opacity-60 hover:opacity-100 transition-opacity">
+        <i data-lucide="arrow-left" size="14"></i>
+        <span class="hidden sm:inline">Continue Shopping</span>
+        <span class="sm:hidden">Back</span>
+    </a>
+</div>
+
+<?php endif; ?>
         <!-- Top Left: Spacer (Desktop Only) -->
         <div id="nav-left" class="flex-1 hidden lg:flex items-center relative z-20"></div>
 
@@ -37,7 +47,6 @@ function rc_mobile_link_class( $link, $active ) {
                 <i data-lucide="menu" size="24"></i>
             </button>
         </div>
-
         <!-- Centered Logo -->
         <div id="logo-container" class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 pointer-events-none transition-all duration-700">
             <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="pointer-events-auto">
@@ -56,7 +65,7 @@ function rc_mobile_link_class( $link, $active ) {
                     <a href="<?php echo esc_url( home_url( '/cart/' ) ); ?>" class="flex items-center hover:text-white/80 transition-colors group">
                         <div class="relative">
                             <i data-lucide="shopping-cart" size="28" stroke-width="1.2" class="text-white/80 group-hover:text-white group-hover:scale-110 transition-all"></i>
-                            <span class="absolute -top-2 -right-3 bg-white text-black text-[9px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                            <span class="absolute -top-2 -right-3 bg-white text-black text-[9px] font-bold w-5 h-5 rounded-full flex items-center justify-center"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
                         </div>
                     </a>
                     <button onclick="toggleLangDropdown(event)" class="hover:text-white/80 transition-colors focus:outline-none ring-0 border-0">

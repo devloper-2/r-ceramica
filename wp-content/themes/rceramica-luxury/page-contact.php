@@ -6,9 +6,6 @@ get_header();
 ?>
 <main id="site-content" role="main">
 
-
-    <?php $rc_nav_active = 'contact'; include get_template_directory() . '/partials/nav.php'; ?>
-
     <header class="relative min-h-screen md:min-h-[85vh] w-full flex items-center justify-center overflow-hidden bg-black pt-20 md:pt-24 group/hero">
         <div class="absolute inset-0 z-0">
             <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80" alt="Contact Us Background" class="w-full h-full object-cover opacity-50 group-hover:scale-105 transition-all duration-[2s]">
