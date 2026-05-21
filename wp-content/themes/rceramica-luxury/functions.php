@@ -62,34 +62,53 @@ function rc_custom_placeholder_img() {
 
 }
 
+
 add_action( 'wp_footer', 'rc_refresh_cart_fragments' );
 
-function rc_refresh_cart_fragments() {
+add_filter('woocommerce_add_to_cart_fragments', function($fragments) {
 
-    if ( is_cart() ) :
+    ob_start();
+    ?>
+
+    <span class="cart-count-header absolute -top-2 -right-3 bg-white text-black text-[9px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+        <?php echo WC()->cart->get_cart_contents_count(); ?>
+    </span>
+
+    <?php
+
+    $fragments['.cart-count-header'] = ob_get_clean();
+
+    return $fragments;
+});
+
+function rc_refresh_cart_fragments() {
     ?>
 
     <script>
     jQuery(function($){
 
-        $(document.body).on('updated_cart_totals removed_from_cart', function(){
+        $(document.body).on('added_to_cart removed_from_cart updated_cart_totals', function(){
 
             $.ajax({
                 url: wc_cart_fragments_params.wc_ajax_url
                     .toString()
                     .replace('%%endpoint%%', 'get_refreshed_fragments'),
                 type: 'POST',
+
                 success: function(data){
 
                     if (data && data.fragments) {
 
                         $.each(data.fragments, function(key, value) {
+
                             $(key).replaceWith(value);
+
                         });
 
                     }
 
                 }
+
             });
 
         });
@@ -98,5 +117,26 @@ function rc_refresh_cart_fragments() {
     </script>
 
     <?php
-    endif;
 }
+add_action('wp_footer', 'rc_refresh_cart_fragments', 100);
+
+add_filter('woocommerce_add_to_cart_fragments', function($fragments) {
+
+    ob_start();
+    ?>
+
+    <span class="cart-count-header absolute -top-2 -right-3 bg-white text-black text-[9px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+        <?php echo WC()->cart->get_cart_contents_count(); ?>
+    </span>
+
+    <?php
+
+    $fragments['.cart-count-header'] = ob_get_clean();
+
+    return $fragments;
+});
+add_action('wp_enqueue_scripts', function () {
+
+    wp_enqueue_script('wc-cart-fragments');
+
+}, 100);

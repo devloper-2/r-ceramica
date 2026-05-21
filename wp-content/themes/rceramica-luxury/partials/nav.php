@@ -65,7 +65,7 @@ function rc_mobile_link_class( $link, $active ) {
                     <a href="<?php echo esc_url( home_url( '/cart/' ) ); ?>" class="flex items-center hover:text-white/80 transition-colors group">
                         <div class="relative">
                             <i data-lucide="shopping-cart" size="28" stroke-width="1.2" class="text-white/80 group-hover:text-white group-hover:scale-110 transition-all"></i>
-                            <span class="absolute -top-2 -right-3 bg-white text-black text-[9px] font-bold w-5 h-5 rounded-full flex items-center justify-center"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
+                            <span class="cart-count-header absolute -top-2 -right-3 bg-white text-black text-[9px] font-bold w-5 h-5 rounded-full flex items-center justify-center"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
                         </div>
                     </a>
                     <button onclick="toggleLangDropdown(event)" class="hover:text-white/80 transition-colors focus:outline-none ring-0 border-0">
@@ -107,7 +107,7 @@ function rc_mobile_link_class( $link, $active ) {
         <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="<?php echo rc_nav_link_class( 'home', $rc_nav_active ); ?>">HOME</a>
         <a href="<?php echo esc_url( home_url( '/about/' ) ); ?>" class="<?php echo rc_nav_link_class( 'about', $rc_nav_active ); ?>">ABOUT US</a>
         <a href="<?php echo esc_url( home_url( '/explore/' ) ); ?>" class="<?php echo rc_nav_link_class( 'explore', $rc_nav_active ); ?>">EXPLORE</a>
-        <a href="#" class="<?php echo rc_nav_link_class( 'catalogue', $rc_nav_active ); ?>">CATALOGUE</a>
+        <a href="<?php echo esc_url( home_url( '/products/' ) ); ?>" class="<?php echo rc_nav_link_class( 'catalogue', $rc_nav_active ); ?>">CATALOGUE</a>
         <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="<?php echo rc_nav_link_class( 'contact', $rc_nav_active ); ?>">CONTACT US</a>
     </div>
 

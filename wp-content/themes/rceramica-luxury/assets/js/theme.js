@@ -580,3 +580,67 @@ function rceramicaInitTheme() {
 }
 
 document.addEventListener('DOMContentLoaded', rceramicaInitTheme);
+
+/* =========================================
+   FILTER SIDEBAR TOGGLE
+========================================= */
+
+function rceramicaInitFilterToggles() {
+
+    const toggleButtons = document.querySelectorAll('[data-filter-toggle]');
+
+    toggleButtons.forEach(button => {
+
+        button.addEventListener('click', function () {
+
+            const target = this.nextElementSibling;
+            const icon = this.querySelector('.filter-toggle-icon');
+
+            if (!target) return;
+
+            target.classList.toggle('hidden');
+
+           if (icon) {
+
+    const isOpen = !target.classList.contains('hidden');
+
+    icon.setAttribute(
+        'data-lucide',
+        isOpen ? 'minus' : 'plus'
+    );
+
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+}
+
+        });
+
+    });
+
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    rceramicaInitFilterToggles();
+
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const range = document.getElementById('priceRange');
+    const minInput = document.getElementById('minPrice');
+    const maxInput = document.getElementById('maxPrice');
+
+    if (!range || !minInput || !maxInput) return;
+
+    range.addEventListener('input', function () {
+
+        maxInput.value = this.value;
+
+        // Optional dynamic min
+        minInput.value = Math.max(0, this.value - 5000);
+
+    });
+
+});

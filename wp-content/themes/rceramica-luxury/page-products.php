@@ -1,337 +1,686 @@
 <?php
 /**
- * Template for the Products page.
+ * Template Name: Products Page
  */
+
 get_header();
+
+$paged = max(1, get_query_var('paged'));
+
+$active_category = isset($_GET['category']) ? sanitize_text_field($_GET['category']) : '';
+$active_finish   = isset($_GET['finish']) ? sanitize_text_field($_GET['finish']) : '';
+$active_brand    = isset($_GET['brand']) ? sanitize_text_field($_GET['brand']) : '';
+$active_shape    = isset($_GET['shape']) ? sanitize_text_field($_GET['shape']) : '';
+$active_mounting = isset($_GET['mounting']) ? sanitize_text_field($_GET['mounting']) : '';
+$active_area     = isset($_GET['area']) ? sanitize_text_field($_GET['area']) : '';
+
+$min_price = isset($_GET['min_price']) ? intval($_GET['min_price']) : 0;
+$max_price = isset($_GET['max_price']) ? intval($_GET['max_price']) : 50000;
+
+/* ----------------------------------------
+   TAX QUERY
+---------------------------------------- */
+
+$tax_query = [];
+
+if ($active_category) {
+    $tax_query[] = [
+        'taxonomy' => 'product_cat',
+        'field'    => 'slug',
+        'terms'    => $active_category,
+    ];
+}
+
+if ($active_finish) {
+    $tax_query[] = [
+        'taxonomy' => 'pa_finish',
+        'field'    => 'slug',
+        'terms'    => $active_finish,
+    ];
+}
+
+if ($active_brand) {
+    $tax_query[] = [
+        'taxonomy' => 'pa_brand',
+        'field'    => 'slug',
+        'terms'    => $active_brand,
+    ];
+}
+
+if ($active_shape) {
+    $tax_query[] = [
+        'taxonomy' => 'pa_shape',
+        'field'    => 'slug',
+        'terms'    => $active_shape,
+    ];
+}
+
+if ($active_mounting) {
+    $tax_query[] = [
+        'taxonomy' => 'pa_mounting',
+        'field'    => 'slug',
+        'terms'    => $active_mounting,
+    ];
+}
+
+if ($active_area) {
+    $tax_query[] = [
+        'taxonomy' => 'pa_area',
+        'field'    => 'slug',
+        'terms'    => $active_area,
+    ];
+}
+
+/* ----------------------------------------
+   PRODUCT QUERY
+---------------------------------------- */
+
+$query_args = [
+    'post_type'      => 'product',
+    'posts_per_page' => 12,
+    'paged'          => $paged,
+    'meta_query'     => [[
+        'key'     => '_price',
+        'value'   => [$min_price, $max_price],
+        'compare' => 'BETWEEN',
+        'type'    => 'NUMERIC',
+    ]]
+];
+
+if (!empty($tax_query)) {
+    $query_args['tax_query'] = $tax_query;
+}
+
+$products_query = new WP_Query($query_args);
+
+/* ----------------------------------------
+   FILTER TERMS
+---------------------------------------- */
+
+$product_categories = get_terms([
+    'taxonomy'   => 'product_cat',
+    'hide_empty' => true,
+    'parent'     => 0,
+]);
+
+$finish_terms = get_terms([
+    'taxonomy'   => 'pa_finish',
+    'hide_empty' => true,
+]);
+
+$brand_terms = get_terms([
+    'taxonomy'   => 'pa_brand',
+    'hide_empty' => true,
+]);
+
+$shape_terms = get_terms([
+    'taxonomy'   => 'pa_shape',
+    'hide_empty' => true,
+]);
+
+$mounting_terms = get_terms([
+    'taxonomy'   => 'pa_mounting',
+    'hide_empty' => true,
+]);
+
+$area_terms = get_terms([
+    'taxonomy'   => 'pa_area',
+    'hide_empty' => true,
+]);
+
+/* ----------------------------------------
+   URL FUNCTION
+---------------------------------------- */
+
+function rc_products_url($args = [])
+{
+    return add_query_arg(
+        array_merge($_GET, $args),
+        home_url('/products/')
+    );
+}
 ?>
+
 <main id="site-content" role="main">
 
-    <main class="pt-32 md:pt-48 pb-24">
-        <div class="max-w-[1720px] mx-auto px-6 md:px-12 lg:px-24">
-            
-            <!-- Breadcrumbs & Sort -->
-            <div class="relative z-[70] flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 animate-slide-up">
-                <div class="flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-white/40">
-                    <a href="<?php echo esc_url( home_url( "/" ) ); ?>" class="hover:text-white transition-colors">Home</a>
-                    <i data-lucide="chevron-right" size="10"></i>
-                    <a href="<?php echo esc_url( home_url( "/faucets/" ) ); ?>" class="hover:text-white transition-colors">Bathrooms</a>
-                    <i data-lucide="chevron-right" size="10"></i>
-                    <span class="text-white" id="current-category">Fusion Collection</span>
+<div class="max-w-[1720px] mx-auto px-6 md:px-12 flex gap-0 pt-48">
+
+    <!-- SIDEBAR -->
+    <aside class="hidden lg:block w-72 shrink-0 pt-12 pr-10">
+
+        <div class="sticky top-[220px] space-y-10">
+
+            <!-- SELECTED OPTIONS -->
+            <div class="bg-[#111] border border-white/5 p-6">
+
+                <h3 class="text-[10px] uppercase tracking-[0.45em] text-white/40 mb-5">
+                    Selected Options
+                </h3>
+
+                <div class="flex flex-wrap gap-3">
+
+                    <?php if ($active_category) : ?>
+                        <a href="<?php echo esc_url(rc_products_url(['category' => ''])); ?>"
+                           class="h-10 px-4 bg-white/10 flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
+
+                            <?php echo esc_html($active_category); ?>
+
+                            <i data-lucide="x" class="w-3 h-3"></i>
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if ($active_finish) : ?>
+                        <a href="<?php echo esc_url(rc_products_url(['finish' => ''])); ?>"
+                           class="h-10 px-4 bg-white/10 flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
+
+                            <?php echo esc_html($active_finish); ?>
+
+                            <i data-lucide="x" class="w-3 h-3"></i>
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if ($active_brand) : ?>
+                        <a href="<?php echo esc_url(rc_products_url(['brand' => ''])); ?>"
+                           class="h-10 px-4 bg-white/10 flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
+
+                            <?php echo esc_html($active_brand); ?>
+
+                            <i data-lucide="x" class="w-3 h-3"></i>
+                        </a>
+                    <?php endif; ?>
+
                 </div>
-                
-                <div class="flex items-center gap-8">
-                    <p class="text-[10px] uppercase tracking-[0.2em] text-white/30"><span id="product-count" class="text-white">12</span> Products Found</p>
-                    <div class="relative">
-                        <button id="sort-button" onclick="toggleSortMenu()" class="flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-white/80 hover:text-white pb-1 border-b border-white/10 transition-colors">
-                            Sort By: <span id="current-sort">Recommended</span> <i data-lucide="chevron-down" size="12"></i>
-                        </button>
-                        <!-- Sort Dropdown Menu -->
-                        <div id="sort-menu" class="absolute right-0 mt-3 w-56 bg-[#111] border border-white/5 hidden z-[100] shadow-2xl backdrop-blur-xl">
-                            <div class="flex flex-col py-3">
-                                <button onclick="applySort('recommended', 'Recommended')" class="px-6 py-4 text-[9px] uppercase tracking-[0.3em] text-left text-white/50 hover:text-white hover:bg-white/5 transition-all">Recommended</button>
-                                <button onclick="applySort('price-low', 'Price: Low to High')" class="px-6 py-4 text-[9px] uppercase tracking-[0.3em] text-left text-white/50 hover:text-white hover:bg-white/5 transition-all">Price: Low to High</button>
-                                <button onclick="applySort('price-high', 'Price: High to Low')" class="px-6 py-4 text-[9px] uppercase tracking-[0.3em] text-left text-white/50 hover:text-white hover:bg-white/5 transition-all">Price: High to Low</button>
-                                <button onclick="applySort('newest', 'Newest Arrivals')" class="px-6 py-4 text-[9px] uppercase tracking-[0.3em] text-left text-white/50 hover:text-white hover:bg-white/5 transition-all">Newest Arrivals</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+                <a href="<?php echo esc_url(home_url('/products/')); ?>"
+                   class="mt-5 h-12 border border-white/10 flex items-center justify-center text-[10px] uppercase tracking-[0.45em] text-white/60 hover:text-white hover:border-[#c5a059] transition-all">
+
+                    Reset All
+
+                </a>
+
             </div>
 
-            <div class="flex flex-col lg:flex-row gap-16">
-                
-                <aside id="filter-sidebar" class="hidden-mobile lg:block w-full lg:w-80 shrink-0 lg:animate-slide-up" style="animation-delay: 0.1s">
-                    <div class="lg:sticky lg:top-48 filter-container flex flex-col h-full lg:h-auto bg-[#0a0a0a] lg:bg-transparent">
-                        
-                        <!-- Mobile Header -->
-                        <div class="lg:hidden flex justify-between items-center px-6 py-6 border-b border-white/5 sticky top-0 bg-[#0a0a0a] z-10">
-                            <h4 class="text-lg font-display uppercase tracking-widest text-[#c5a059]">Refine By</h4>
-                            <button onclick="toggleMobileFilters()" class="text-white/60 hover:text-white transition-colors">
-                                <i data-lucide="x" size="24"></i>
-                            </button>
-                        </div>
+            <!-- CATEGORIES -->
+            <div class="border border-white/5">
 
-                        <!-- Scrollable Body -->
-                        <div class="flex-1 overflow-y-auto px-6 lg:px-0 py-8 lg:py-0 lg:space-y-2 filter-panel">
-                            <!-- Sort Accordion (Mobile Only) -->
-                            <div class="lg:hidden border border-white/5 overflow-hidden">
-                                <button onclick="toggleAccordion('sort-mobile')" class="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group">
-                                    <span class="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">Sort By</span>
-                                    <i id="sort-mobile-icon" data-lucide="plus" size="14" class="text-white/40 group-hover:text-white transition-transform"></i>
-                                </button>
-                                <div id="sort-mobile" class="hidden px-6 py-4 space-y-2 bg-black/40">
-                                    <button onclick="applySort('recommended', 'Recommended'); toggleMobileFilters()" class="w-full text-left py-3 text-[9px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Recommended</button>
-                                    <button onclick="applySort('price-low', 'Price: Low to High'); toggleMobileFilters()" class="w-full text-left py-3 text-[9px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Price: Low to High</button>
-                                    <button onclick="applySort('price-high', 'Price: High to Low'); toggleMobileFilters()" class="w-full text-left py-3 text-[9px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Price: High to Low</button>
-                                    <button onclick="applySort('newest', 'Newest Arrivals'); toggleMobileFilters()" class="w-full text-left py-3 text-[9px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Newest Arrivals</button>
-                                </div>
-                            </div>
+                <button onclick="toggleAccordion('categories-filter')"
+                        class="w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
 
-                            <!-- Selected Options (Always Visible) -->
-                            <div class="bg-white/5 border border-white/5 p-6 mb-6">
-                                <h4 class="text-[10px] font-display font-medium uppercase tracking-[0.2em] text-white/40 mb-4">Selected Options</h4>
-                                <div id="selected-filters" class="flex flex-wrap gap-2">
-                                    <span class="bg-white/10 text-[9px] px-3 py-1.5 uppercase tracking-widest flex items-center gap-2 group cursor-pointer hover:bg-white/20">
-                                        Chrome <i data-lucide="x" size="10"></i>
-                                    </span>
-                                </div>
-                            </div>
+                    <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">
+                        Categories
+                    </span>
 
-                            <!-- Price Accordion -->
-                            <div class="border border-white/5 overflow-hidden">
-                                <button onclick="toggleAccordion('price-filter')" class="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group">
-                                    <span class="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">Budget Range</span>
-                                    <i id="price-filter-icon" data-lucide="plus" size="14" class="text-white/40 group-hover:text-white transition-transform"></i>
-                                </button>
-                                <div id="price-filter" class="hidden px-6 py-10 space-y-8 bg-black/40">
-                                    <!-- Price Slider -->
-                                    <div class="space-y-4">
-                                        <div class="flex justify-between items-center text-[9px] uppercase tracking-widest text-white/40">
-                                            <span>Min: ₹0</span>
-                                            <span id="slider-val">Max: ₹50,000</span>
-                                        </div>
-                                        <input type="range" id="price-slider" min="0" max="100000" step="500" value="50000" oninput="syncInputsFromSlider()" class="cursor-pointer">
-                                    </div>
-                                    
-                                    <!-- Price Inputs -->
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <div class="space-y-2">
-                                            <label class="text-[8px] uppercase tracking-widest text-white/30">Min Budget</label>
-                                            <div class="relative">
-                                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[9px] text-white/40">₹</span>
-                                                <input type="number" id="price-min" value="0" class="w-full bg-white/5 border border-white/10 pl-6 pr-3 py-3 text-[10px] text-white outline-none focus:border-[#c5a059] transition-colors appearance-none">
-                                            </div>
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="text-[8px] uppercase tracking-widest text-white/30">Max Budget</label>
-                                            <div class="relative">
-                                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[9px] text-white/40">₹</span>
-                                                <input type="number" id="price-max" value="50000" class="w-full bg-white/5 border border-white/10 pl-6 pr-3 py-3 text-[10px] text-white outline-none focus:border-[#c5a059] transition-colors appearance-none">
-                                            </div>
-                                        </div>
-                                    </div>
+                    <span id="categories-filter-icon" class="text-white/40 text-sm">—</span>
 
-                                    <button class="w-full py-3 text-[9px] uppercase tracking-[0.2em] font-bold border border-[#c5a059]/20 text-[#c5a059] hover:bg-[#c5a059] hover:text-white transition-all">
-                                        Apply Range
-                                    </button>
-                                </div>
-                            </div>
+                </button>
 
-                            <!-- Area Accordion -->
-                            <div class="border border-white/5 overflow-hidden">
-                                <button onclick="toggleAccordion('area-filter')" class="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group">
-                                    <span class="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">Area</span>
-                                    <i id="area-filter-icon" data-lucide="plus" size="14" class="text-white/40 group-hover:text-white transition-transform"></i>
-                                </button>
-                                <div id="area-filter" class="hidden px-6 py-8 space-y-4 bg-black/40">
-                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
-                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
-                                        <span>Basin</span>
-                                    </label>
-                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
-                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
-                                        <span>Shower</span>
-                                    </label>
-                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
-                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
-                                        <span>Kitchen</span>
-                                    </label>
-                                </div>
-                            </div>
+                <div id="categories-filter" class="px-4 py-4 bg-black/40 space-y-1">
 
-                            <!-- Color Finishes Accordion (Active) -->
-                            <div class="border border-white/5 overflow-hidden">
-                                <button onclick="toggleAccordion('color-filter')" class="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group">
-                                    <span class="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">Color Finishes</span>
-                                    <i id="color-filter-icon" data-lucide="minus" size="14" class="text-white/40 group-hover:text-white transition-transform"></i>
-                                </button>
-                                <div id="color-filter" class="px-6 py-8 space-y-6 bg-black/40">
-                                    <div class="flex items-center gap-4 cursor-pointer group">
-                                        <div class="w-10 h-10 border border-white/10 overflow-hidden">
-                                            <img src="https://rceramica.com/img/finishes/black_chrome.jpg" onerror="this.src='https://placehold.co/40x40/333333/ffffff?text=BC'" class="w-full h-full object-cover">
-                                        </div>
-                                        <span class="text-[10px] uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">Black Chrome</span>
-                                    </div>
-                                    <div class="flex items-center gap-4 cursor-pointer group">
-                                        <div class="w-10 h-10 border border-white/10 bg-[#1a1a1a]"></div>
-                                        <span class="text-[10px] uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">Black Matt</span>
-                                    </div>
-                                    <div class="flex items-center gap-4 cursor-pointer group">
-                                        <div class="w-10 h-10 border border-white/10 bg-[#7c5e42]"></div>
-                                        <span class="text-[10px] uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">Blush Gold Bright PVD</span>
-                                    </div>
-                                    <div class="flex items-center gap-4 cursor-pointer group">
-                                        <div class="w-10 h-10 border border-white/10 bg-gradient-to-br from-[#dfdfdf] to-[#999]"></div>
-                                        <span class="text-[10px] uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">Chrome</span>
-                                    </div>
-                                    <div class="flex items-center gap-4 cursor-pointer group">
-                                        <div class="relative w-10 h-10 border border-[#c5a059] bg-[#b89552]">
-                                            <div class="absolute inset-0 flex items-center justify-center">
-                                                <i data-lucide="check" size="12" class="text-black"></i>
-                                            </div>
-                                        </div>
-                                        <span class="text-[10px] uppercase tracking-widest text-white transition-colors">Gold Bright PVD</span>
-                                    </div>
-                                </div>
-                            </div>
+                    <?php foreach ($product_categories as $cat) :
 
-                            <!-- Mounting Accordion -->
-                            <div class="border border-white/5 overflow-hidden">
-                                <button onclick="toggleAccordion('mounting-filter')" class="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group">
-                                    <span class="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">Mounting</span>
-                                    <i id="mounting-filter-icon" data-lucide="plus" size="14" class="text-white/40 group-hover:text-white transition-transform"></i>
-                                </button>
-                                <div id="mounting-filter" class="hidden px-6 py-8 space-y-4 bg-black/40">
-                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
-                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
-                                        <span>Deck Mounted</span>
-                                    </label>
-                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
-                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
-                                        <span>Wall Mounted</span>
-                                    </label>
-                                </div>
-                            </div>
+                        $is_active = $active_category === $cat->slug;
 
-                            <!-- Range Accordion -->
-                            <div class="border border-white/5 overflow-hidden">
-                                <button onclick="toggleAccordion('range-filter')" class="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group">
-                                    <span class="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">Range</span>
-                                    <i id="range-filter-icon" data-lucide="plus" size="14" class="text-white/40 group-hover:text-white transition-transform"></i>
-                                </button>
-                                <div id="range-filter" class="hidden px-6 py-8 space-y-4 bg-black/40">
-                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
-                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
-                                        <span>Economy</span>
-                                    </label>
-                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
-                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
-                                        <span>Premium</span>
-                                    </label>
-                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
-                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
-                                        <span>Luxury</span>
-                                    </label>
-                                </div>
-                            </div>
+                    ?>
 
-                            <!-- Shape Accordion -->
-                            <div class="border border-white/5 overflow-hidden">
-                                <button onclick="toggleAccordion('shape-filter')" class="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group">
-                                    <span class="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">Shape</span>
-                                    <i id="shape-filter-icon" data-lucide="plus" size="14" class="text-white/40 group-hover:text-white transition-transform"></i>
-                                </button>
-                                <div id="shape-filter" class="hidden px-6 py-8 space-y-4 bg-black/40">
-                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
-                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
-                                        <span>Square</span>
-                                    </label>
-                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
-                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
-                                        <span>Round</span>
-                                    </label>
-                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
-                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
-                                        <span>Curved</span>
-                                    </label>
-                                </div>
-                            </div>
+                    <a href="<?php echo esc_url(rc_products_url([
+                        'category' => $cat->slug
+                    ])); ?>"
 
-                            <div class="pt-8 block lg:hidden">
-                                <button class="w-full py-5 text-[10px] uppercase tracking-[0.4em] font-bold border border-white/10 hover:bg-white hover:text-black transition-all">
-                                    Reset All
-                                </button>
-                            </div>
-                        </div>
+                       class="flex items-center justify-between py-3 px-4 text-[11px] uppercase tracking-[0.25em] transition-all <?php echo $is_active
+                            ? 'text-[#c5a059] bg-white/5 border-l-2 border-[#c5a059]'
+                            : 'text-white/40 hover:text-white hover:bg-white/3 border-l-2 border-transparent'; ?>">
 
-                        <!-- Sticky Mobile Footer -->
-                        <div class="lg:hidden p-6 border-t border-white/5 bg-[#0a0a0a] sticky bottom-0">
-                            <button onclick="toggleMobileFilters()" class="w-full py-5 text-[10px] uppercase tracking-[0.4em] font-bold bg-[#c5a059] text-white transition-all shadow-2xl">
-                                Apply Selection
-                            </button>
-                        </div>
+                        <span><?php echo esc_html($cat->name); ?></span>
 
-                        <!-- Desktop Reset Button (Visible only on lg) -->
-                        <div class="hidden lg:block pt-8">
-                            <button class="w-full py-5 text-[10px] uppercase tracking-[0.4em] font-bold border border-white/10 hover:bg-white hover:text-black transition-all">
-                                Reset Filters
-                            </button>
-                        </div>
-                    </div>
-                </aside>
+                        <span class="text-[9px] opacity-50">
+                            <?php echo $cat->count; ?>
+                        </span>
 
-                <!-- Product Grid -->
-                <div class="flex-1">
-                    <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-12 gap-y-20">
-                        <!-- Products will be injected here -->
-                    </div>
+                    </a>
+
+                    <?php endforeach; ?>
+
                 </div>
 
             </div>
+<!-- BUDGET RANGE -->
+<div class="border border-white/5">
+
+    <button onclick="toggleAccordion('budget-filter')"
+            class="w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+
+        <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">
+            Budget Range
+        </span>
+
+        <span id="budget-filter-icon" class="text-white/40 text-sm">—</span>
+
+    </button>
+
+    <div id="budget-filter" class="p-6 bg-black/40">
+
+    <form method="GET">
+
+        <?php foreach ($_GET as $key => $value) :
+
+            if ($key === 'min_price' || $key === 'max_price') {
+                continue;
+            }
+
+        ?>
+
+            <input type="hidden"
+                   name="<?php echo esc_attr($key); ?>"
+                   value="<?php echo esc_attr($value); ?>">
+
+        <?php endforeach; ?>
+
+        <div class="flex justify-between text-[10px] uppercase tracking-[0.25em] text-white/40 mb-6">
+            <span>Min: ₹0</span>
+            <span>Max: ₹50,000</span>
         </div>
-    </main>
 
-    <!-- Professional Architecture Footer -->
-    <footer class="relative bg-[#0c0c0c] pt-24 pb-12 border-t border-white/5">
-        <div class="max-w-[1720px] mx-auto px-6 md:px-24">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
-                <div class="space-y-10">
-                    <img src="https://rceramica.com/logo/logo.png" alt="R Ceramica Logo" class="h-16 w-auto object-contain">
-                    <p class="text-white/40 text-[13px] leading-relaxed font-light max-w-sm">
-                        R Ceramica is a brand that believes in continuous development and growth. We innovate to reform the market approach.
-                    </p>
-                </div>
-                <!-- Simplified links -->
-                <div class="space-y-10 text-[13px] text-white/40 uppercase tracking-wider">
-                    <h4 class="text-white font-display text-lg tracking-wider font-light lowercase capitalize">Collections</h4>
-                    <ul class="space-y-4 lowercase capitalize">
-                        <li><a href="#" class="hover:text-white transition-colors">Lounge Tiles</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Bathware Series</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Kitchen Concepts</a></li>
-                    </ul>
-                </div>
-                <div class="space-y-10 text-[13px] text-white/40 uppercase tracking-wider">
-                    <h4 class="text-white font-display text-lg tracking-wider font-light lowercase capitalize">Corporate</h4>
-                    <ul class="space-y-4 lowercase capitalize">
-                        <li><a href="<?php echo esc_url( home_url( "/about/" ) ); ?>" class="hover:text-white transition-colors">Story</a></li>
-                        <li><a href="<?php echo esc_url( home_url( "/contact/" ) ); ?>" class="hover:text-white transition-colors">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="space-y-10">
-                    <h4 class="text-white font-display text-lg tracking-wider font-light lowercase capitalize">Contact</h4>
-                    <div class="space-y-4 text-[13px] text-white/40 leading-relaxed font-light">
-                        <p>Morbi, Gujarat (INDIA)</p>
-                        <p>PH: +91 94274 10127</p>
-                    </div>
-                </div>
-            </div>
-            <div class="pt-16 border-t border-white/5 flex flex-col items-center gap-6 text-[10px] text-white/20 uppercase tracking-[0.3em]">
-                <p>© 2024 R Ceramica Global. All Rights Reserved.</p>
-            </div>
-        </div>
-    </footer>
+        <input type="range"
+               id="priceRange"
+               min="0"
+               max="50000"
+               step="200"
+               value="<?php echo esc_attr($max_price); ?>"
+               class="w-full mb-6">
 
-    <!-- Notification Toast -->
-    <div id="toast" class="fixed top-24 right-6 md:right-12 bg-white text-black pl-6 pr-10 py-5 border-l-4 border-[#c5a059] opacity-0 translate-x-12 pointer-events-none transition-all duration-500 z-[200] shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
-        <div class="flex items-center gap-4">
-            <div class="bg-black/5 p-2 rounded-full">
-                <i data-lucide="check" size="18" class="text-[#c5a059]"></i>
-            </div>
+        <div class="grid grid-cols-2 gap-4 mb-6">
+
             <div>
-                <p class="text-[10px] uppercase tracking-[0.3em] font-bold mb-0.5">Success</p>
-                <p class="text-[9px] uppercase tracking-[0.2em] text-black/60" id="toast-message">Item Added to Cart</p>
+
+                <label class="block text-[9px] uppercase tracking-[0.25em] text-white/30 mb-2">
+                    Min Budget
+                </label>
+
+                <input type="number"
+                       id="minPrice"
+                       name="min_price"
+                       value="<?php echo esc_attr($min_price); ?>"
+                       class="w-full h-12 bg-transparent border border-white/10 px-4 text-white outline-none">
+
             </div>
+
+            <div>
+
+                <label class="block text-[9px] uppercase tracking-[0.25em] text-white/30 mb-2">
+                    Max Budget
+                </label>
+
+                <input type="number"
+                       id="maxPrice"
+                       name="max_price"
+                       value="<?php echo esc_attr($max_price); ?>"
+                       class="w-full h-12 bg-transparent border border-white/10 px-4 text-white outline-none">
+
+            </div>
+
         </div>
-        <div class="absolute bottom-0 left-0 h-[2px] bg-[#c5a059] w-0 toast-progress"></div>
-    </div>
 
-    <!-- Mobile Filter Toggle -->
-    <div class="lg:hidden fixed bottom-8 right-6 z-[80] animate-slide-up">
-        <button id="mobile-filter-btn" onclick="toggleMobileFilters()" class="flex items-center justify-center bg-white text-black w-12 h-12 rounded-full shadow-2xl active:scale-90 transition-all duration-300">
-            <i data-lucide="filter" size="18"></i>
+        <button type="submit"
+                class="w-full h-14 border border-[#c5a059]/40 text-[#c5a059] text-[10px] uppercase tracking-[0.45em] hover:bg-[#c5a059] hover:text-black transition-all">
+
+            Apply Range
+
         </button>
+
+    </form>
+
+</div>
+
+
+</div>
+            <!-- COLOR FINISHES -->
+            <div class="border border-white/5">
+
+                <button onclick="toggleAccordion('finish-filter')"
+                        class="w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+
+                    <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">
+                        Color Finishes
+                    </span>
+
+                    <span id="finish-filter-icon" class="text-white/40 text-sm">—</span>
+
+                </button>
+
+                <div id="finish-filter" class="px-6 py-6 bg-black/40 space-y-4">
+
+                    <?php foreach ($finish_terms as $term) :
+
+                        $is_active = $active_finish === $term->slug;
+
+                    ?>
+
+                    <a href="<?php echo esc_url(rc_products_url([
+                        'finish' => $term->slug
+                    ])); ?>"
+
+                       class="flex items-center gap-4 group">
+
+                        <div class="w-5 h-5 border <?php echo $is_active
+                            ? 'border-[#c5a059] bg-[#c5a059]'
+                            : 'border-white/20'; ?>"></div>
+
+                        <span class="text-[10px] uppercase tracking-[0.25em] <?php echo $is_active
+                            ? 'text-white'
+                            : 'text-white/50'; ?>">
+
+                            <?php echo esc_html($term->name); ?>
+
+                        </span>
+
+                    </a>
+
+                    <?php endforeach; ?>
+
+                </div>
+
+            </div>
+            <!-- BRANDS -->
+<div class="border border-white/5">
+
+    <button onclick="toggleAccordion('brand-filter')"
+            class="w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+
+        <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">
+            Brands
+        </span>
+
+        <span id="brand-filter-icon" class="text-white/40 text-sm">+</span>
+
+    </button>
+
+    <div id="brand-filter"
+         class="px-6 py-6 bg-black/40 space-y-4 hidden">
+
+        <?php foreach ($brand_terms as $term) :
+
+            $is_active = $active_brand === $term->slug;
+
+        ?>
+
+        <a href="<?php echo esc_url(rc_products_url([
+            'brand' => $term->slug
+        ])); ?>"
+
+           class="flex items-center gap-4 group">
+
+            <div class="w-5 h-5 border flex items-center justify-center <?php echo $is_active
+                ? 'border-[#c5a059] bg-[#c5a059]'
+                : 'border-white/20'; ?>">
+
+                <?php if ($is_active) : ?>
+                    <span class="text-black text-[10px]">✓</span>
+                <?php endif; ?>
+
+            </div>
+
+            <span class="text-[10px] uppercase tracking-[0.25em] <?php echo $is_active
+                ? 'text-white'
+                : 'text-white/50'; ?>">
+
+                <?php echo esc_html($term->name); ?>
+
+            </span>
+
+        </a>
+
+        <?php endforeach; ?>
+
     </div>
 
-    <!-- Scripts -->
+</div>
+
+<!-- MOUNTING -->
+<div class="border border-white/5">
+
+    <button onclick="toggleAccordion('mounting-filter')"
+            class="w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+
+        <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">
+            Mounting
+        </span>
+
+        <span id="mounting-filter-icon" class="text-white/40 text-sm">+</span>
+
+    </button>
+
+    <div id="mounting-filter"
+         class="px-6 py-6 bg-black/40 space-y-4 hidden">
+
+        <?php foreach ($mounting_terms as $term) :
+
+            $is_active = $active_mounting === $term->slug;
+
+        ?>
+
+        <a href="<?php echo esc_url(rc_products_url([
+            'mounting' => $term->slug
+        ])); ?>"
+
+           class="flex items-center gap-4 group">
+
+            <div class="w-5 h-5 border flex items-center justify-center <?php echo $is_active
+                ? 'border-[#c5a059] bg-[#c5a059]'
+                : 'border-white/20'; ?>">
+
+                <?php if ($is_active) : ?>
+                    <span class="text-black text-[10px]">✓</span>
+                <?php endif; ?>
+
+            </div>
+
+            <span class="text-[10px] uppercase tracking-[0.25em] <?php echo $is_active
+                ? 'text-white'
+                : 'text-white/50'; ?>">
+
+                <?php echo esc_html($term->name); ?>
+
+            </span>
+
+        </a>
+
+        <?php endforeach; ?>
+
+    </div>
+
+</div>
+
+<!-- SHAPE -->
+<div class="border border-white/5">
+
+    <button onclick="toggleAccordion('shape-filter')"
+            class="w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+
+        <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">
+            Shape
+        </span>
+
+        <span id="shape-filter-icon" class="text-white/40 text-sm">+</span>
+
+    </button>
+
+    <div id="shape-filter"
+         class="px-6 py-6 bg-black/40 space-y-4 hidden">
+
+        <?php foreach ($shape_terms as $term) :
+
+            $is_active = $active_shape === $term->slug;
+
+        ?>
+
+        <a href="<?php echo esc_url(rc_products_url([
+            'shape' => $term->slug
+        ])); ?>"
+
+           class="flex items-center gap-4 group">
+
+            <div class="w-5 h-5 border flex items-center justify-center <?php echo $is_active
+                ? 'border-[#c5a059] bg-[#c5a059]'
+                : 'border-white/20'; ?>">
+
+                <?php if ($is_active) : ?>
+                    <span class="text-black text-[10px]">✓</span>
+                <?php endif; ?>
+
+            </div>
+
+            <span class="text-[10px] uppercase tracking-[0.25em] <?php echo $is_active
+                ? 'text-white'
+                : 'text-white/50'; ?>">
+
+                <?php echo esc_html($term->name); ?>
+
+            </span>
+
+        </a>
+
+        <?php endforeach; ?>
+
+    </div>
+
+</div>
+
+        </div>
+
+    </aside>
+
+    <!-- PRODUCTS -->
+    <div class="flex-1 min-w-0 py-12">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-12 gap-y-20">
+
+            <?php if ($products_query->have_posts()) : ?>
+
+                <?php while ($products_query->have_posts()) : $products_query->the_post();
+
+                    $post_id   = get_the_ID();
+
+$sku       = get_post_meta($post_id, '_sku', true);
+
+$price     = get_post_meta($post_id, '_price', true);
+
+$size      = get_post_meta($post_id, '_rc_size', true);
+
+$finish    = get_post_meta($post_id, '_rc_finish', true);
+
+$img_url   = get_post_meta($post_id, '_rc_image_url', true);
+
+$thumb     = get_the_post_thumbnail_url($post_id, 'large');
+
+$image     = $thumb ?: ($img_url ?: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=800');
+
+$permalink = get_permalink();
+
+$product   = wc_get_product($post_id);
+
+                ?>
+
+                <article class="group relative bg-[#111] overflow-hidden">
+
+                    <div class="relative aspect-[4/5] overflow-hidden bg-[#0d0d0d]">
+
+                        <a href="<?php the_permalink(); ?>">
+
+                           <img src="<?php echo esc_url($image); ?>"
+         alt="<?php echo esc_attr(get_the_title()); ?>"
+         loading="lazy"
+         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+
+                        </a>
+
+                    </div>
+
+                    <div class="p-6 text-center space-y-3">
+
+                        <h3 class="text-[11px] uppercase tracking-[0.35em] text-[#c5a059]">
+                            Fusion Series
+                        </h3>
+
+                        <h2 class="text-[20px] uppercase tracking-[0.08em] text-white">
+                            <?php the_title(); ?>
+                        </h2>
+
+                        <?php if ($sku) : ?>
+
+                            <p class="text-white/30 text-[11px] uppercase tracking-[0.25em]">
+                                <?php echo esc_html($sku); ?>
+                            </p>
+
+                        <?php endif; ?>
+
+                        <p class="text-white text-[32px] font-light">
+                            ₹<?php echo number_format($price); ?>
+                        </p>
+
+                        <div class="pt-6 space-y-4 viewcartpopup">
+
+                            <a href="<?php echo esc_url( $product->add_to_cart_url() ); ?>" data-quantity="1" data-product_id="<?php echo esc_attr( $product->get_id() ); ?>" data-product_sku="<?php echo esc_attr( $product->get_sku() ); ?>" aria-label="<?php echo esc_attr( $product->add_to_cart_description() ); ?>" rel="nofollow" class="rc-add-to-cart add_to_cart_button ajax_add_to_cart product_type_simple h-14 w-full border border-white bg-white text-black text-[11px] uppercase tracking-[0.45em] flex items-center justify-center gap-3 hover:bg-[#c5a059] hover:border-[#c5a059] transition-all duration-300"><i data-lucide="shopping-cart" size="14"></i>Add To Cart</a>
+
+                            <a href="<?php the_permalink(); ?>"
+                               class="h-14 w-full border border-white/10 flex items-center justify-center text-[10px] uppercase tracking-[0.45em] text-white hover:border-[#c5a059] transition-all"> View Details</a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <?php endwhile; ?>
+
+            <?php endif; ?>
+
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="pt-20 flex justify-center">
+
+            <?php
+            echo paginate_links([
+                'total'      => $products_query->max_num_pages,
+                'current'    => $paged,
+                'mid_size'   => 1,
+                'prev_text'  => '←',
+                'next_text'  => '→',
+            ]);
+            ?>
+
+        </div>
+
+    </div>
+
+</div>
+
 </main>
+
+<script>
+function toggleAccordion(id) {
+
+    const content = document.getElementById(id);
+    const icon = document.getElementById(id + '-icon');
+
+    if (content.style.display === 'none') {
+
+        content.style.display = 'block';
+        icon.innerHTML = '—';
+
+    } else {
+
+        content.style.display = 'none';
+        icon.innerHTML = '+';
+    }
+}
+</script>
+<?php
+wc_enqueue_js("
+    $(document.body).on('added_to_cart', function() {
+        $(document.body).trigger('wc_fragment_refresh');
+    });
+");
+?>
+
 <?php get_footer(); ?>
