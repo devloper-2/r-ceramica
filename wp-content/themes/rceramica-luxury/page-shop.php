@@ -343,110 +343,59 @@ $finish_colors = [
 ];
 
 ?>
+<div class="flex flex-col lg:flex-row gap-16">
+<aside class="hidden-mobile lg:block w-full lg:w-80 shrink-0 lg:animate-slide-up">
 
-<aside class="hidden lg:block w-72 shrink-0 pt-12 pr-10">
-
-    <div class="sticky top-[220px] space-y-10">
-<!-- Selected Options -->
-
-<div class="border border-white/5 bg-[#111] p-6">
-
-    <h3 class="text-[10px] uppercase tracking-[0.45em] text-white/40 mb-6">
-        Selected Options
-    </h3>
-
+ <div class="lg:sticky lg:top-48 filter-container flex flex-col h-full lg:h-auto bg-[#0a0a0a] lg:bg-transparent">
+    
+ <div class="flex-1 overflow-y-auto px-6 lg:px-0 py-8 lg:py-0 lg:space-y-2 filter-panel">
+    <div class="border border-white/5 bg-[#111] p-6">
+    <h3 class="text-[10px] uppercase tracking-[0.45em] text-white/40 mb-6">Selected Options</h3>
     <div class="flex flex-wrap gap-3">
-
         <?php if ($active_finish) : ?>
-
-            <a href="<?php echo esc_url(rc_shop_url([
-                            'finish' => ''
-                        ])); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
-
+            <a href="<?php echo esc_url(rc_shop_url([ 'finish' => '' ])); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
                 <?php echo esc_html($active_finish); ?>
-
                 <i data-lucide="x" class="w-3 h-3"></i>
-
             </a>
-
         <?php endif; ?>
-
 
         <?php if ($active_brand) : ?>
-
-            <a href="<?php echo esc_url(rc_shop_url([
-                            'brand' => ''
-                        ])); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
-
+            <a href="<?php echo esc_url(rc_shop_url([ 'brand' => '' ])); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
                 <?php echo esc_html($active_brand); ?>
-
                 <i data-lucide="x" class="w-3 h-3"></i>
-
             </a>
-
         <?php endif; ?>
+
         <?php if ($active_shape) : ?>
+            <a href="<?php echo esc_url(rc_shop_url([ 'shape' => '' ])); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
+                <?php echo esc_html($active_shape); ?>
+                <i data-lucide="x" class="w-3 h-3"></i>
+            </a>
+            <?php endif; ?>
 
-    <a href="<?php echo esc_url(rc_shop_url([
-                    'shape' => ''
-                ])); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
+            <?php if ($active_mounting) : ?>
+                <a href="<?php echo esc_url(rc_shop_url([ 'mounting' => '' ])); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
+                    <?php echo esc_html($active_mounting); ?>
+                    <i data-lucide="x" class="w-3 h-3"></i>
+                </a>
 
-        <?php echo esc_html($active_shape); ?>
-
-        <i data-lucide="x" class="w-3 h-3"></i>
-
-    </a>
-
-<?php endif; ?>
-
-
-<?php if ($active_mounting) : ?>
-
-    <a href="<?php echo esc_url(rc_shop_url([
-                    'mounting' => ''
-                ])); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
-
-        <?php echo esc_html($active_mounting); ?>
-
-        <i data-lucide="x" class="w-3 h-3"></i>
-
-    </a>
-
-<?php endif; ?>
-        <!-- Reset -->
-        <a href="<?php echo esc_url(add_query_arg([
-                        'category' => $cat_key,
-                        'sub'      => $active_sub_slug
-                    ], home_url('/shop/'))); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white transition-all">Reset All</a>
-
+                <?php endif; ?>
+        
+        <a href="<?php echo esc_url(add_query_arg([ 'category' => $cat_key, 'sub'      => $active_sub_slug ], home_url('/shop/'))); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white transition-all">Reset All</a>
     </div>
-
 </div>
 
 <!-- Budget Range -->
 
 <div class="border border-white/5 bg-[#080808]">
-
-    <button data-filter-toggle
-        class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
-
-        <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">
-            Budget Range
-        </span>
-
-        <i data-lucide="minus"
-           class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
-
+    <button data-filter-toggle class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+        <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">Budget Range</span>
+        <i data-lucide="minus" class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
     </button>
 
     <div class="p-6 space-y-8">
-
         <form method="GET" action="<?php echo esc_url(home_url('/shop/')); ?>">
-
-            <!-- Preserve Existing Filters -->
-
             <input type="hidden" name="category" value="<?php echo esc_attr($cat_key); ?>">
-
             <?php if ($active_sub_slug) : ?>
                 <input type="hidden" name="sub" value="<?php echo esc_attr($active_sub_slug); ?>">
             <?php endif; ?>
@@ -466,263 +415,161 @@ $finish_colors = [
             <?php if ($active_mounting) : ?>
                 <input type="hidden" name="mounting" value="<?php echo esc_attr($active_mounting); ?>">
             <?php endif; ?>
-
-            <!-- Labels -->
+            
 
             <div class="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-white/30">
-
-                <span>
-                    Min: ₹0
-                </span>
-
-                <span>
-                    Max: ₹50,000
-                </span>
-
+                <span>Min: ₹0</span>
+                <span>Max: ₹50,000</span>
             </div>
 
             <!-- Range -->
-
-            <input
-                type="range"
-                id="priceRange"
-                min="0"
-                max="50000"
-                step="500"
-                value="<?php echo esc_attr($max_price); ?>"
-                class="w-full accent-[#c5a059]">
+            <input type="range" id="priceRange" min="0" max="50000" step="500" value="<?php echo esc_attr($max_price); ?>" class="w-full accent-[#c5a059]">
 
             <!-- Inputs -->
-
             <div class="grid grid-cols-2 gap-4">
-
                 <div>
-
-                    <label class="block text-[9px] uppercase tracking-[0.3em] text-white/20 mb-3">
-                        Min Budget
-                    </label>
-
-                    <input
-                        type="number"
-                        name="min_price"
-                        id="minPrice"
-                        value="<?php echo esc_attr($min_price); ?>"
-                        class="w-full h-12 bg-transparent border border-white/10 px-4 text-white text-sm focus:outline-none focus:border-[#c5a059]">
-
+                    <label class="block text-[9px] uppercase tracking-[0.3em] text-white/20 mb-3">Min Budget</label>
+                    <input type="number" name="min_price" id="minPrice" value="<?php echo esc_attr($min_price); ?>" class="w-full h-12 bg-transparent border border-white/10 px-4 text-white text-sm focus:outline-none focus:border-[#c5a059]">
                 </div>
-
                 <div>
-
-                    <label class="block text-[9px] uppercase tracking-[0.3em] text-white/20 mb-3">
-                        Max Budget
-                    </label>
-
-                    <input
-                        type="number"
-                        name="max_price"
-                        id="maxPrice"
-                        value="<?php echo esc_attr($max_price); ?>"
-                        class="w-full h-12 bg-transparent border border-white/10 px-4 text-white text-sm focus:outline-none focus:border-[#c5a059]">
-
+                    <label class="block text-[9px] uppercase tracking-[0.3em] text-white/20 mb-3">Max Budget</label>
+                    <input type="number" name="max_price" id="maxPrice" value="<?php echo esc_attr($max_price); ?>" class="w-full h-12 bg-transparent border border-white/10 px-4 text-white text-sm focus:outline-none focus:border-[#c5a059]">
                 </div>
-
             </div>
 
             <!-- Button -->
-
-            <button
-                type="submit"
-                class="w-full h-14 mt-6 border border-[#c5a059]/40 text-[#c5a059] text-[11px] uppercase tracking-[0.45em] hover:bg-[#c5a059] hover:text-black transition-all">
-
-                Apply Range
-
-            </button>
-
+            <button type="submit" class="w-full h-14 mt-6 border border-[#c5a059]/40 text-[#c5a059] text-[11px] uppercase tracking-[0.45em] hover:bg-[#c5a059] hover:text-black transition-all"> Apply Range </button>
         </form>
+    </div>
+</div>
 
+<!-- Color Finishes -->
+ <?php if (!empty($finish_terms) && !is_wp_error($finish_terms)) : ?>
+
+    <div class="border border-white/5 bg-[#080808]">
+        <button data-filter-toggle class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+            <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">Color Finishes</span>
+            <i data-lucide="minus" class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
+        </button>
+
+        <div class="px-6 py-8 space-y-6">
+            <?php foreach ($finish_terms as $finish) :
+                $is_active_finish = strtolower($active_finish) === strtolower($finish->slug);
+                // premium swatches
+                $finish_styles = [
+                    'black-chrome' => 'background:linear-gradient(135deg,#4a4a4a,#111);',
+                    'black-matt' => 'background:#1b1b1b;',
+                    'blush-gold-bright-pvd' => 'background:#9c7854;',
+                    'chrome' => 'background:linear-gradient(135deg,#f5f5f5,#bdbdbd);',
+                    'gold-bright-pvd' => 'background:#c5a059;',
+                ];
+                $style = $finish_styles[$finish->slug] ?? 'background:#666;';
+            ?>
+            <a href="<?php echo esc_url(rc_shop_url([ 'finish' => $is_active_finish ? '' : $finish->slug ])); ?>" class="flex items-center gap-4 group">
+
+                    <!-- Swatch -->
+                    <div style="<?php echo esc_attr($style); ?>" class="relative w-11 h-11 border flex items-center justify-center transition-all duration-300
+                        <?php echo $is_active_finish ? 'border-[#c5a059]' : 'border-white/10 group-hover:border-white/30'; ?>">
+
+                        <?php if ($is_active_finish) : ?>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        <?php elseif ($finish->slug === 'black-chrome') : ?>
+                            <span class="text-white text-[11px] font-semibold tracking-wide">BC</span>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Label -->
+                    <span class="text-[11px] uppercase tracking-[0.22em] transition-all duration-300
+                        <?php echo $is_active_finish ? 'text-white'  : 'text-white/40 group-hover:text-white/70'; ?>">
+                        <?php echo esc_html($finish->name); ?>
+                    </span>
+                </a>
+            <?php endforeach; ?>
+        </div>
     </div>
 
-</div>
-       
-
-        <!-- Color Finishes -->
-        <?php if (!empty($finish_terms) && !is_wp_error($finish_terms)) : ?>
-
-            <div class="border border-white/5 bg-[#080808]">
-
-                <button data-filter-toggle class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
-                     <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">
-                        Color Finishes
-                    </span>
-                    <i data-lucide="plus" class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
-                </button>
-
-                <div class="hidden p-6 space-y-5">
-
-                    <?php foreach ($finish_terms as $finish) :
-
-                        $is_active_finish = strtolower($active_finish) === strtolower($finish->slug);
-
-                        $swatch = $finish_colors[$finish->slug] ?? '#999999';
-
-                    ?>
-
-                        <a href="<?php echo esc_url(rc_shop_url([
-                                        'finish' => $is_active_finish ? '' : $finish->slug
-                                    ])); ?>"
-
-                           class="flex items-center gap-4 group">
-
-                            <span class="w-5 h-5 border border-white/20 <?php echo $is_active_finish ? 'ring-2 ring-[#c5a059]' : ''; ?>"
-                                  style="background-color: <?php echo esc_attr($swatch); ?>"></span>
-
-                            <span class="text-[11px] uppercase tracking-[0.25em] transition-colors <?php echo $is_active_finish ? 'text-[#c5a059]' : 'text-white/50 group-hover:text-white'; ?>">
-
-                                <?php echo esc_html($finish->name); ?>
-
-                            </span>
-
-                        </a>
-
-                    <?php endforeach; ?>
-
-                </div>
-
-            </div>
-
-        <?php endif; ?>
+<?php endif; ?>
 
         <!-- Brands -->
         <?php if (!empty($brands) && !is_wp_error($brands)) : ?>
-
             <div class="border border-white/5 bg-[#080808]">
-
-                <button data-filter-toggle class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
-                    <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">
-                        Brands
-                    </span>
-                    <i data-lucide="plus" class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
+                 <button data-filter-toggle class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+                    <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">Brands</span>
+                    <i data-lucide="minus" class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
                 </button>
-
-                <div class="hidden p-6 space-y-5">
-
-                    <?php foreach ($brands as $brand) :
-
-    $is_active_brand = $active_brand === $brand->slug;
-
-?>
-
-<a href="<?php echo esc_url(rc_shop_url([
-                'brand' => $is_active_brand ? '' : $brand->slug
-            ])); ?>"
-
-   class="flex items-center gap-4 group">
-
-    <span class="w-4 h-4 border border-white/20 flex items-center justify-center">
-
-        <?php if ($is_active_brand) : ?>
-
-            <span class="w-2 h-2 bg-[#c5a059]"></span>
-
-        <?php endif; ?>
-
-    </span>
-
-    <span class="text-[11px] uppercase tracking-[0.25em] transition-colors <?php echo $is_active_brand ? 'text-[#c5a059]' : 'text-white/50 group-hover:text-white'; ?>">
-
-        <?php echo esc_html($brand->name); ?>
-
-    </span>
-
-</a>
-
-<?php endforeach; ?>
-
+                <div class="p-6 space-y-5">
+                    <?php foreach ($brands as $brand) : $is_active_brand = $active_brand === $brand->slug; ?>
+                    <a href="<?php echo esc_url(rc_shop_url([ 'brand' => $is_active_brand ? '' : $brand->slug ])); ?>" class="flex items-center gap-4 group">
+                        <span class="w-4 h-4 border border-white/20 flex items-center justify-center">
+                             <?php if ($is_active_brand) : ?>
+                                <span class="w-2 h-2 bg-[#c5a059]"></span>
+                                <?php endif; ?>
+                        </span>
+                        <span class="text-[11px] uppercase tracking-[0.25em] transition-colors <?php echo $is_active_brand ? 'text-[#c5a059]' : 'text-white/50 group-hover:text-white'; ?>"><?php echo esc_html($brand->name); ?></span>
+                    </a>
+                    <?php endforeach; ?>
                 </div>
-
             </div>
-
         <?php endif; ?>
 
         <!-- Mounting -->
         <?php if (!empty($mountings) && !is_wp_error($mountings)) : ?>
-    <div class="border border-white/5 bg-[#080808]">
-
-        <button data-filter-toggle class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
-            <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">
-                Mounting
-            </span>
-            <i data-lucide="plus" class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
-        </button>
-
-        <div class="hidden p-6 space-y-5">
-            <?php foreach ($mountings as $mounting) : 
-                $is_active_mounting = ($active_mounting === $mounting->slug);
-            ?>
-                <a href="<?php echo esc_url(rc_shop_url([
-                    'mounting' => $is_active_mounting ? '' : $mounting->slug
-                ])); ?>" class="flex items-center gap-4 group">
-
+            <div class="border border-white/5 bg-[#080808]">
+                <button data-filter-toggle class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+                    <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">Mounting</span>
+                    <i data-lucide="minus" class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
+                </button>
+        
+                <div class="p-6 space-y-5">
+                    <?php foreach ($mountings as $mounting) : $is_active_mounting = ($active_mounting === $mounting->slug); ?>
+                <a href="<?php echo esc_url(rc_shop_url([ 'mounting' => $is_active_mounting ? '' : $mounting->slug ])); ?>" class="flex items-center gap-4 group">
                     <span class="w-4 h-4 border border-white/20 flex items-center justify-center <?php echo $is_active_mounting ? 'bg-[#c5a059] border-[#c5a059]' : ''; ?>">
-                        <?php if ($is_active_mounting) : ?>
-                            <i data-lucide="check" class="w-3 h-3 text-black"></i>
-                        <?php endif; ?>
+                        <?php if ($is_active_mounting) : ?><i data-lucide="check" class="w-3 h-3 text-black"></i><?php endif; ?>
                     </span>
-
                     <span class="text-[11px] uppercase tracking-[0.25em] text-white/50 group-hover:text-white transition-colors">
                         <?php echo esc_html($mounting->name); ?>
                     </span>
                 </a>
             <?php endforeach; ?>
         </div>
-
     </div>
 <?php endif; ?>
 
         <!-- Shapes -->
         <?php if (!empty($shapes) && !is_wp_error($shapes)) : ?>
-    <div class="border border-white/5 bg-[#080808]">
-
-        <button data-filter-toggle class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
-            <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">
-                Shape
-            </span>
-            <i data-lucide="plus" class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
-        </button>
-
-        <div class="hidden p-6 space-y-5">
-            <?php foreach ($shapes as $shape) : 
-                $is_active_shape = ($active_shape === $shape->slug);
-            ?>
-                <a href="<?php echo esc_url(rc_shop_url([
-                    'shape' => $is_active_shape ? '' : $shape->slug
-                ])); ?>" class="flex items-center gap-4 group">
-
+            <div class="border border-white/5 bg-[#080808]">
+                <button data-filter-toggle class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+                    <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">Shape</span>
+                    <i data-lucide="minus" class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
+                </button>
+        
+                <div class="p-6 space-y-5">
+                    <?php foreach ($shapes as $shape) : $is_active_shape = ($active_shape === $shape->slug); ?>
+                <a href="<?php echo esc_url(rc_shop_url([ 'shape' => $is_active_shape ? '' : $shape->slug ])); ?>" class="flex items-center gap-4 group">
                     <span class="w-4 h-4 border border-white/20 flex items-center justify-center <?php echo $is_active_shape ? 'bg-[#c5a059] border-[#c5a059]' : ''; ?>">
                         <?php if ($is_active_shape) : ?>
                             <i data-lucide="check" class="w-3 h-3 text-black"></i>
                         <?php endif; ?>
                     </span>
-
                     <span class="text-[11px] uppercase tracking-[0.25em] text-white/50 group-hover:text-white transition-colors">
                         <?php echo esc_html($shape->name); ?>
                     </span>
                 </a>
             <?php endforeach; ?>
         </div>
-
     </div>
 <?php endif; ?>
-
-    </div>
-
+ </div>
+</div>
 </aside>
 
 <?php endif; ?>
             <?php
 $show_subcategory_grid = empty($active_sub_slug) && !empty($subcategories);
 ?>
-<section class="flex-1 min-w-0 py-12">
+<div class="flex-1">
 
     <?php if ($show_subcategory_grid) { ?>
 
@@ -837,9 +684,7 @@ $show_subcategory_grid = empty($active_sub_slug) && !empty($subcategories);
                         <?php } ?>
 
                         <?php if ($price) { ?>
-                            <div class="text-[18px] font-light text-white mb-10 tracking-tight">
-                                ₹ <?php echo esc_html(number_format((float) $price)); ?>
-                            </div>
+                            <div class="text-[18px] font-light text-white mb-10 tracking-tight">₹ <?php echo esc_html(number_format((float) $price)); ?></div>
                         <?php } ?>
 
                         <div class="px-4 viewcartpopup">
@@ -868,78 +713,227 @@ $show_subcategory_grid = empty($active_sub_slug) && !empty($subcategories);
         </div>
 
     <?php } ?>
-
-</section>
+</div>
+</div>
         </div>
 
         <!-- ── Mobile Filter Panel ────────────────────────────────────────────────── -->
         <div id="mobile-filter-panel" class="fixed inset-y-0 right-0 w-80 max-w-full bg-[#0d0d0d] border-l border-white/10 z-[600] translate-x-full transition-transform duration-500 overflow-y-auto">
-            <div class="flex items-center justify-between p-6 border-b border-white/5">
-                <span class="text-[11px] uppercase tracking-[0.4em] text-white/60">Filter & Browse</span>
-                <button onclick="document.getElementById('mobile-filter-panel').classList.add('translate-x-full')" class="text-white/40 hover:text-white transition-colors">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <div class="p-6 space-y-10">
-                <!-- Subcategories -->
-                <div>
-                    <h4 class="text-[9px] uppercase tracking-[0.5em] text-white/20 mb-5">Category</h4>
-                    <div class="space-y-1">
-                        <a href="<?php echo esc_url(add_query_arg('category', $cat_key, home_url('/shop/'))); ?>" class="block py-3 text-[11px] uppercase tracking-[0.25em] border-b border-white/5 <?php echo ! $active_sub_slug ? 'text-[#c5a059]' : 'text-white/50 hover:text-white'; ?> transition-colors">
-                            All <?php echo esc_html($cat_info['title']); ?>
-                        </a>
-                        <?php foreach ($subcategories as $sub) : $is_active = $active_sub_slug === $sub->slug; ?>
-                            <a href="<?php echo esc_url(add_query_arg(['category' => $cat_key, 'sub' => $sub->slug], home_url('/shop/'))); ?>" class="block py-3 text-[11px] uppercase tracking-[0.25em] border-b border-white/5 <?php echo $is_active ? 'text-[#c5a059]' : 'text-white/50 hover:text-white'; ?> transition-colors">
-                                <?php echo esc_html($sub->name); ?>
-                            </a>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-                <!-- Finish -->
-                <?php if (! empty($finishes)) : ?>
-                    <div>
-                        <h4 class="text-[9px] uppercase tracking-[0.5em] text-white/20 mb-5">Finish</h4>
-                        <div class="flex flex-wrap gap-2">
-                            <?php if ($active_finish) : ?>
-                                <a href="<?php echo rc_shop_url(['finish' => '']); ?>" class="px-3 py-1.5 border border-white/10 text-[9px] uppercase tracking-[0.2em] text-white/40 hover:text-white hover:border-white/30 transition-all">All</a>
-                            <?php endif; ?>
-                            <?php foreach ($finishes as $fin) : ?>
-                                <a href="<?php echo rc_shop_url(['finish' => $fin]); ?>" class="px-3 py-1.5 border text-[9px] uppercase tracking-[0.2em] transition-all <?php echo $active_finish === $fin ? 'border-[#c5a059] text-[#c5a059]' : 'border-white/10 text-white/40 hover:border-white/30 hover:text-white'; ?>">
-                                    <?php echo esc_html($fin); ?>
-                                </a>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
+            <div class="border border-white/5 bg-[#111] p-6">
+    <h3 class="text-[10px] uppercase tracking-[0.45em] text-white/40 mb-6">Selected Options</h3>
+    <div class="flex flex-wrap gap-3">
+        <?php if ($active_finish) : ?>
+            <a href="<?php echo esc_url(rc_shop_url([ 'finish' => '' ])); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
+                <?php echo esc_html($active_finish); ?>
+                <i data-lucide="x" class="w-3 h-3"></i>
+            </a>
+        <?php endif; ?>
+
+        <?php if ($active_brand) : ?>
+            <a href="<?php echo esc_url(rc_shop_url([ 'brand' => '' ])); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
+                <?php echo esc_html($active_brand); ?>
+                <i data-lucide="x" class="w-3 h-3"></i>
+            </a>
+        <?php endif; ?>
+
+        <?php if ($active_shape) : ?>
+            <a href="<?php echo esc_url(rc_shop_url([ 'shape' => '' ])); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
+                <?php echo esc_html($active_shape); ?>
+                <i data-lucide="x" class="w-3 h-3"></i>
+            </a>
+            <?php endif; ?>
+
+            <?php if ($active_mounting) : ?>
+                <a href="<?php echo esc_url(rc_shop_url([ 'mounting' => '' ])); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white">
+                    <?php echo esc_html($active_mounting); ?>
+                    <i data-lucide="x" class="w-3 h-3"></i>
+                </a>
+
                 <?php endif; ?>
-                <!-- Sort -->
+        
+        <a href="<?php echo esc_url(add_query_arg([ 'category' => $cat_key, 'sub'      => $active_sub_slug ], home_url('/shop/'))); ?>" class="h-10 px-4 bg-white/10 hover:bg-white/15 transition-all flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white transition-all">Reset All</a>
+    </div>
+</div>
+
+<!-- Budget Range -->
+
+<div class="border border-white/5 bg-[#080808]">
+    <button data-filter-toggle class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+        <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">Budget Range</span>
+        <i data-lucide="minus" class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
+    </button>
+
+    <div class="p-6 space-y-8">
+        <form method="GET" action="<?php echo esc_url(home_url('/shop/')); ?>">
+            <input type="hidden" name="category" value="<?php echo esc_attr($cat_key); ?>">
+            <?php if ($active_sub_slug) : ?>
+                <input type="hidden" name="sub" value="<?php echo esc_attr($active_sub_slug); ?>">
+            <?php endif; ?>
+
+            <?php if ($active_finish) : ?>
+                <input type="hidden" name="finish" value="<?php echo esc_attr($active_finish); ?>">
+            <?php endif; ?>
+
+            <?php if ($active_brand) : ?>
+                <input type="hidden" name="brand" value="<?php echo esc_attr($active_brand); ?>">
+            <?php endif; ?>
+
+            <?php if ($active_shape) : ?>
+                <input type="hidden" name="shape" value="<?php echo esc_attr($active_shape); ?>">
+            <?php endif; ?>
+
+            <?php if ($active_mounting) : ?>
+                <input type="hidden" name="mounting" value="<?php echo esc_attr($active_mounting); ?>">
+            <?php endif; ?>
+            
+
+            <div class="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-white/30">
+                <span>Min: ₹0</span>
+                <span>Max: ₹50,000</span>
+            </div>
+
+            <!-- Range -->
+            <input type="range" id="priceRange" min="0" max="50000" step="500" value="<?php echo esc_attr($max_price); ?>" class="w-full accent-[#c5a059]">
+
+            <!-- Inputs -->
+            <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <h4 class="text-[9px] uppercase tracking-[0.5em] text-white/20 mb-5">Sort By</h4>
-                    <div class="space-y-1">
-                        <?php foreach (['' => 'Default', 'name_asc' => 'Name A–Z', 'price_asc' => 'Price: Low to High', 'price_desc' => 'Price: High to Low'] as $val => $label) : ?>
-                            <a href="<?php echo rc_shop_url(['sort' => $val]); ?>" class="block py-2.5 text-[11px] uppercase tracking-[0.25em] border-b border-white/5 <?php echo $sort === $val ? 'text-[#c5a059]' : 'text-white/40 hover:text-white'; ?> transition-colors">
-                                <?php echo esc_html($label); ?>
-                            </a>
-                        <?php endforeach; ?>
-                    </div>
+                    <label class="block text-[9px] uppercase tracking-[0.3em] text-white/20 mb-3">Min Budget</label>
+                    <input type="number" name="min_price" id="minPrice" value="<?php echo esc_attr($min_price); ?>" class="w-full h-12 bg-transparent border border-white/10 px-4 text-white text-sm focus:outline-none focus:border-[#c5a059]">
+                </div>
+                <div>
+                    <label class="block text-[9px] uppercase tracking-[0.3em] text-white/20 mb-3">Max Budget</label>
+                    <input type="number" name="max_price" id="maxPrice" value="<?php echo esc_attr($max_price); ?>" class="w-full h-12 bg-transparent border border-white/10 px-4 text-white text-sm focus:outline-none focus:border-[#c5a059]">
                 </div>
             </div>
+
+            <!-- Button -->
+            <button type="submit" class="w-full h-14 mt-6 border border-[#c5a059]/40 text-[#c5a059] text-[11px] uppercase tracking-[0.45em] hover:bg-[#c5a059] hover:text-black transition-all"> Apply Range </button>
+        </form>
+    </div>
+</div>
+
+<!-- Color Finishes -->
+ <?php if (!empty($finish_terms) && !is_wp_error($finish_terms)) : ?>
+
+    <div class="border border-white/5 bg-[#080808]">
+        <button data-filter-toggle class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+            <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">Color Finishes</span>
+            <i data-lucide="minus" class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
+        </button>
+
+        <div class="px-6 py-8 space-y-6">
+            <?php foreach ($finish_terms as $finish) :
+                $is_active_finish = strtolower($active_finish) === strtolower($finish->slug);
+                // premium swatches
+                $finish_styles = [
+                    'black-chrome' => 'background:linear-gradient(135deg,#4a4a4a,#111);',
+                    'black-matt' => 'background:#1b1b1b;',
+                    'blush-gold-bright-pvd' => 'background:#9c7854;',
+                    'chrome' => 'background:linear-gradient(135deg,#f5f5f5,#bdbdbd);',
+                    'gold-bright-pvd' => 'background:#c5a059;',
+                ];
+                $style = $finish_styles[$finish->slug] ?? 'background:#666;';
+            ?>
+            <a href="<?php echo esc_url(rc_shop_url([ 'finish' => $is_active_finish ? '' : $finish->slug ])); ?>" class="flex items-center gap-4 group">
+
+                    <!-- Swatch -->
+                    <div style="<?php echo esc_attr($style); ?>" class="relative w-11 h-11 border flex items-center justify-center transition-all duration-300
+                        <?php echo $is_active_finish ? 'border-[#c5a059]' : 'border-white/10 group-hover:border-white/30'; ?>">
+
+                        <?php if ($is_active_finish) : ?>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        <?php elseif ($finish->slug === 'black-chrome') : ?>
+                            <span class="text-white text-[11px] font-semibold tracking-wide">BC</span>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Label -->
+                    <span class="text-[11px] uppercase tracking-[0.22em] transition-all duration-300
+                        <?php echo $is_active_finish ? 'text-white'  : 'text-white/40 group-hover:text-white/70'; ?>">
+                        <?php echo esc_html($finish->name); ?>
+                    </span>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+<?php endif; ?>
+
+        <!-- Brands -->
+        <?php if (!empty($brands) && !is_wp_error($brands)) : ?>
+            <div class="border border-white/5 bg-[#080808]">
+                 <button data-filter-toggle class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+                    <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">Brands</span>
+                    <i data-lucide="minus" class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
+                </button>
+                <div class="p-6 space-y-5">
+                    <?php foreach ($brands as $brand) : $is_active_brand = $active_brand === $brand->slug; ?>
+                    <a href="<?php echo esc_url(rc_shop_url([ 'brand' => $is_active_brand ? '' : $brand->slug ])); ?>" class="flex items-center gap-4 group">
+                        <span class="w-4 h-4 border border-white/20 flex items-center justify-center">
+                             <?php if ($is_active_brand) : ?>
+                                <span class="w-2 h-2 bg-[#c5a059]"></span>
+                                <?php endif; ?>
+                        </span>
+                        <span class="text-[11px] uppercase tracking-[0.25em] transition-colors <?php echo $is_active_brand ? 'text-[#c5a059]' : 'text-white/50 group-hover:text-white'; ?>"><?php echo esc_html($brand->name); ?></span>
+                    </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- Mounting -->
+        <?php if (!empty($mountings) && !is_wp_error($mountings)) : ?>
+            <div class="border border-white/5 bg-[#080808]">
+                <button data-filter-toggle class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+                    <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">Mounting</span>
+                    <i data-lucide="minus" class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
+                </button>
+        
+                <div class="p-6 space-y-5">
+                    <?php foreach ($mountings as $mounting) : $is_active_mounting = ($active_mounting === $mounting->slug); ?>
+                <a href="<?php echo esc_url(rc_shop_url([ 'mounting' => $is_active_mounting ? '' : $mounting->slug ])); ?>" class="flex items-center gap-4 group">
+                    <span class="w-4 h-4 border border-white/20 flex items-center justify-center <?php echo $is_active_mounting ? 'bg-[#c5a059] border-[#c5a059]' : ''; ?>">
+                        <?php if ($is_active_mounting) : ?><i data-lucide="check" class="w-3 h-3 text-black"></i><?php endif; ?>
+                    </span>
+                    <span class="text-[11px] uppercase tracking-[0.25em] text-white/50 group-hover:text-white transition-colors">
+                        <?php echo esc_html($mounting->name); ?>
+                    </span>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+<?php endif; ?>
+
+        <!-- Shapes -->
+        <?php if (!empty($shapes) && !is_wp_error($shapes)) : ?>
+            <div class="border border-white/5 bg-[#080808]">
+                <button data-filter-toggle class="group w-full flex items-center justify-between px-6 py-5 border-b border-white/5">
+                    <span class="text-[10px] uppercase tracking-[0.45em] text-white/70">Shape</span>
+                    <i data-lucide="minus" class="filter-toggle-icon w-4 h-4 text-white/40 group-hover:text-white transition-all duration-300"></i>
+                </button>
+        
+                <div class="p-6 space-y-5">
+                    <?php foreach ($shapes as $shape) : $is_active_shape = ($active_shape === $shape->slug); ?>
+                <a href="<?php echo esc_url(rc_shop_url([ 'shape' => $is_active_shape ? '' : $shape->slug ])); ?>" class="flex items-center gap-4 group">
+                    <span class="w-4 h-4 border border-white/20 flex items-center justify-center <?php echo $is_active_shape ? 'bg-[#c5a059] border-[#c5a059]' : ''; ?>">
+                        <?php if ($is_active_shape) : ?>
+                            <i data-lucide="check" class="w-3 h-3 text-black"></i>
+                        <?php endif; ?>
+                    </span>
+                    <span class="text-[11px] uppercase tracking-[0.25em] text-white/50 group-hover:text-white transition-colors">
+                        <?php echo esc_html($shape->name); ?>
+                    </span>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+<?php endif; ?>
         </div>
         <!-- Mobile filter backdrop -->
         <div id="mobile-filter-backdrop" class="fixed inset-0 bg-black/60 z-[590] hidden" onclick="document.getElementById('mobile-filter-panel').classList.add('translate-x-full'); this.classList.add('hidden');"></div>
-        <script>
-            // Show backdrop when panel is open
-            const filterPanel = document.getElementById('mobile-filter-panel');
-            const filterBackdrop = document.getElementById('mobile-filter-backdrop');
-            const observer = new MutationObserver(() => {
-                filterBackdrop.classList.toggle('hidden', filterPanel.classList.contains('translate-x-full'));
-            });
-            observer.observe(filterPanel, {
-                attributes: true,
-                attributeFilter: ['class']
-            });
-        </script>
 
         <!-- ── Footer ────────────────────────────────────────────────────────────── -->
     </div><!-- /pt-32 wrapper -->
