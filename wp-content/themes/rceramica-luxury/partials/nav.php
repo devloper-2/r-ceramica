@@ -26,7 +26,7 @@ function rc_mobile_link_class( $link, $active ) {
 ?>
 <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 font-sans font-light">
     <!-- Top Row -->
-    <div class="relative flex justify-between items-center px-4 md:px-12">
+    <div class="relative flex justify-between items-center px-4 md:px-12 headershow">
 <?php if ( is_cart() ) : ?>
 
 <div class="flex-1 flex items-center">
@@ -53,7 +53,7 @@ function rc_mobile_link_class( $link, $active ) {
             </button>
         </div>
         <!-- Centered Logo -->
-        <div id="logo-container" class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 pointer-events-none transition-all duration-700">
+        <div id="logo-container" class="transition-all duration-700">
             <!-- Desktop Navigation Links (Bottom Row) -->
             <div id="desktop-nav-links" class="hidden lg:flex justify-center items-center py-4 space-x-12 xl:space-x-16 text-[11px] uppercase tracking-[0.3em] font-medium text-white/80 transition-all duration-500">
                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="<?php echo rc_nav_link_class( 'home', $rc_nav_active ); ?>">HOME</a>
@@ -100,7 +100,7 @@ function rc_mobile_link_class( $link, $active ) {
         </div>
 
         <!-- Search Area -->
-        <div id="nav-center" class="absolute inset-0 flex justify-center items-center pointer-events-none px-12">
+        <div id="nav-center" class="absolute inset-0 flex justify-center items-center pointer-events-none px-12 z-20">
             <div id="search-input-container" class="w-full max-w-xl opacity-0 pointer-events-none translate-y-4 transition-all duration-500 relative">
                 <div class="flex items-center w-full relative pointer-events-auto">
                     <input type="text" id="search-input" placeholder="SEARCH THE COLLECTION..." class="w-full bg-transparent border-b border-white text-white text-xs md:text-sm font-display font-light placeholder:text-white/30 focus:outline-none focus:border-white transition-all py-1.5 px-1 text-center uppercase tracking-[0.3em]">

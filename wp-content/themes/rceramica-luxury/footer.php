@@ -4,25 +4,15 @@
  */
 ?>
 <!-- Professional Architecture Footer -->
-    <footer class="relative bg-[#0c0c0c] pt-24 pb-12 border-t border-white/5 overflow-hidden mt-24">
+    <footer class="relative bg-[#0c0c0c] pt-24 pb-12 border-t border-white/5 overflow-hidden mt-24 globlefooter">
         <div class="max-w-[1440px] mx-auto px-6 md:px-16">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-24 mb-24">
                 <!-- Column 1: Brand Profile -->
                 <div class="space-y-10">
-                    <img src="https://rceramica.com/logo/logo.png" alt="R Ceramica Logo" class="h-16 w-auto object-contain">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.webp" alt="R Ceramica Logo" class="h-16 w-auto object-contain">
                     <p class="text-white/40 text-[13px] leading-relaxed font-light font-sans max-w-sm">
                         R Ceramica is a brand that believes in continuous development and growth. We always try to innovate and bring something new to reform the approach of the market and the certificates that we have achieved over the years are proof of our creativity and credibility.
                     </p>
-                    <div class="flex items-center gap-6 pt-4">
-                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="facebook" size="18"></i></a>
-                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="instagram" size="18"></i></a>
-                        <a href="#" class="text-white/30 hover:text-white transition-colors">
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
-                        </a>
-                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="linkedin" size="18"></i></a>
-                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="youtube" size="18"></i></a>
-                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="hash" size="18"></i></a>
-                    </div>
                 </div>
 
                 <!-- Column 2: Quick Links -->

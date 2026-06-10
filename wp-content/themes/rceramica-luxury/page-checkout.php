@@ -2,6 +2,10 @@
 /**
  * Template for the Checkout page.
  */
+add_filter('body_class', function($classes) {
+    $classes[] = 'headernone';
+    return $classes;
+});
 get_header();
 ?>
 <main id="site-content" role="main">
@@ -16,7 +20,7 @@ get_header();
                 <span class="sm:hidden">Cart</span>
             </a>
             <div class="absolute left-1/2 -translate-x-1/2 flex justify-center">
-                <img src="https://rceramica.com/logo/logo.png" alt="R Ceramica" class="h-8 md:h-10 w-auto">
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.webp"" alt="R Ceramica" class="cartlogo">
             </div>
             <div class="flex-1 flex justify-end">
                 <div class="flex items-center gap-2">

@@ -2,14 +2,35 @@
 /**
  * Template for the Cart page.
  */
+add_filter('body_class', function($classes) {
+    $classes[] = 'headernone';
+    return $classes;
+});
 get_header();
 
 ?>
 
+ <!-- Simplified Checkout Header -->
+    <header class="fixed top-0 left-0 w-full z-[100] bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5 h-20">
+        <div class="max-w-[1720px] mx-auto px-4 md:px-6 h-full flex justify-between items-center">
+            <a href="<?php echo esc_url( home_url( "/cart/" ) ); ?>" class="flex-1 flex items-center gap-2 text-[10px] uppercase tracking-[0.4em] text-white/40 hover:text-white transition-all">
+                <i data-lucide="arrow-left" size="14"></i>
+                <span class="hidden sm:inline">Back to Cart</span>
+                <span class="sm:hidden">Cart</span>
+            </a>
+            <div class="absolute left-1/2 -translate-x-1/2 flex justify-center">
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.webp" alt="R Ceramica" class="cartlogo">
+            </div>
+            <div class="flex-1 flex justify-end">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="lock" size="12" class="text-[#c5a059]"></i>
+                    <span class="text-[8px] md:text-[9px] uppercase tracking-[0.3em] font-medium text-white/40 hidden xs:block">Secure</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
 <main id="site-content" role="main">
-
-
-   
 
     <main class="pt-24 md:pt-64 pb-16 min-h-screen">
         <div class="max-w-[1440px] mx-auto px-4 md:px-12">

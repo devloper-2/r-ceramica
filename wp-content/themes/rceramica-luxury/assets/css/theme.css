@@ -375,7 +375,65 @@
 .globalheader {
     width: 100%;
     display: flex;
+    padding: 15px 10px;
 }
+body.login-page #navbar,body.login-page .globlefooter,body.headernone #navbar, boyd.headernone .globalheader{
+    display: none;
+}
+
+.woocommerce img, .woocommerce-page img{
+    height: unset;
+}
+img.cartlogo{
+    height: 50px;
+}
+.luxury-shadow { shadow: 0 40px 100px -20px rgba(0,0,0,0.5); }
+        .glass-panel { background: rgba(255,255,255,0.02); border: 1px border-white/5; backdrop-filter: blur(10px); }
+        
+        .checkout-input {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            color: #fff;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .checkout-input:focus {
+            outline: none;
+            border-color: #c5a059;
+            background: rgba(255,255,255,0.06);
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.1);
+        }
+        
+        label {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            font-weight: 500;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 0.75rem;
+        }
+
+        .step-active { color: white; opacity: 1; border-color: #c5a059; }
+        .step-inactive { color: white; opacity: 0.2; }
+
+        .payment-card {
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.02);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .payment-card:hover { border-color: rgba(255,255,255,0.3); }
+        .payment-card.active { border-color: #c5a059; background: rgba(197, 160, 89, 0.05); }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 768px) {
+            .checkout-input { padding: 1rem 1.25rem; }
+        }
 
 @media only screen and (max-width: 980px) {
     .hidden-mobile{

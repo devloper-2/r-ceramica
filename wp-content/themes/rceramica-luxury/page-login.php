@@ -1,4 +1,10 @@
 <?php
+add_filter('body_class', function($classes) {
+    $classes[] = 'login-page';
+    return $classes;
+});
+?>
+<?php
 /**
  * Template for the Login page.
  */
