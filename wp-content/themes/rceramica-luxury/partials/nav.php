@@ -26,7 +26,7 @@ function rc_mobile_link_class( $link, $active ) {
 ?>
 <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 font-sans font-light">
     <!-- Top Row -->
-    <div class="relative flex justify-between items-center px-4 md:px-12 h-20 md:h-32 lg:h-36">
+    <div class="relative flex justify-between items-center px-4 md:px-12">
 <?php if ( is_cart() ) : ?>
 
 <div class="flex-1 flex items-center">
@@ -38,8 +38,13 @@ function rc_mobile_link_class( $link, $active ) {
 </div>
 
 <?php endif; ?>
+<div class="border-b border-white/5 globalheader">
         <!-- Top Left: Spacer (Desktop Only) -->
-        <div id="nav-left" class="flex-1 hidden lg:flex items-center relative z-20"></div>
+        <div id="nav-left" class="flex-1 hidden lg:flex items-center relative z-20">
+            <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="pointer-events-auto">
+                <img id="navbar-logo" src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.webp" alt="R Ceramica Logo" class="h-10 md:h-16 w-auto object-contain cursor-pointer">
+            </a>
+        </div>
 
         <!-- Mobile Left: Menu Button -->
         <div id="mobile-menu-btn" class="flex-1 lg:hidden flex items-center relative z-[60] transition-opacity duration-300">
@@ -49,9 +54,14 @@ function rc_mobile_link_class( $link, $active ) {
         </div>
         <!-- Centered Logo -->
         <div id="logo-container" class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 pointer-events-none transition-all duration-700">
-            <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="pointer-events-auto">
-                <img id="navbar-logo" src="https://rceramica.com/logo/logo.png" alt="R Ceramica Logo" class="h-10 md:h-16 w-auto object-contain cursor-pointer">
-            </a>
+            <!-- Desktop Navigation Links (Bottom Row) -->
+            <div id="desktop-nav-links" class="hidden lg:flex justify-center items-center py-4 space-x-12 xl:space-x-16 text-[11px] uppercase tracking-[0.3em] font-medium text-white/80 transition-all duration-500">
+                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="<?php echo rc_nav_link_class( 'home', $rc_nav_active ); ?>">HOME</a>
+                <a href="<?php echo esc_url( home_url( '/about/' ) ); ?>" class="<?php echo rc_nav_link_class( 'about', $rc_nav_active ); ?>">ABOUT US</a>
+                <a href="<?php echo esc_url( home_url( '/explore/' ) ); ?>" class="<?php echo rc_nav_link_class( 'explore', $rc_nav_active ); ?>">EXPLORE</a>
+                <a href="<?php echo esc_url( home_url( '/products/' ) ); ?>" class="<?php echo rc_nav_link_class( 'catalogue', $rc_nav_active ); ?>">CATALOGUE</a>
+                <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="<?php echo rc_nav_link_class( 'contact', $rc_nav_active ); ?>">CONTACT US</a>
+            </div>
         </div>
 
         <!-- Top Right: Tools -->
@@ -100,16 +110,8 @@ function rc_mobile_link_class( $link, $active ) {
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Desktop Navigation Links (Bottom Row) -->
-    <div id="desktop-nav-links" class="hidden lg:flex justify-center items-center py-4 border-t border-white/5 space-x-12 xl:space-x-16 text-[11px] uppercase tracking-[0.3em] font-medium text-white/80 transition-all duration-500">
-        <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="<?php echo rc_nav_link_class( 'home', $rc_nav_active ); ?>">HOME</a>
-        <a href="<?php echo esc_url( home_url( '/about/' ) ); ?>" class="<?php echo rc_nav_link_class( 'about', $rc_nav_active ); ?>">ABOUT US</a>
-        <a href="<?php echo esc_url( home_url( '/explore/' ) ); ?>" class="<?php echo rc_nav_link_class( 'explore', $rc_nav_active ); ?>">EXPLORE</a>
-        <a href="<?php echo esc_url( home_url( '/products/' ) ); ?>" class="<?php echo rc_nav_link_class( 'catalogue', $rc_nav_active ); ?>">CATALOGUE</a>
-        <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="<?php echo rc_nav_link_class( 'contact', $rc_nav_active ); ?>">CONTACT US</a>
-    </div>
+    
 
     <!-- Global Language Dropdown -->
     <div id="lang-dropdown" class="hidden absolute right-4 md:right-12 top-[80px] md:top-[128px] lg:top-[144px] w-48 bg-black/40 backdrop-blur-xl border border-white/10 p-2 rounded-sm shadow-2xl z-[110]">
@@ -165,6 +167,7 @@ function rc_mobile_link_class( $link, $active ) {
                 <span>My Account</span>
             </button>
         </div>
+    </div>
     </div>
 </nav>
 

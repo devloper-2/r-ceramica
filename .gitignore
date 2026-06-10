@@ -28,6 +28,8 @@ wp-content/backup/
 
 # WordPress upgrade temporary files
 wp-content/upgrade/
+wp-content/plugins/*
+!wp-content/plugins/my-custom-plugin/
 
 # Log files
 *.log
