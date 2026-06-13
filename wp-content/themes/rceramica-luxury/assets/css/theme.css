@@ -380,7 +380,9 @@
 body.login-page #navbar,body.login-page .globlefooter,body.headernone #navbar, boyd.headernone .globalheader{
     display: none;
 }
-
+#navbar #nav-left img{
+    height: 60px;
+}
 .woocommerce img, .woocommerce-page img{
     height: unset;
 }
