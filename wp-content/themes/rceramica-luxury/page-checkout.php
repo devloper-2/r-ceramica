@@ -8,6 +8,105 @@ add_filter('body_class', function($classes) {
 });
 get_header();
 ?>
+<?php
+$checkout = WC()->checkout();
+
+do_action( 'woocommerce_before_checkout_form', $checkout );
+
+// If checkout registration is disabled and not logged in.
+if (
+    ! $checkout->is_registration_enabled() &&
+    $checkout->is_registration_required() &&
+    ! is_user_logged_in()
+) {
+    echo esc_html__(
+        'You must be logged in to checkout.',
+        'woocommerce'
+    );
+    return;
+}
+
+wc_print_notices();
+?>
+<style>
+        
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0a0a0a; color: white; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        
+        .luxury-shadow { shadow: 0 40px 100px -20px rgba(0,0,0,0.5); }
+        .glass-panel { background: rgba(255,255,255,0.02); border: 1px border-white/5; backdrop-filter: blur(10px); }
+        
+        .woocommerce-billing-fields__field-wrapper .input-text {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            color: #fff;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .woocommerce-billing-fields__field-wrapper .input-text:focus {
+            outline: none;
+            border-color: #c5a059;
+            background: rgba(255,255,255,0.06);
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.1);
+        }
+        .woocommerce-billing-fields__field-wrapper .select2-container--default .select2-selection--single{
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 50px;
+            display: flex;
+            align-items: center;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow{
+            top: 13px;
+        }
+        .woocommerce-billing-fields__field-wrapper .form-row{
+            margin: 50px 0 10px;
+        }        
+        label {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            font-weight: 500;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 0.75rem;
+        }
+
+        .step-active { color: white; opacity: 1; border-color: #c5a059; }
+        .step-inactive { color: white; opacity: 0.2; }
+
+        .payment-card {
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.02);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .payment-card:hover { border-color: rgba(255,255,255,0.3); }
+        .payment-card.active { border-color: #c5a059; background: rgba(197, 160, 89, 0.05); }
+        .checkout-hidden-review {
+    position: absolute;
+    left: -99999px;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+        /* Mobile specific adjustments */
+        @media (max-width: 768px) {
+            .checkout-input { padding: 1rem 1.25rem; }
+        }
+    </style>
 <main id="site-content" role="main">
 
 
@@ -20,7 +119,7 @@ get_header();
                 <span class="sm:hidden">Cart</span>
             </a>
             <div class="absolute left-1/2 -translate-x-1/2 flex justify-center">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.webp"" alt="R Ceramica" class="cartlogo">
+                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>"><img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.webp"" alt="R Ceramica" class="cartlogo"></a>
             </div>
             <div class="flex-1 flex justify-end">
                 <div class="flex items-center gap-2">
@@ -60,61 +159,26 @@ get_header();
                             <span class="text-[8px] sm:text-[10px] uppercase tracking-widest font-medium">Ok</span>
                         </div>
                     </div>
-
-                    <form class="space-y-4 md:space-y-12">
+                    
+                        <form name="checkout" method="post" class="checkout woocommerce-checkout space-y-4 md:space-y-12" action="<?php echo esc_url( wc_get_checkout_url() ); ?>" enctype="multipart/form-data">
                         <!-- Shipping Section -->
-                        <div id="section-shipping" class="space-y-4 md:space-y-10">
-                            <div class="grid grid-cols-2 gap-3 md:gap-8">
-                                <div>
-                                    <label class="!mb-1.5">First Name</label>
-                                    <input type="text" class="checkout-input !py-3" placeholder="WINTER">
-                                </div>
-                                <div>
-                                    <label class="!mb-1.5">Last Name</label>
-                                    <input type="text" class="checkout-input !py-3" placeholder="NIGHTINGALE">
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <label class="!mb-1.5">Address</label>
-                                <input type="text" class="checkout-input !py-3" placeholder="AVENUE MONTAGE 42">
-                            </div>
+                        <div id="section-shipping">
 
-                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8">
-                                <div class="col-span-2 md:col-span-1">
-                                    <label class="!mb-1.5">City</label>
-                                    <input type="text" class="checkout-input !py-3" placeholder="HOUSTON">
-                                </div>
-                                <div>
-                                    <label class="!mb-1.5">State</label>
-                                    <input type="text" class="checkout-input !py-3" placeholder="TX">
-                                </div>
-                                <div>
-                                    <label class="!mb-1.5">Zip</label>
-                                    <input type="text" class="checkout-input !py-3" placeholder="77002">
-                                </div>
-                            </div>
+                            <?php do_action( 'woocommerce_checkout_billing' ); ?>
+
                         </div>
 
                         <!-- Payment architecture -->
-                        <div class="pt-4 md:pt-12 border-t border-white/5">
-                            <h3 class="text-[8px] md:text-[11px] uppercase tracking-[0.3em] font-semibold mb-3">Payment</h3>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div class="payment-card rounded-xl p-3 md:p-6 active flex flex-col items-center">
-                                    <i data-lucide="credit-card" class="mb-1.5" size="18"></i>
-                                    <span class="text-[7px] uppercase tracking-widest font-medium">Card</span>
-                                </div>
-                                <div class="payment-card rounded-xl p-3 md:p-6 flex flex-col items-center">
-                                    <i data-lucide="apple" class="mb-1.5" size="18"></i>
-                                    <span class="text-[7px] uppercase tracking-widest font-medium">Pay</span>
-                                </div>
-                            </div>
-                        </div>
+                       <div id="order_review_wrapper" class="checkout-hidden-review">
+
+    <div id="order_review">
+        <?php do_action( 'woocommerce_checkout_order_review' ); ?>
+    </div>
+
+</div>
 
                         <div class="pt-4">
-                            <button type="submit" class="w-full bg-white text-black py-4 md:py-6 rounded-full text-[9px] md:text-[11px] font-bold tracking-[0.3em] uppercase transition-all active:scale-[0.98]">
-                                Complete Order
-                            </button>
+                            <button type="button" id="custom-place-order" class="w-full bg-white text-black py-4 md:py-6 rounded-full text-[9px] md:text-[11px] font-bold tracking-[0.3em] uppercase transition-all active:scale-[0.98]">Complete Order</button>
                         </div>
                     </form>
                 </div>
@@ -129,48 +193,79 @@ get_header();
 
                         <!-- Items List -->
                         <div class="space-y-4 mb-8">
-                            <div class="flex gap-4 items-center">
-                                <div class="w-14 h-14 bg-[#151515] rounded-lg overflow-hidden flex-shrink-0">
-                                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80" alt="Product" class="w-full h-full object-cover grayscale">
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <h4 class="text-[10px] uppercase tracking-tight font-medium truncate">AURA MATTE BLACK TAP</h4>
-                                    <div class="flex justify-between items-center mt-1">
-                                        <span class="text-[9px] text-white/30 uppercase">Qty: 1</span>
-                                        <span class="text-[11px] font-light">$2,450.00</span>
-                                    </div>
-                                </div>
-                            </div>
+
+                            <?php foreach ( WC()->cart->get_cart() as $cart_item ) :
+
+                                $_product = $cart_item['data'];
+
+                            ?>
 
                             <div class="flex gap-4 items-center">
+
                                 <div class="w-14 h-14 bg-[#151515] rounded-lg overflow-hidden flex-shrink-0">
-                                    <img src="https://images.unsplash.com/photo-1615529182906-134d12bbd61c?auto=format&fit=crop&q=80" alt="Product" class="w-full h-full object-cover grayscale">
+
+                                    <?php echo $_product->get_image( 'woocommerce_thumbnail' ); ?>
+
                                 </div>
+
                                 <div class="flex-1 min-w-0">
-                                    <h4 class="text-[10px] uppercase tracking-tight font-medium truncate">VENATO carrara marble</h4>
+
+                                    <h4 class="text-[10px] uppercase tracking-tight font-medium truncate">
+
+                                        <?php echo $_product->get_name(); ?>
+
+                                    </h4>
+
                                     <div class="flex justify-between items-center mt-1">
-                                        <span class="text-[9px] text-white/30 uppercase">Qty: 1</span>
-                                        <span class="text-[11px] font-light">$1,890.00</span>
+
+                                        <span class="text-[9px] text-white/30 uppercase">
+
+                                            Qty: <?php echo $cart_item['quantity']; ?>
+
+                                        </span>
+
+                                        <span class="text-[11px] font-light">
+
+                                            <?php
+                                            echo WC()->cart->get_product_subtotal(
+                                                $_product,
+                                                $cart_item['quantity']
+                                            );
+                                            ?>
+
+                                        </span>
+
                                     </div>
+
                                 </div>
+
                             </div>
-                        </div>
+
+                            <?php endforeach; ?>
+
+                    </div>
 
                         <!-- Calculations -->
                         <div class="space-y-3 mb-6 pb-6 border-b border-white/5">
                             <div class="flex justify-between text-[10px] uppercase tracking-widest text-white/30">
                                 <span>Subtotal</span>
-                                <span class="text-white">$4,340.00</span>
+                                <span class="text-white">
+                                    <?php wc_cart_totals_subtotal_html(); ?>
+                                </span>
                             </div>
                             <div class="flex justify-between text-[10px] uppercase tracking-widest text-white/30">
                                 <span>Tax</span>
-                                <span class="text-white">$347.00</span>
+                                <span class="text-white">
+                                    <?php echo wc_price( WC()->cart->get_total_tax() ); ?>
+                                </span>
                             </div>
                         </div>
 
                         <div class="flex justify-between items-center">
                             <span class="text-[9px] uppercase tracking-[0.3em] font-medium text-[#c5a059]">Total Due</span>
-                            <span class="text-2xl font-light">$4,687.00</span>
+                            <span class="text-2xl font-light">
+    <?php wc_cart_totals_order_total_html(); ?>
+</span>
                         </div>
                     </div>
                 </div>
@@ -179,4 +274,29 @@ get_header();
         </div>
     </main>
 </main>
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    const customBtn = document.getElementById('custom-place-order');
+
+    if (!customBtn) return;
+
+    customBtn.addEventListener('click', function() {
+
+        const wcButton = document.querySelector(
+            '#place_order'
+        );
+
+        if (wcButton) {
+
+            wcButton.click();
+
+        }
+
+    });
+
+});
+
+</script>
 <?php get_footer(); ?>

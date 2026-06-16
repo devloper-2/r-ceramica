@@ -19,7 +19,7 @@ get_header();
                 <span class="sm:hidden">Cart</span>
             </a>
             <div class="absolute left-1/2 -translate-x-1/2 flex justify-center">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.webp" alt="R Ceramica" class="cartlogo">
+                <a href="<?php echo esc_url( home_url( '/' ) ); ?>"><img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.webp" alt="R Ceramica" class="cartlogo"></a>
             </div>
             <div class="flex-1 flex justify-end">
                 <div class="flex items-center gap-2">
@@ -29,7 +29,10 @@ get_header();
             </div>
         </div>
     </header>
-
+<?php
+do_action( 'woocommerce_before_cart' );
+wc_print_notices();
+?>
 <main id="site-content" role="main">
 
     <main class="pt-24 md:pt-64 pb-16 min-h-screen">
@@ -38,10 +41,12 @@ get_header();
                 <h1 class="text-3xl md:text-6xl font-serif italic mb-2 opacity-95">Your Order</h1>
                 <p class="text-white/30 tracking-[0.2em] text-[8px] md:text-[11px] uppercase">Review and finalize your curated spaces</p>
             </header>
-
+<form class="woocommerce-cart-form" action="<?php echo esc_url( wc_get_cart_url() ); ?>" method="post">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 xl:gap-24">
+                
                 <!-- Cart Items -->
                 <div class="lg:col-span-8">
+                    
                     <div class="hidden md:grid grid-cols-12 pb-4 border-b border-white/10 text-[9px] uppercase tracking-[0.3em] font-medium text-white/30">
                         <div class="col-span-6">Product</div>
                         <div class="col-span-2 text-center">Price</div>
@@ -54,7 +59,17 @@ get_header();
     $_product   = $cart_item['data'];
     $product_id = $cart_item['product_id'];
 
-    if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 ) :
+    if (
+    $_product &&
+    $_product->exists() &&
+    $cart_item['quantity'] > 0 &&
+    apply_filters(
+        'woocommerce_cart_item_visible',
+        true,
+        $cart_item,
+        $cart_item_key
+    )
+) :
 
         $product_permalink = $_product->is_visible()
             ? $_product->get_permalink( $cart_item )
@@ -97,14 +112,19 @@ get_header();
                 </span>
 
                 <h3 class="text-sm md:text-xl font-light tracking-wide md:mb-2 uppercase truncate">
+    <a href="<?php echo esc_url( $product_permalink ); ?>">
+        <?php
+        echo apply_filters(
+            'woocommerce_cart_item_name',
+            $_product->get_name(),
+            $cart_item,
+            $cart_item_key
+        );
+        ?>
+    </a>
+</h3>
 
-                    <a href="<?php echo esc_url( $product_permalink ); ?>">
-
-                        <?php echo $_product->get_name(); ?>
-
-                    </a>
-
-                </h3>
+<?php echo wc_get_formatted_cart_item_data( $cart_item ); ?>
 
             </div>
 
@@ -148,18 +168,36 @@ get_header();
         </div>
 
         <!-- Remove -->
-        <a href="<?php echo esc_url( wc_get_cart_remove_url( $cart_item_key ) ); ?>"
-           class="hidden md:flex absolute -right-8 top-1/2 -translate-y-1/2 text-red-500/40 hover:text-red-500 transition-colors">
-
-            <i data-lucide="x" size="18"></i>
-
-        </a>
+        <?php
+echo sprintf(
+    '<a href="%s"
+       class="hidden md:flex absolute -right-8 top-1/2 -translate-y-1/2 text-red-500/40 hover:text-red-500 transition-colors remove"
+       aria-label="%s">
+       <i data-lucide="x" size="18"></i>
+    </a>',
+    esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
+    esc_attr__( 'Remove item', 'woocommerce' )
+);
+?>
 
     </div>
 
 </div>
 
 <?php endif; endforeach; ?>
+<div class="mt-8 flex justify-end">
+
+    <button
+        type="submit"
+        name="update_cart"
+        value="Update cart"
+        class="bg-white/10 px-6 py-3 rounded-full text-[10px] uppercase tracking-widest">
+
+        Update Cart
+
+    </button>
+
+</div>
 
                     <!-- Additional Services - More compact -->
                     <div class="mt-12 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8">
@@ -179,6 +217,7 @@ get_header();
                             <p class="text-[7px] md:text-[10px] text-white/30 leading-tight uppercase hidden sm:block">24/7 dedicated concierge.</p>
                         </div>
                     </div>
+
                 </div>
 
                 <!-- Summary Sidebar -->
@@ -189,44 +228,104 @@ get_header();
                             
                             <div class="space-y-4 mb-8 pb-6 border-b border-white/5">
                                 <div class="flex justify-between text-[10px] uppercase tracking-widest text-white/40">
-                                    <span>Subtotal</span>
-                                    <span class="text-white">$4,340.00</span>
-                                </div>
-                                <div class="flex justify-between text-[10px] uppercase tracking-widest text-[#c5a059]">
-                                    <span>Shipping</span>
-                                    <span>Free</span>
-                                </div>
+        <span>Subtotal</span>
+        <span class="text-white">
+            <?php wc_cart_totals_subtotal_html(); ?>
+        </span>
+    </div>
+
+    <?php foreach ( WC()->cart->get_coupons() as $code => $coupon ) : ?>
+
+        <div class="flex justify-between text-[10px] uppercase tracking-widest text-green-400">
+
+            <span>
+                <?php wc_cart_totals_coupon_label( $coupon ); ?>
+            </span>
+
+            <span>
+                <?php wc_cart_totals_coupon_html( $coupon ); ?>
+            </span>
+
+        </div>
+
+    <?php endforeach; ?>
+
+    <?php if ( WC()->cart->needs_shipping() ) : ?>
+
+        <div class="flex justify-between text-[10px] uppercase tracking-widest text-[#c5a059]">
+
+            <span>Shipping</span>
+
+            <span>
+
+                <?php
+                if ( WC()->cart->needs_shipping() ) {
+                    wc_cart_totals_shipping_html();
+                }
+                ?>
+
+            </span>
+
+        </div>
+
+    <?php endif; ?>
                                 
                                 <!-- Compact Promo -->
                                 <div class="pt-2">
                                     <div class="flex gap-2">
-                                        <input type="text" placeholder="CODE" class="flex-1 bg-white/5 border border-white/5 rounded-full px-4 py-3 text-[9px] tracking-widest focus:outline-none focus:border-white/20 uppercase">
-                                        <button class="bg-white/10 text-white px-4 py-3 rounded-full text-[9px] font-bold tracking-widest hover:bg-white hover:text-black transition-all">OK</button>
+                                       <?php if ( wc_coupons_enabled() ) : ?>
+
+                                    <div class="pt-2">
+                                        <div class="flex gap-2">
+
+                                            <input
+                                                type="text"
+                                                name="coupon_code"
+                                                placeholder="Coupon Code"
+                                                class="flex-1 bg-white/5 border border-white/5 rounded-full px-4 py-3 text-[9px] uppercase">
+
+                                            <button
+                                                type="submit"
+                                                name="apply_coupon"
+                                                value="Apply coupon"
+                                                class="bg-white/10 text-white px-4 py-3 rounded-full text-[9px]">
+
+                                                Apply
+
+                                            </button>
+
+                                        </div>
+                                    </div>
+
+                                    <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="flex justify-between items-end mb-8">
                                 <span class="text-[9px] uppercase tracking-widest text-white/40 font-medium">Total</span>
-                                <span class="text-2xl md:text-3xl font-light tracking-tighter">$4,687.00</span>
+                                <span class="text-2xl md:text-3xl font-light tracking-tighter"><?php wc_cart_totals_order_total_html(); ?></span>
                             </div>
 
-                            <a href="<?php echo esc_url( home_url( "/checkout/" ) ); ?>" class="block w-full bg-[#c5a059] text-white text-center py-5 rounded-full text-[10px] font-bold tracking-[0.3em] uppercase transition-all shadow-xl shadow-[#c5a059]/10">
+                            <a href="<?php echo esc_url( wc_get_checkout_url() ); ?>" class="block w-full bg-[#c5a059] text-white text-center py-5 rounded-full text-[10px] font-bold tracking-[0.3em] uppercase transition-all shadow-xl shadow-[#c5a059]/10">
                                 Checkout
                             </a>
 
                             <div class="mt-6 flex flex-col items-center gap-4">
                                 <div class="flex gap-4 grayscale opacity-20">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" class="h-2 w-auto" alt="Visa">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" class="h-4 w-auto" alt="Mastercard">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" class="h-3 w-auto" alt="Paypal">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" class="logogray" alt="Visa">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" class="logogray" alt="Mastercard">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" class="logogray" alt="Paypal">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <?php wp_nonce_field( 'woocommerce-cart', 'woocommerce-cart-nonce' ); ?>
+</form>
         </div>
     </main>
 </main>
+<?php do_action( 'woocommerce_after_cart' ); ?>
 <?php get_footer(); ?>

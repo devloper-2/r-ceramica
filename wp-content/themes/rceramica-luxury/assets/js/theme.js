@@ -646,13 +646,24 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-     const filterPanel = document.getElementById('mobile-filter-panel');
-            const filterBackdrop = document.getElementById('mobile-filter-backdrop');
-            const observer = new MutationObserver(() => {
-                filterBackdrop.classList.toggle('hidden', filterPanel.classList.contains('translate-x-full'));
-            });
-            observer.observe(filterPanel, {
-                attributes: true,
-                attributeFilter: ['class']
-            });
+
+    const filterPanel = document.getElementById('mobile-filter-panel');
+    const filterBackdrop = document.getElementById('mobile-filter-backdrop');
+
+    if (!filterPanel || !filterBackdrop) {
+        return;
+    }
+
+    const observer = new MutationObserver(() => {
+        filterBackdrop.classList.toggle(
+            'hidden',
+            filterPanel.classList.contains('translate-x-full')
+        );
+    });
+
+    observer.observe(filterPanel, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
+
 });
