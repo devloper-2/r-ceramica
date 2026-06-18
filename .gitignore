@@ -27,9 +27,8 @@ wp-content/backup/
 # But keep custom themes with: !wp-content/themes/your-custom-theme/
 
 # WordPress upgrade temporary files
-# wp-content/upgrade/
-# wp-content/plugins/*
-# !wp-content/plugins/my-custom-plugin/
+wp-content/plugins/woocommerce/
+wp-content/plugins/woo-razorpay/
 
 # Log files
 *.log
