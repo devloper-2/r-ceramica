@@ -1,83 +1,53 @@
-# WordPress Configuration
+# WordPress Core
+wp-admin/
+wp-includes/
+ 
+# Configuration
 wp-config.php
-
-# Environment files
 .env
 .env.local
 .env.*.local
-
+ 
 # Dependencies
 vendor/
 node_modules/
-composer.lock
-
-# Uploads and Media Files
+ 
+# Uploads
 wp-content/uploads/
 wp-content/cache/
 wp-content/backup/
-
-# Plugins (usually installed via composer or specific management)
-# Uncomment if you want to ignore all plugins except custom ones
-# wp-content/plugins/*/
-# But keep custom plugins with: !wp-content/plugins/your-custom-plugin/
-
-# Themes (usually installed separately)
-# Uncomment if you want to ignore default/installed themes
-# wp-content/themes/*/
-# But keep custom themes with: !wp-content/themes/your-custom-theme/
-
-# WordPress upgrade temporary files
-wp-content/plugins/woocommerce/
-wp-content/plugins/woo-razorpay/
-
-# Log files
+wp-content/upgrade/
+wp-content/languages/
+ 
+# Plugins
+wp-content/plugins/*
+!wp-content/plugins/your-custom-plugin/
+ 
+# Themes
+wp-content/themes/*
+!wp-content/themes/rceramica-luxury/
+ 
+# Logs
 *.log
 debug.log
-
-# Database files
-*.db
+ 
+# Database
 *.sql
-
-# IDE and Editor files
+*.db
+ 
+# IDE
 .vscode/
 .idea/
-*.sublime-project
-*.sublime-workspace
+ 
+# OS
 .DS_Store
-*.swp
-*.swo
-*~
-.project
-.buildpath
-.settings/
-*.orig
-
-# OS files
 Thumbs.db
-.AppleDouble
-.LSOverride
-
-# Temporary files
+ 
+# Temporary
 *.tmp
 .cache
 .temp
-
-# System files
-.htaccess (optional - include if using custom rules)
-
-# Backup files
-*.bak
-*.backup
-*.old
-
-# npm/yarn
-package-lock.json
-yarn.lock
-
-# Test coverage
-coverage/
-.nyc_output/
-
-# Local development
+ 
+# Local
 local-config.php
 wp-cli.local.yml
