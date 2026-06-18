@@ -461,7 +461,7 @@ boyd.headernone .globalheader {
 
 .woocommerce img,
 .woocommerce-page img {
-    height: unset;
+    height: 100%;
 }
 
 img.cartlogo {
@@ -537,6 +537,9 @@ label {
     width: 50px;
     height: 50px;
 }
+.filterpagetop{
+    padding-top: 150px;
+}
 
 /* Mobile specific adjustments */
 @media (max-width: 768px) {
@@ -548,5 +551,11 @@ label {
 @media only screen and (max-width: 980px) {
     .hidden-mobile {
         display: none;
+    }
+}
+
+@media only screen and (max-width: 600px){
+    img.footerlogo{
+        height: 70px;
     }
 }

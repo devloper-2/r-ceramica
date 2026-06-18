@@ -10,7 +10,7 @@ get_header();
     
 
     <!-- Hero Section -->
-    <header class="relative h-screen w-full flex items-center justify-center pt-20 md:pt-24 overflow-hidden bg-[#080808]">
+    <header class="relative h-screen w-full flex items-center justify-center text-3xl sm:text-4xl md:text-7xl overflow-hidden bg-[#080808]">
         <div class="absolute inset-0 z-0">
             <video autoPlay loop muted playsInline class="w-full h-full object-cover object-center opacity-80 hover:scale-105 transition-all duration-[2s]">
                 <source src="https://hindwarestg.blob.core.windows.net/container1/products/ae5eb07a-52f8-45fa-98ea-c427f8dde36f.mp4" type="video/mp4">
@@ -34,9 +34,9 @@ get_header();
         <section class="w-full overflow-hidden">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-0 bg-[#0a0a0a]">
                 <!-- Medium Feature: Kitchen -->
-                <div class="md:col-span-6 group relative overflow-hidden bg-[#0a0a0a] min-h-[500px] md:min-h-[70vh] explore-item">
+                <div class="md:col-span-6 group relative overflow-hidden bg-[#0a0a0a] min-h-[350px] md:min-h-[70vh] md:min-h-[70vh] explore-item">
                     <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80" alt="Designer Kitchen" class="w-full h-full object-cover explore-img opacity-40">
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex flex-col justify-end p-12">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex flex-col justify-end p-6 md:p-12">
                         <span class="text-[9px] uppercase tracking-[0.5em] text-[#c5a059] mb-4">Materiality</span>
                         <h2 class="text-3xl md:text-4xl font-display font-light uppercase tracking-widest mb-6">Culinary <br>Studios</h2>
                         <a href="<?php echo esc_url( home_url( '/explore/' ) ); ?>" class="w-fit flex items-center gap-6 text-[10px] uppercase tracking-[0.3em] text-white group-hover:gap-10 transition-all">
@@ -46,9 +46,9 @@ get_header();
                 </div>
 
                 <!-- Medium Feature: Living -->
-                <div class="md:col-span-6 group relative overflow-hidden bg-[#0c0c0c] min-h-[500px] md:min-h-[70vh] explore-item">
+                <div class="md:col-span-6 group relative overflow-hidden bg-[#0c0c0c] min-h-[350px] md:min-h-[70vh] md:min-h-[70vh] explore-item">
                     <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80" alt="Living Space" class="w-full h-full object-cover explore-img opacity-40">
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex flex-col justify-end p-12">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex flex-col justify-end p-6 md:p-12">
                         <span class="text-[9px] uppercase tracking-[0.5em] text-[#c5a059] mb-4">Precision</span>
                         <h2 class="text-3xl md:text-4xl font-display font-light uppercase tracking-widest mb-6">Expansive <br>Living</h2>
                         <a href="<?php echo esc_url( home_url( '/explore/' ) ); ?>" class="w-fit flex items-center gap-6 text-[10px] uppercase tracking-[0.3em] text-white group-hover:gap-10 transition-all">
@@ -97,11 +97,11 @@ get_header();
         </section>
 
         <!-- Business & Support Section -->
-        <section class="py-24 md:py-32 bg-[#0a0a0a] border-t border-white/5">
+        <section class="py-16 md:py-24 lg:py-32 bg-[#0a0a0a] border-t border-white/5">
             <div class="max-w-[1440px] mx-auto px-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:p-12 lg:gap-6 md:p-8">
                     <!-- Institutional Business -->
-                    <div class="group flex flex-col items-center text-center p-8 border border-white/5 hover:border-white/20 transition-all duration-500 rounded-sm">
+                    <div class="group flex flex-col items-center text-center p-6 md:p-8 border border-white/5 hover:border-white/20 transition-all duration-500 rounded-sm">
                         <div class="w-16 h-16 mb-8 flex items-center justify-center text-white/40 group-hover:text-white transition-colors duration-500">
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
                         </div>
@@ -113,7 +113,7 @@ get_header();
                     </div>
 
                     <!-- International Business -->
-                    <div class="group flex flex-col items-center text-center p-8 border border-white/5 hover:border-white/20 transition-all duration-500 rounded-sm">
+                    <div class="group flex flex-col items-center text-center p-6 md:p-8 border border-white/5 hover:border-white/20 transition-all duration-500 rounded-sm">
                         <div class="w-16 h-16 mb-8 flex items-center justify-center text-white/40 group-hover:text-white transition-colors duration-500">
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                         </div>
@@ -125,7 +125,7 @@ get_header();
                     </div>
 
                     <!-- Service & Support -->
-                    <div class="group flex flex-col items-center text-center p-8 border border-white/5 hover:border-white/20 transition-all duration-500 rounded-sm">
+                    <div class="group flex flex-col items-center text-center p-6 md:p-8 border border-white/5 hover:border-white/20 transition-all duration-500 rounded-sm">
                         <div class="w-16 h-16 mb-8 flex items-center justify-center text-white/40 group-hover:text-white transition-colors duration-500">
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/><path d="M21 16v2a4 4 0 0 1-4 4h-5"/></svg>
                         </div>
@@ -137,7 +137,7 @@ get_header();
                     </div>
 
                     <!-- Download App -->
-                    <div class="group flex flex-col items-center text-center p-8 bg-white text-black rounded-sm group">
+                    <div class="group flex flex-col items-center text-center p-6 md:p-8 bg-white text-black rounded-sm group">
                         <div class="w-16 h-16 mb-8 flex items-center justify-center text-black/40 group-hover:text-black transition-colors duration-500">
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/><path d="M12 7v6"/><path d="m9 10 3 3 3-3"/></svg>
                         </div>
@@ -152,17 +152,17 @@ get_header();
         </section>
 
         <!-- SEO/Insight Section -->
-        <section class="py-32 md:py-48 bg-[#0a0a0a] relative overflow-hidden border-t border-white/5">
+        <section class="py-16 md:py-32 lg:py-48 bg-[#0a0a0a] relative overflow-hidden border-t border-white/5">
             <!-- Subtle Background Typography -->
-            <div class="absolute top-1/2 left-0 -translate-y-1/2 text-[20vw] font-display font-black text-white/[0.015] whitespace-nowrap pointer-events-none uppercase tracking-tighter select-none">
+            <div class="absolute top-1/2 left-0 -translate-y-1/2 text-[30vw] md:text-[20vw] font-display font-black text-white/[0.015] whitespace-nowrap pointer-events-none uppercase tracking-tighter select-none">
                 Excellence Through Innovation
             </div>
 
             <div class="max-w-[1440px] mx-auto px-6 relative z-10">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-24 items-start">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 lg:gap-24 items-start">
                     <!-- Left Side: Decorative & Title -->
                     <div class="lg:col-span-5">
-                        <div class="space-y-12">
+                        <div class="space-y-8 md:space-y-12">
                             <div class="group inline-flex items-center gap-6">
                                 <div class="w-12 h-px bg-white/20 group-hover:w-20 transition-all duration-500"></div>
                                 <span class="text-[10px] uppercase tracking-[0.5em] text-white/30">Insight & Heritage</span>
@@ -204,7 +204,7 @@ get_header();
                                 <div id="seo-gradient" class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-10 transition-opacity duration-700"></div>
                             </div>
 
-                            <div class="flex items-center gap-12 pt-4">
+                            <div class="flex items-center gap-6 md:p-12 pt-4">
                                 <button onclick="toggleSEO()" id="seo-toggle" class="group flex items-center gap-6 text-[9px] uppercase tracking-[0.4em] text-white/40 hover:text-white transition-all cursor-pointer">
                                     <span id="seo-toggle-text">Discover More</span>
                                     <div class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-white/40 transition-all">
@@ -223,10 +223,10 @@ get_header();
                 </div>
             </div>
         </section>        <!-- Social Media Section -->
-        <section class="py-24 md:py-32 bg-[#0c0c0c] border-t border-white/5 overflow-hidden">
+        <section class="py-16 md:py-24 lg:py-32 bg-[#0c0c0c] border-t border-white/5 overflow-hidden">
             <div class="max-w-[1440px] mx-auto px-6 md:px-16">
                 <!-- SEO Friendly Refined Header -->
-                <div class="flex flex-col items-center text-center mb-16">
+                <div class="flex flex-col items-center text-center mb-10 md:mb-16">
                     <span class="text-[9px] uppercase tracking-[0.5em] text-white/30 mb-4 font-medium">Digital Presence</span>
                     <h2 class="text-xl md:text-2xl font-display font-light text-white uppercase tracking-[0.2em]">
                         Follow us on <span class="italic text-white/20">Social Media</span>
@@ -275,7 +275,7 @@ get_header();
                 </div>
 
                 <!-- Minimalist Icons row -->
-                <div class="mt-12 flex justify-center items-center gap-8 md:gap-12 border-t border-white/5 pt-12">
+                <div class="mt-12 flex justify-center items-center gap-6 md:p-8 md:gap-6 md:p-12 border-t border-white/5 pt-12">
                     <a href="#" aria-label="Follow us on X" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/20 hover:text-white hover:border-white/30 transition-all transform hover:-translate-y-1 duration-300">
                             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
                         </a>

@@ -54,6 +54,9 @@ function rc_mobile_link_class( $link, $active ) {
         </div>
         <!-- Centered Logo -->
         <div id="logo-container" class="transition-all duration-700">
+             <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="pointer-events-auto flex md:hidden">
+                <img id="navbar-logo" src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.webp" alt="R Ceramica Logo" class="cartlogo h-10 md:h-12 w-auto object-contain cursor-pointer">
+            </a>
             <!-- Desktop Navigation Links (Bottom Row) -->
             <div id="desktop-nav-links" class="hidden lg:flex justify-center items-center py-4 space-x-12 xl:space-x-16 text-[11px] uppercase tracking-[0.3em] font-medium text-white/80 transition-all duration-500">
                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="<?php echo rc_nav_link_class( 'home', $rc_nav_active ); ?>">HOME</a>
@@ -174,7 +177,9 @@ function rc_mobile_link_class( $link, $active ) {
 <!-- Mobile Menu Overlay -->
 <div id="mobile-menu" class="mobile-menu-hidden fixed inset-0 bg-[#0a0a0a] z-[500] flex flex-col p-8 overflow-y-auto transition-all duration-500">
     <div class="flex justify-between items-center mb-12">
-        <img src="https://rceramica.com/logo/logo.png" alt="Logo" class="h-12 w-auto">
+        <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="pointer-events-auto">
+                <img id="navbar-logo" src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.webp" alt="R Ceramica Logo" class="h-10 md:h-12 w-auto object-contain cursor-pointer">
+            </a>
         <button onclick="toggleMobileMenu()" class="text-white hover:text-gray-400 transition-colors">
             <i data-lucide="x" size="32"></i>
         </button>

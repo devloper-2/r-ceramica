@@ -4,21 +4,21 @@
  */
 ?>
 <!-- Professional Architecture Footer -->
-    <footer class="relative bg-[#0c0c0c] pt-24 pb-12 border-t border-white/5 overflow-hidden mt-24 globlefooter">
+    <footer class="relative bg-[#0c0c0c] pt-16 md:pt-24 pb-10 md:pb-12 border-t border-white/5 overflow-hidden mt-16 md:mt-24 globlefooter">
         <div class="max-w-[1440px] mx-auto px-6 md:px-16">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-24 mb-24">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-16 lg:gap-24 mb-16 md:mb-24 items-start">
                 <!-- Column 1: Brand Profile -->
-                <div class="space-y-10">
-                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.webp" alt="R Ceramica Logo" class="h-16 w-auto object-contain">
-                    <p class="text-white/40 text-[13px] leading-relaxed font-light font-sans max-w-sm">
+                <div class="space-y-6 md:space-y-10">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.webp" alt="R Ceramica Logo" class="footerlogo h-12 md:h-16 w-auto object-contain">
+                    <p class="text-white/40 text-[12px] md:text-[13px] leading-relaxed font-light font-sans max-w-sm">
                         R Ceramica is a brand that believes in continuous development and growth. We always try to innovate and bring something new to reform the approach of the market and the certificates that we have achieved over the years are proof of our creativity and credibility.
                     </p>
                 </div>
 
                 <!-- Column 2: Quick Links -->
-                <div class="space-y-10">
+                <div class="space-y-6 md:space-y-10">
                     <h4 class="text-white font-display text-lg tracking-wider font-light">Quick Links</h4>
-                    <ul class="space-y-5 text-[13px] text-white/40 font-sans tracking-wide">
+                    <ul class="space-y-5 text-[12px] md:text-[13px] text-white/40 font-sans tracking-wide">
                         <li><a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Explore</a></li>
                         <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Visualizer</a></li>
                         <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Projects</a></li>
@@ -27,9 +27,9 @@
                 </div>
 
                 <!-- Column 3: Corporate -->
-                <div class="space-y-10">
+                <div class="space-y-6 md:space-y-10">
                     <h4 class="text-white font-display text-lg tracking-wider font-light">Corporate</h4>
-                    <ul class="space-y-5 text-[13px] text-white/40 font-sans tracking-wide">
+                    <ul class="space-y-5 text-[12px] md:text-[13px] text-white/40 font-sans tracking-wide">
                         <li><a href="<?php echo esc_url( home_url( "/about/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Our Story</a></li>
                         <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Chairman Message</a></li>
                         <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">News & Media</a></li>
@@ -38,10 +38,10 @@
                 </div>
 
                 <!-- Column 4: Contact Us -->
-                <div class="space-y-10">
+                <div class="space-y-6 md:space-y-10">
                     <h4 class="text-white font-display text-lg tracking-wider font-light">Contact Us</h4>
-                    <div class="space-y-6 text-[13px] text-white/40 font-sans leading-relaxed">
-                        <div class="flex items-start gap-4 border-b border-white/5 pb-6">
+                    <div class="space-y-4 md:space-y-6 text-[12px] md:text-[13px] text-white/40 font-sans leading-relaxed">
+                        <div class="flex items-start gap-4 border-b border-white/5 pb-4 md:pb-6">
                             <i data-lucide="map-pin" size="18" class="shrink-0 text-white/20 mt-1"></i>
                             <p>Opp. Ceramic City, B/h. Meldi Ma Temple, Lalpar, 8-A National Highway, Morbi-363642. Gujarat (INDIA)</p>
                         </div>
@@ -66,11 +66,11 @@
             </div>
 
             <!-- Bottom Section Container -->
-            <div class="pt-16 border-t border-white/5 flex flex-col items-center gap-10">
+            <div class="pt-10 md:pt-16 border-t border-white/5 flex flex-col items-center gap-4 md:gap-6 md:gap-10">
                 <!-- Copyright Bar -->
-                <div class="w-full flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-white/20 uppercase tracking-[0.3em] font-medium text-center">
+                <div class="w-full flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6 text-[10px] text-white/20 uppercase tracking-[0.3em] font-medium text-center">
                     <p>© 2024 R Ceramica Global. All Rights Reserved.</p>
-                    <div class="flex gap-8">
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-8">
                         <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
                         <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
                     </div>
