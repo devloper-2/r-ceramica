@@ -22,7 +22,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /public_html/staging # Ensure this matches your Hostinger setup. Use / if the FTP user is restricted exactly to the root.
+          server-dir: /public_html/staging/ # Ensure this matches your Hostinger setup. Use / if the FTP user is restricted exactly to the root.
           exclude: |
             **/.git*
             **/.git*/**
