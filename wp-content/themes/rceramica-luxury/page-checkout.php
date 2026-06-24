@@ -111,6 +111,10 @@ wc_print_notices();
         color: white;
         opacity: 0.2;
     }
+    .step-completed{
+        color:#c5a059;
+        opacity:1;
+    }
 
     .payment-card {
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -162,49 +166,114 @@ wc_print_notices();
                         <p class="text-white/40 text-[8px] md:text-[11px] uppercase tracking-[0.3em]">Excellence delivered to your doorstep</p>
                     </div>
                     <?php
-                        $current_step = 1;
-                            if (is_wc_endpoint_url('order-pay')) {
+                    $current_step = 1;
+
+                        if ( is_wc_endpoint_url('order-pay') ) {
                             $current_step = 2;
                         }
-                        if (is_wc_endpoint_url('order-received')) {
+
+                        if ( is_wc_endpoint_url('order-received') ) {
                             $current_step = 3;
                         }
-                    ?>
+                        function step_class($step, $current_step) {
+                            if ($current_step > $step) {
+                                return 'step-completed';
+                            }
+
+                            if ($current_step == $step) {
+                                return 'step-active';
+                            }
+
+                            return 'step-inactive';
+                        }
+                        ?>
                     <!-- Steps Progress -->
                     <div class="flex items-center justify-between sm:justify-start sm:gap-6 mb-6 sm:mb-12 pb-4 border-b border-white/5">
-                        <div class="flex items-center gap-3 <?php echo $current_step >= 1 ? 'step-active' : 'step-inactive'; ?>">
+                        <div class="flex items-center gap-3 <?php echo step_class(1, $current_step); ?>">
                             <span class="w-4 h-4 sm:w-6 sm:h-6 rounded-full border border-current flex items-center justify-center text-[8px] sm:text-[10px]">1</span>
                             <span class="text-[8px] sm:text-[10px] uppercase tracking-widest font-medium">Ship</span>
                         </div>
                         <div class="flex-1 max-w-[20px] sm:max-w-[40px] h-px bg-white/10"></div>
-                        <div class="flex items-center gap-3 <?php echo $current_step >= 2 ? 'step-active' : 'step-inactive'; ?>">
+                        <div class="flex items-center gap-3 <?php echo step_class(2, $current_step); ?>">
                             <span class="w-4 h-4 sm:w-6 sm:h-6 rounded-full border border-current flex items-center justify-center text-[8px] sm:text-[10px]">2</span>
                             <span class="text-[8px] sm:text-[10px] uppercase tracking-widest font-medium">Pay</span>
                         </div>
                         <div class="flex-1 max-w-[20px] sm:max-w-[40px] h-px bg-white/10"></div>
-                        <div class="flex items-center gap-3 <?php echo $current_step >= 3 ? 'step-active' : 'step-inactive'; ?>">
+                        <div class="flex items-center gap-3 <?php echo step_class(3, $current_step); ?>">
                             <span class="w-4 h-4 sm:w-6 sm:h-6 rounded-full border border-current flex items-center justify-center text-[8px] sm:text-[10px]">3</span>
                             <span class="text-[8px] sm:text-[10px] uppercase tracking-widest font-medium">Ok</span>
                         </div>
                     </div>
 
-                    <form name="checkout" method="post" class="checkout woocommerce-checkout space-y-4 md:space-y-12" action="<?php echo esc_url(wc_get_checkout_url()); ?>" enctype="multipart/form-data">
-                        <!-- Shipping Section -->
-                        <div id="section-shipping">
-                            <?php do_action('woocommerce_checkout_billing'); ?>
-                        </div>
+                    <?php if ( is_wc_endpoint_url( 'order-pay' ) ) : ?>
 
-                        <!-- Payment architecture -->
-                        <div id="order_review_wrapper" class="checkout-hidden-review">
-                            <div id="order_review">
-                                <?php do_action('woocommerce_checkout_order_review'); ?>
+                        <!-- ORDER PAY PAGE -->
+                        <div id="order_review_wrapper">
+
+                            <div class="glass-panel rounded-3xl p-8">
+
+                                <h2 class="text-xl mb-6 uppercase tracking-widest">
+                                    Payment Method
+                                </h2>
+
+                                <?php
+                                global $wp;
+
+                                $order_id = absint( $wp->query_vars['order-pay'] ?? 0 );
+                                $order    = wc_get_order( $order_id );
+
+                                if ( $order ) {
+
+                                    wc_get_template(
+                                        'checkout/form-pay.php',
+                                        array(
+                                            'order'              => $order,
+                                            'available_gateways' => WC()->payment_gateways()->get_available_payment_gateways(),
+                                            'order_button_text'  => __( 'Pay Now', 'woocommerce' ),
+                                        )
+                                    );
+
+                                } else {
+
+                                    echo '<p>Order not found.</p>';
+
+                                }
+                                ?>
+
                             </div>
+
                         </div>
 
-                        <div class="pt-4">
-                            <button type="button" id="custom-place-order" class="w-full bg-white text-black py-4 md:py-6 rounded-full text-[9px] md:text-[11px] font-bold tracking-[0.3em] uppercase transition-all active:scale-[0.98]">Complete Order</button>
-                        </div>
-                    </form>
+                    <?php else : ?>
+
+                        <!-- NORMAL CHECKOUT PAGE -->
+                        <form name="checkout"
+                            method="post"
+                            class="checkout woocommerce-checkout space-y-4 md:space-y-12"
+                            action="<?php echo esc_url( wc_get_checkout_url() ); ?>"
+                            enctype="multipart/form-data">
+
+                            <div id="section-shipping">
+                                <?php do_action( 'woocommerce_checkout_billing' ); ?>
+                            </div>
+
+                            <div id="order_review_wrapper" class="checkout-hidden-review">
+                                <div id="order_review">
+                                    <?php do_action( 'woocommerce_checkout_order_review' ); ?>
+                                </div>
+                            </div>
+
+                            <div class="pt-4">
+                                <button type="button"
+                                        id="custom-place-order"
+                                        class="w-full bg-white text-black py-4 md:py-6 rounded-full text-[9px] md:text-[11px] font-bold tracking-[0.3em] uppercase transition-all active:scale-[0.98]">
+                                    Complete Order
+                                </button>
+                            </div>
+
+                        </form>
+
+                    <?php endif; ?>
                 </div>
 
                 <!-- Order Summary Sidebar -->
