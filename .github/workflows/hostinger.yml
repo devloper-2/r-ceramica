@@ -19,7 +19,7 @@ jobs:
       - name: Sync Files to Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ftp.rceramica.com
+          server: 82.25.107.184
           username: u715248258.autodeploy
           password: j*lXIYU05=sB
           server-dir: /public_html/staging/ # Ensure this matches your Hostinger setup. Use / if the FTP user is restricted exactly to the root.
