@@ -1,0 +1,32 @@
+name: Deploy WordPress to Hostinger
+
+on:
+  push:
+    branches:
+      - wordpress # Triggers the deployment only when pushing to the wordpress branch
+
+jobs:
+  deploy:
+    name: FTP Deploy Changed Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # Required to calculate the difference between the current and previous commit
+
+      - name: Sync Files to Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /public_html/staging # Ensure this matches your Hostinger setup. Use / if the FTP user is restricted exactly to the root.
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/
+            readme.md
+            wp-config.php
+            wp-content/uploads/**
