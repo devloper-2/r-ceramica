@@ -69,7 +69,7 @@
             <div class="pt-10 md:pt-16 border-t border-white/5 flex flex-col items-center gap-4 md:gap-6 md:gap-10">
                 <!-- Copyright Bar -->
                 <div class="w-full flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6 text-[10px] text-white/20 uppercase tracking-[0.3em] font-medium text-center">
-                    <p>© 2024 R Ceramica Global. All Rights Reserved.</p>
+                    <p>© 2026 R Ceramica Global. All Rights Reserved.</p>
                     <div class="flex flex-col sm:flex-row gap-3 sm:gap-8">
                         <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
                         <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
