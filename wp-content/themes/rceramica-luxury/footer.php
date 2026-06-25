@@ -43,7 +43,7 @@
                     <div class="space-y-4 md:space-y-6 text-[12px] md:text-[13px] text-white/40 font-sans leading-relaxed">
                         <div class="flex items-start gap-4 border-b border-white/5 pb-4 md:pb-6">
                             <i data-lucide="map-pin" size="18" class="shrink-0 text-white/20 mt-1"></i>
-                            <p>Opp. Ceramic City, B/h. Meldi Ma Temple, Lalpar, 8-A National Highway, Morbi-363642. Gujarat (INDIA)</p>
+                            <p>Opp. Ceramic City, B/H. Meldi Ma Temple, Lalpar, 8-A National Highway, Morbi-363642. Gujarat (INDIA)</p>
                         </div>
                         <div class="flex items-center gap-4 group cursor-pointer hover:text-white transition-colors">
                             <i data-lucide="phone" size="18" class="text-white/20"></i>
