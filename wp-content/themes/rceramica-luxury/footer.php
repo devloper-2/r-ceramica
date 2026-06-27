@@ -17,7 +17,7 @@
 
                 <!-- Column 2: Quick Links -->
                 <div class="space-y-6 md:space-y-10">
-                    <h4 class="text-white font-display text-lg tracking-wider font-light">Quick Links</h4>
+                    <h4 class="text-white font-display text-lg tracking-wider font-light">Quick Links test</h4>
                     <ul class="space-y-5 text-[12px] md:text-[13px] text-white/40 font-sans tracking-wide">
                         <li><a href="<?php echo esc_url( home_url( "/explore/" ) ); ?>" class="hover:text-white transition-all hover:pl-2 uppercase">Explore</a></li>
                         <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Visualizer</a></li>
