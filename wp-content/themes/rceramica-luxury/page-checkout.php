@@ -3,6 +3,7 @@
 /**
  * Template for the Checkout page.
  */
+
 add_filter('body_class', function ($classes) {
     $classes[] = 'headernone';
     return $classes;
@@ -111,9 +112,10 @@ wc_print_notices();
         color: white;
         opacity: 0.2;
     }
-    .step-completed{
-        color:#c5a059;
-        opacity:1;
+
+    .step-completed {
+        color: #c5a059;
+        opacity: 1;
     }
 
     .payment-card {
@@ -168,25 +170,26 @@ wc_print_notices();
                     <?php
                     $current_step = 1;
 
-                        if ( is_wc_endpoint_url('order-pay') ) {
-                            $current_step = 2;
+                    if (is_wc_endpoint_url('order-pay')) {
+                        $current_step = 2;
+                    }
+
+                    if (is_wc_endpoint_url('order-received')) {
+                        $current_step = 3;
+                    }
+                    function step_class($step, $current_step)
+                    {
+                        if ($current_step > $step) {
+                            return 'step-completed';
                         }
 
-                        if ( is_wc_endpoint_url('order-received') ) {
-                            $current_step = 3;
+                        if ($current_step == $step) {
+                            return 'step-active';
                         }
-                        function step_class($step, $current_step) {
-                            if ($current_step > $step) {
-                                return 'step-completed';
-                            }
 
-                            if ($current_step == $step) {
-                                return 'step-active';
-                            }
-
-                            return 'step-inactive';
-                        }
-                        ?>
+                        return 'step-inactive';
+                    }
+                    ?>
                     <!-- Steps Progress -->
                     <div class="flex items-center justify-between sm:justify-start sm:gap-6 mb-6 sm:mb-12 pb-4 border-b border-white/5">
                         <div class="flex items-center gap-3 <?php echo step_class(1, $current_step); ?>">
@@ -205,7 +208,7 @@ wc_print_notices();
                         </div>
                     </div>
 
-                    <?php if ( is_wc_endpoint_url( 'order-pay' ) ) : ?>
+                    <?php if (is_wc_endpoint_url('order-pay')) : ?>
 
                         <!-- ORDER PAY PAGE -->
                         <div id="order_review_wrapper">
@@ -219,24 +222,31 @@ wc_print_notices();
                                 <?php
                                 global $wp;
 
-                                $order_id = absint( $wp->query_vars['order-pay'] ?? 0 );
-                                $order    = wc_get_order( $order_id );
+                                $order_id = absint($wp->query_vars['order-pay'] ?? 0);
+                                $order    = wc_get_order($order_id);
 
-                                if ( $order ) {
+                                if (! $order) {
+                                    echo '<p>Order not found.</p>';
+                                    return;
+                                }
+
+                                $payment_method = $order->get_payment_method();
+
+                                $gateways = WC()->payment_gateways()->payment_gateways();
+
+                                if (isset($gateways[$payment_method]) && method_exists($gateways[$payment_method], 'receipt_page')) {
+
+                                    $gateways[$payment_method]->receipt_page($order->get_id());
+                                } else {
 
                                     wc_get_template(
                                         'checkout/form-pay.php',
                                         array(
                                             'order'              => $order,
                                             'available_gateways' => WC()->payment_gateways()->get_available_payment_gateways(),
-                                            'order_button_text'  => __( 'Pay Now', 'woocommerce' ),
+                                            'order_button_text'  => __('Pay Now', 'woocommerce'),
                                         )
                                     );
-
-                                } else {
-
-                                    echo '<p>Order not found.</p>';
-
                                 }
                                 ?>
 
@@ -250,23 +260,23 @@ wc_print_notices();
                         <form name="checkout"
                             method="post"
                             class="checkout woocommerce-checkout space-y-4 md:space-y-12"
-                            action="<?php echo esc_url( wc_get_checkout_url() ); ?>"
+                            action="<?php echo esc_url(wc_get_checkout_url()); ?>"
                             enctype="multipart/form-data">
 
                             <div id="section-shipping">
-                                <?php do_action( 'woocommerce_checkout_billing' ); ?>
+                                <?php do_action('woocommerce_checkout_billing'); ?>
                             </div>
 
                             <div id="order_review_wrapper" class="checkout-hidden-review">
                                 <div id="order_review">
-                                    <?php do_action( 'woocommerce_checkout_order_review' ); ?>
+                                    <?php do_action('woocommerce_checkout_order_review'); ?>
                                 </div>
                             </div>
 
                             <div class="pt-4">
                                 <button type="button"
-                                        id="custom-place-order"
-                                        class="w-full bg-white text-black py-4 md:py-6 rounded-full text-[9px] md:text-[11px] font-bold tracking-[0.3em] uppercase transition-all active:scale-[0.98]">
+                                    id="custom-place-order"
+                                    class="w-full bg-white text-black py-4 md:py-6 rounded-full text-[9px] md:text-[11px] font-bold tracking-[0.3em] uppercase transition-all active:scale-[0.98]">
                                     Complete Order
                                 </button>
                             </div>
@@ -307,10 +317,10 @@ wc_print_notices();
 
                                             <span class="text-[11px] font-light">
                                                 <?php
-                                                    echo WC()->cart->get_product_subtotal(
-                                                        $_product,
-                                                        $cart_item['quantity']
-                                                    );
+                                                echo WC()->cart->get_product_subtotal(
+                                                    $_product,
+                                                    $cart_item['quantity']
+                                                );
                                                 ?>
                                             </span>
                                         </div>
@@ -350,6 +360,7 @@ wc_print_notices();
         </div>
     </main>
 </main>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
@@ -373,4 +384,10 @@ wc_print_notices();
 
     });
 </script>
+<?php if ( ! is_user_logged_in() ) : ?>
+<div id="checkout-login-modal" class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+    <?php get_template_part( 'partials/login-popup' ); ?>
+</div>
+<?php endif; ?>
+
 <?php get_footer(); ?>

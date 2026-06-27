@@ -32,7 +32,7 @@ get_header();
 
         <!-- Luxury Showers Section -->
         <section class="relative group overflow-hidden bg-[#0c0c0c] h-screen w-full snap-start explore-item border-t border-white/5">
-            <img src="https://images.unsplash.com/photo-1620626014330-f99a0937285d?auto=format&fit=crop&q=80" class="absolute inset-0 w-full h-full object-cover explore-img opacity-30 transition-transform duration-[4s]" alt="Showers">
+            <img src="https://6a3e669989587270ec843fee.imgix.net/Luxury-Shower-240975.jpeg" class="absolute inset-0 w-full h-full object-cover explore-img opacity-30 transition-transform duration-[4s]" alt="Showers">
             <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all"></div>
             <div class="absolute inset-0 flex flex-col justify-end p-8 md:p-24">
                 <div class="max-w-[1720px] mx-auto w-full">
@@ -50,7 +50,7 @@ get_header();
 
         <!-- Artisan Faucets Section -->
         <section class="relative group overflow-hidden bg-[#0a0a0a] h-screen w-full snap-start explore-item border-t border-white/5">
-            <img src="https://images.unsplash.com/photo-1584622781514-f670c2269a84?auto=format&fit=crop&q=80&w=1600" class="absolute inset-0 w-full h-full object-cover explore-img opacity-50" alt="Artisan Faucets">
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/A-kitchen-faucet-443674.jpeg" class="absolute inset-0 w-full h-full object-cover explore-img opacity-50" alt="Artisan Faucets">
             <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/80 via-black/40 to-transparent flex flex-col justify-end md:justify-center p-8 md:p-24">
                 <div class="max-w-[1720px] mx-auto w-full flex flex-col items-start text-left">
                     <div class="w-full md:w-auto">
@@ -68,7 +68,7 @@ get_header();
 
         <!-- Sanitary Forms Section -->
         <section class="relative group overflow-hidden bg-[#0c0c0c] h-screen w-full snap-start explore-item border-t border-white/5">
-            <img src="https://images.unsplash.com/photo-1584622781564-1d9876a13d00?auto=format&fit=crop&q=80&w=1600" class="w-full h-full object-cover explore-img opacity-40 transition-transform duration-[3s]" alt="Bathware">
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/hygiene-ystems.webp" class="w-full h-full object-cover explore-img opacity-40 transition-transform duration-[3s]" alt="Bathware">
             <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/80"></div>
             <div class="absolute inset-0 flex flex-col justify-end p-8 md:p-24">
                 <div class="max-w-[1720px] mx-auto w-full">
@@ -96,7 +96,7 @@ get_header();
 
         <!-- FRP Manhole Section -->
         <section class="relative group overflow-hidden bg-[#060606] h-screen w-full snap-start explore-item border-t border-white/5">
-            <img src="https://images.unsplash.com/photo-1533150423042-12714441c940?auto=format&fit=crop&q=80&w=1600" class="absolute inset-0 w-full h-full object-cover explore-img opacity-30" alt="FRP Manhole">
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/maram-alkrdy.webp" class="absolute inset-0 w-full h-full object-cover explore-img opacity-30" alt="FRP Manhole">
             <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/90"></div>
             <div class="absolute inset-0 flex flex-col justify-end p-8 md:p-24">
                 <div class="max-w-[1720px] mx-auto w-full">

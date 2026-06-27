@@ -129,40 +129,35 @@ get_header();
 <script>
     jQuery('#sendOtp').click(function () {
 
-        let mobile = jQuery('#mobile').val();
+    let mobile = jQuery('#mobile').val();
 
-        jQuery.post('<?php echo admin_url("admin-ajax.php"); ?>', {
+    jQuery.ajax({
+        url: '<?php echo admin_url("admin-ajax.php"); ?>',
+        type: 'POST',
+        dataType: 'json',
+        data: {
             action: 'send_login_otp',
             mobile: mobile
-        }, function (response) {
+        },
+        success: function(response) {
+            console.log(response);
 
             if (response.success) {
-                jQuery('#otpSection').show();
+                $('#otpSection').show();
                 alert('OTP Sent');
             } else {
                 alert(response.data);
             }
+        },
+        error: function(xhr, status, error) {
+            console.log("XHR:", xhr.responseText);
+            console.log("Status:", status);
+            console.log("Error:", error);
 
-        });
-
+            alert("AJAX Error");
+        }
     });
-    jQuery('#verifyOtp').click(function () {
 
-        let otp = jQuery('#otp').val();
-
-        jQuery.post('<?php echo admin_url("admin-ajax.php"); ?>', {
-            action: 'verify_login_otp',
-            otp: otp
-        }, function (response) {
-
-            if (response.success) {
-                window.location.href = '/catalogue/';
-            } else {
-                alert('Invalid OTP');
-            }
-
-        });
-
-    });
+});
 </script>
 <?php get_footer(); ?>

@@ -540,6 +540,9 @@ label {
 .filterpagetop{
     padding-top: 140px;
 }
+.select2-container--default .select2-selection--single .select2-selection__rendered{
+    color: #fff;
+}
 
 /* Mobile specific adjustments */
 @media (max-width: 768px) {

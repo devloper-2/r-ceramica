@@ -1,32 +1,44 @@
-name: Deploy WordPress to Hostinger
+name: Deploy WordPress to Hostinger via SSH
 
 on:
   push:
     branches:
-      - wordpress # Triggers the deployment only when pushing to the wordpress branch
+      - wordpress
 
 jobs:
   deploy:
-    name: FTP Deploy Changed Files
+    name: rsync Deploy via SSH
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2 # Required to calculate the difference between the current and previous commit
+          fetch-depth: 1
 
-      - name: Sync Files to Hostinger
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: 82.25.107.184
-          username: u715248258.autodeploy
-          password: j*lXIYU05=sB
-          server-dir: ./staging/ # Ensure this matches your Hostinger setup. Use / if the FTP user is restricted exactly to the root.
-          exclude: |
-            **/.git*
-            **/.git*/**
-            .github/
-            readme.md
-            wp-config.php
-            wp-content/uploads/**
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p 65002 82.25.107.184 >> ~/.ssh/known_hosts
+
+      - name: Deploy via rsync
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key -p 65002 -o StrictHostKeyChecking=no" \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='wp-config.php' \
+            --exclude='wp-content/uploads/' \
+            --exclude='node_modules/' \
+            --exclude='*.md' \
+            ./ u715248258@82.25.107.184:/home/u715248258/public_html/
+
+      - name: Verify Deployment
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            -p 65002 \
+            -o StrictHostKeyChecking=no \
+            u715248258@82.25.107.184 \
+            "echo '✅ Deploy complete' && ls /home/u715248258/public_html/ | head -20"
