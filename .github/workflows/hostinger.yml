@@ -19,7 +19,7 @@ jobs:
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p 65002 82.25.107.184 >> ~/.ssh/known_hosts
 
@@ -41,4 +41,4 @@ jobs:
             -p 65002 \
             -o StrictHostKeyChecking=no \
             u715248258@82.25.107.184 \
-            "echo '✅ Deploy complete at:' && date && echo '--- Checking footer.php ---' && grep -n 'echo date' /home/u715248258/domains/rceramica.com/public_html/staging/wp-content/themes/rceramica-luxury/footer.php"
+            "echo '✅ Deploy complete at:' && date && grep -n 'echo date' /home/u715248258/domains/rceramica.com/public_html/staging/wp-content/themes/rceramica-luxury/footer.php"
