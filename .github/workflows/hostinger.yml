@@ -33,7 +33,7 @@ jobs:
             --exclude='wp-content/uploads/' \
             --exclude='node_modules/' \
             --exclude='*.md' \
-            ./ u715248258@82.25.107.184:/home/u715248258/public_html/staging/
+            ./ u715248258@82.25.107.184:/home/u715248258/domains/rceramica.com/public_html/staging/
 
       - name: Verify Deployment
         run: |
@@ -41,4 +41,4 @@ jobs:
             -p 65002 \
             -o StrictHostKeyChecking=no \
             u715248258@82.25.107.184 \
-            "echo '✅ Deploy complete at:' && date && echo '--- Files in staging ---' && ls /home/u715248258/public_html/staging/"
+            "echo '✅ Deploy complete at:' && date && echo '--- Checking footer.php ---' && grep -n 'echo date' /home/u715248258/domains/rceramica.com/public_html/staging/wp-content/themes/rceramica-luxury/footer.php"
