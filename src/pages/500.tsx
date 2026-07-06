@@ -1,23 +1,20 @@
-"use client";
+import Head from "next/head";
+import Link from "next/link";
 
-import { useEffect } from "react";
-
-interface ErrorProps {
-  error: Error & { digest?: string };
-  reset: () => void;
-}
-
-export default function GlobalError({ error, reset }: ErrorProps) {
-  useEffect(() => {
-    // Log to an error reporting service in production
-    console.error(error);
-  }, [error]);
-
+/**
+ * 500.tsx — custom server-error screen (Pages Router convention).
+ * Replaces the App Router error.tsx.
+ */
+export default function ServerError() {
   return (
     <section
       className="flex min-h-[70vh] flex-col items-center justify-center gap-6 px-4 text-center"
-      aria-label="An error occurred"
+      aria-label="Server error"
     >
+      <Head>
+        <title>Something Went Wrong | R Ceramica</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Head>
       <p className="font-display text-sm uppercase tracking-[0.2em] text-[var(--color-gold)]">
         Error
       </p>
@@ -25,15 +22,15 @@ export default function GlobalError({ error, reset }: ErrorProps) {
         Something went wrong
       </h1>
       <p className="max-w-md text-white/60">
-        An unexpected error occurred. Please try again, or contact us if the
-        problem persists.
+        An unexpected error occurred on our side. Please try again, or contact us
+        if the problem persists.
       </p>
-      <button
-        onClick={reset}
+      <Link
+        href="/"
         className="mt-2 border border-white/20 px-8 py-3 text-sm uppercase tracking-widest transition-colors hover:border-[var(--color-gold)] hover:text-[var(--color-gold)]"
       >
-        Try Again
-      </button>
+        Return Home
+      </Link>
     </section>
   );
 }

@@ -1,0 +1,50 @@
+import Head from "next/head";
+import { Hero, NarrativeSection, MediaGrid, FeatureCards } from "@/components/sections";
+import {
+  ABOUT_HERO,
+  ABOUT_NARRATIVE,
+  ABOUT_VALUES,
+  ABOUT_CAPABILITIES,
+} from "@/lib/constants/about";
+import { webPageSchema } from "@/lib/utils";
+import { siteConfig } from "@/config/site";
+
+const TITLE = `About Us | ${siteConfig.name}`;
+const DESCRIPTION =
+  "Discover the R Ceramica story — two decades of design-led porcelain manufacturing, sustainable production, and surfaces trusted in 40+ countries.";
+
+/**
+ * About Us page → "/about"  (Pages Router: filename `about` maps to /about).
+ *
+ * A teaching example of REUSE: every section here (Hero, NarrativeSection,
+ * MediaGrid, FeatureCards) is the SAME component used on the home page — only
+ * the data (@/lib/constants/about) and styles (styles/aboutpage.css) differ.
+ */
+export default function AboutPage() {
+  return (
+    <div className="page-about">
+      <Head>
+        <title>{TITLE}</title>
+        <meta name="description" content={DESCRIPTION} />
+        <link rel="canonical" href={`${siteConfig.url}/about`} />
+        <meta property="og:title" content={TITLE} />
+        <meta property="og:description" content={DESCRIPTION} />
+        <meta property="og:image" content={siteConfig.ogImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              webPageSchema("/about", "About Us", ABOUT_NARRATIVE.lead)
+            ),
+          }}
+        />
+      </Head>
+
+      <Hero {...ABOUT_HERO} />
+      <NarrativeSection {...ABOUT_NARRATIVE} />
+      <MediaGrid items={ABOUT_VALUES} ariaLabel="Our values" ctaLabel="Learn More" />
+      <FeatureCards items={ABOUT_CAPABILITIES} ariaLabel="Why choose R Ceramica" />
+    </div>
+  );
+}

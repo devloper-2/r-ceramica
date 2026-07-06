@@ -3,9 +3,23 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import SectionLabel from "@/components/ui/SectionLabel";
-import { CAROUSEL_SLIDES } from "@/lib/constants/home";
+import type { CarouselSlide } from "@/lib/types";
 
-export default function ProductCarousel() {
+interface ProductCarouselProps {
+  slides: CarouselSlide[];
+  eyebrow?: string;
+}
+
+/**
+ * ProductCarousel — auto-advancing full-bleed video carousel.
+ *
+ * REUSABLE: pass any list of slides. Client component because it manages the
+ * active slide + fade transition state.
+ */
+export default function ProductCarousel({
+  slides,
+  eyebrow = "Spotlight Collection",
+}: ProductCarouselProps) {
   const [current, setCurrent] = useState(0);
   const [fading, setFading] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -19,21 +33,21 @@ export default function ProductCarousel() {
   }, []);
 
   const next = useCallback(
-    () => goTo((current + 1) % CAROUSEL_SLIDES.length),
-    [current, goTo]
+    () => goTo((current + 1) % slides.length),
+    [current, goTo, slides.length]
   );
   const prev = useCallback(
-    () => goTo((current - 1 + CAROUSEL_SLIDES.length) % CAROUSEL_SLIDES.length),
-    [current, goTo]
+    () => goTo((current - 1 + slides.length) % slides.length),
+    [current, goTo, slides.length]
   );
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    video.src = CAROUSEL_SLIDES[current].videoSrc;
+    video.src = slides[current].videoSrc;
     video.load();
     video.play().catch(() => {});
-  }, [current]);
+  }, [current, slides]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -43,7 +57,9 @@ export default function ProductCarousel() {
     return () => video.removeEventListener("ended", onEnded);
   }, [next]);
 
-  const slide = CAROUSEL_SLIDES[current];
+  if (slides.length === 0) return null;
+
+  const slide = slides[current];
 
   return (
     <section
@@ -74,7 +90,7 @@ export default function ProductCarousel() {
             aria-live="polite"
             aria-atomic="true"
           >
-            <SectionLabel text="Spotlight Collection" className="mb-4 block" />
+            <SectionLabel text={eyebrow} className="mb-4 block" />
             <h3 className="text-white font-display text-4xl md:text-7xl mb-6 font-light uppercase tracking-tight">
               {slide.title}
             </h3>
@@ -117,7 +133,7 @@ export default function ProductCarousel() {
         role="tablist"
         aria-label="Carousel navigation"
       >
-        {CAROUSEL_SLIDES.map((_, i) => (
+        {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => goTo(i)}
@@ -125,9 +141,7 @@ export default function ProductCarousel() {
             aria-selected={i === current}
             aria-label={`Go to slide ${i + 1}`}
             className={`h-0.5 transition-all duration-700 ${
-              i === current
-                ? "w-12 md:w-20 bg-white"
-                : "w-8 md:w-12 bg-white/20"
+              i === current ? "w-12 md:w-20 bg-white" : "w-8 md:w-12 bg-white/20"
             }`}
           />
         ))}

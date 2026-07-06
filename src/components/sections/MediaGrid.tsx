@@ -1,15 +1,33 @@
 import Image from "next/image";
 import SectionLabel from "@/components/ui/SectionLabel";
 import ArrowLink from "@/components/ui/ArrowLink";
-import { SPACE_CARDS } from "@/lib/constants/home";
+import type { SpaceCard } from "@/lib/types";
 
-export default function ArchitecturalSpaces() {
+interface MediaGridProps {
+  items: SpaceCard[];
+  /** Describes the section for screen readers, e.g. "Architectural Spaces". */
+  ariaLabel: string;
+  /** Link text shown on each card. */
+  ctaLabel?: string;
+}
+
+/**
+ * MediaGrid — a full-bleed grid of image cards with a label, title and link.
+ *
+ * REUSABLE: the homepage uses it for "Architectural Spaces"; the About page
+ * uses the very same component for "Our Values". Only the `items` differ.
+ */
+export default function MediaGrid({
+  items,
+  ariaLabel,
+  ctaLabel = "View Collection",
+}: MediaGridProps) {
   return (
-    <section aria-label="Architectural Spaces" className="w-full overflow-hidden">
+    <section aria-label={ariaLabel} className="w-full overflow-hidden">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-0 bg-[var(--color-bg)]">
-        {SPACE_CARDS.map((card) => (
+        {items.map((card) => (
           <div
-            key={card.href}
+            key={card.title}
             className="md:col-span-6 group relative overflow-hidden bg-[var(--color-bg)] min-h-[500px] md:min-h-[70vh]"
           >
             <Image
@@ -24,7 +42,7 @@ export default function ArchitecturalSpaces() {
               <h2 className="text-3xl md:text-4xl font-display font-light uppercase tracking-widest mb-6 whitespace-pre-line">
                 {card.title}
               </h2>
-              <ArrowLink href={card.href} label="View Collection" />
+              <ArrowLink href={card.href} label={ctaLabel} />
             </div>
           </div>
         ))}

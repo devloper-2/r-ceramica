@@ -1,0 +1,12 @@
+/* =====================================================================
+   footer.css — Styles specific to the Footer component.
+   Imported by components/layout/Footer.tsx. Uses theme.css tokens.
+   ===================================================================== */
+
+.site-footer {
+  background-color: var(--color-bg-alt);
+}
+
+.site-footer a {
+  transition: color 0.3s var(--ease-smooth);
+}

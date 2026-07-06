@@ -1,0 +1,9 @@
+/* =====================================================================
+   aboutpage.css — Styles specific to the ABOUT US page (/about).
+   Imported by app/_pages/AboutPage.tsx. Uses tokens from theme.css so it
+   automatically follows the global theme. Add about-only rules here.
+   ===================================================================== */
+
+.page-about {
+  background-color: var(--color-bg);
+}

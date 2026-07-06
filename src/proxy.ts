@@ -1,5 +1,5 @@
 /**
- * middleware.ts — Next.js Edge Middleware for R Ceramica.
+ * proxy.ts — Next.js Proxy (formerly "middleware") for R Ceramica.
  *
  * Runs at the edge before every request (no cold starts).
  * Handles:
@@ -7,10 +7,11 @@
  *      in a cookie, matching the EN / FR / IT options in LANGUAGES constant.
  *   2. Security — adds a request ID for tracing (response header).
  *
- * NOTE: This middleware does NOT redirect URLs (e.g. /fr/...) — it purely
- * sets a cookie so client components (language switcher) can read the
- * detected locale. Implement full i18n routing here if sub-path locales
- * are added in the future.
+ * NOTE: This does NOT redirect URLs (e.g. /fr/...) — it purely sets a cookie so
+ * client components (language switcher) can read the detected locale. Implement
+ * full i18n routing here if sub-path locales are added in the future.
+ *
+ * (Renamed from middleware.ts → proxy.ts per the Next.js 16 convention.)
  */
 
 import { NextResponse } from "next/server";
@@ -44,7 +45,7 @@ function detectLocale(acceptLanguage: string | null): SupportedLocale {
   return DEFAULT_LOCALE;
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const response = NextResponse.next();
 
   // ── 1. Locale detection ──────────────────────────────────────────────────
@@ -69,7 +70,7 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   /**
-   * Run middleware on all routes EXCEPT:
+   * Run on all routes EXCEPT:
    * - Next.js internals (_next/static, _next/image)
    * - Static files in /public (favicon, images, etc.)
    * - API routes (handled separately)

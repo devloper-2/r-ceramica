@@ -9,17 +9,20 @@ const config: Config = {
   theme: {
     extend: {
       // ─── Brand Colors ─────────────────────────────────────────────────────────
+      // Mapped to the CSS variables in src/app/css/theme.css so that the
+      // theme file remains the single source of truth. Editing theme.css
+      // updates both `var(--color-*)` usages AND `bg-brand-*` utilities.
       colors: {
         brand: {
-          bg: "#0a0a0a",
-          "bg-alt": "#0c0c0c",
-          "bg-card": "#111111",
-          surface: "#1B1B1B",
-          gold: "#c5a059",
-          "gold-light": "#d4b475",
-          white: "#ffffff",
-          border: "rgba(255,255,255,0.05)",
-          "border-hover": "rgba(255,255,255,0.2)",
+          bg: "var(--color-bg)",
+          "bg-alt": "var(--color-bg-alt)",
+          "bg-card": "var(--color-bg-card)",
+          surface: "var(--color-surface)",
+          gold: "var(--color-gold)",
+          "gold-light": "var(--color-gold-light)",
+          white: "var(--color-white)",
+          border: "var(--color-border)",
+          "border-hover": "var(--color-border-hover)",
         },
       },
       // ─── Typography ───────────────────────────────────────────────────────────

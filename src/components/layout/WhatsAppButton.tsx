@@ -14,7 +14,7 @@ export default function WhatsAppButton() {
       href="https://wa.me/919427410127"
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[100] group cursor-pointer"
+      className="whatsapp-fab fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[100] group cursor-pointer"
       aria-label="Contact us on WhatsApp"
     >
       <div className="flex flex-col items-center relative">

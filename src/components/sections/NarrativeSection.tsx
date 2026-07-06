@@ -3,67 +3,71 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import Button from "@/components/ui/Button";
+import type { NarrativeContent } from "@/lib/types";
 
-const SEO_PARAGRAPHS = [
-  "R Ceramica — an exclusive porcelain and ceramic brand, has established its presence through decades of innovation, merging traditional craftsmanship with cutting-edge nanotechnology production. Our manufacturing units in key industrial hubs are equipped with first-for-industry thermal efficiency systems, ensuring every slab meets the highest architectural standards.",
-  "With a curated network of over 200+ exclusive studios across international markets, we bring a sensory-driven approach to architectural surfaces. Our commitment to sustainability isn't just a corporate statement; it's embedded in our supply chain, from raw material extraction to the final tactile finish of our large-format porcelain slabs.",
-  "Whether you are designing a high-traffic commercial space or a minimalist private residence, R Ceramica provides the technical data and aesthetic versatility required to transcend the limits of traditional design. Our portfolio spans the world's most prestigious projects, reflecting our status as a cornerstone of modern architectural surface engineering.",
-];
-
-export default function LegacySection() {
+/**
+ * NarrativeSection — a long-form editorial text block with an expand/collapse
+ * "Discover More" control.
+ *
+ * REUSABLE: homepage uses it for "The Legacy of Architectural Surfaces";
+ * About page uses it for "Our Story". Client component because it holds the
+ * expanded/collapsed UI state.
+ */
+export default function NarrativeSection({
+  eyebrow,
+  title,
+  lead,
+  paragraphs,
+  cta,
+  watermark,
+}: NarrativeContent) {
   const [expanded, setExpanded] = useState(false);
 
   return (
     <section
       className="py-32 md:py-48 bg-[var(--color-bg)] relative overflow-hidden border-t border-white/5"
-      aria-label="R Ceramica heritage and legacy"
+      aria-label={title.replace(/\n/g, " ")}
     >
-      {/* Background watermark */}
-      <div
-        className="absolute top-1/2 left-0 -translate-y-1/2 text-[20vw] font-display font-black text-white/[0.015] whitespace-nowrap pointer-events-none uppercase tracking-tighter select-none"
-        aria-hidden="true"
-      >
-        Excellence Through Innovation
-      </div>
+      {watermark && (
+        <div
+          className="absolute top-1/2 left-0 -translate-y-1/2 text-[20vw] font-display font-black text-white/[0.015] whitespace-nowrap pointer-events-none uppercase tracking-tighter select-none"
+          aria-hidden="true"
+        >
+          {watermark}
+        </div>
+      )}
 
       <div className="max-w-content mx-auto px-[var(--section-px)] relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-24 items-start">
-          {/* Left */}
+          {/* Left — heading */}
           <div className="lg:col-span-5">
             <div className="space-y-12">
               <div className="group inline-flex items-center gap-6">
                 <div className="w-12 h-px bg-white/20 group-hover:w-20 transition-all duration-500" />
                 <span className="text-[10px] uppercase tracking-[0.5em] text-white/30">
-                  Insight & Heritage
+                  {eyebrow}
                 </span>
               </div>
 
-              <h2 className="text-5xl md:text-7xl font-display font-light text-white leading-[0.95] tracking-tighter uppercase">
-                The Legacy of <br />
-                <span
-                  className="text-transparent"
-                  style={{ WebkitTextStroke: "1px rgba(255,255,255,0.2)" }}
-                >
-                  Architectural
-                </span>{" "}
-                <br />
-                Surfaces
+              <h2 className="text-5xl md:text-7xl font-display font-light text-white leading-[0.95] tracking-tighter uppercase whitespace-pre-line">
+                {title}
               </h2>
 
-              <div className="pt-8 hidden lg:block">
-                <Button as="link" href="/contact" variant="solid" size="lg">
-                  Enquire Now
-                </Button>
-              </div>
+              {cta && (
+                <div className="pt-8 hidden lg:block">
+                  <Button as="link" href={cta.href} variant="solid" size="lg">
+                    {cta.label}
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Right */}
+          {/* Right — body copy */}
           <div className="lg:col-span-7">
             <div className="relative space-y-10">
               <h3 className="text-2xl md:text-3xl font-display font-light text-white/90 leading-snug max-w-2xl">
-                Merging traditional craftsmanship with state-of-the-art
-                nanotechnology to redefine modern porcelain engineering.
+                {lead}
               </h3>
 
               <div className="relative">
@@ -71,7 +75,7 @@ export default function LegacySection() {
                   className="text-sm md:text-base text-white/40 font-light leading-relaxed space-y-8 overflow-hidden transition-all duration-1000 ease-in-out"
                   style={{ maxHeight: expanded ? "1000px" : "160px" }}
                 >
-                  {SEO_PARAGRAPHS.map((p, i) => (
+                  {paragraphs.map((p, i) => (
                     <p key={i}>{p}</p>
                   ))}
                 </div>
@@ -99,11 +103,19 @@ export default function LegacySection() {
                 </button>
               </div>
 
-              <div className="lg:hidden pt-8">
-                <Button as="link" href="/contact" variant="solid" size="lg" className="w-full text-center">
-                  Enquire Now
-                </Button>
-              </div>
+              {cta && (
+                <div className="lg:hidden pt-8">
+                  <Button
+                    as="link"
+                    href={cta.href}
+                    variant="solid"
+                    size="lg"
+                    className="w-full text-center"
+                  >
+                    {cta.label}
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
