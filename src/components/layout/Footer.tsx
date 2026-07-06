@@ -51,7 +51,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-10">
             <Image
-              src="https://rceramica.com/logo/logo.png"
+              src="/images/logo.webp"
               alt="R Ceramica Logo"
               width={160}
               height={64}

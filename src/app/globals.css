@@ -223,3 +223,29 @@ body {
   pointer-events: auto;
   transform: translateY(0);
 }
+.logonew{
+  width: 25%;
+}
+.wooiconstyle{
+  width: 30px;
+}
+.globalnav{
+  width: 60%;
+  flex: inherit;
+}
+.globalnav ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.globalnav ul li{
+  display: block;
+  margin: 0 12px;
+}
+.globalnav ul li a{
+  display: block;
+  padding: 0;
+}
