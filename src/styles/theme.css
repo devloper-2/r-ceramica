@@ -30,6 +30,12 @@
   /* ─── Typography ─────────────────────────────────────────────────── */
   --font-sans: var(--font-inter), sans-serif;
   --font-display: var(--font-outfit), sans-serif;
+  /* Account/commerce pages (cart, checkout, orders, tracking) + login.
+     The right-hand vars (--font-playfair/--font-jakarta/--font-tenor) are
+     injected by next/font in _document.tsx. */
+  --font-serif: var(--font-playfair), serif;
+  --font-body-alt: var(--font-jakarta), sans-serif;
+  --font-tenor-display: var(--font-tenor), sans-serif;
 
   /* ─── Spacing / Layout ───────────────────────────────────────────── */
   --container-max: 1440px;

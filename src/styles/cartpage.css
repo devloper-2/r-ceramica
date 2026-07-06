@@ -1,0 +1,9 @@
+/* =====================================================================
+   cartpage.css — styles scoped to the /cart page (.page-cart).
+   ===================================================================== */
+
+.page-cart input[type="number"]::-webkit-inner-spin-button,
+.page-cart input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

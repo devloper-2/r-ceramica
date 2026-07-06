@@ -1,0 +1,12 @@
+/* =====================================================================
+   orderspage.css — styles scoped to the /orders page (.page-orders).
+   ===================================================================== */
+
+.page-orders .order-card {
+  transition: all 0.5s var(--ease-smooth);
+}
+.page-orders .order-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.1);
+}

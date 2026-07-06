@@ -1,0 +1,8 @@
+/* =====================================================================
+   trackingpage.css — scoped to /tracking (.page-tracking).
+   Layout is Tailwind-inline; reserved for page-only tweaks.
+   ===================================================================== */
+
+.page-tracking {
+  background-color: var(--color-bg);
+}

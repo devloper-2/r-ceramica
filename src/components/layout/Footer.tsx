@@ -42,6 +42,37 @@ const WhatsAppIcon = () => (
   </svg>
 );
 
+/**
+ * Renders a placeholder ("#") link as a plain <a> and a real route as a
+ * next/link. A next/link with href="#" resolves the hash against the current
+ * URL (including its query string), which produces a hydration mismatch on
+ * pages that carry a query (e.g. /products?category=…). A plain anchor renders
+ * href="#" identically on server and client.
+ */
+function FooterLink({
+  href,
+  className,
+  children,
+  ...rest
+}: {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+} & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+  if (href === "#") {
+    return (
+      <a href="#" className={className} {...rest}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link href={href} className={className} {...rest}>
+      {children}
+    </Link>
+  );
+}
+
 export default function Footer() {
   return (
     <footer className="site-footer relative bg-[var(--color-bg-alt)] pt-24 pb-12 border-t border-white/5 overflow-hidden">
@@ -70,14 +101,14 @@ export default function Footer() {
                 { href: "#", icon: <LinkedinIcon />, label: "LinkedIn" },
                 { href: "#", icon: <YoutubeIcon />, label: "YouTube" },
               ].map((s) => (
-                <Link
+                <FooterLink
                   key={s.label}
                   href={s.href}
                   aria-label={s.label}
                   className="text-white/30 hover:text-white transition-colors"
                 >
                   {s.icon}
-                </Link>
+                </FooterLink>
               ))}
             </div>
           </div>
@@ -90,12 +121,12 @@ export default function Footer() {
             <ul className="space-y-5 text-[13px] text-white/40 tracking-wide">
               {FOOTER_QUICK_LINKS.map((link) => (
                 <li key={link.label}>
-                  <Link
+                  <FooterLink
                     href={link.href}
                     className="hover:text-white hover:pl-2 transition-all uppercase"
                   >
                     {link.label}
-                  </Link>
+                  </FooterLink>
                 </li>
               ))}
             </ul>
@@ -109,12 +140,12 @@ export default function Footer() {
             <ul className="space-y-5 text-[13px] text-white/40 tracking-wide">
               {FOOTER_CORPORATE_LINKS.map((link) => (
                 <li key={link.label}>
-                  <Link
+                  <FooterLink
                     href={link.href}
                     className="hover:text-white hover:pl-2 transition-all uppercase"
                   >
                     {link.label}
-                  </Link>
+                  </FooterLink>
                 </li>
               ))}
             </ul>

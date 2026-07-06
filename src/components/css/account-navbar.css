@@ -1,0 +1,10 @@
+/* =====================================================================
+   account-navbar.css — styles for the minimal AccountNavbar used on the
+   account/commerce pages (cart, orders, order-details, tracking).
+   Most styling is Tailwind-inline; this file holds the few scoped rules.
+   ===================================================================== */
+
+.account-navbar {
+  font-family: var(--font-sans);
+  font-weight: 300;
+}

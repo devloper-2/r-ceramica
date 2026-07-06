@@ -1,0 +1,9 @@
+/* =====================================================================
+   tilespage.css — styles scoped to the /tiles page (.page-tiles).
+   Full-viewport "explore" bands. Optional scroll-snap alignment on each
+   band (proximity keeps it gentle and doesn't trap the footer).
+   ===================================================================== */
+
+.page-tiles .explore-item {
+  scroll-snap-align: start;
+}

@@ -1,0 +1,16 @@
+/* =====================================================================
+   cataloguepage.css — styles scoped to the /catalogue page (.page-catalogue).
+   ===================================================================== */
+
+/* Outlined ("stroke only") display text used in the hero + request headings. */
+.page-catalogue .cat-outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15);
+}
+
+/* Vertical book-spine label on catalogue cards. */
+.page-catalogue .book-spine {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}

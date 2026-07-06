@@ -1,0 +1,8 @@
+/* =====================================================================
+   bathroomspage.css — styles scoped to the /bathrooms page (.page-bathrooms).
+   Layout is Tailwind-inline; this file is reserved for page-only tweaks.
+   ===================================================================== */
+
+.page-bathrooms {
+  background-color: var(--color-bg);
+}

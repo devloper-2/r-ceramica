@@ -1,5 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
-import { inter, outfit } from "@/lib/fonts";
+import { inter, outfit, playfair, jakarta, tenor } from "@/lib/fonts";
 import { organizationSchema, websiteSchema } from "@/lib/schemas";
 
 /**
@@ -9,7 +9,10 @@ import { organizationSchema, websiteSchema } from "@/lib/schemas";
  */
 export default function Document() {
   return (
-    <Html lang="en" className={`${inter.variable} ${outfit.variable}`}>
+    <Html
+      lang="en"
+      className={`${inter.variable} ${outfit.variable} ${playfair.variable} ${jakarta.variable} ${tenor.variable}`}
+    >
       <Head>
         <link
           rel="preconnect"

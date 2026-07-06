@@ -1,0 +1,8 @@
+/* =====================================================================
+   loginpage.css — styles scoped to the /login page (.page-login).
+   ===================================================================== */
+
+.page-login .login-input:focus {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 20px rgba(197, 160, 89, 0.05);
+}

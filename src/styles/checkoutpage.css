@@ -1,0 +1,40 @@
+/* =====================================================================
+   checkoutpage.css — styles scoped to the /checkout page (.page-checkout).
+   Ported input + payment-card styles from checkout.html.
+   ===================================================================== */
+
+.page-checkout .checkout-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 0.85rem 1.25rem;
+  color: #fff;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.page-checkout .checkout-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+}
+.page-checkout .checkout-input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 20px rgba(197, 160, 89, 0.1);
+}
+
+.page-checkout .checkout-card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.page-checkout .checkout-card:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.page-checkout .checkout-card.active {
+  border-color: var(--color-gold);
+  background: rgba(197, 160, 89, 0.05);
+}

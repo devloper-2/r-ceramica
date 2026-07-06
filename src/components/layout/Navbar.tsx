@@ -242,8 +242,8 @@ export default function Navbar() {
                     </h4>
                     <div className="space-y-1">
                       {[
-                        { name: "Pietra Grey Slabs", type: "High Gloss Porcelain", href: "#" },
-                        { name: "Calacatta Gold", type: "Marble Selection", href: "#" },
+                        { name: "Pietra Grey Slabs", type: "High Gloss Porcelain", href: "/products?category=tiles" },
+                        { name: "Calacatta Gold", type: "Marble Selection", href: "/products?category=tiles" },
                       ].map((item) => (
                         <Link
                           key={item.name}
@@ -274,7 +274,7 @@ export default function Navbar() {
                       {["New Arrivals", "Technical"].map((tag) => (
                         <Link
                           key={tag}
-                          href="#"
+                          href="/products"
                           className="text-[9px] text-white/50 hover:text-white border border-white/5 hover:border-white/20 px-3 py-1 rounded-full transition-all uppercase tracking-widest bg-white/[0.02]"
                         >
                           {tag}
@@ -284,7 +284,7 @@ export default function Navbar() {
                   </div>
                 </div>
                 <div className="bg-white/[0.02] border-t border-white/5 p-3 text-center">
-                  <Link href="#" className="text-[8px] uppercase tracking-[0.3em] text-white/20 hover:text-white transition-colors">
+                  <Link href="/products" className="text-[8px] uppercase tracking-[0.3em] text-white/20 hover:text-white transition-colors">
                     View All Results
                   </Link>
                 </div>

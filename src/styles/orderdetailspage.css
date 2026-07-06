@@ -1,0 +1,8 @@
+/* =====================================================================
+   orderdetailspage.css — scoped to /order-details (.page-order-details).
+   Layout is Tailwind-inline; reserved for page-only tweaks.
+   ===================================================================== */
+
+.page-order-details {
+  background-color: var(--color-bg);
+}

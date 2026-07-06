@@ -1,0 +1,9 @@
+/* =====================================================================
+   contactpage.css — styles scoped to the /contact page (.page-contact).
+   Uses only var(--color-*) tokens from theme.css.
+   ===================================================================== */
+
+.page-contact input:focus,
+.page-contact textarea:focus {
+  border-bottom-color: var(--color-white);
+}
