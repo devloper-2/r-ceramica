@@ -1,10 +1,12 @@
 import Head from "next/head";
-import { Hero, NarrativeSection, MediaGrid, FeatureCards } from "@/components/sections";
+import { Hero,  PhilosophySection, StatsGrid, ManufacturingSection, TestimonialsQuote, Footprint  } from "@/components/sections";
 import {
   ABOUT_HERO,
-  ABOUT_NARRATIVE,
-  ABOUT_VALUES,
-  ABOUT_CAPABILITIES,
+  ABOUT_PHILOSOPHY,
+  ABOUT_TECHNOLOGY,
+  ABOUT_STATS,
+  ABOUT_CHAIRMAN,
+  ABOUT_FOOTPRINT,
 } from "@/lib/constants/about";
 import { webPageSchema } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
@@ -31,20 +33,14 @@ export default function AboutPage() {
         <meta property="og:description" content={DESCRIPTION} />
         <meta property="og:image" content={siteConfig.ogImage} />
         <meta name="twitter:card" content="summary_large_image" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(
-              webPageSchema("/about", "About Us", ABOUT_NARRATIVE.lead)
-            ),
-          }}
-        />
       </Head>
 
       <Hero {...ABOUT_HERO} />
-      <NarrativeSection {...ABOUT_NARRATIVE} />
-      <MediaGrid items={ABOUT_VALUES} ariaLabel="Our values" ctaLabel="Learn More" />
-      <FeatureCards items={ABOUT_CAPABILITIES} ariaLabel="Why choose R Ceramica" />
+      <PhilosophySection {...ABOUT_PHILOSOPHY} />
+      <StatsGrid items={ABOUT_STATS} />
+      <ManufacturingSection title="Our Manufacturing Process" items={ABOUT_TECHNOLOGY} />
+      <TestimonialsQuote {...ABOUT_CHAIRMAN} />
+      <Footprint {...ABOUT_FOOTPRINT} />
     </div>
   );
 }

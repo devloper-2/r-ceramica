@@ -15,3 +15,8 @@ export { default as FeatureCards } from "./FeatureCards";
 export { default as NarrativeSection } from "./NarrativeSection";
 export { default as ProductCarousel } from "./ProductCarousel";
 export { default as SocialFeed } from "./SocialFeed";
+export { default as StatsGrid } from "./StatsGrid";
+export { default as ManufacturingSection } from "./ManufacturingSection";
+export { default as PhilosophySection } from "./PhilosophySection";
+export { default as TestimonialsQuote } from "./TestimonialsQuote";
+export { default as Footprint } from "./Footprint";

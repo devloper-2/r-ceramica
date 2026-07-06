@@ -93,3 +93,118 @@ export const ABOUT_CAPABILITIES: FeatureCard[] = [
     inverted: true,
   },
 ];
+export type StatAccent =
+  | "amber"
+  | "blue"
+  | "emerald"
+  | "purple";
+
+export const ABOUT_STATS: {
+  number: string;
+  label: string;
+  accent: StatAccent;
+}[] = [
+  {
+    number: "20+",
+    label: "Global Markets Served",
+    accent: "amber",
+  },
+  {
+    number: "5000+",
+    label: "Surface Designs",
+    accent: "blue",
+  },
+  {
+    number: "30+",
+    label: "Industry Awards",
+    accent: "emerald",
+  },
+  {
+    number: "12M+",
+    label: "SQM Annual Production Capacity",
+    accent: "purple",
+  },
+];
+export const ABOUT_TECHNOLOGY = [
+  {
+    title: "Nano-Trek Tech",
+    description:
+      "Micro-pore sealing for absolute hygienic surfaces and stain resistance.",
+    image:
+      "/images/aboutecnoimg.jpg",
+    accent: "blue",
+  },
+  {
+    title: "Continuum Slabs",
+    description:
+      "Large format engineering allowing seamless architectural transitions.",
+    image:
+      "/images/continuumimg.webp",
+    accent: "amber",
+  },
+  {
+    title: "Eco-Thermal Kilns",
+    description:
+      "Reducing carbon footprint through revolutionary energy recovery.",
+    image:
+      "/images/ecothermalkilns.webp",
+    accent: "emerald",
+  },
+];
+
+export const ABOUT_PHILOSOPHY = {
+  title: "We don't just manufacture surfaces; we engineer",
+  highlight: " sensory experiences.",
+
+  intro:
+    "R Ceramica was born out of a vision to redefine the architectural landscape through high-performance porcelain and ceramic solutions.",
+
+  description:
+    "Starting as a boutique facility in Morbi, the hub of ceramic innovation, we have evolved into a global powerhouse, merging traditional craftsmanship with state-of-the-art nanotechnology. Our journey is driven by one core philosophy: the surface is the soul of any space.",
+
+  image:
+    "/images/materiallab.webp",
+
+  imageAlt: "Material Lab",
+
+  badgeTitle: "Technical Analysis",
+
+  badgeText: "0.05% Water Absorption Certified",
+};
+
+export const ABOUT_CHAIRMAN = {
+  backgroundText: "VISIONARY",
+
+  heading: "Chairman's Perspective",
+
+  quote:
+    "Innovation is not about adding more features; it's about stripping away everything that isn't essential until the soul of the material is all that remains.",
+
+  name: "Rajesh Patel",
+
+  designation: "Founder & Chairman, R Ceramica",
+
+  image:
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80",
+
+  imageAlt: "Chairman",
+};
+
+export const ABOUT_FOOTPRINT = {
+  eyebrow: "Global Echo",
+
+  title: "Across\nBorders",
+
+  description:
+    "With operational hubs in Gujarat, Dubai, and emerging centers in Europe, our logistics network ensures architectural excellence is delivered to every continent without compromise.",
+
+  cta: {
+    label: "View Logistics Centers",
+    href: "/contact",
+  },
+
+  image:
+    "/images/wordmap.jpg",
+
+  imageAlt: "Abstract World Map",
+};
