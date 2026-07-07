@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Hero,  PhilosophySection, StatsGrid, ManufacturingSection, TestimonialsQuote, Footprint  } from "@/components/sections";
+import { Hero, PhilosophySection, StatsGrid, ManufacturingSection, TestimonialsQuote, Footprint  } from "@/components/sections";
 import {
   ABOUT_HERO,
   ABOUT_PHILOSOPHY,

@@ -16,6 +16,7 @@ import type { HeroContent } from "@/lib/types";
 export default function Hero({
   eyebrow,
   title,
+  description,
   mediaType,
   mediaSrc,
   mediaAlt,
@@ -63,11 +64,20 @@ export default function Hero({
           {title}
         </h1>
         <div className="mt-8 w-16 h-px bg-white/40 mx-auto mb-10" role="presentation" />
+        {description && (
+    <p className="max-w-2xl text-base md:text-lg text-white/80 leading-relaxed mb-10">
+      {description}
+    </p>
+  )}
         {cta && (
-          <Button as="link" href={cta.href} variant="outline" size="md">
-            {cta.label}
-          </Button>
-        )}
+            <Button
+  as="link"
+  href={cta.href}
+  variant={cta.variant ?? "outline"}
+>
+  {cta.label}
+</Button>
+          )}
       </div>
     </header>
   );

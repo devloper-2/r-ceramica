@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { type AnchorHTMLAttributes, type ButtonHTMLAttributes } from "react";
 
-type ButtonVariant = "outline" | "solid" | "ghost";
+type ButtonVariant = "outline" | "solid" | "ghost" | "gold";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface BaseProps {
@@ -25,10 +25,15 @@ type ButtonProps = ButtonAsButton | ButtonAsLink;
 const variantClasses: Record<ButtonVariant, string> = {
   outline:
     "bg-white/10 border border-white/20 text-white hover:bg-white hover:text-black",
+
   solid:
     "bg-white text-black hover:bg-neutral-200",
+
   ghost:
     "text-white/60 border-b border-white/20 hover:text-white hover:border-white",
+
+  gold:
+    "bg-[#C8A97E] border border-[#C8A97E] text-black hover:bg-[#B89463] hover:border-[#B89463]",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

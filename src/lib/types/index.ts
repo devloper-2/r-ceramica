@@ -25,6 +25,8 @@ export interface Language {
 export interface CtaLink {
   label: string;
   href: string;
+  className?: string;
+  variant?: "outline" | "solid" | "ghost" | "gold";
 }
 
 // ─── Hero (reusable across Home, About, and future pages) ─────────────────────
@@ -33,6 +35,8 @@ export interface HeroContent {
   eyebrow?: string;
   title: string;
   /** "video" for the homepage hero, "image" for lighter inner pages. */
+   /** Optional description below the hero title. */
+  description?: string;
   mediaType: "video" | "image";
   mediaSrc: string;
   /** Required (for a11y) when mediaType is "image". */
