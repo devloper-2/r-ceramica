@@ -21,7 +21,7 @@ export const HOME_HERO: HeroContent = {
   title: "Redefining Spaces",
   mediaType: "video",
   mediaSrc:
-    "https://hindwarestg.blob.core.windows.net/container1/products/ae5eb07a-52f8-45fa-98ea-c427f8dde36f.mp4",
+    "/images/bathroomvideo.mp4",
   cta: { label: "Explore Collection", href: "/tiles" },
   fullHeight: true,
 };

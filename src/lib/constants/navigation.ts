@@ -3,7 +3,7 @@ import type { NavLink, Language } from "@/lib/types";
 export const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
-  { label: "Tiles", href: "/tiles" },
+  { label: "Tiles", href: "/explore" },
   { label: "Bathrooms", href: "/bathrooms" },
   { label: "Accessories", href: "/accessories" },
   { label: "Catalogue", href: "/catalogue" },

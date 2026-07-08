@@ -3,7 +3,7 @@ import { Hero,  PhilosophySection, StatsGrid, ManufacturingSection, Testimonials
 import {
   CONTACT_HERO,
 } from "@/lib/constants/contact";
-import { webPageSchema } from "@/lib/utils";
+import { contactPageSchema } from "@/lib/schemas";
 import { siteConfig } from "@/config/site";
 import ContactSection from "@/components/sections/ContactSection";
 
@@ -29,6 +29,12 @@ export default function ContactUs() {
         <meta property="og:description" content={DESCRIPTION} />
         <meta property="og:image" content={siteConfig.ogImage} />
         <meta name="twitter:card" content="summary_large_image" />
+        <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify(contactPageSchema),
+  }}
+/>
       </Head>
 
       <Hero {...CONTACT_HERO} />

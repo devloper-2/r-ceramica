@@ -8,7 +8,7 @@ import {
   ABOUT_CHAIRMAN,
   ABOUT_FOOTPRINT,
 } from "@/lib/constants/about";
-import { webPageSchema } from "@/lib/utils";
+import { aboutPageSchema } from "@/lib/schemas";
 import { siteConfig } from "@/config/site";
 
 const TITLE = `About Us | ${siteConfig.name}`;
@@ -32,7 +32,13 @@ export default function AboutPage() {
         <meta property="og:title" content={TITLE} />
         <meta property="og:description" content={DESCRIPTION} />
         <meta property="og:image" content={siteConfig.ogImage} />
-        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:card" content="summary_large_image" /> 
+        <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify(aboutPageSchema),
+  }}
+/>
       </Head>
 
       <Hero {...ABOUT_HERO} />

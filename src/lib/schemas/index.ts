@@ -9,4 +9,7 @@ export {
   organizationSchema,
   websiteSchema,
   homePageSchema,
+  aboutPageSchema,
+  contactPageSchema,
+  explorePageSchema,
 } from "./jsonld";

@@ -3,6 +3,7 @@ import ContactSelect from "./ContactSelect";
 import ContactTextarea from "./ContactTextarea";
 import Button from "@/components/ui/Button";
 import { ArrowRight } from "lucide-react";
+import OfficeLocations from "./OfficeLocations";
 
 export default function ContactForm() {
   return (
@@ -95,7 +96,7 @@ export default function ContactForm() {
   </Button>
 </div>
       </form>
-
+<OfficeLocations />
     </div>
   );
 }

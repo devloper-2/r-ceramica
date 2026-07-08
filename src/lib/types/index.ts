@@ -107,3 +107,13 @@ export interface FooterColumn {
 }
 
 export type { ReactNode };
+
+export interface ExploreContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  image: string;
+  imageAlt?: string;
+  href: string;
+  linkLabel?: string;
+}

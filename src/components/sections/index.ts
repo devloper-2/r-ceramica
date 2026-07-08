@@ -20,3 +20,4 @@ export { default as ManufacturingSection } from "./ManufacturingSection";
 export { default as PhilosophySection } from "./PhilosophySection";
 export { default as TestimonialsQuote } from "./TestimonialsQuote";
 export { default as Footprint } from "./Footprint";
+export { default as ExploreSection } from "./ExploreSection";

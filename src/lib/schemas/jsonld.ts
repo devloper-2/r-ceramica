@@ -87,3 +87,87 @@ export const homePageSchema = {
     ],
   },
 } as const;
+
+export const aboutPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+
+  name: `About Us | ${siteConfig.name}`,
+  url: `${siteConfig.url}/about`,
+  description:
+    "Discover the R Ceramica story — two decades of design-led porcelain manufacturing, sustainable production, and surfaces trusted worldwide.",
+
+  breadcrumb: {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteConfig.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "About Us",
+        item: `${siteConfig.url}/about`,
+      },
+    ],
+  },
+} as const;
+
+export const explorePageSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+
+  name: `Explore Collections | ${siteConfig.name}`,
+  url: `${siteConfig.url}/explore`,
+  description:
+    "Explore R Ceramica's luxury sanitaryware, faucets, showers and premium collections.",
+} as const;
+
+// ─── Contact Page ─────────────────────────────────────────────────────────────
+
+export const contactPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+
+  name: `Contact | ${siteConfig.name}`,
+  url: `${siteConfig.url}/contact`,
+  description:
+    "Contact R Ceramica for porcelain slabs, exports, dealership and project inquiries.",
+
+  breadcrumb: {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteConfig.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Contact",
+        item: `${siteConfig.url}/contact`,
+      },
+    ],
+  },
+
+  mainEntity: {
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: siteConfig.url,
+    telephone: siteConfig.contact.phone,
+    email: siteConfig.contact.email,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: siteConfig.address.street,
+      addressLocality: siteConfig.address.city,
+      addressRegion: siteConfig.address.state,
+      postalCode: siteConfig.address.postalCode,
+      addressCountry: siteConfig.address.country,
+    },
+  },
+} as const;
