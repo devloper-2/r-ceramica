@@ -279,7 +279,7 @@ export default function ProductsPage() {
 
           {/* ── Breadcrumbs + Sort ── */}
           <div className="relative z-[70] flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 products-slide-up">
-            <div className="flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-white/40">
+            <div className="w-full flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-white/40">
               <Link href="/" className="hover:text-white transition-colors">Home</Link>
               <ChevronRight size={10} />
               <Link href="/bathrooms" className="hover:text-white transition-colors">Bathrooms</Link>
@@ -287,31 +287,17 @@ export default function ProductsPage() {
               <span className="text-white">{categoryLabel}</span>
             </div>
 
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-8 w-full justify-between lg:justify-end">
               <p className="text-[10px] uppercase tracking-[0.2em] text-white/30">
                 <span className="text-white">{displayProducts.length}</span> Products Found
               </p>
-              <div className="relative">
-                <button
-                  onClick={(e) => { e.stopPropagation(); setSortMenuOpen((o) => !o); }}
-                  className="flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-white/80 hover:text-white pb-1 border-b border-white/10 transition-colors"
-                >
-                  Sort By: <span>{sortLabel}</span> <ChevronDown size={12} />
-                </button>
-                {sortMenuOpen && (
-                  <div onClick={(e) => e.stopPropagation()}
-                    className="absolute right-0 mt-3 w-56 bg-[#111] border border-white/5 z-[100] shadow-2xl">
-                    <div className="flex flex-col py-3">
-                      {[["recommended","Recommended"],["price-low","Price: Low to High"],["price-high","Price: High to Low"],["newest","Newest Arrivals"]].map(([type, label]) => (
-                        <button key={type} onClick={() => applySort(type, label)}
-                          className="px-6 py-4 text-[9px] uppercase tracking-[0.3em] text-left text-white/50 hover:text-white hover:bg-white/5 transition-all">
-                          {label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+              {/* ── Mobile Filter FAB ── */}
+      <div className="lg:hidden products-slide-up flex items-center">
+        <button onClick={() => setMobileFilterOpen(true)}
+          className="flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-white/70 border border-white/20 backdrop-blur-md hover:bg-white hover:text-black hover:border-white hover:shadow-[0_0_25px_rgba(255,255,255,0.25)] hover:scale-105 active:scale-95 transition-all duration-300">
+          <Filter size={18} />
+        </button>
+      </div>
             </div>
           </div>
 
@@ -428,13 +414,7 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {/* ── Mobile Filter FAB ── */}
-      <div className="lg:hidden fixed bottom-8 right-6 z-[80] products-slide-up">
-        <button onClick={() => setMobileFilterOpen(true)}
-          className="flex items-center justify-center bg-white text-black w-12 h-12 rounded-full shadow-2xl active:scale-90 transition-all duration-300">
-          <Filter size={18} />
-        </button>
-      </div>
+      
 
       {/* ── Toast Notification ── */}
       <div className={`products-toast fixed top-24 right-6 md:right-12 bg-white text-black pl-6 pr-10 py-5 border-l-4 border-[#c5a059] z-[200] shadow-[0_20px_50px_rgba(0,0,0,0.3)] pointer-events-none ${toast.visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"}`}>

@@ -230,7 +230,7 @@ export default function ProductDetailPage() {
 
             {/* Quantity + Add to Cart */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex items-center border border-white/10 h-14">
+              <div className="flex items-center justify-center border border-white/10 h-14">
                 <button onClick={() => setQty((q) => Math.max(1, q - 1))}
                   className="w-14 h-full flex items-center justify-center hover:bg-white/5 transition-colors text-white/60 hover:text-white">
                   <Minus size={14} />
@@ -243,13 +243,7 @@ export default function ProductDetailPage() {
                 </button>
               </div>
 
-              <button onClick={() => setInCart(true)}
-                className={`flex-1 h-14 flex items-center justify-center gap-3 text-[10px] uppercase tracking-[0.4em] font-bold transition-all
-                  ${inCart
-                    ? "bg-[#c5a059] text-white border border-[#c5a059]"
-                    : "bg-white text-black hover:bg-neutral-200"
-                  }`}
-              >
+              <button onClick={() => setInCart(true)} className={`flex h-14 md:h-20 flex items-center cursor-pointer justify-center gap-3 text-[10px] uppercase tracking-[0.4em] font-bold transition-all ${inCart ? "bg-[#c5a059] text-white border border-[#c5a059]" : "bg-white text-black hover:bg-neutral-200" }`} >
                 {inCart ? <Check size={14} /> : <ShoppingCart size={14} />}
                 {inCart ? "Added to Cart" : "Add to Cart"}
               </button>

@@ -86,6 +86,7 @@
 /* Borders — keep decorative borders subtle but just a touch more visible */
 .border-white\/5  { border-color: rgba(255,255,255,0.10) !important; }
 .border-white\/10 { border-color: rgba(255,255,255,0.14) !important; }
+.border-white\/20 { border-color: rgba(255,255,255,0.5) !important; }
 
 /* ─── Base Reset ──────────────────────────────────────────────────────── */
 *,
