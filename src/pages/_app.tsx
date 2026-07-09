@@ -21,6 +21,8 @@ import "@/styles/checkoutpage.css";
 import "@/styles/loginpage.css";
 import "@/styles/trackingpage.css";
 import "@/styles/orderspage.css";
+import "@/styles/privacypage.css";
+import "@/styles/termspage.css";
 import "@/components/css/navbar.css";
 import "@/components/css/footer.css";
 import "@/components/css/whatsapp-button.css";
