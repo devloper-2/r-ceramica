@@ -1,0 +1,48 @@
+/* =====================================================================
+   loginpage.css — Sign In page (/login).
+   ===================================================================== */
+
+.page-login {
+  background-color: #0a0a0a;
+  min-height: 100vh;
+  color: white;
+  position: relative;
+}
+
+/* ── Underline-style inputs ── */
+.login-underline-input {
+  width: 100%;
+  background: #0a0a0a;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 0;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Kill browser autofill white flash */
+.login-underline-input:-webkit-autofill,
+.login-underline-input:-webkit-autofill:hover,
+.login-underline-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #0a0a0a inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.login-underline-input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.login-underline-input:focus {
+  border-bottom-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 1px 0 0 rgba(197, 160, 89, 0.3);
+}
+
+/* Label floats gold on focus via group-focus-within */

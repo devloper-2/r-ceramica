@@ -1,0 +1,23 @@
+/* =====================================================================
+   contactpage.css — Styles specific to the CONTACT US page (/contact).
+   ===================================================================== */
+
+.page-contact {
+  background-color: #0a0a0a;
+}
+
+/* ── Contact Hero ──────────────────────────────────────────────────── */
+@keyframes contactFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.contact-hero__fade-in {
+  animation: contactFadeIn 1s ease-out forwards;
+}

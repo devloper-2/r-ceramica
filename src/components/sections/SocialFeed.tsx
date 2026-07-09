@@ -42,11 +42,11 @@ const WhatsAppSVG = () => (
 );
 
 const SOCIAL_ICONS = [
-  { platform: "Instagram", href: "#", icon: <InstagramSVG /> },
-  { platform: "Facebook", href: "#", icon: <FacebookSVG /> },
-  { platform: "LinkedIn", href: "#", icon: <LinkedinSVG /> },
-  { platform: "YouTube", href: "#", icon: <YoutubeSVG /> },
-  { platform: "WhatsApp", href: "https://wa.me/919427410127", icon: <WhatsAppSVG /> },
+  { platform: "Instagram", href: "#",                           icon: <InstagramSVG />, color: "#E1306C", bg: "rgba(225,48,108,0.12)" },
+  { platform: "Facebook",  href: "#",                           icon: <FacebookSVG />,  color: "#1877F2", bg: "rgba(24,119,242,0.12)" },
+  { platform: "LinkedIn",  href: "#",                           icon: <LinkedinSVG />,  color: "#0A66C2", bg: "rgba(10,102,194,0.12)" },
+  { platform: "YouTube",   href: "#",                           icon: <YoutubeSVG />,   color: "#FF0000", bg: "rgba(255,0,0,0.12)"    },
+  { platform: "WhatsApp",  href: "https://wa.me/919427410127",  icon: <WhatsAppSVG />,  color: "#25D366", bg: "rgba(37,211,102,0.12)" },
 ];
 
 interface SocialFeedProps {
@@ -83,10 +83,12 @@ export default function SocialFeed({
           aria-label="Social media posts"
         >
           {posts.map((post) => (
-            <div
+            <Link
               key={post.id}
+              href="/explore"
               role="listitem"
-              className="min-w-[280px] md:min-w-[320px] aspect-square bg-[var(--color-bg-card)] snap-center relative group/post overflow-hidden rounded-sm border border-white/5 flex-shrink-0"
+              aria-label={post.imageAlt}
+              className="min-w-[280px] md:min-w-[320px] aspect-square bg-[var(--color-bg-card)] snap-center relative group/post overflow-hidden rounded-sm border border-white/5 flex-shrink-0 block"
             >
               <Image
                 src={post.imageSrc}
@@ -95,12 +97,17 @@ export default function SocialFeed({
                 sizes="320px"
                 className="object-cover opacity-60 group-hover/post:opacity-80 transition-all duration-700 group-hover/post:scale-105"
               />
-            </div>
+              <div className="absolute inset-0 bg-black/0 group-hover/post:bg-black/20 transition-all duration-500 flex items-center justify-center">
+                <span className="text-[9px] uppercase tracking-[0.4em] text-white opacity-0 group-hover/post:opacity-100 transition-all duration-500 translate-y-2 group-hover/post:translate-y-0">
+                  View Collection
+                </span>
+              </div>
+            </Link>
           ))}
         </div>
 
         {/* Social Icon Links */}
-        <div className="mt-12 flex justify-center items-center gap-8 md:gap-12 border-t border-white/5 pt-12">
+        <div className="mt-12 flex justify-center items-center gap-6 md:gap-10 border-t border-white/5 pt-12">
           {SOCIAL_ICONS.map((s) => (
             <Link
               key={s.platform}
@@ -108,7 +115,20 @@ export default function SocialFeed({
               target={s.href.startsWith("http") ? "_blank" : undefined}
               rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
               aria-label={`Follow us on ${s.platform}`}
-              className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/20 hover:text-white hover:border-white/30 transition-all transform hover:-translate-y-1 duration-300"
+              className="social-brand-icon w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:-translate-y-1"
+              style={{
+                border: `1px solid ${s.color}40`,
+                color: s.color,
+                background: "transparent",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = s.bg;
+                (e.currentTarget as HTMLElement).style.borderColor = s.color;
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "transparent";
+                (e.currentTarget as HTMLElement).style.borderColor = `${s.color}40`;
+              }}
             >
               {s.icon}
             </Link>

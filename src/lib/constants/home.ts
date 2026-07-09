@@ -22,7 +22,7 @@ export const HOME_HERO: HeroContent = {
   mediaType: "video",
   mediaSrc:
     "/images/bathroomvideo.mp4",
-  cta: { label: "Explore Collection", href: "/tiles" },
+  cta: { label: "Explore Collection", href: "/products" },
   fullHeight: true,
 };
 
@@ -34,7 +34,7 @@ export const SPACE_CARDS: SpaceCard[] = [
     imageSrc:
       "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=1200",
     imageAlt: "Designer Kitchen with premium ceramic surfaces",
-    href: "/products?category=culinary",
+    href: "/explore",
   },
   {
     label: "Precision",
@@ -42,7 +42,7 @@ export const SPACE_CARDS: SpaceCard[] = [
     imageSrc:
       "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=1200",
     imageAlt: "Expansive living space with architectural porcelain",
-    href: "/products?category=living",
+    href: "/bathrooms",
   },
 ];
 
@@ -75,14 +75,14 @@ export const HOME_FEATURES: FeatureCard[] = [
     title: "Institutional\nBusiness",
     description: "Project solutions for institutional & business clients",
     linkLabel: "Explore Projects",
-    href: "#",
+    href: "/about",
   },
   {
     icon: Globe,
     title: "International\nBusiness",
     description: "Our global footprint and operational countries",
     linkLabel: "Global Reach",
-    href: "#",
+    href: "/about",
   },
   {
     icon: Headset,
@@ -96,7 +96,7 @@ export const HOME_FEATURES: FeatureCard[] = [
     title: "Download\nService App",
     description: "Manage your space from your fingertips",
     linkLabel: "Download Now",
-    href: "#",
+    href: "/catalogue",
     inverted: true,
   },
 ];

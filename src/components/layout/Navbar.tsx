@@ -1,14 +1,39 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { Menu, X, Search, ShoppingCart } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu, X, Search, ShoppingCart, ArrowRight } from "lucide-react";
 import { NAV_LINKS, LANGUAGES } from "@/lib/constants/navigation";
+
+/* ── Searchable site index ─────────────────────────────────────────────── */
+const SEARCH_INDEX = [
+  { title: "Home",           href: "/",          cat: "Page",    keywords: "home landing" },
+  { title: "About Us",       href: "/about",     cat: "Page",    keywords: "about story heritage brand" },
+  { title: "Explore",        href: "/explore",   cat: "Page",    keywords: "explore tiles collections surfaces" },
+  { title: "Bathrooms",      href: "/bathrooms", cat: "Page",    keywords: "bathrooms luxury design" },
+  { title: "Products",       href: "/products",  cat: "Page",    keywords: "products faucets mixers accessories" },
+  { title: "Catalogue",      href: "/catalogue", cat: "Page",    keywords: "catalogue download brochure" },
+  { title: "Contact Us",     href: "/contact",   cat: "Page",    keywords: "contact support enquiry" },
+  { title: "Cart",           href: "/cart",      cat: "Page",    keywords: "cart shopping bag checkout" },
+  { title: "Track Order",    href: "/tracking",  cat: "Account", keywords: "track order delivery status" },
+  { title: "My Orders",      href: "/orders",    cat: "Account", keywords: "orders history acquisitions" },
+  { title: "Sign In",        href: "/login",     cat: "Account", keywords: "login sign in account" },
+  // Products
+  { title: "Fusion Basin Mixer",    href: "/products/1",  cat: "Product", keywords: "basin mixer faucet chrome" },
+  { title: "Zen Exposed Mixer",     href: "/products/2",  cat: "Product", keywords: "exposed mixer bathroom" },
+  { title: "Petra Vessel Filler",   href: "/products/3",  cat: "Product", keywords: "vessel filler tap" },
+  { title: "Obsidian Mono Tap",     href: "/products/4",  cat: "Product", keywords: "mono tap black matte" },
+  { title: "Calcite Floor Tile",    href: "/products/5",  cat: "Product", keywords: "floor tile stone calcite" },
+  { title: "Marble Surface Slab",   href: "/products/6",  cat: "Product", keywords: "marble slab surface white" },
+  { title: "Statuario Signature",   href: "/products/7",  cat: "Product", keywords: "statuario marble signature" },
+  { title: "Aurum Vessel Filler",   href: "/products/8",  cat: "Product", keywords: "gold vessel filler luxury" },
+];
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searching, setSearching] = useState(false);
@@ -64,6 +89,35 @@ export default function Navbar() {
     setSearchQuery("");
     searchInputRef.current?.blur();
   }, []);
+
+  // Close search on route change
+  useEffect(() => { closeSearch(); }, [pathname, closeSearch]);
+
+  // ESC key closes search
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") closeSearch(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [closeSearch]);
+
+  // Live search results
+  const searchResults = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (q.length < 2) return [];
+    return SEARCH_INDEX.filter(
+      (item) =>
+        item.title.toLowerCase().includes(q) ||
+        item.keywords.toLowerCase().includes(q)
+    ).slice(0, 8);
+  }, [searchQuery]);
+
+  function handleSearchSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (searchResults.length > 0) {
+      router.push(searchResults[0].href);
+      closeSearch();
+    }
+  }
 
   const handleLangClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -301,6 +355,102 @@ export default function Navbar() {
           </div>
         )}
       </nav>
+
+      {/* ── Search Overlay ── */}
+      {searching && (
+        <div
+          className="fixed inset-0 z-[600] bg-black/95 backdrop-blur-xl flex flex-col"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Search"
+        >
+          {/* Top bar */}
+          <div className="flex items-center px-6 md:px-16 h-20 md:h-28 border-b border-white/5">
+            <Search size={20} className="text-white/30 shrink-0 mr-5" />
+            <form onSubmit={handleSearchSubmit} className="flex-1">
+              <input
+                ref={searchInputRef}
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search collections, products, pages…"
+                className="w-full bg-transparent text-white text-lg md:text-2xl font-light tracking-wide outline-none placeholder:text-white/20"
+                autoComplete="off"
+              />
+            </form>
+            <button
+              onClick={closeSearch}
+              className="ml-6 text-white/40 hover:text-white transition-colors"
+              aria-label="Close search"
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          {/* Results */}
+          <div className="flex-1 overflow-y-auto px-6 md:px-16 py-10">
+            {searchQuery.trim().length < 2 ? (
+              /* Quick links shown before typing */
+              <div>
+                <p className="text-[9px] uppercase tracking-[0.5em] text-white/50 mb-8">Quick Links</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {[
+                    { label: "Products",  href: "/products"  },
+                    { label: "Explore",   href: "/explore"   },
+                    { label: "Bathrooms", href: "/bathrooms" },
+                    { label: "Catalogue", href: "/catalogue" },
+                    { label: "About Us",  href: "/about"     },
+                    { label: "Contact",   href: "/contact"   },
+                    { label: "Cart",      href: "/cart"      },
+                    { label: "My Orders", href: "/orders"    },
+                  ].map((l) => (
+                    <Link
+                      key={l.href}
+                      href={l.href}
+                      onClick={closeSearch}
+                      className="flex items-center justify-between px-5 py-4 border border-white/10 rounded-xl text-[10px] uppercase tracking-[0.3em] text-white/60 hover:text-white hover:border-white/30 transition-all group"
+                    >
+                      {l.label}
+                      <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : searchResults.length === 0 ? (
+              <div className="text-center py-24">
+                <p className="text-white/60 text-[11px] uppercase tracking-[0.4em]">No results for &ldquo;{searchQuery}&rdquo;</p>
+                <Link href="/products" onClick={closeSearch} className="mt-8 inline-block text-[9px] uppercase tracking-[0.4em] text-[#c5a059] hover:text-white transition-colors font-medium">
+                  Browse all products →
+                </Link>
+              </div>
+            ) : (
+              <div>
+                <p className="text-[9px] uppercase tracking-[0.5em] text-white/50 mb-8">
+                  {searchResults.length} result{searchResults.length !== 1 ? "s" : ""} for &ldquo;{searchQuery}&rdquo;
+                </p>
+                <div className="space-y-2">
+                  {searchResults.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={closeSearch}
+                      className="flex items-center justify-between px-6 py-5 border border-white/5 rounded-xl hover:border-[#c5a059]/40 hover:bg-[#c5a059]/5 transition-all group"
+                    >
+                      <div className="flex items-center gap-5">
+                        <span className="text-[8px] uppercase tracking-[0.3em] text-white/50 w-16 shrink-0">{item.cat}</span>
+                        <span className="text-sm font-light tracking-wider text-white/80 group-hover:text-white transition-colors">
+                          {item.title}
+                        </span>
+                      </div>
+                      <ArrowRight size={14} className="text-white/20 group-hover:text-[#c5a059] group-hover:translate-x-1 transition-all" />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ── Mobile Drawer ── */}
       <div

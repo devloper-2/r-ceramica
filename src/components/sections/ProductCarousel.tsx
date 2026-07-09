@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import SectionLabel from "@/components/ui/SectionLabel";
 import type { CarouselSlide } from "@/lib/types";
@@ -99,13 +100,13 @@ export default function ProductCarousel({
             </p>
           </div>
 
-          <button className="text-white text-[11px] tracking-[0.4em] uppercase border-b border-white/20 pb-2 hover:border-white transition-all group/btn flex items-center gap-6">
+          <Link href="/products" className="text-white text-[11px] tracking-[0.4em] uppercase border-b border-white/20 pb-2 hover:border-white transition-all group/btn flex items-center gap-6">
             Discover Details
             <ArrowRight
               size={14}
               className="group-hover/btn:translate-x-3 transition-transform"
             />
-          </button>
+          </Link>
         </div>
       </div>
 

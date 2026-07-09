@@ -1,0 +1,33 @@
+/* =====================================================================
+   bathroomspage.css — Styles for the Bathrooms page (/bathrooms).
+   ===================================================================== */
+
+.page-bathrooms {
+  background-color: #0a0a0a;
+}
+
+/* ── Hero fade-in ── */
+@keyframes bathroomsFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bathrooms-fade-in {
+  animation: bathroomsFadeIn 1.5s ease-out forwards;
+}
+
+/* ── Product card hover ── */
+.bathrooms-product-card .product-overlay {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.bathrooms-product-card:hover .product-overlay {
+  opacity: 1;
+}

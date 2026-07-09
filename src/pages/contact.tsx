@@ -1,10 +1,7 @@
 import Head from "next/head";
-import { Hero,  PhilosophySection, StatsGrid, ManufacturingSection, TestimonialsQuote, Footprint  } from "@/components/sections";
-import {
-  CONTACT_HERO,
-} from "@/lib/constants/contact";
 import { contactPageSchema } from "@/lib/schemas";
 import { siteConfig } from "@/config/site";
+import ContactHero from "@/components/sections/ContactHero";
 import ContactSection from "@/components/sections/ContactSection";
 
 const TITLE = `Contact Us | ${siteConfig.name}`;
@@ -37,7 +34,7 @@ export default function ContactUs() {
 />
       </Head>
 
-      <Hero {...CONTACT_HERO} />
+      <ContactHero />
       <ContactSection />
     </div>
   );

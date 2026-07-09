@@ -7,3 +7,24 @@
 .page-about {
   background-color: var(--color-bg);
 }
+
+/* ── About Hero ──────────────────────────────────────────────────── */
+.about-hero__outline-text {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+  color: transparent;
+}
+
+@keyframes aboutBlurIn {
+  from {
+    filter: blur(20px);
+    opacity: 0;
+  }
+  to {
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+.about-hero__blur-in {
+  animation: aboutBlurIn 1.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}

@@ -1,0 +1,63 @@
+/* =====================================================================
+   checkoutpage.css — Secure Checkout page (/checkout).
+   ===================================================================== */
+
+.page-checkout {
+  background-color: #0a0a0a;
+  min-height: 100vh;
+  color: white;
+}
+
+/* ── Checkout input ── */
+.checkout-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.1rem 1.4rem;
+  color: #fff;
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+.checkout-input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+.checkout-input:focus {
+  border-color: #c5a059;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 20px rgba(197, 160, 89, 0.1);
+}
+
+/* ── Step indicator ── */
+.step-active  { color: white; opacity: 1;   }
+.step-done    { color: #c5a059; opacity: 1; }
+.step-inactive{ color: white; opacity: 0.2; }
+
+/* ── Payment method card ── */
+.payment-card {
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.02);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.payment-card:hover  { border-color: rgba(255,255,255,0.3); }
+.payment-card.active { border-color: #c5a059; background: rgba(197,160,89,0.05); }
+
+/* ── Slide-up form ── */
+@keyframes coSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.co-slide-up { animation: coSlideUp 0.8s ease-out forwards; }
+
+/* ── Success pulse ── */
+@keyframes successPop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  60%  { transform: scale(1.1); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+.success-pop { animation: successPop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }

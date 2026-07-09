@@ -27,6 +27,15 @@ export const ABOUT_HERO: HeroContent = {
   fullHeight: false,
 };
 
+export const ABOUT_HERO_STATIC = {
+  imageSrc:
+    "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80",
+  imageAlt: "Office Facility",
+  eyebrow: "Since 1994",
+  titleLine1: "The Heritage of",
+  titleLine2: "Excellence",
+};
+
 // ─── Our Story (NarrativeSection — same component as the homepage Legacy) ──────
 export const ABOUT_NARRATIVE: NarrativeContent = {
   eyebrow: "Who We Are",
@@ -82,7 +91,7 @@ export const ABOUT_CAPABILITIES: FeatureCard[] = [
     title: "Certified\nExcellence",
     description: "Independently tested for durability and safety",
     linkLabel: "Certifications",
-    href: "#",
+    href: "/catalogue",
   },
   {
     icon: Users,

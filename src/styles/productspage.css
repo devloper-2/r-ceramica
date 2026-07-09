@@ -1,0 +1,97 @@
+/* =====================================================================
+   productspage.css — Styles for the Products page (/products).
+   ===================================================================== */
+
+.page-products {
+  background-color: #0a0a0a;
+  min-height: 100vh;
+}
+
+/* ── Scrollbar ── */
+.page-products ::-webkit-scrollbar { width: 6px; }
+.page-products ::-webkit-scrollbar-track { background: #0a0a0a; }
+.page-products ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+.page-products ::-webkit-scrollbar-thumb:hover { background: #444; }
+
+/* ── Filter panel thin scrollbar ── */
+.filter-panel {
+  scrollbar-width: thin;
+  scrollbar-color: #333 #0a0a0a;
+}
+.filter-panel::-webkit-scrollbar { width: 3px; }
+.filter-panel::-webkit-scrollbar-track { background: transparent; }
+.filter-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+.filter-panel::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+@media (min-width: 1024px) {
+  .filter-panel {
+    max-height: calc(100vh - 220px);
+    overflow-y: auto;
+    padding-right: 8px;
+    margin-right: -8px;
+  }
+}
+
+/* ── Product card image hover ── */
+.product-card:hover .product-img {
+  transform: scale(1.05);
+}
+
+/* ── Custom range slider ── */
+input[type="range"].price-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  outline: none;
+}
+input[type="range"].price-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #c5a059;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid #0a0a0a;
+  transition: transform 0.2s;
+}
+input[type="range"].price-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* ── Slide-up animation ── */
+@keyframes productSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.products-slide-up {
+  animation: productSlideUp 0.8s ease-out forwards;
+}
+
+/* ── Mobile filter drawer ── */
+.mobile-filter-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.mobile-filter-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.mobile-filter-hidden .filter-drawer-panel {
+  transform: translateX(-100%);
+}
+.mobile-filter-visible .filter-drawer-panel {
+  transform: translateX(0);
+}
+
+/* ── Checkbox accent ── */
+input[type="checkbox"].products-check {
+  accent-color: white;
+}
+
+/* ── Toast ── */
+.products-toast {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}

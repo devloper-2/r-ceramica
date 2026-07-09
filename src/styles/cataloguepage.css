@@ -1,0 +1,55 @@
+/* =====================================================================
+   cataloguepage.css — Catalogue page (/catalogue).
+   ===================================================================== */
+
+.page-catalogue {
+  background-color: #0a0a0a;
+}
+
+/* ── Catalogue card ── */
+.cat-card { transition: border-color 0.4s ease; }
+.cat-card:hover .cat-img { transform: scale(1.06); }
+.cat-img { transition: transform 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+
+/* ── Book spine vertical text ── */
+.book-spine {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+}
+
+/* ── Filter pill active state ── */
+.filter-pill-active {
+  background: white;
+  color: black;
+  border-color: white;
+}
+
+/* ── No-scrollbar on pill strip ── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── Watermark ── */
+.catalogue-watermark {
+  font-size: clamp(80px, 22vw, 320px);
+  line-height: 1;
+  white-space: nowrap;
+  color: rgba(255,255,255,0.02);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ── Slide-up cards ── */
+@keyframes catFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.cat-fade-up {
+  animation: catFadeUp 0.7s ease-out forwards;
+}
+
+/* ── Outline ghost text ── */
+.catalogue-ghost {
+  -webkit-text-stroke: 1px rgba(255,255,255,0.15);
+  color: transparent;
+}

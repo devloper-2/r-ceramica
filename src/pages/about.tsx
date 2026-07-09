@@ -1,7 +1,8 @@
 import Head from "next/head";
-import { Hero, PhilosophySection, StatsGrid, ManufacturingSection, TestimonialsQuote, Footprint  } from "@/components/sections";
+import { PhilosophySection, StatsGrid, ManufacturingSection, TestimonialsQuote, Footprint  } from "@/components/sections";
+import AboutHero from "@/components/sections/AboutHero";
 import {
-  ABOUT_HERO,
+  ABOUT_HERO_STATIC,
   ABOUT_PHILOSOPHY,
   ABOUT_TECHNOLOGY,
   ABOUT_STATS,
@@ -41,7 +42,7 @@ export default function AboutPage() {
 />
       </Head>
 
-      <Hero {...ABOUT_HERO} />
+      <AboutHero {...ABOUT_HERO_STATIC} />
       <PhilosophySection {...ABOUT_PHILOSOPHY} />
       <StatsGrid items={ABOUT_STATS} />
       <ManufacturingSection title="Our Manufacturing Process" items={ABOUT_TECHNOLOGY} />
