@@ -29,7 +29,7 @@ const ORDER_DATA: Record<string, {
         spec: "Matte Finish · 2400×1200 mm",
         qty: 2,
         price: "₹ 53,200",
-        img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=300",
+        img: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=300",
       },
       {
         name: "Aurum Vessel Filler",

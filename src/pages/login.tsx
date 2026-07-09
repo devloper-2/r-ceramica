@@ -39,7 +39,7 @@ export default function LoginPage() {
       {/* Mobile ambient background */}
       <div className="fixed inset-0 z-0 md:hidden opacity-20 pointer-events-none">
         <Image
-          src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80"
+          src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80"
           alt=""
           fill
           sizes="100vw"
@@ -76,7 +76,7 @@ export default function LoginPage() {
         {/* Left: Cinematic image (desktop only) */}
         <div className="hidden md:block md:w-1/2 lg:w-3/5 relative overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80"
+            src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80"
             alt="Architecture"
             fill
             sizes="60vw"
