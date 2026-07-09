@@ -30,18 +30,18 @@ export const HOME_HERO: HeroContent = {
 export const SPACE_CARDS: SpaceCard[] = [
   {
     label: "Materiality",
-    title: "Culinary\nStudios",
+    title: "Luxury\nBathrooms",
     imageSrc:
-      "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=1200",
-    imageAlt: "Designer Kitchen with premium ceramic surfaces",
+      "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=1200",
+    imageAlt: "Luxury bathroom with premium sanitary ware and fittings",
     href: "/explore",
   },
   {
     label: "Precision",
-    title: "Expansive\nLiving",
+    title: "Sanitary\nForms",
     imageSrc:
-      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=1200",
-    imageAlt: "Expansive living space with architectural porcelain",
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1200",
+    imageAlt: "Premium sanitary ware basin and mixer tap",
     href: "/bathrooms",
   },
 ];
@@ -119,32 +119,27 @@ export const HOME_NARRATIVE: NarrativeContent = {
 export const SOCIAL_POSTS: SocialPost[] = [
   {
     id: 1,
-    imageSrc:
-      "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&q=80&w=600",
-    imageAlt: "Luxury contemporary bathroom with architectural porcelain slabs",
+    imageSrc: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=600",
+    imageAlt: "Luxury bathroom with wall-hung faucet and white basin",
   },
   {
     id: 2,
-    imageSrc:
-      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600",
-    imageAlt: "Detailed view of luxury ceramic surface textures",
+    imageSrc: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600",
+    imageAlt: "Premium chrome basin mixer tap close-up",
   },
   {
     id: 3,
-    imageSrc:
-      "https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?auto=format&fit=crop&q=80&w=600",
-    imageAlt: "Minimalist residential living with high-end floor tiles",
+    imageSrc: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&q=80&w=600",
+    imageAlt: "Modern exposed shower mixer in matte black",
   },
   {
     id: 4,
-    imageSrc:
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=600",
-    imageAlt: "Architectural surface applications in modern design",
+    imageSrc: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&q=80&w=600",
+    imageAlt: "Contemporary bathroom interior with luxury fittings",
   },
   {
     id: 5,
-    imageSrc:
-      "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=600",
-    imageAlt: "Modern kitchen backsplash with premium tiling",
+    imageSrc: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&q=80&w=600",
+    imageAlt: "Elegant freestanding bath with floor-mounted filler tap",
   },
 ];

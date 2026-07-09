@@ -8,27 +8,27 @@ const DESCRIPTION =
   "Precision-engineered faucet collections, luxury showers and sanitary solutions where architectural geometry meets the sensory experience of water.";
 
 const FUSION_COLLECTIONS = [
-  { id: "101", name: "Rivo Collection", img: "https://images.unsplash.com/photo-1620626011761-9963d7b59675?auto=format&fit=crop&q=80&w=600" },
-  { id: "201", name: "Curve Collection", img: "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=600" },
-  { id: "301", name: "Eva Collection", img: "https://images.unsplash.com/photo-1615529182904-14819c35db37?auto=format&fit=crop&q=80&w=600" },
-  { id: "401", name: "Roma Collection", img: "https://images.unsplash.com/photo-1620625515032-6ed0c1790c75?auto=format&fit=crop&q=80&w=600" },
-  { id: "501", name: "Artiz Collection", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=600" },
-  { id: "601", name: "Metro Collection", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=600" },
-  { id: "701", name: "Iris Collection", img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&q=80&w=600" },
-  { id: "801", name: "Cadiz Collection", img: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=600" },
-  { id: "901", name: "Amaze Collection", img: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&q=80&w=600" },
-  { id: "1001", name: "Rossa Collection", img: "https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&q=80&w=600" },
+  { id: "101", name: "Rivo Collection",  img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600" },
+  { id: "201", name: "Curve Collection", img: "https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&q=80&w=600" },
+  { id: "301", name: "Eva Collection",   img: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&q=80&w=600" },
+  { id: "401", name: "Roma Collection",  img: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=600" },
+  { id: "501", name: "Artiz Collection", img: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&q=80&w=600" },
+  { id: "601", name: "Metro Collection", img: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&q=80&w=600" },
+  { id: "701", name: "Iris Collection",  img: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&q=80&w=600" },
+  { id: "801", name: "Cadiz Collection", img: "https://images.unsplash.com/photo-1604709177225-055f99402ea3?auto=format&fit=crop&q=80&w=600" },
+  { id: "901", name: "Amaze Collection", img: "https://images.unsplash.com/photo-1504274066651-8d31a536b11a?auto=format&fit=crop&q=80&w=600" },
+  { id: "1001",name: "Rossa Collection", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=600" },
 ];
 
 const SHOWER_SERIES = [
-  { name: "Overhead Series", img: "https://images.unsplash.com/photo-1620626014330-f99a0937285d?auto=format&fit=crop&q=80&w=800" },
-  { name: "Body Jets", img: "https://images.unsplash.com/photo-1584622781514-f670c2269a84?auto=format&fit=crop&q=80&w=800" },
-  { name: "Hand Showers", img: "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=800" },
+  { name: "Overhead Series", img: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&q=80&w=800" },
+  { name: "Body Jets",       img: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&q=80&w=800" },
+  { name: "Hand Showers",    img: "https://images.unsplash.com/photo-1504274066651-8d31a536b11a?auto=format&fit=crop&q=80&w=800" },
 ];
 
 const SANITARY_SERIES = [
-  { name: "Water Closets", label: "Explore Series", img: "https://images.unsplash.com/photo-1584622781564-1d9876a13d00?auto=format&fit=crop&q=80&w=1200" },
-  { name: "Artisan Basins", label: "Explore Series", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200" },
+  { name: "Water Closets",  label: "Explore Series", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=1200" },
+  { name: "Artisan Basins", label: "Explore Series", img: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&q=80&w=1200" },
 ];
 
 export default function BathroomsPage() {
@@ -48,7 +48,7 @@ export default function BathroomsPage() {
       <section className="relative h-[80vh] w-full flex items-center overflow-hidden bg-[#080808]">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80"
+            src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80"
             alt="Luxury Faucets"
             fill
             priority

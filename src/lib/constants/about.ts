@@ -21,7 +21,7 @@ export const ABOUT_HERO: HeroContent = {
   title: "About R Ceramica",
   mediaType: "image",
   mediaSrc:
-    "https://images.unsplash.com/photo-1615873968403-89e068629265?auto=format&fit=crop&q=80&w=1600",
+    "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&q=80&w=1600",
   mediaAlt: "R Ceramica architectural porcelain showroom interior",
   cta: { label: "Talk to Us", href: "/contact" },
   fullHeight: false,
@@ -29,7 +29,7 @@ export const ABOUT_HERO: HeroContent = {
 
 export const ABOUT_HERO_STATIC = {
   imageSrc:
-    "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80",
   imageAlt: "Office Facility",
   eyebrow: "Since 1994",
   titleLine1: "The Heritage of",
@@ -56,15 +56,15 @@ export const ABOUT_VALUES: SpaceCard[] = [
     label: "Our Craft",
     title: "Design-Led\nManufacturing",
     imageSrc:
-      "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=1200",
-    imageAlt: "Precision ceramic manufacturing facility",
-    href: "/tiles",
+      "https://images.unsplash.com/photo-1604709177225-055f99402ea3?auto=format&fit=crop&q=80&w=1200",
+    imageAlt: "Precision sanitary ware manufacturing facility",
+    href: "/products",
   },
   {
     label: "Our Promise",
     title: "Sustainable\nByDesign",
     imageSrc:
-      "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&q=80&w=1200",
+      "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&q=80&w=1200",
     imageAlt: "Sustainable material sourcing and green production",
     href: "/about",
   },
@@ -194,7 +194,7 @@ export const ABOUT_CHAIRMAN = {
   designation: "Founder & Chairman, R Ceramica",
 
   image:
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&q=80",
 
   imageAlt: "Chairman",
 };

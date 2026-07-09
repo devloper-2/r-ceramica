@@ -6,7 +6,7 @@ export const EXPLORE_SECTIONS = [
     description:
       "Curated porcelain systems for high-envelope architecture.",
     image:
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80",
     imageAlt: "Main Collection",
     imageOpacity: 50,
     bg: "#080808",
@@ -23,7 +23,7 @@ export const EXPLORE_SECTIONS = [
     description:
       "Advanced hydro-therapy systems designed for the ultimate wellness experience.",
     image:
-      "https://images.unsplash.com/photo-1620626014330-f99a0937285d?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&q=80",
     imageAlt: "Showers",
     imageOpacity: 30,
     bg: "#0c0c0c",
@@ -39,7 +39,7 @@ export const EXPLORE_SECTIONS = [
     description:
       "Precision engineered hardware defining the intersection of fluid dynamics and sculpture.",
     image:
-      "https://images.unsplash.com/photo-1584622781514-f670c2269a84?auto=format&fit=crop&q=80&w=1600",
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1600",
     imageAlt: "Artisan Faucets",
     imageOpacity: 50,
     bg: "#0a0a0a",
@@ -57,7 +57,7 @@ export const EXPLORE_SECTIONS = [
     description:
       "High-performance water closets connecting ergonomic form and sustainability for contemporary living.",
     image:
-      "https://images.unsplash.com/photo-1584622781564-1d9876a13d00?auto=format&fit=crop&q=80&w=1600",
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=1600",
     imageAlt: "Bathware",
     imageOpacity: 40,
     bg: "#0c0c0c",
@@ -73,7 +73,7 @@ export const EXPLORE_SECTIONS = [
     description:
       "Hand-crafted artisan basins that redefine the morning ritual through stone and ceramic textures.",
     image:
-      "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=1600",
+      "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&q=80&w=1600",
     imageAlt: "Wash Basin",
     imageOpacity: 40,
     bg: "#080808",
@@ -91,7 +91,7 @@ export const EXPLORE_SECTIONS = [
       "and sustainable performance",
     ],
     image:
-      "https://images.unsplash.com/photo-1533150423042-12714441c940?auto=format&fit=crop&q=80&w=1600",
+      "https://images.unsplash.com/photo-1504274066651-8d31a536b11a?auto=format&fit=crop&q=80&w=1600",
     imageAlt: "FRP Manhole",
     imageOpacity: 30,
     bg: "#060606",
