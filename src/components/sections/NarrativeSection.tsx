@@ -38,7 +38,7 @@ export default function NarrativeSection({
       )}
 
       <div className="max-w-content mx-auto px-[var(--section-px)] relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-24 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-24 items-start">
           {/* Left — heading */}
           <div className="lg:col-span-5">
             <div className="space-y-12">
@@ -49,7 +49,7 @@ export default function NarrativeSection({
                 </span>
               </div>
 
-              <h2 className="text-5xl md:text-7xl font-display font-light text-white leading-[0.95] tracking-tighter uppercase whitespace-pre-line">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-light text-white leading-[1.5] tracking-tighter uppercase whitespace-pre-line">
                 {title}
               </h2>
 
@@ -66,7 +66,7 @@ export default function NarrativeSection({
           {/* Right — body copy */}
           <div className="lg:col-span-7">
             <div className="relative space-y-10">
-              <h3 className="text-2xl md:text-3xl font-display font-light text-white/90 leading-snug max-w-2xl">
+              <h3 className="text-2xl sm:text-3xl md:text-5xl leading-[0.9] font-display font-light text-white/90 leading-snug max-w-2xl">
                 {lead}
               </h3>
 

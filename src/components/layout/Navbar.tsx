@@ -156,7 +156,7 @@ export default function Navbar() {
 <div className="relative flex items-center justify-between p-5">
 
   {/* Mobile Menu */}
-  <div className="lg:hidden flex-1 flex items-center">
+  <div className="lg:hidden w-1/5">
     <button
       onClick={() => setMobileOpen(true)}
       className="text-white hover:text-white/80 transition-colors p-2 -ml-2"
@@ -165,7 +165,16 @@ export default function Navbar() {
       <Menu size={24} />
     </button>
   </div>
-
+<Link href="/" aria-label="R Ceramica Home" className="lg:hidden">
+      <Image
+        src="/images/logo.webp"
+        alt="R Ceramica Logo"
+        width={160}
+        height={64}
+        className="h-10 w-auto object-contain"
+        priority
+      />
+    </Link>
   {/* Desktop Logo */}
   <div className="hidden lg:flex flex-1 items-center">
     <Link href="/" aria-label="R Ceramica Home">
@@ -463,7 +472,7 @@ export default function Navbar() {
       >
         <div className="flex justify-between items-center mb-12">
           <Image
-            src="https://rceramica.com/logo/logo.png"
+            src="/images/logo.webp"
             alt="R Ceramica"
             width={120}
             height={48}
@@ -484,7 +493,7 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               onClick={() => setMobileOpen(false)}
-              className={`text-xl font-light tracking-widest py-3 border-b border-white/5 uppercase transition-colors ${
+              className={`text-1xl font-light tracking-widest py-3 border-b border-white/5 uppercase transition-colors ${
                 pathname === link.href ? "text-[var(--color-gold)]" : "hover:text-gray-400"
               }`}
               aria-current={pathname === link.href ? "page" : undefined}
@@ -496,14 +505,14 @@ export default function Navbar() {
             <Link
               href="/login"
               onClick={() => setMobileOpen(false)}
-              className="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase transition-colors"
+              className="text-1xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase transition-colors"
             >
               Sign In
             </Link>
           ) : (
             <div className="py-4 border-b border-white/5">
               <div className="flex items-center gap-3">
-                <span className="text-xl font-light tracking-widest text-white uppercase truncate">
+                <span className="text-1xl font-light tracking-widest text-white uppercase truncate">
                   {userName}
                 </span>
                 <button

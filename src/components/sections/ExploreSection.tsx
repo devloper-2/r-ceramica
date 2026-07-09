@@ -118,7 +118,7 @@ export default function ExploreSection({
             {linkVariant === "button" ? (
               <Link
                 href={href}
-                className="inline-block py-5 px-16 border border-white/10 hover:bg-white hover:text-black transition-all text-[12px] uppercase tracking-[0.5em] font-medium"
+                className="inline-block py-5 px-4 md:px-8 lg:px-16 border border-white/10 hover:bg-white hover:text-black transition-all text-[12px] uppercase tracking-[0.5em] font-medium"
               >
                 {linkLabel}
               </Link>

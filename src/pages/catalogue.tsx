@@ -191,7 +191,7 @@ export default function CataloguePage() {
       </header>
 
       {/* ══ STICKY FILTER PILLS ═════════════════════════════════ */}
-      <div className="sticky top-[80px] md:top-[112px] z-40 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5 py-4">
+      <div className="sticky top-[80px] md:top-[105px] z-40 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5 py-4">
         <div className="max-w-[1440px] mx-auto px-6 md:px-16">
           <div className="flex items-center gap-3 overflow-x-auto pb-1 no-scrollbar">
             {FILTER_PILLS.map(({ id, label }) => {
