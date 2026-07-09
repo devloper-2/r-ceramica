@@ -6,7 +6,7 @@ import { siteConfig } from "@/config/site";
  * Replaces the App Router sitemap.ts route handler. Add new routes to the
  * `paths` array below (or fetch dynamic product slugs from a CMS).
  */
-const paths = ["/", "/about", "/explore", "/bathrooms", "/contact", "/products", "/cart", "/catalogue", "/checkout", "/login", "/tracking", "/orders"];
+const paths = ["/", "/about", "/explore", "/bathrooms", "/contact", "/products", "/cart", "/catalogue", "/checkout", "/login", "/tracking", "/orders", "/privacy", "/terms"];
 
 function buildSitemap(): string {
   const urls = paths
