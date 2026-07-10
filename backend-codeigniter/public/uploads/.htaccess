@@ -1,0 +1,8 @@
+# Uploaded media only. NEVER execute code here — this blocks the classic
+# "upload a shell disguised as an image" attack.
+php_flag engine off
+Options -ExecCGI -Indexes
+
+<FilesMatch "\.(php|phar|phtml|php3|php4|php5|php7|pht|cgi|pl|py|asp|aspx|sh)$">
+    Require all denied
+</FilesMatch>

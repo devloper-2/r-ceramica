@@ -1,8 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# ---------------------------------------------------------------------------
+# Frontend (frontend-nextjs/)
+# ---------------------------------------------------------------------------
 # dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -11,33 +14,51 @@
 !.yarn/versions
 
 # testing
-/coverage
+coverage/
 
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
+# next.js build output
+.next/
+out/
+build/
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
-package-lock.json
+# vercel
+.vercel
+
+# ---------------------------------------------------------------------------
+# Backend (backend-codeigniter/)
+# ---------------------------------------------------------------------------
+# composer dependencies
+vendor/
+
+# CI4 writable (logs, cache, sessions) — keep the folder, ignore contents
+backend-codeigniter/writable/cache/*
+backend-codeigniter/writable/logs/*
+backend-codeigniter/writable/session/*
+backend-codeigniter/writable/debugbar/*
+!**/.gitkeep
+
+# admin-uploaded media (not source-controlled) — lives in public/uploads
+backend-codeigniter/public/uploads/*
+!backend-codeigniter/public/uploads/.gitkeep
+!backend-codeigniter/public/uploads/.htaccess
+
+# ---------------------------------------------------------------------------
+# Secrets & env (both apps)
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+
+# ---------------------------------------------------------------------------
+# Misc
+# ---------------------------------------------------------------------------
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
