@@ -27,6 +27,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Verify content API is reachable
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "X-API-Key: ${{ secrets.CONTENT_API_KEY }}" \
+            "https://admin.rceramica.com/api/v1/pages/about")
+          echo "Content API status: $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "::error::Content API returned HTTP $STATUS. Check CONTENT_API_KEY secret and server health."
+            exit 1
+          fi
+
       - name: Generate site data from live API
         run: node scripts/gen-site-data.mjs
         env:

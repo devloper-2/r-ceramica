@@ -37,8 +37,10 @@ interface HomeProps {
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   try {
     const page = await api.getPage("home");
+    console.log("[home] getStaticProps: fetched from API, sections:", page?.sections?.length ?? 0);
     return { props: { page } };
-  } catch {
+  } catch (err) {
+    console.error("[home] getStaticProps: API fetch failed — using static fallback:", err instanceof Error ? err.message : String(err));
     return { props: { page: null } };
   }
 };

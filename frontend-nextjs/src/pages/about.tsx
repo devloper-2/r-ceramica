@@ -29,8 +29,10 @@ interface AboutProps {
 export const getStaticProps: GetStaticProps<AboutProps> = async () => {
   try {
     const page = await api.getPage("about");
+    console.log("[about] getStaticProps: fetched from API, sections:", page?.sections?.length ?? 0);
     return { props: { page } };
-  } catch {
+  } catch (err) {
+    console.error("[about] getStaticProps: API fetch failed — using static fallback:", err instanceof Error ? err.message : String(err));
     return { props: { page: null } };
   }
 };

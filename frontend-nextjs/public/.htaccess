@@ -1,7 +1,8 @@
 Options -MultiViews
+DirectoryIndex index.html
 RewriteEngine On
 
-# Serve pre-rendered .html files for clean URLs
+# Serve pre-rendered .html files for clean URLs (e.g. /about → about.html)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
