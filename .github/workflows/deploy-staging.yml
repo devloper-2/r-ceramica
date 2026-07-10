@@ -1,7 +1,5 @@
 name: Deploy staging site
 
-# Fires when admin clicks "Publish site" in the CI4 admin panel.
-# The Publish controller sends a repository_dispatch event to GitHub.
 on:
   repository_dispatch:
     types: [rebuild-site]
@@ -47,11 +45,11 @@ jobs:
           STATIC_EXPORT: "true"
 
       - name: Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASS }}
-          local-dir: frontend-nextjs/out/
-          server-dir: public_html/staging/
-          dangerous-clean-slate: false
+        run: |
+          sudo apt-get install -y lftp
+          lftp -u "${{ secrets.FTP_USER }}","${{ secrets.FTP_PASS }}" ftp://${{ secrets.FTP_HOST }} <<'FTPEOF'
+          set ssl:verify-certificate no
+          set ftp:ssl-allow no
+          mirror --reverse --delete --verbose out/ public_html/staging/
+          bye
+          FTPEOF
