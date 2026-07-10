@@ -79,7 +79,7 @@ export default function ContactInfo() {
           return (
             <div
               key={item.title}
-              className="flex items-start gap-6 group"
+              className="flex items-start gap-6 group ctainfoicon"
             >
               <div className="mt-1 w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white/40 group-hover:bg-white group-hover:text-black transition-all">
                 <Icon size={20} />

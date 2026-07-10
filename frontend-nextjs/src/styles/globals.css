@@ -83,6 +83,7 @@
 /* white/40 → white/62 */
 .text-white\/40 { color: rgba(255,255,255,0.62) !important; }
 
+
 /* Borders — keep decorative borders subtle but just a touch more visible */
 .border-white\/5  { border-color: rgba(255,255,255,0.10) !important; }
 .border-white\/10 { border-color: rgba(255,255,255,0.14) !important; }
@@ -306,3 +307,7 @@ body {
 .globalheader ul li a{
   display: block;
 } 
+
+.ctainfoicon:hover .lucide{
+  color: rgba(0,0,0,0.62);
+}
