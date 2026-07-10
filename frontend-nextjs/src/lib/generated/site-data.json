@@ -1,0 +1,113 @@
+{
+  "nav": [
+    {
+      "label": "Home",
+      "href": "/"
+    },
+    {
+      "label": "About Us",
+      "href": "/about"
+    },
+    {
+      "label": "Explore",
+      "href": "/explore"
+    },
+    {
+      "label": "Bathrooms",
+      "href": "/bathrooms"
+    },
+    {
+      "label": "Products",
+      "href": "/products"
+    },
+    {
+      "label": "Catalogue",
+      "href": "/catalogue"
+    },
+    {
+      "label": "Contact Us",
+      "href": "/contact"
+    }
+  ],
+  "languages": [
+    {
+      "code": "EN",
+      "label": "English"
+    },
+    {
+      "code": "FR",
+      "label": "Français"
+    },
+    {
+      "code": "IT",
+      "label": "Italiano"
+    }
+  ],
+  "footer": {
+    "quickLinks": [
+      {
+        "label": "Explore",
+        "href": "/explore"
+      },
+      {
+        "label": "Products",
+        "href": "/products"
+      },
+      {
+        "label": "Bathrooms",
+        "href": "/bathrooms"
+      },
+      {
+        "label": "Catalogue",
+        "href": "/catalogue"
+      },
+      {
+        "label": "Contact Us",
+        "href": "/contact"
+      }
+    ],
+    "corporateLinks": [
+      {
+        "label": "Our Story",
+        "href": "/about"
+      },
+      {
+        "label": "Chairman Message",
+        "href": "/about"
+      },
+      {
+        "label": "News & Media",
+        "href": "/contact"
+      },
+      {
+        "label": "Career",
+        "href": "/contact"
+      }
+    ]
+  },
+  "contact": {
+    "phone": "+91-94274-10127",
+    "whatsapp": "+919427410127",
+    "email": "info@rceramica.com"
+  },
+  "address": {
+    "street": "Opp. Ceramic City, 8-A National Highway",
+    "city": "Morbi",
+    "state": "Gujarat",
+    "postalCode": "363642",
+    "countryFull": "India",
+    "full": "Opp. Ceramic City, 8-A National Highway, Morbi-363642. Gujarat (India)",
+    "country": "IN"
+  },
+  "socials": {
+    "facebook": "https://www.facebook.com/rceramica",
+    "instagram": "https://www.instagram.com/rceramica",
+    "twitter": "",
+    "linkedin": "",
+    "youtube": ""
+  },
+  "site": {
+    "name": "R Ceramica",
+    "shortDescription": "Premium porcelain and ceramic surfaces for architectural excellence."
+  }
+}

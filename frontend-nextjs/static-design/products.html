@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products | R Ceramica | Architectural Collection</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Outfit:wght@300;400;500&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,200,0,0&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        .font-display { font-family: 'Outfit', sans-serif; }
+        .material-symbols-outlined { font-size: 24px; vertical-align: middle; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
+        
+        .product-card:hover .product-img { transform: scale(1.05); }
+        
+        .filter-panel { 
+            scrollbar-width: thin;
+            scrollbar-color: #333 #0a0a0a;
+        }
+
+        /* Optimized Mobile Drawer Transitions */
+        .mobile-menu-hidden {
+            transform: translateX(-100%);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .mobile-menu-visible {
+            transform: translateX(0);
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        /* Optimized Mobile Filter Drawer */
+        @media (max-width: 1023px) {
+            #filter-sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 300;
+                background: #0a0a0a;
+                transition: opacity 0.3s ease, visibility 0.3s ease;
+                display: flex !important;
+                flex-direction: column;
+            }
+            
+            #filter-sidebar.hidden-mobile {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+            }
+            
+            #filter-sidebar.visible-mobile {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+            }
+
+            #filter-sidebar .filter-container {
+                transform: translateX(-100%);
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                width: 85%;
+                height: 100%;
+                background: #0a0a0a;
+                border-right: 1px solid rgba(255,255,255,0.05);
+            }
+
+            #filter-sidebar.visible-mobile .filter-container {
+                transform: translateX(0);
+            }
+            
+            /* Overlay effect */
+            #filter-sidebar::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: rgba(0,0,0,0.6);
+                z-index: -1;
+                opacity: 0;
+                transition: opacity 0.4s ease;
+            }
+            
+            #filter-sidebar.visible-mobile::after {
+                opacity: 1;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .filter-panel {
+                max-height: calc(100vh - 220px);
+                overflow-y: auto;
+                padding-right: 8px;
+                margin-right: -8px;
+            }
+        }
+
+        /* Custom Range Slider */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #c5a059;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid #0a0a0a;
+            transition: transform 0.2s;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+        
+        .filter-panel::-webkit-scrollbar { width: 3px; }
+        .filter-panel::-webkit-scrollbar-track { background: transparent; }
+        .filter-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .filter-panel::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up { animation: slideUp 0.8s ease-out forwards; }
+
+        input[type="checkbox"] {
+            accent-color: white;
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-white font-sans font-light selection:bg-white/20">
+
+    <!-- Shared Navigation (Inherited from Index) -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 font-sans font-light bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-white/5">
+        <div class="relative flex justify-between items-center px-4 md:px-12 h-20 md:h-28">
+            <div id="mobile-menu-btn" class="flex-1 lg:hidden flex items-center relative z-[60]">
+                <button onclick="toggleMobileMenu()" class="text-white relative z-[70] p-2 -ml-2">
+                    <i data-lucide="menu" size="24"></i>
+                </button>
+            </div>
+            <div id="logo-container" class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 pointer-events-none">
+                <a href="index.html" class="pointer-events-auto">
+                    <img id="navbar-logo" src="https://rceramica.com/logo/logo.png" alt="R Ceramica Logo" class="h-10 md:h-16 w-auto object-contain">
+                </a>
+            </div>
+            <div id="nav-right" class="flex-1 flex justify-end items-center relative z-20">
+                <div class="hidden lg:flex items-center gap-10">
+                    <div onclick="toggleSearch()" class="flex items-center cursor-pointer group"><span class="material-symbols-outlined font-light text-2xl text-white/80">search</span></div>
+                    <a href="cart.html" class="relative group">
+                        <i data-lucide="shopping-cart" size="24" stroke-width="1.2" class="text-white/80"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-3 bg-white text-black text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                    </a>
+                    <button onclick="toggleLoginDropdown(event)" class="focus:outline-none">
+                        <span class="material-symbols-outlined font-light text-2xl">account_circle</span>
+                    </button>
+                </div>
+                <!-- Mobile Icons -->
+                <div class="lg:hidden flex items-center gap-6">
+                    <div onclick="toggleSearch()" class="flex items-center cursor-pointer group">
+                        <span class="material-symbols-outlined font-light text-2xl text-white/80">search</span>
+                    </div>
+                    <a href="cart.html" class="relative group">
+                        <i data-lucide="shopping-cart" size="22" stroke-width="1.2" class="text-white/80"></i>
+                        <span id="cart-count-mobile" class="absolute -top-2 -right-2 bg-white text-black text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Global Login Dropdown -->
+        <div id="login-dropdown" class="hidden absolute right-4 md:right-12 top-[80px] md:top-[96px] w-56 bg-black/60 backdrop-blur-2xl border border-white/10 p-1.5 rounded-sm shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] z-[110]">
+            <div id="logged-out-view">
+                <a href="login.html" class="block w-full text-left px-6 py-5 text-[11px] md:text-[10px] text-white/80 hover:text-white hover:bg-white/10 transition-all uppercase tracking-[0.3em] font-medium">
+                    Sign In
+                </a>
+            </div>
+            <div id="logged-in-view" class="hidden">
+                <div class="px-6 py-4 border-b border-white/5">
+                    <p id="user-display-name" class="text-[10px] uppercase tracking-[0.2em] text-white font-medium truncate">Client User</p>
+                </div>
+                <a href="orders.html" class="block w-full text-left px-6 py-4 text-[11px] md:text-[10px] text-white/60 hover:text-[#c5a059] hover:bg-white/5 transition-all uppercase tracking-[0.3em] font-medium flex items-center gap-3">
+                    <span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                    Orders
+                </a>
+                <button onclick="logout()" class="w-full text-left px-6 py-4 text-[11px] md:text-[10px] text-white/80 hover:text-white hover:bg-white/10 transition-all uppercase tracking-[0.3em] font-medium flex items-center gap-3">
+                    <span class="material-symbols-outlined text-[18px]">logout</span>
+                    Sign Out
+                </button>
+            </div>
+        </div>
+        
+        <div id="desktop-nav-links" class="hidden lg:flex justify-center items-center py-3 border-t border-white/5 space-x-12 text-[10px] uppercase tracking-[0.3em] font-medium text-white/60">
+            <a href="index.html" class="hover:text-white transition-colors">HOME</a>
+            <a href="about.html" class="hover:text-white transition-colors">ABOUT US</a>
+            <a href="explore.html" class="hover:text-white transition-colors">TILES</a>
+            <a href="faucets.html" class="text-white relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-px after:bg-white transition-colors">BATHROOMS</a>
+            <a href="explore.html" class="hover:text-white transition-colors">ACCESSORIES</a>
+            <a href="#" class="hover:text-white transition-colors text-[#c5a059]">CATALOGUE</a>
+            <a href="contact.html" class="hover:text-white transition-colors">CONTACT US</a>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="mobile-menu-hidden fixed inset-0 bg-[#0a0a0a] z-[500] flex flex-col p-8 overflow-y-auto transition-all duration-500">
+        <div class="flex justify-between items-center mb-12">
+            <img src="https://rceramica.com/logo/logo.png" alt="Logo" class="h-12 w-auto">
+            <button onclick="toggleMobileMenu()" class="text-white hover:text-gray-400 transition-colors">
+                <i data-lucide="x" size="32"></i>
+            </button>
+        </div>
+        
+        <div class="flex flex-col space-y-1 gap-2 mb-12">
+            <a href="index.html" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">HOME</a>
+            <a href="about.html" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">ABOUT US</a>
+            <a href="explore.html" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">TILES</a>
+            <a href="faucets.html" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase font-medium text-[#c5a059]">BATHROOMS</a>
+            <a href="explore.html" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">ACCESSORIES</a>
+            <a href="#" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">CATALOGUE</a>
+            <a href="contact.html" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">CONTACT US</a>
+            <a href="login.html" id="mobile-signin-link" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">SIGN IN</a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="pt-32 md:pt-48 pb-24">
+        <div class="max-w-[1720px] mx-auto px-6 md:px-12 lg:px-24">
+            
+            <!-- Breadcrumbs & Sort -->
+            <div class="relative z-[70] flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 animate-slide-up">
+                <div class="flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-white/40">
+                    <a href="index.html" class="hover:text-white transition-colors">Home</a>
+                    <i data-lucide="chevron-right" size="10"></i>
+                    <a href="faucets.html" class="hover:text-white transition-colors">Bathrooms</a>
+                    <i data-lucide="chevron-right" size="10"></i>
+                    <span class="text-white" id="current-category">Fusion Collection</span>
+                </div>
+                
+                <div class="flex items-center gap-8">
+                    <p class="text-[10px] uppercase tracking-[0.2em] text-white/30"><span id="product-count" class="text-white">12</span> Products Found</p>
+                    <div class="relative">
+                        <button id="sort-button" onclick="toggleSortMenu()" class="flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-white/80 hover:text-white pb-1 border-b border-white/10 transition-colors">
+                            Sort By: <span id="current-sort">Recommended</span> <i data-lucide="chevron-down" size="12"></i>
+                        </button>
+                        <!-- Sort Dropdown Menu -->
+                        <div id="sort-menu" class="absolute right-0 mt-3 w-56 bg-[#111] border border-white/5 hidden z-[100] shadow-2xl backdrop-blur-xl">
+                            <div class="flex flex-col py-3">
+                                <button onclick="applySort('recommended', 'Recommended')" class="px-6 py-4 text-[9px] uppercase tracking-[0.3em] text-left text-white/50 hover:text-white hover:bg-white/5 transition-all">Recommended</button>
+                                <button onclick="applySort('price-low', 'Price: Low to High')" class="px-6 py-4 text-[9px] uppercase tracking-[0.3em] text-left text-white/50 hover:text-white hover:bg-white/5 transition-all">Price: Low to High</button>
+                                <button onclick="applySort('price-high', 'Price: High to Low')" class="px-6 py-4 text-[9px] uppercase tracking-[0.3em] text-left text-white/50 hover:text-white hover:bg-white/5 transition-all">Price: High to Low</button>
+                                <button onclick="applySort('newest', 'Newest Arrivals')" class="px-6 py-4 text-[9px] uppercase tracking-[0.3em] text-left text-white/50 hover:text-white hover:bg-white/5 transition-all">Newest Arrivals</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-16">
+                
+                <aside id="filter-sidebar" class="hidden-mobile lg:block w-full lg:w-80 shrink-0 lg:animate-slide-up" style="animation-delay: 0.1s">
+                    <div class="lg:sticky lg:top-48 filter-container flex flex-col h-full lg:h-auto bg-[#0a0a0a] lg:bg-transparent">
+                        
+                        <!-- Mobile Header -->
+                        <div class="lg:hidden flex justify-between items-center px-6 py-6 border-b border-white/5 sticky top-0 bg-[#0a0a0a] z-10">
+                            <h4 class="text-lg font-display uppercase tracking-widest text-[#c5a059]">Refine By</h4>
+                            <button onclick="toggleMobileFilters()" class="text-white/60 hover:text-white transition-colors">
+                                <i data-lucide="x" size="24"></i>
+                            </button>
+                        </div>
+
+                        <!-- Scrollable Body -->
+                        <div class="flex-1 overflow-y-auto px-6 lg:px-0 py-8 lg:py-0 lg:space-y-2 filter-panel">
+                            <!-- Sort Accordion (Mobile Only) -->
+                            <div class="lg:hidden border border-white/5 overflow-hidden">
+                                <button onclick="toggleAccordion('sort-mobile')" class="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group">
+                                    <span class="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">Sort By</span>
+                                    <i id="sort-mobile-icon" data-lucide="plus" size="14" class="text-white/40 group-hover:text-white transition-transform"></i>
+                                </button>
+                                <div id="sort-mobile" class="hidden px-6 py-4 space-y-2 bg-black/40">
+                                    <button onclick="applySort('recommended', 'Recommended'); toggleMobileFilters()" class="w-full text-left py-3 text-[9px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Recommended</button>
+                                    <button onclick="applySort('price-low', 'Price: Low to High'); toggleMobileFilters()" class="w-full text-left py-3 text-[9px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Price: Low to High</button>
+                                    <button onclick="applySort('price-high', 'Price: High to Low'); toggleMobileFilters()" class="w-full text-left py-3 text-[9px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Price: High to Low</button>
+                                    <button onclick="applySort('newest', 'Newest Arrivals'); toggleMobileFilters()" class="w-full text-left py-3 text-[9px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Newest Arrivals</button>
+                                </div>
+                            </div>
+
+                            <!-- Selected Options (Always Visible) -->
+                            <div class="bg-white/5 border border-white/5 p-6 mb-6">
+                                <h4 class="text-[10px] font-display font-medium uppercase tracking-[0.2em] text-white/40 mb-4">Selected Options</h4>
+                                <div id="selected-filters" class="flex flex-wrap gap-2">
+                                    <span class="bg-white/10 text-[9px] px-3 py-1.5 uppercase tracking-widest flex items-center gap-2 group cursor-pointer hover:bg-white/20">
+                                        Chrome <i data-lucide="x" size="10"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Price Accordion -->
+                            <div class="border border-white/5 overflow-hidden">
+                                <button onclick="toggleAccordion('price-filter')" class="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group">
+                                    <span class="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">Budget Range</span>
+                                    <i id="price-filter-icon" data-lucide="plus" size="14" class="text-white/40 group-hover:text-white transition-transform"></i>
+                                </button>
+                                <div id="price-filter" class="hidden px-6 py-10 space-y-8 bg-black/40">
+                                    <!-- Price Slider -->
+                                    <div class="space-y-4">
+                                        <div class="flex justify-between items-center text-[9px] uppercase tracking-widest text-white/40">
+                                            <span>Min: ₹0</span>
+                                            <span id="slider-val">Max: ₹50,000</span>
+                                        </div>
+                                        <input type="range" id="price-slider" min="0" max="100000" step="500" value="50000" oninput="syncInputsFromSlider()" class="cursor-pointer">
+                                    </div>
+                                    
+                                    <!-- Price Inputs -->
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="space-y-2">
+                                            <label class="text-[8px] uppercase tracking-widest text-white/30">Min Budget</label>
+                                            <div class="relative">
+                                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[9px] text-white/40">₹</span>
+                                                <input type="number" id="price-min" value="0" class="w-full bg-white/5 border border-white/10 pl-6 pr-3 py-3 text-[10px] text-white outline-none focus:border-[#c5a059] transition-colors appearance-none">
+                                            </div>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <label class="text-[8px] uppercase tracking-widest text-white/30">Max Budget</label>
+                                            <div class="relative">
+                                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[9px] text-white/40">₹</span>
+                                                <input type="number" id="price-max" value="50000" class="w-full bg-white/5 border border-white/10 pl-6 pr-3 py-3 text-[10px] text-white outline-none focus:border-[#c5a059] transition-colors appearance-none">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button class="w-full py-3 text-[9px] uppercase tracking-[0.2em] font-bold border border-[#c5a059]/20 text-[#c5a059] hover:bg-[#c5a059] hover:text-white transition-all">
+                                        Apply Range
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Area Accordion -->
+                            <div class="border border-white/5 overflow-hidden">
+                                <button onclick="toggleAccordion('area-filter')" class="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group">
+                                    <span class="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">Area</span>
+                                    <i id="area-filter-icon" data-lucide="plus" size="14" class="text-white/40 group-hover:text-white transition-transform"></i>
+                                </button>
+                                <div id="area-filter" class="hidden px-6 py-8 space-y-4 bg-black/40">
+                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
+                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
+                                        <span>Basin</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
+                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
+                                        <span>Shower</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
+                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
+                                        <span>Kitchen</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Color Finishes Accordion (Active) -->
+                            <div class="border border-white/5 overflow-hidden">
+                                <button onclick="toggleAccordion('color-filter')" class="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group">
+                                    <span class="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">Color Finishes</span>
+                                    <i id="color-filter-icon" data-lucide="minus" size="14" class="text-white/40 group-hover:text-white transition-transform"></i>
+                                </button>
+                                <div id="color-filter" class="px-6 py-8 space-y-6 bg-black/40">
+                                    <div class="flex items-center gap-4 cursor-pointer group">
+                                        <div class="w-10 h-10 border border-white/10 overflow-hidden">
+                                            <img src="https://rceramica.com/img/finishes/black_chrome.jpg" onerror="this.src='https://placehold.co/40x40/333333/ffffff?text=BC'" class="w-full h-full object-cover">
+                                        </div>
+                                        <span class="text-[10px] uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">Black Chrome</span>
+                                    </div>
+                                    <div class="flex items-center gap-4 cursor-pointer group">
+                                        <div class="w-10 h-10 border border-white/10 bg-[#1a1a1a]"></div>
+                                        <span class="text-[10px] uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">Black Matt</span>
+                                    </div>
+                                    <div class="flex items-center gap-4 cursor-pointer group">
+                                        <div class="w-10 h-10 border border-white/10 bg-[#7c5e42]"></div>
+                                        <span class="text-[10px] uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">Blush Gold Bright PVD</span>
+                                    </div>
+                                    <div class="flex items-center gap-4 cursor-pointer group">
+                                        <div class="w-10 h-10 border border-white/10 bg-gradient-to-br from-[#dfdfdf] to-[#999]"></div>
+                                        <span class="text-[10px] uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">Chrome</span>
+                                    </div>
+                                    <div class="flex items-center gap-4 cursor-pointer group">
+                                        <div class="relative w-10 h-10 border border-[#c5a059] bg-[#b89552]">
+                                            <div class="absolute inset-0 flex items-center justify-center">
+                                                <i data-lucide="check" size="12" class="text-black"></i>
+                                            </div>
+                                        </div>
+                                        <span class="text-[10px] uppercase tracking-widest text-white transition-colors">Gold Bright PVD</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mounting Accordion -->
+                            <div class="border border-white/5 overflow-hidden">
+                                <button onclick="toggleAccordion('mounting-filter')" class="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group">
+                                    <span class="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">Mounting</span>
+                                    <i id="mounting-filter-icon" data-lucide="plus" size="14" class="text-white/40 group-hover:text-white transition-transform"></i>
+                                </button>
+                                <div id="mounting-filter" class="hidden px-6 py-8 space-y-4 bg-black/40">
+                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
+                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
+                                        <span>Deck Mounted</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
+                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
+                                        <span>Wall Mounted</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Range Accordion -->
+                            <div class="border border-white/5 overflow-hidden">
+                                <button onclick="toggleAccordion('range-filter')" class="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group">
+                                    <span class="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">Range</span>
+                                    <i id="range-filter-icon" data-lucide="plus" size="14" class="text-white/40 group-hover:text-white transition-transform"></i>
+                                </button>
+                                <div id="range-filter" class="hidden px-6 py-8 space-y-4 bg-black/40">
+                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
+                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
+                                        <span>Economy</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
+                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
+                                        <span>Premium</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
+                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
+                                        <span>Luxury</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Shape Accordion -->
+                            <div class="border border-white/5 overflow-hidden">
+                                <button onclick="toggleAccordion('shape-filter')" class="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group">
+                                    <span class="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">Shape</span>
+                                    <i id="shape-filter-icon" data-lucide="plus" size="14" class="text-white/40 group-hover:text-white transition-transform"></i>
+                                </button>
+                                <div id="shape-filter" class="hidden px-6 py-8 space-y-4 bg-black/40">
+                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
+                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
+                                        <span>Square</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
+                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
+                                        <span>Round</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
+                                        <input type="checkbox" class="w-3.5 h-3.5 rounded-sm bg-white/5 border-white/10 border checked:bg-white">
+                                        <span>Curved</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="pt-8 block lg:hidden">
+                                <button class="w-full py-5 text-[10px] uppercase tracking-[0.4em] font-bold border border-white/10 hover:bg-white hover:text-black transition-all">
+                                    Reset All
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Sticky Mobile Footer -->
+                        <div class="lg:hidden p-6 border-t border-white/5 bg-[#0a0a0a] sticky bottom-0">
+                            <button onclick="toggleMobileFilters()" class="w-full py-5 text-[10px] uppercase tracking-[0.4em] font-bold bg-[#c5a059] text-white transition-all shadow-2xl">
+                                Apply Selection
+                            </button>
+                        </div>
+
+                        <!-- Desktop Reset Button (Visible only on lg) -->
+                        <div class="hidden lg:block pt-8">
+                            <button class="w-full py-5 text-[10px] uppercase tracking-[0.4em] font-bold border border-white/10 hover:bg-white hover:text-black transition-all">
+                                Reset Filters
+                            </button>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Product Grid -->
+                <div class="flex-1">
+                    <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-12 gap-y-20">
+                        <!-- Products will be injected here -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Professional Architecture Footer -->
+    <footer class="relative bg-[#0c0c0c] pt-24 pb-12 border-t border-white/5">
+        <div class="max-w-[1720px] mx-auto px-6 md:px-24">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
+                <div class="space-y-10">
+                    <img src="https://rceramica.com/logo/logo.png" alt="R Ceramica Logo" class="h-16 w-auto object-contain">
+                    <p class="text-white/40 text-[13px] leading-relaxed font-light max-w-sm">
+                        R Ceramica is a brand that believes in continuous development and growth. We innovate to reform the market approach.
+                    </p>
+                </div>
+                <!-- Simplified links -->
+                <div class="space-y-10 text-[13px] text-white/40 uppercase tracking-wider">
+                    <h4 class="text-white font-display text-lg tracking-wider font-light lowercase capitalize">Collections</h4>
+                    <ul class="space-y-4 lowercase capitalize">
+                        <li><a href="#" class="hover:text-white transition-colors">Lounge Tiles</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Bathware Series</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Kitchen Concepts</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-10 text-[13px] text-white/40 uppercase tracking-wider">
+                    <h4 class="text-white font-display text-lg tracking-wider font-light lowercase capitalize">Corporate</h4>
+                    <ul class="space-y-4 lowercase capitalize">
+                        <li><a href="about.html" class="hover:text-white transition-colors">Story</a></li>
+                        <li><a href="contact.html" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-10">
+                    <h4 class="text-white font-display text-lg tracking-wider font-light lowercase capitalize">Contact</h4>
+                    <div class="space-y-4 text-[13px] text-white/40 leading-relaxed font-light">
+                        <p>Morbi, Gujarat (INDIA)</p>
+                        <p>PH: +91 94274 10127</p>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-16 border-t border-white/5 flex flex-col items-center gap-6 text-[10px] text-white/20 uppercase tracking-[0.3em]">
+                <p>© 2024 R Ceramica Global. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed top-24 right-6 md:right-12 bg-white text-black pl-6 pr-10 py-5 border-l-4 border-[#c5a059] opacity-0 translate-x-12 pointer-events-none transition-all duration-500 z-[200] shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+        <div class="flex items-center gap-4">
+            <div class="bg-black/5 p-2 rounded-full">
+                <i data-lucide="check" size="18" class="text-[#c5a059]"></i>
+            </div>
+            <div>
+                <p class="text-[10px] uppercase tracking-[0.3em] font-bold mb-0.5">Success</p>
+                <p class="text-[9px] uppercase tracking-[0.2em] text-black/60" id="toast-message">Item Added to Cart</p>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 h-[2px] bg-[#c5a059] w-0 toast-progress"></div>
+    </div>
+
+    <!-- Mobile Filter Toggle -->
+    <div class="lg:hidden fixed bottom-8 right-6 z-[80] animate-slide-up">
+        <button id="mobile-filter-btn" onclick="toggleMobileFilters()" class="flex items-center justify-center bg-white text-black w-12 h-12 rounded-full shadow-2xl active:scale-90 transition-all duration-300">
+            <i data-lucide="filter" size="18"></i>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        lucide.createIcons();
+        
+        let cart = {}; // Store item quantities { productId: quantity }
+
+        function toggleMobileFilters() {
+            const sidebar = document.getElementById('filter-sidebar');
+            const isOpening = sidebar.classList.contains('hidden-mobile');
+            
+            if (isOpening) {
+                sidebar.classList.remove('hidden-mobile');
+                sidebar.classList.add('visible-mobile');
+                document.body.style.overflow = 'hidden';
+            } else {
+                sidebar.classList.add('hidden-mobile');
+                sidebar.classList.remove('visible-mobile');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Mobile Menu Logic
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const isOpening = mobileMenu.classList.contains('mobile-menu-hidden');
+            
+            if (isOpening) {
+                mobileMenu.classList.remove('mobile-menu-hidden');
+                mobileMenu.classList.add('mobile-menu-visible');
+                document.body.style.overflow = 'hidden';
+            } else {
+                mobileMenu.classList.remove('mobile-menu-visible');
+                mobileMenu.classList.add('mobile-menu-hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Global Search Placeholder
+        function toggleSearch() {
+            console.log("Search toggled");
+            // You can implement a full-screen search overlay here if needed
+        }
+
+        // Price Synchronization
+        function syncInputsFromSlider() {
+            const slider = document.getElementById('price-slider');
+            const maxInput = document.getElementById('price-max');
+            const sliderValText = document.getElementById('slider-val');
+            
+            maxInput.value = slider.value;
+            sliderValText.textContent = `Max: ₹${Number(slider.value).toLocaleString()}`;
+        }
+
+        function syncSliderFromInput() {
+            const slider = document.getElementById('price-slider');
+            const maxInput = document.getElementById('price-max');
+            const minInput = document.getElementById('price-min');
+            const sliderValText = document.getElementById('slider-val');
+
+            // Ensure min doesn't exceed max
+            if (parseInt(minInput.value) > parseInt(maxInput.value)) {
+                minInput.value = maxInput.value;
+            }
+
+            slider.value = maxInput.value;
+            sliderValText.textContent = `Max: ₹${Number(maxInput.value).toLocaleString()}`;
+        }
+
+        // Add event listeners for direct input changes
+        document.addEventListener('DOMContentLoaded', () => {
+            const maxInput = document.getElementById('price-max');
+            const minInput = document.getElementById('price-min');
+            const slider = document.getElementById('price-slider');
+            
+            if (maxInput && slider) {
+                maxInput.addEventListener('input', syncSliderFromInput);
+            }
+            if (minInput) {
+                minInput.addEventListener('input', syncSliderFromInput);
+            }
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryId = urlParams.get('category') || 'fusion';
+        
+        const categoryMap = {
+            '101': 'Rivo Collection',
+            '201': 'Curve Collection',
+            '301': 'Eva Collection',
+            '401': 'Roma Collection',
+            '501': 'Artiz Collection',
+            'fusion': 'Fusion Collection',
+            'tiles': 'Architectural Surfaces',
+            'sanitary': 'Sanitary Forms',
+            'culinary': 'Culinary Studios',
+            'living': 'Expansive Living',
+            'showers': 'Luxury Showers',
+            'basins': 'Minimal Basins'
+        };
+
+        const currentCategoryTitle = categoryMap[categoryId] || 'Our Collection';
+        document.getElementById('current-category').textContent = currentCategoryTitle;
+
+        const products = [
+            { id: 1, name: 'Fusion Basin Mixer', collection: 'Fusion', code: 'F10201CL', price: '12,450', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600' },
+            { id: 2, name: 'Prime Wall Mixer', collection: 'Fusion', code: 'F10202WM', price: '18,200', img: 'https://images.unsplash.com/photo-1620626011761-9963d7b59675?auto=format&fit=crop&q=80&w=600' },
+            { id: 3, name: 'Eco High Neck Faucet', collection: 'Fusion', code: 'E10301HN', price: '8,900', img: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=600' },
+            { id: 4, name: 'Sleek Pillar Cock', collection: 'Fusion', code: 'S10401PC', price: '4,650', img: 'https://images.unsplash.com/photo-1615529182904-14819c35db37?auto=format&fit=crop&q=80&w=600' },
+            { id: 5, name: 'Grand Shower Arm', collection: 'Fusion', code: 'G10501SA', price: '14,000', img: 'https://images.unsplash.com/photo-1620625515032-6ed0c1790c75?auto=format&fit=crop&q=80&w=600' },
+            { id: 6, name: 'Urban Bath Spout', collection: 'Fusion', code: 'U10601BS', price: '6,200', img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=600' },
+            { id: 7, name: 'Nova Concealed Valve', collection: 'Fusion', code: 'N10701CV', price: '5,500', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=600' },
+            { id: 8, name: 'Zen Exposed Mixer', collection: 'Fusion', code: 'Z10801EM', price: '22,400', img: 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&q=80&w=600' },
+            { id: 9, name: 'Aero Hand Shower', collection: 'Fusion', code: 'A10901HS', price: '3,800', img: 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&q=80&w=600' },
+            { id: 10, name: 'Minimal Diverter', collection: 'Fusion', code: 'M11001DV', price: '9,500', img: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&q=80&w=600' },
+            { id: 11, name: 'Artisan Glass Basin', collection: 'Sanitary', code: 'G20101VB', price: '32,000', img: 'https://images.unsplash.com/photo-1620626014330-f99a0937285d?auto=format&fit=crop&q=80&w=600' },
+            { id: 12, name: 'Shadow Granite Slab', collection: 'Tiles', code: 'SG501', price: '450 / sqft', img: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=800' }
+        ];
+
+        // Filter products based on category detection (simple for demo)
+        let displayProducts = [];
+        
+        function initDisplay() {
+            displayProducts = categoryId === 'tiles' ? [products[11]] : 
+                             categoryId === 'sanitary' ? [products[10]] : 
+                             [...products];
+        }
+
+        initDisplay();
+
+        const grid = document.getElementById('product-grid');
+        const countSpan = document.getElementById('product-count');
+        
+        function updateCount() {
+            countSpan.textContent = displayProducts.length;
+        }
+
+        function renderProducts() {
+            updateCount();
+            grid.innerHTML = displayProducts.map((item, index) => {
+                const quantity = cart[item.id] || 0;
+                
+                return `
+                <div class="product-card group animate-slide-up" style="animation-delay: ${0.2 + index * 0.05}s">
+                    <div class="relative aspect-[4/5] bg-[#111] overflow-hidden mb-8 group cursor-pointer">
+                        <img src="${item.img}" class="product-img w-full h-full object-cover transition-transform duration-[1.5s] ease-out" alt="${item.name}">
+                        
+                        <!-- Labels -->
+                        <div class="absolute top-6 left-6 flex flex-col gap-2">
+                             <div class="bg-white/5 backdrop-blur-md border border-white/10 px-3 py-1 text-[8px] uppercase tracking-[0.2em] font-medium text-white/80">New Arrival</div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6 text-center px-4">
+                        <div class="space-y-2">
+                            <p class="text-[9px] text-[#c5a059] uppercase tracking-[0.4em] font-medium">${item.collection} Series</p>
+                            <h3 class="text-lg md:text-xl font-display font-light uppercase tracking-[0.15em] group-hover:text-white/80 transition-colors">${item.name}</h3>
+                            <p class="text-[10px] text-white/30 uppercase tracking-[0.2em]">${item.code}</p>
+                            <p class="text-sm font-sans tracking-[0.1em] text-white/80 mt-2">₹ ${item.price}</p>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col gap-3 pt-2">
+                            ${quantity === 0 ? `
+                                <button onclick="updateQuantity(${item.id}, 1)" class="w-full py-4 bg-white text-black text-[9px] uppercase tracking-[0.4em] font-bold hover:bg-neutral-200 transition-all flex items-center justify-center gap-3">
+                                    <i data-lucide="shopping-cart" size="14"></i>
+                                    Add to Cart
+                                </button>
+                            ` : `
+                                <div class="flex items-center justify-between bg-white text-black h-12 px-4 shadow-xl">
+                                    <button onclick="updateQuantity(${item.id}, -1)" class="w-10 h-full flex items-center justify-center hover:bg-neutral-100 transition-colors">
+                                        <i data-lucide="minus" size="12"></i>
+                                    </button>
+                                    <span class="text-[10px] font-bold tracking-[0.2em]">${quantity}</span>
+                                    <button onclick="updateQuantity(${item.id}, 1)" class="w-10 h-full flex items-center justify-center hover:bg-neutral-100 transition-colors">
+                                        <i data-lucide="plus" size="12"></i>
+                                    </button>
+                                </div>
+                            `}
+                            <button class="w-full py-4 border border-white/10 text-white/60 text-[9px] uppercase tracking-[0.4em] hover:bg-white/5 hover:text-white transition-all">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+            lucide.createIcons();
+        }
+
+        renderProducts();
+
+        // Accordion Logic
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(id + '-icon');
+            const isHidden = content.classList.contains('hidden');
+
+            // Toggle Content
+            if (isHidden) {
+                content.classList.remove('hidden');
+                icon.setAttribute('data-lucide', 'minus');
+            } else {
+                content.classList.add('hidden');
+                icon.setAttribute('data-lucide', 'plus');
+            }
+
+            // Re-render Lucide Icons for the specific element
+            lucide.createIcons();
+        }
+
+        // Sort Logic
+        function toggleSortMenu() {
+            if (window.innerWidth < 1024) {
+                toggleMobileFilters();
+                // Optionally auto-open the sort accordion in the drawer
+                const sortAccordion = document.getElementById('sort-mobile');
+                if (sortAccordion && sortAccordion.classList.contains('hidden')) {
+                    toggleAccordion('sort-mobile');
+                }
+                return;
+            }
+            const menu = document.getElementById('sort-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function applySort(type, label) {
+            document.getElementById('current-sort').textContent = label;
+            document.getElementById('sort-menu').classList.add('hidden');
+
+            if (type === 'price-low') {
+                displayProducts.sort((a, b) => {
+                    const priceA = parseFloat(a.price.replace(/[^\d.]/g, ''));
+                    const priceB = parseFloat(b.price.replace(/[^\d.]/g, ''));
+                    return priceA - priceB;
+                });
+            } else if (type === 'price-high') {
+                displayProducts.sort((a, b) => {
+                    const priceA = parseFloat(a.price.replace(/[^\d.]/g, ''));
+                    const priceB = parseFloat(b.price.replace(/[^\d.]/g, ''));
+                    return priceB - priceA;
+                });
+            } else if (type === 'recommended') {
+                initDisplay();
+            } else if (type === 'newest') {
+                displayProducts.reverse(); // Simplified newest logic
+            }
+            
+            renderProducts();
+        }
+
+        // Close dropdowns on outside click
+        window.addEventListener('click', (e) => {
+            const sortMenu = document.getElementById('sort-menu');
+            const sortButton = document.getElementById('sort-button');
+            if (sortMenu && !sortMenu.classList.contains('hidden') && !sortButton.contains(e.target) && !sortMenu.contains(e.target)) {
+                sortMenu.classList.add('hidden');
+            }
+        });
+
+        // Cart Logic
+        const cartCountSpan = document.getElementById('cart-count');
+        const cartCountMobileSpan = document.getElementById('cart-count-mobile');
+        const toast = document.getElementById('toast');
+        const toastProgress = document.querySelector('.toast-progress');
+
+        function updateQuantity(id, delta) {
+            if (!cart[id]) cart[id] = 0;
+            
+            const prevQty = cart[id];
+            cart[id] = Math.max(0, cart[id] + delta);
+            
+            // Only show toast if adding for the first time or increasing
+            if (delta > 0) {
+                showToast(delta > 0 && prevQty === 0 ? "Item Added to Cart" : "Quantity Updated");
+            }
+
+            // Update total cart count
+            let total = 0;
+            Object.values(cart).forEach(qty => total += qty);
+            if (cartCountSpan) cartCountSpan.textContent = total;
+            if (cartCountMobileSpan) cartCountMobileSpan.textContent = total;
+            
+            renderProducts();
+        }
+
+        function showToast(message) {
+            document.getElementById('toast-message').textContent = message;
+            
+            // Trigger animation
+            toast.classList.remove('opacity-0', 'translate-x-12', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-x-0');
+            
+            // Progress Bar Reset
+            toastProgress.style.transition = 'none';
+            toastProgress.style.width = '0%';
+            
+            setTimeout(() => {
+                toastProgress.style.transition = 'width 3s linear';
+                toastProgress.style.width = '100%';
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-12', 'pointer-events-none');
+                toast.classList.remove('opacity-100', 'translate-x-0');
+            }, 3000);
+        }
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.classList.add('py-0');
+            } else {
+                nav.classList.remove('py-0');
+            }
+        });
+
+        // Auth Logic
+        const loginDropdown = document.getElementById('login-dropdown');
+        function toggleLoginDropdown(e) {
+            if (e) e.stopPropagation();
+            loginDropdown.classList.toggle('hidden');
+        }
+
+        function checkAuth() {
+            const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+            const loggedOutView = document.getElementById('logged-out-view');
+            const loggedInView = document.getElementById('logged-in-view');
+            const userDisplayName = document.getElementById('user-display-name');
+            const loginIcon = document.querySelector('button[onclick="toggleLoginDropdown(event)"] .material-symbols-outlined');
+
+            if (isAuthenticated) {
+                if (loggedOutView) loggedOutView.classList.add('hidden');
+                if (loggedInView) loggedInView.classList.remove('hidden');
+                if (userDisplayName) userDisplayName.innerText = localStorage.getItem('userName') || 'User';
+                if (loginIcon) loginIcon.style.color = '#c5a059';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userMobile');
+            window.location.reload();
+        }
+
+        window.addEventListener('click', () => {
+            if (loginDropdown) loginDropdown.classList.add('hidden');
+        });
+
+        checkAuth();
+    </script>
+</body>
+</html>

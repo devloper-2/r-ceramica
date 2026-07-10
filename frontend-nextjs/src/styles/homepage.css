@@ -1,0 +1,9 @@
+/* =====================================================================
+   homepage.css — Styles specific to the HOME page (/).
+   Imported by app/_pages/HomePage.tsx. Uses tokens from theme.css so it
+   automatically follows the global theme. Add homepage-only rules here.
+   ===================================================================== */
+
+.page-home {
+  background-color: var(--color-bg);
+}

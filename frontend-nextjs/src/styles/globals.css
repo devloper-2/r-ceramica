@@ -1,0 +1,308 @@
+/* =====================================================================
+   globals.css — Global base styles for the whole app.
+   ---------------------------------------------------------------------
+   Load order matters:
+     1. Tailwind             — utility classes
+     2. Material Symbols     — self-hosted icon font
+     3. theme.css            — the single theme source (colours/fonts/spacing)
+   Page- and component-specific styling lives in its OWN file:
+     • app/css/*.css         (e.g. homepage.css, aboutpage.css)
+     • components/css/*.css  (e.g. footer.css, navbar.css)
+   ===================================================================== */
+
+@import "tailwindcss";
+@import "material-symbols/outlined";
+@import "./theme.css";
+
+/* ─── Tailwind v4 Theme ──────────────────────────────────────────────────── */
+/* In v4, theme extensions live here via @theme, not in tailwind.config.ts.  */
+@theme inline {
+  /* Fonts */
+  --font-sans: var(--font-inter), sans-serif;
+  --font-display: var(--font-outfit), sans-serif;
+
+  /* Brand colors */
+  --color-brand-bg: var(--color-bg);
+  --color-brand-bg-alt: var(--color-bg-alt);
+  --color-brand-bg-card: var(--color-bg-card);
+  --color-brand-surface: var(--color-surface);
+  --color-brand-gold: var(--color-gold);
+  --color-brand-gold-light: var(--color-gold-light);
+  --color-brand-white: var(--color-white);
+  --color-brand-border: var(--color-border);
+  --color-brand-border-hover: var(--color-border-hover);
+
+  /* Letter spacing */
+  --tracking-ultra-wide: 0.5em;
+  --tracking-extra-wide: 0.4em;
+  --tracking-super-wide: 0.3em;
+  --tracking-mega-wide: 0.2em;
+
+  /* Max width */
+  --max-w-content: 1440px;
+
+  /* Transitions */
+  --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+  --duration-400: 400ms;
+  --duration-700: 700ms;
+  --duration-800: 800ms;
+  --duration-2000: 2000ms;
+
+  /* Animations */
+  --animate-fade-in-up: fadeInUp 1s ease-out forwards;
+  --animate-fade-in: fadeIn 0.5s ease-out forwards;
+}
+
+/* ─── Explicit Font Utilities (mirrors static-design hardcoded style) ────── */
+/* Tailwind v4 @theme alone isn't always enough when next/font CSS vars are   */
+/* resolved at runtime — these explicit rules guarantee Outfit/Inter apply.   */
+.font-sans {
+  font-family: var(--font-inter), Inter, sans-serif;
+}
+.font-display {
+  font-family: var(--font-outfit), Outfit, sans-serif;
+}
+
+/* ─── Minimum-visibility text overrides ──────────────────────────────── */
+/*
+ * On non-calibrated / budget monitors rgba(255,255,255,0.10–0.25) is
+ * virtually invisible. Bump every ultra-faint white text class to a
+ * readable floor without changing the design hierarchy.
+ */
+
+/* white/5, white/10 → white/30 floor */
+.text-white\/5  { color: rgba(255,255,255,0.30) !important; }
+.text-white\/10 { color: rgba(255,255,255,0.35) !important; }
+
+/* white/20 → white/45 */
+.text-white\/20 { color: rgba(255,255,255,0.45) !important; }
+
+/* white/30 → white/55 */
+.text-white\/30 { color: rgba(255,255,255,0.55) !important; }
+
+/* white/40 → white/62 */
+.text-white\/40 { color: rgba(255,255,255,0.62) !important; }
+
+/* Borders — keep decorative borders subtle but just a touch more visible */
+.border-white\/5  { border-color: rgba(255,255,255,0.10) !important; }
+.border-white\/10 { border-color: rgba(255,255,255,0.14) !important; }
+.border-white\/20 { border-color: rgba(255,255,255,0.5) !important; }
+
+/* ─── Base Reset ──────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ─── Custom Scrollbar ────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ─── Animations ──────────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* ─── Mobile Menu Transitions ─────────────────────────────────────────── */
+.mobile-menu-enter {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.mobile-menu-exit {
+  transform: translateX(-100%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ─── Search Bar Active States ────────────────────────────────────────── */
+.is-searching #nav-left {
+  opacity: 0;
+  pointer-events: none;
+  flex: 0 0 0;
+  width: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.is-searching #nav-right {
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.5s ease-in-out;
+}
+
+@media (min-width: 1024px) {
+  .is-searching #nav-right {
+    opacity: 0.5;
+    pointer-events: auto;
+  }
+  .is-searching #nav-right:hover {
+    opacity: 1;
+  }
+}
+
+.is-searching #desktop-nav-links {
+  opacity: 1;
+  pointer-events: auto;
+  transition: all 0.5s ease-in-out;
+}
+
+.is-searching #nav-center {
+  width: 100%;
+  max-width: 100% !important;
+  left: 0 !important;
+  margin: 0 !important;
+  padding: 0 1.5rem;
+  opacity: 1;
+  pointer-events: auto;
+  transition: all 0.8s var(--ease-smooth);
+  z-index: 60;
+  display: flex;
+  justify-content: center !important;
+}
+
+@media (min-width: 1024px) {
+  .is-searching #nav-center {
+    padding: 0;
+  }
+}
+
+#logo-container {
+  z-index: 70;
+  transition: all 0.7s var(--ease-smooth);
+}
+
+.is-searching #logo-container {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(0, -50%) scale(0.9);
+}
+
+.is-searching #mobile-menu-btn {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .is-searching #logo-container {
+    opacity: 1;
+    pointer-events: auto;
+    left: 3rem;
+    transform: translate(0, -50%) scale(1);
+  }
+}
+
+.is-searching #search-input-container {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  width: 100%;
+  max-width: 500px;
+}
+
+/* ─── Search Results States ───────────────────────────────────────────── */
+#search-results-container {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: all 0.5s var(--ease-smooth);
+  width: 100%;
+  left: 0;
+  top: calc(100% + 1rem);
+}
+
+@media (min-width: 1024px) {
+  #search-results-container {
+    top: calc(100% + 0.5rem);
+  }
+}
+
+.is-searching.has-query #search-results-container {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.globalheader {
+    flex: inherit;
+}
+.globalheader ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 30px;
+}
+.globalheader ul li{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.globalheader ul li a{
+  display: block;
+} 

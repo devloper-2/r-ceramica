@@ -1,0 +1,42 @@
+/* =====================================================================
+   productdetailpage.css — Product Detail page (/products/[id]).
+   ===================================================================== */
+
+.page-product-detail {
+  background-color: #0a0a0a;
+  min-height: 100vh;
+}
+
+/* ── Thumbnail strip ── */
+.thumb-strip::-webkit-scrollbar { height: 3px; }
+.thumb-strip::-webkit-scrollbar-track { background: transparent; }
+.thumb-strip::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+/* ── 3D viewer panel ── */
+.viewer-panel {
+  background: radial-gradient(ellipse at 50% 60%, #1a1a1a 0%, #0a0a0a 70%);
+}
+
+/* ── Slide-up entrance ── */
+@keyframes pdSlideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.pd-slide-up {
+  animation: pdSlideUp 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* ── Colour swatch active ring ── */
+.finish-swatch.active {
+  outline: 2px solid #c5a059;
+  outline-offset: 3px;
+}
+
+/* ── Quantity spinner ── */
+.qty-spinner {
+  -moz-appearance: textfield;
+}
+.qty-spinner::-webkit-inner-spin-button,
+.qty-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}

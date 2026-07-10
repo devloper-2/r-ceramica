@@ -1,0 +1,41 @@
+/* =====================================================================
+   theme.css — SINGLE SOURCE OF TRUTH FOR THE ENTIRE SITE THEME
+   ---------------------------------------------------------------------
+   Change the values below to restyle the WHOLE website in one place.
+   Every page and component reads these variables — directly via
+   `var(--color-*)`, or through the Tailwind `brand-*` tokens (which are
+   mapped to these same variables in tailwind.config.ts).
+
+   👉 To rebrand the site, you normally only need to edit this file.
+   ===================================================================== */
+
+:root {
+  /* ─── Brand Colours ──────────────────────────────────────────────── */
+  --color-bg: #0a0a0a; /* page background */
+  --color-bg-alt: #0c0c0c; /* alternating section background */
+  --color-bg-card: #111111; /* cards / tiles */
+  --color-surface: #1b1b1b; /* raised surfaces (navbar, etc.) */
+  --color-gold: #c5a059; /* primary accent */
+  --color-gold-light: #d4b475; /* accent hover / highlight */
+  --color-white: #ffffff;
+  --color-border: rgba(255, 255, 255, 0.05);
+  --color-border-hover: rgba(255, 255, 255, 0.2);
+
+  /* ─── Semantic Aliases (prefer these in NEW code) ────────────────── */
+  --color-text: var(--color-white);
+  --color-text-muted: rgba(255, 255, 255, 0.4);
+  --color-accent: var(--color-gold);
+  --color-accent-hover: var(--color-gold-light);
+
+  /* ─── Typography ─────────────────────────────────────────────────── */
+  --font-sans: var(--font-inter), Inter, sans-serif;
+  --font-display: var(--font-outfit), Outfit, sans-serif;
+
+  /* ─── Spacing / Layout ───────────────────────────────────────────── */
+  --container-max: 1440px;
+  --section-px: clamp(1.5rem, 4vw, 4rem);
+  --section-py: clamp(4rem, 8vw, 8rem);
+
+  /* ─── Motion ─────────────────────────────────────────────────────── */
+  --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+}

@@ -1,0 +1,10 @@
+/* =====================================================================
+   navbar.css — Styles specific to the Navbar component.
+   Imported by components/layout/Navbar.tsx. Uses theme.css tokens.
+   (The complex search/menu transition states live in globals.css because
+   they target ids shared across the whole navigation.)
+   ===================================================================== */
+
+.site-navbar.is-scrolled {
+  background-color: color-mix(in srgb, var(--color-surface) 80%, transparent);
+}

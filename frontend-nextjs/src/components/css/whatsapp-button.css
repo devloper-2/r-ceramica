@@ -1,0 +1,8 @@
+/* =====================================================================
+   whatsapp-button.css — Styles specific to the floating WhatsApp button.
+   Imported by components/layout/WhatsAppButton.tsx.
+   ===================================================================== */
+
+.whatsapp-fab {
+  transition: transform 0.5s var(--ease-smooth);
+}

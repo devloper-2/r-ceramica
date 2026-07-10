@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogue | R Ceramica | Architectural Collection</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Outfit:wght@300;400;500&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,200,0,0&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        .font-display { font-family: 'Outfit', sans-serif; }
+        .material-symbols-outlined { font-size: 24px; vertical-align: middle; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
+
+        .mobile-menu-hidden {
+            transform: translateX(-100%);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .mobile-menu-visible {
+            transform: translateX(0);
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.8s ease-out forwards; }
+
+        /* Catalogue card hover */
+        .cat-card { transition: border-color 0.4s ease; }
+        .cat-card:hover .cat-img { transform: scale(1.06); }
+        .cat-img { transition: transform 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+
+        /* Filter pill active */
+        .filter-pill.active {
+            background: white;
+            color: black;
+        }
+
+        /* Book spine decoration */
+        .book-spine {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-white font-sans font-light selection:bg-white/20">
+
+    <!-- ═══════════════════════ NAVBAR ═══════════════════════ -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 font-sans font-light bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-white/5">
+        <div class="relative flex justify-between items-center px-4 md:px-12 h-20 md:h-28">
+            <!-- Mobile: Hamburger -->
+            <div id="mobile-menu-btn" class="flex-1 lg:hidden flex items-center relative z-[60]">
+                <button onclick="toggleMobileMenu()" class="text-white relative z-[70] p-2 -ml-2">
+                    <i data-lucide="menu" size="24"></i>
+                </button>
+            </div>
+
+            <!-- Logo (centered) -->
+            <div id="logo-container" class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 pointer-events-none">
+                <a href="index.html" class="pointer-events-auto">
+                    <img src="https://rceramica.com/logo/logo.png" alt="R Ceramica Logo" class="h-10 md:h-16 w-auto object-contain">
+                </a>
+            </div>
+
+            <!-- Right: Icons -->
+            <div id="nav-right" class="flex-1 flex justify-end items-center relative z-20">
+                <div class="hidden lg:flex items-center gap-10">
+                    <div onclick="toggleSearch()" class="flex items-center cursor-pointer group">
+                        <span class="material-symbols-outlined font-light text-2xl text-white/80 group-hover:text-white transition-colors">search</span>
+                    </div>
+                    <a href="cart.html" class="relative group">
+                        <i data-lucide="shopping-cart" size="24" stroke-width="1.2" class="text-white/80 group-hover:text-white transition-colors"></i>
+                        <span class="absolute -top-2 -right-3 bg-white text-black text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                    </a>
+                    <button onclick="toggleLoginDropdown(event)" class="focus:outline-none hover:text-white/80 transition-colors">
+                        <span class="material-symbols-outlined font-light text-2xl">account_circle</span>
+                    </button>
+                </div>
+                <!-- Mobile icons -->
+                <div class="lg:hidden flex items-center gap-6">
+                    <div onclick="toggleSearch()" class="flex items-center cursor-pointer">
+                        <span class="material-symbols-outlined font-light text-2xl text-white/80">search</span>
+                    </div>
+                    <a href="cart.html" class="relative">
+                        <i data-lucide="shopping-cart" size="22" stroke-width="1.2" class="text-white/80"></i>
+                        <span class="absolute -top-2 -right-2 bg-white text-black text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Dropdown -->
+        <div id="login-dropdown" class="hidden absolute right-4 md:right-12 top-[80px] md:top-[96px] w-56 bg-black/60 backdrop-blur-2xl border border-white/10 p-1.5 rounded-sm shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] z-[110]">
+            <div id="logged-out-view">
+                <a href="login.html" class="block w-full text-left px-6 py-5 text-[10px] text-white/80 hover:text-white hover:bg-white/10 transition-all uppercase tracking-[0.3em] font-medium">Sign In</a>
+            </div>
+            <div id="logged-in-view" class="hidden">
+                <div class="px-6 py-4 border-b border-white/5">
+                    <p id="user-display-name" class="text-[10px] uppercase tracking-[0.2em] text-white font-medium truncate">Client User</p>
+                </div>
+                <a href="orders.html" class="flex items-center gap-3 px-6 py-4 text-[10px] text-white/60 hover:text-[#c5a059] hover:bg-white/5 transition-all uppercase tracking-[0.3em] font-medium">
+                    <span class="material-symbols-outlined text-[18px]">receipt_long</span>Orders
+                </a>
+                <button onclick="logout()" class="w-full text-left flex items-center gap-3 px-6 py-4 text-[10px] text-white/80 hover:text-white hover:bg-white/10 transition-all uppercase tracking-[0.3em] font-medium">
+                    <span class="material-symbols-outlined text-[18px]">logout</span>Sign Out
+                </button>
+            </div>
+        </div>
+
+        <!-- Desktop Nav Links -->
+        <div id="desktop-nav-links" class="hidden lg:flex justify-center items-center py-3 border-t border-white/5 space-x-12 text-[10px] uppercase tracking-[0.3em] font-medium text-white/60">
+            <a href="index.html" class="hover:text-white transition-colors">HOME</a>
+            <a href="about.html" class="hover:text-white transition-colors">ABOUT US</a>
+            <a href="explore.html" class="hover:text-white transition-colors">TILES</a>
+            <a href="faucets.html" class="hover:text-white transition-colors">BATHROOMS</a>
+            <a href="explore.html" class="hover:text-white transition-colors">ACCESSORIES</a>
+            <a href="catalogue.html" class="text-white relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-px after:bg-white transition-colors">CATALOGUE</a>
+            <a href="contact.html" class="hover:text-white transition-colors">CONTACT US</a>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu-hidden fixed inset-0 bg-[#0a0a0a] z-[500] flex flex-col p-8 overflow-y-auto transition-all duration-500">
+        <div class="flex justify-between items-center mb-12">
+            <img src="https://rceramica.com/logo/logo.png" alt="Logo" class="h-12 w-auto">
+            <button onclick="toggleMobileMenu()" class="text-white hover:text-gray-400 transition-colors">
+                <i data-lucide="x" size="32"></i>
+            </button>
+        </div>
+        <div class="flex flex-col space-y-1 gap-2">
+            <a href="index.html" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">HOME</a>
+            <a href="about.html" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">ABOUT US</a>
+            <a href="explore.html" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">TILES</a>
+            <a href="faucets.html" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">BATHROOMS</a>
+            <a href="explore.html" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">ACCESSORIES</a>
+            <a href="catalogue.html" class="text-xl font-light tracking-widest text-[#c5a059] py-3 border-b border-white/5 uppercase">CATALOGUE</a>
+            <a href="contact.html" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">CONTACT US</a>
+            <a href="login.html" id="mobile-signin-link" class="text-xl font-light tracking-widest hover:text-gray-400 py-3 border-b border-white/5 uppercase">SIGN IN</a>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════ HERO ═══════════════════════ -->
+    <header class="relative pt-40 md:pt-56 pb-24 md:pb-32 bg-[#080808] overflow-hidden">
+        <!-- Subtle background watermark -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+            <span class="text-[22vw] font-display font-black text-white/[0.02] uppercase tracking-tighter whitespace-nowrap">CATALOGUE</span>
+        </div>
+
+        <!-- Decorative lines -->
+        <div class="absolute top-0 left-0 w-px h-full bg-gradient-to-b from-transparent via-white/5 to-transparent ml-8 md:ml-24"></div>
+        <div class="absolute top-0 right-0 w-px h-full bg-gradient-to-b from-transparent via-white/5 to-transparent mr-8 md:mr-24"></div>
+
+        <div class="relative max-w-[1440px] mx-auto px-6 md:px-16 text-center fade-up">
+            <div class="inline-flex items-center gap-6 mb-8">
+                <div class="w-12 h-px bg-[#c5a059]/60"></div>
+                <span class="text-[9px] uppercase tracking-[0.6em] text-[#c5a059] font-medium">Collection Archive</span>
+                <div class="w-12 h-px bg-[#c5a059]/60"></div>
+            </div>
+            <h1 class="text-4xl md:text-7xl font-display font-light uppercase tracking-[0.2em] text-white mb-6 leading-[1.05]">
+                Product<br><span class="text-white/20" style="-webkit-text-stroke: 1px rgba(255,255,255,0.15); color: transparent;">Catalogue</span>
+            </h1>
+            <p class="text-[11px] text-white/40 uppercase tracking-[0.35em] max-w-xl mx-auto leading-relaxed mt-8">
+                Explore our complete library of architectural surface catalogues, technical data sheets, and collection lookbooks.
+            </p>
+        </div>
+
+        <!-- Stats bar -->
+        <div class="relative max-w-[1440px] mx-auto px-6 md:px-16 mt-20">
+            <div class="grid grid-cols-3 border border-white/5 divide-x divide-white/5">
+                <div class="py-8 text-center">
+                    <p class="text-2xl md:text-3xl font-display font-light text-white mb-1">08</p>
+                    <p class="text-[8px] uppercase tracking-[0.4em] text-white/30">Collections</p>
+                </div>
+                <div class="py-8 text-center">
+                    <p class="text-2xl md:text-3xl font-display font-light text-white mb-1">500+</p>
+                    <p class="text-[8px] uppercase tracking-[0.4em] text-white/30">Products</p>
+                </div>
+                <div class="py-8 text-center">
+                    <p class="text-2xl md:text-3xl font-display font-light text-white mb-1">2024</p>
+                    <p class="text-[8px] uppercase tracking-[0.4em] text-white/30">Edition</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ═══════════════════════ FILTER PILLS ═══════════════════════ -->
+    <section class="sticky top-[120px] md:top-[148px] z-40 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5 py-5">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-16">
+            <div class="flex items-center gap-3 overflow-x-auto pb-1 no-scrollbar">
+                <button onclick="filterCatalogue('all', this)" class="filter-pill active shrink-0 px-5 py-2 border border-white/10 text-[9px] uppercase tracking-[0.3em] font-medium transition-all hover:border-white/30 rounded-sm">
+                    All
+                </button>
+                <button onclick="filterCatalogue('tiles', this)" class="filter-pill shrink-0 px-5 py-2 border border-white/10 text-[9px] uppercase tracking-[0.3em] font-medium text-white/50 transition-all hover:border-white/30 hover:text-white rounded-sm">
+                    Tiles
+                </button>
+                <button onclick="filterCatalogue('bathroom', this)" class="filter-pill shrink-0 px-5 py-2 border border-white/10 text-[9px] uppercase tracking-[0.3em] font-medium text-white/50 transition-all hover:border-white/30 hover:text-white rounded-sm">
+                    Bathrooms
+                </button>
+                <button onclick="filterCatalogue('kitchen', this)" class="filter-pill shrink-0 px-5 py-2 border border-white/10 text-[9px] uppercase tracking-[0.3em] font-medium text-white/50 transition-all hover:border-white/30 hover:text-white rounded-sm">
+                    Kitchen
+                </button>
+                <button onclick="filterCatalogue('slabs', this)" class="filter-pill shrink-0 px-5 py-2 border border-white/10 text-[9px] uppercase tracking-[0.3em] font-medium text-white/50 transition-all hover:border-white/30 hover:text-white rounded-sm">
+                    Large Format
+                </button>
+                <button onclick="filterCatalogue('outdoor', this)" class="filter-pill shrink-0 px-5 py-2 border border-white/10 text-[9px] uppercase tracking-[0.3em] font-medium text-white/50 transition-all hover:border-white/30 hover:text-white rounded-sm">
+                    Outdoor
+                </button>
+                <button onclick="filterCatalogue('technical', this)" class="filter-pill shrink-0 px-5 py-2 border border-white/10 text-[9px] uppercase tracking-[0.3em] font-medium text-white/50 transition-all hover:border-white/30 hover:text-white rounded-sm">
+                    Technical
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ CATALOGUE GRID ═══════════════════════ -->
+    <main class="py-20 md:py-28 bg-[#0a0a0a]">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-16">
+
+            <!-- Results count -->
+            <div class="flex items-center justify-between mb-12">
+                <p class="text-[10px] uppercase tracking-[0.3em] text-white/30">
+                    Showing <span id="cat-count" class="text-white">8</span> Catalogues
+                </p>
+                <div class="w-24 h-px bg-white/5"></div>
+            </div>
+
+            <!-- Grid -->
+            <div id="catalogue-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-1">
+
+                <!-- ── Card 1: Master Collection 2024 ── -->
+                <div class="cat-card group relative border border-white/5 hover:border-white/15 overflow-hidden" data-category="all tiles bathroom kitchen slabs outdoor technical">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-[#111]">
+                        <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=800" alt="Master Collection" class="cat-img w-full h-full object-cover opacity-50">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+
+                        <!-- Book spine accent -->
+                        <div class="absolute left-0 top-0 bottom-0 w-8 bg-[#c5a059]/10 border-r border-[#c5a059]/20 flex items-center justify-center">
+                            <span class="book-spine text-[7px] uppercase tracking-[0.3em] text-[#c5a059]/60 font-medium">R Ceramica · 2024</span>
+                        </div>
+
+                        <!-- Badge -->
+                        <div class="absolute top-6 right-6">
+                            <span class="bg-[#c5a059] text-black text-[7px] uppercase tracking-[0.3em] font-bold px-3 py-1.5">New Edition</span>
+                        </div>
+
+                        <!-- Pages count -->
+                        <div class="absolute top-6 left-14 bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5">
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/60">148 Pages</span>
+                        </div>
+
+                        <!-- Bottom content -->
+                        <div class="absolute bottom-0 left-0 right-0 p-8 pl-12">
+                            <span class="text-[8px] uppercase tracking-[0.5em] text-[#c5a059] block mb-3">Complete Collection</span>
+                            <h3 class="text-2xl md:text-3xl font-display font-light uppercase tracking-widest text-white mb-2 leading-tight">Master<br>Collection 2024</h3>
+                            <p class="text-[9px] uppercase tracking-[0.25em] text-white/40 mb-6">Tiles · Bathrooms · Kitchen · Accessories</p>
+                            <div class="flex items-center gap-3">
+                                <a href="#" class="flex-1 flex items-center justify-center gap-2 bg-white text-black py-3.5 text-[8px] uppercase tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all">
+                                    <i data-lucide="download" size="12"></i> Download PDF
+                                </a>
+                                <a href="#" class="flex items-center justify-center w-12 h-12 border border-white/10 hover:border-white/40 text-white/60 hover:text-white transition-all">
+                                    <i data-lucide="eye" size="14"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card footer -->
+                    <div class="px-8 pl-12 py-5 border-t border-white/5 flex items-center justify-between bg-[#0d0d0d]">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/30">Available</span>
+                        </div>
+                        <span class="text-[8px] uppercase tracking-[0.25em] text-white/20">PDF · 24 MB</span>
+                    </div>
+                </div>
+
+                <!-- ── Card 2: Architectural Tiles ── -->
+                <div class="cat-card group relative border border-white/5 hover:border-white/15 overflow-hidden" data-category="tiles">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-[#111]">
+                        <img src="https://images.unsplash.com/photo-1616046229478-9901c5536a45?auto=format&fit=crop&q=80&w=800" alt="Architectural Tiles" class="cat-img w-full h-full object-cover opacity-50">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                        <div class="absolute left-0 top-0 bottom-0 w-8 bg-white/5 border-r border-white/10 flex items-center justify-center">
+                            <span class="book-spine text-[7px] uppercase tracking-[0.3em] text-white/30 font-medium">R Ceramica · Tiles</span>
+                        </div>
+                        <div class="absolute top-6 left-14 bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5">
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/60">96 Pages</span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-8 pl-12">
+                            <span class="text-[8px] uppercase tracking-[0.5em] text-[#c5a059] block mb-3">Surface Studio</span>
+                            <h3 class="text-2xl md:text-3xl font-display font-light uppercase tracking-widest text-white mb-2 leading-tight">Architectural<br>Tiles</h3>
+                            <p class="text-[9px] uppercase tracking-[0.25em] text-white/40 mb-6">Floor · Wall · Large Format · Mosaic</p>
+                            <div class="flex items-center gap-3">
+                                <a href="#" class="flex-1 flex items-center justify-center gap-2 bg-white text-black py-3.5 text-[8px] uppercase tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all">
+                                    <i data-lucide="download" size="12"></i> Download PDF
+                                </a>
+                                <a href="#" class="flex items-center justify-center w-12 h-12 border border-white/10 hover:border-white/40 text-white/60 hover:text-white transition-all">
+                                    <i data-lucide="eye" size="14"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-8 pl-12 py-5 border-t border-white/5 flex items-center justify-between bg-[#0d0d0d]">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/30">Available</span>
+                        </div>
+                        <span class="text-[8px] uppercase tracking-[0.25em] text-white/20">PDF · 18 MB</span>
+                    </div>
+                </div>
+
+                <!-- ── Card 3: Bathroom Series ── -->
+                <div class="cat-card group relative border border-white/5 hover:border-white/15 overflow-hidden" data-category="bathroom">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-[#111]">
+                        <img src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&q=80&w=800" alt="Bathroom Series" class="cat-img w-full h-full object-cover opacity-50">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                        <div class="absolute left-0 top-0 bottom-0 w-8 bg-white/5 border-r border-white/10 flex items-center justify-center">
+                            <span class="book-spine text-[7px] uppercase tracking-[0.3em] text-white/30 font-medium">R Ceramica · Bath</span>
+                        </div>
+                        <div class="absolute top-6 right-6">
+                            <span class="bg-white/10 backdrop-blur-md border border-white/10 text-white text-[7px] uppercase tracking-[0.3em] font-bold px-3 py-1.5">Updated</span>
+                        </div>
+                        <div class="absolute top-6 left-14 bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5">
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/60">112 Pages</span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-8 pl-12">
+                            <span class="text-[8px] uppercase tracking-[0.5em] text-[#c5a059] block mb-3">Sanctuary Series</span>
+                            <h3 class="text-2xl md:text-3xl font-display font-light uppercase tracking-widest text-white mb-2 leading-tight">Bathroom<br>Collection</h3>
+                            <p class="text-[9px] uppercase tracking-[0.25em] text-white/40 mb-6">Faucets · Showers · Basins · Accessories</p>
+                            <div class="flex items-center gap-3">
+                                <a href="#" class="flex-1 flex items-center justify-center gap-2 bg-white text-black py-3.5 text-[8px] uppercase tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all">
+                                    <i data-lucide="download" size="12"></i> Download PDF
+                                </a>
+                                <a href="#" class="flex items-center justify-center w-12 h-12 border border-white/10 hover:border-white/40 text-white/60 hover:text-white transition-all">
+                                    <i data-lucide="eye" size="14"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-8 pl-12 py-5 border-t border-white/5 flex items-center justify-between bg-[#0d0d0d]">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/30">Available</span>
+                        </div>
+                        <span class="text-[8px] uppercase tracking-[0.25em] text-white/20">PDF · 21 MB</span>
+                    </div>
+                </div>
+
+                <!-- ── Card 4: Kitchen Concepts ── -->
+                <div class="cat-card group relative border border-white/5 hover:border-white/15 overflow-hidden" data-category="kitchen">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-[#111]">
+                        <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800" alt="Kitchen Concepts" class="cat-img w-full h-full object-cover opacity-50">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                        <div class="absolute left-0 top-0 bottom-0 w-8 bg-white/5 border-r border-white/10 flex items-center justify-center">
+                            <span class="book-spine text-[7px] uppercase tracking-[0.3em] text-white/30 font-medium">R Ceramica · Kitchen</span>
+                        </div>
+                        <div class="absolute top-6 left-14 bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5">
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/60">64 Pages</span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-8 pl-12">
+                            <span class="text-[8px] uppercase tracking-[0.5em] text-[#c5a059] block mb-3">Culinary Studio</span>
+                            <h3 class="text-2xl md:text-3xl font-display font-light uppercase tracking-widest text-white mb-2 leading-tight">Kitchen<br>Concepts</h3>
+                            <p class="text-[9px] uppercase tracking-[0.25em] text-white/40 mb-6">Counter Tops · Backsplash · Sinks</p>
+                            <div class="flex items-center gap-3">
+                                <a href="#" class="flex-1 flex items-center justify-center gap-2 bg-white text-black py-3.5 text-[8px] uppercase tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all">
+                                    <i data-lucide="download" size="12"></i> Download PDF
+                                </a>
+                                <a href="#" class="flex items-center justify-center w-12 h-12 border border-white/10 hover:border-white/40 text-white/60 hover:text-white transition-all">
+                                    <i data-lucide="eye" size="14"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-8 pl-12 py-5 border-t border-white/5 flex items-center justify-between bg-[#0d0d0d]">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/30">Available</span>
+                        </div>
+                        <span class="text-[8px] uppercase tracking-[0.25em] text-white/20">PDF · 12 MB</span>
+                    </div>
+                </div>
+
+                <!-- ── Card 5: Large Format Slabs ── -->
+                <div class="cat-card group relative border border-white/5 hover:border-white/15 overflow-hidden" data-category="slabs tiles">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-[#111]">
+                        <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=800" alt="Large Format Slabs" class="cat-img w-full h-full object-cover opacity-50">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                        <div class="absolute left-0 top-0 bottom-0 w-8 bg-[#c5a059]/10 border-r border-[#c5a059]/20 flex items-center justify-center">
+                            <span class="book-spine text-[7px] uppercase tracking-[0.3em] text-[#c5a059]/60 font-medium">R Ceramica · Slabs</span>
+                        </div>
+                        <div class="absolute top-6 right-6">
+                            <span class="bg-[#c5a059] text-black text-[7px] uppercase tracking-[0.3em] font-bold px-3 py-1.5">Exclusive</span>
+                        </div>
+                        <div class="absolute top-6 left-14 bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5">
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/60">80 Pages</span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-8 pl-12">
+                            <span class="text-[8px] uppercase tracking-[0.5em] text-[#c5a059] block mb-3">Monolith Series</span>
+                            <h3 class="text-2xl md:text-3xl font-display font-light uppercase tracking-widest text-white mb-2 leading-tight">Large Format<br>Slabs</h3>
+                            <p class="text-[9px] uppercase tracking-[0.25em] text-white/40 mb-6">1200×2400 · 1600×3200 · Bookmatch</p>
+                            <div class="flex items-center gap-3">
+                                <a href="#" class="flex-1 flex items-center justify-center gap-2 bg-white text-black py-3.5 text-[8px] uppercase tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all">
+                                    <i data-lucide="download" size="12"></i> Download PDF
+                                </a>
+                                <a href="#" class="flex items-center justify-center w-12 h-12 border border-white/10 hover:border-white/40 text-white/60 hover:text-white transition-all">
+                                    <i data-lucide="eye" size="14"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-8 pl-12 py-5 border-t border-white/5 flex items-center justify-between bg-[#0d0d0d]">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/30">Available</span>
+                        </div>
+                        <span class="text-[8px] uppercase tracking-[0.25em] text-white/20">PDF · 32 MB</span>
+                    </div>
+                </div>
+
+                <!-- ── Card 6: Outdoor Porcelain ── -->
+                <div class="cat-card group relative border border-white/5 hover:border-white/15 overflow-hidden" data-category="outdoor tiles">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-[#111]">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=800" alt="Outdoor Porcelain" class="cat-img w-full h-full object-cover opacity-50">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                        <div class="absolute left-0 top-0 bottom-0 w-8 bg-white/5 border-r border-white/10 flex items-center justify-center">
+                            <span class="book-spine text-[7px] uppercase tracking-[0.3em] text-white/30 font-medium">R Ceramica · Outdoor</span>
+                        </div>
+                        <div class="absolute top-6 left-14 bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5">
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/60">72 Pages</span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-8 pl-12">
+                            <span class="text-[8px] uppercase tracking-[0.5em] text-[#c5a059] block mb-3">Terrace & Garden</span>
+                            <h3 class="text-2xl md:text-3xl font-display font-light uppercase tracking-widest text-white mb-2 leading-tight">Outdoor<br>Porcelain</h3>
+                            <p class="text-[9px] uppercase tracking-[0.25em] text-white/40 mb-6">R11 Anti-Slip · Pool Copings · Pavers</p>
+                            <div class="flex items-center gap-3">
+                                <a href="#" class="flex-1 flex items-center justify-center gap-2 bg-white text-black py-3.5 text-[8px] uppercase tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all">
+                                    <i data-lucide="download" size="12"></i> Download PDF
+                                </a>
+                                <a href="#" class="flex items-center justify-center w-12 h-12 border border-white/10 hover:border-white/40 text-white/60 hover:text-white transition-all">
+                                    <i data-lucide="eye" size="14"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-8 pl-12 py-5 border-t border-white/5 flex items-center justify-between bg-[#0d0d0d]">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/30">Available</span>
+                        </div>
+                        <span class="text-[8px] uppercase tracking-[0.25em] text-white/20">PDF · 15 MB</span>
+                    </div>
+                </div>
+
+                <!-- ── Card 7: Technical Data Sheets ── -->
+                <div class="cat-card group relative border border-white/5 hover:border-white/15 overflow-hidden" data-category="technical">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-[#111]">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800" alt="Technical Data" class="cat-img w-full h-full object-cover opacity-30">
+                        <!-- Technical grid overlay -->
+                        <div class="absolute inset-0" style="background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 40px 40px;"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>
+                        <div class="absolute left-0 top-0 bottom-0 w-8 bg-white/5 border-r border-white/10 flex items-center justify-center">
+                            <span class="book-spine text-[7px] uppercase tracking-[0.3em] text-white/30 font-medium">R Ceramica · Technical</span>
+                        </div>
+                        <div class="absolute top-6 left-14 bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5">
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/60">48 Pages</span>
+                        </div>
+                        <!-- Technical accent icons -->
+                        <div class="absolute top-1/3 right-8 flex flex-col gap-4 opacity-20">
+                            <i data-lucide="ruler" size="20" class="text-white"></i>
+                            <i data-lucide="layers" size="20" class="text-white"></i>
+                            <i data-lucide="shield-check" size="20" class="text-white"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-8 pl-12">
+                            <span class="text-[8px] uppercase tracking-[0.5em] text-[#c5a059] block mb-3">Engineering Specs</span>
+                            <h3 class="text-2xl md:text-3xl font-display font-light uppercase tracking-widest text-white mb-2 leading-tight">Technical<br>Data Sheets</h3>
+                            <p class="text-[9px] uppercase tracking-[0.25em] text-white/40 mb-6">ISO Ratings · Certifications · Dimensions</p>
+                            <div class="flex items-center gap-3">
+                                <a href="#" class="flex-1 flex items-center justify-center gap-2 bg-white text-black py-3.5 text-[8px] uppercase tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all">
+                                    <i data-lucide="download" size="12"></i> Download PDF
+                                </a>
+                                <a href="#" class="flex items-center justify-center w-12 h-12 border border-white/10 hover:border-white/40 text-white/60 hover:text-white transition-all">
+                                    <i data-lucide="eye" size="14"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-8 pl-12 py-5 border-t border-white/5 flex items-center justify-between bg-[#0d0d0d]">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/30">Available</span>
+                        </div>
+                        <span class="text-[8px] uppercase tracking-[0.25em] text-white/20">PDF · 8 MB</span>
+                    </div>
+                </div>
+
+                <!-- ── Card 8: Lookbook 2024 ── -->
+                <div class="cat-card group relative border border-white/5 hover:border-white/15 overflow-hidden" data-category="all">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-[#111]">
+                        <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=800" alt="Lookbook 2024" class="cat-img w-full h-full object-cover opacity-50">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                        <div class="absolute left-0 top-0 bottom-0 w-8 bg-[#c5a059]/10 border-r border-[#c5a059]/20 flex items-center justify-center">
+                            <span class="book-spine text-[7px] uppercase tracking-[0.3em] text-[#c5a059]/60 font-medium">R Ceramica · Look</span>
+                        </div>
+                        <div class="absolute top-6 right-6">
+                            <span class="bg-white/10 backdrop-blur-md border border-white/10 text-white text-[7px] uppercase tracking-[0.3em] font-bold px-3 py-1.5">Limited</span>
+                        </div>
+                        <div class="absolute top-6 left-14 bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5">
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/60">56 Pages</span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-8 pl-12">
+                            <span class="text-[8px] uppercase tracking-[0.5em] text-[#c5a059] block mb-3">Visual Inspiration</span>
+                            <h3 class="text-2xl md:text-3xl font-display font-light uppercase tracking-widest text-white mb-2 leading-tight">Lookbook<br>2024</h3>
+                            <p class="text-[9px] uppercase tracking-[0.25em] text-white/40 mb-6">Lifestyle · Interiors · Project Showcase</p>
+                            <div class="flex items-center gap-3">
+                                <a href="#" class="flex-1 flex items-center justify-center gap-2 bg-white text-black py-3.5 text-[8px] uppercase tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all">
+                                    <i data-lucide="download" size="12"></i> Download PDF
+                                </a>
+                                <a href="#" class="flex items-center justify-center w-12 h-12 border border-white/10 hover:border-white/40 text-white/60 hover:text-white transition-all">
+                                    <i data-lucide="eye" size="14"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-8 pl-12 py-5 border-t border-white/5 flex items-center justify-between bg-[#0d0d0d]">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/30">Limited Run</span>
+                        </div>
+                        <span class="text-[8px] uppercase tracking-[0.25em] text-white/20">PDF · 28 MB</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ═══════════════════════ REQUEST SECTION ═══════════════════════ -->
+    <section class="py-24 md:py-32 bg-[#0c0c0c] border-t border-white/5">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Left -->
+                <div class="space-y-8">
+                    <div class="inline-flex items-center gap-6">
+                        <div class="w-8 h-px bg-[#c5a059]/60"></div>
+                        <span class="text-[9px] uppercase tracking-[0.5em] text-[#c5a059]/80">Bespoke Service</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-display font-light text-white uppercase tracking-wider leading-tight">
+                        Request a<br>
+                        <span class="text-white/20" style="-webkit-text-stroke: 1px rgba(255,255,255,0.15); color: transparent;">Physical</span><br>
+                        Catalogue
+                    </h2>
+                    <p class="text-[11px] text-white/40 uppercase tracking-[0.25em] leading-relaxed max-w-md">
+                        Request our premium printed catalogues delivered to your studio or showroom. Available for architects, interior designers, and trade professionals.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <a href="contact.html" class="flex items-center justify-center gap-3 bg-white text-black px-10 py-5 text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all">
+                            <i data-lucide="send" size="14"></i> Request Copy
+                        </a>
+                        <a href="contact.html" class="flex items-center justify-center gap-3 border border-white/10 text-white/60 hover:text-white hover:border-white/30 px-10 py-5 text-[10px] uppercase tracking-[0.3em] transition-all">
+                            Contact Us
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: Benefits list -->
+                <div class="space-y-0">
+                    <div class="flex items-start gap-6 py-7 border-b border-white/5 group">
+                        <div class="w-10 h-10 border border-white/10 group-hover:border-[#c5a059]/40 flex items-center justify-center shrink-0 transition-colors">
+                            <i data-lucide="package" size="16" class="text-white/30 group-hover:text-[#c5a059] transition-colors"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-[11px] uppercase tracking-[0.2em] text-white mb-1">Premium Print Quality</h4>
+                            <p class="text-[10px] text-white/30 tracking-[0.1em] leading-relaxed">Printed on 170gsm art paper with true-to-life color reproduction.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-6 py-7 border-b border-white/5 group">
+                        <div class="w-10 h-10 border border-white/10 group-hover:border-[#c5a059]/40 flex items-center justify-center shrink-0 transition-colors">
+                            <i data-lucide="truck" size="16" class="text-white/30 group-hover:text-[#c5a059] transition-colors"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-[11px] uppercase tracking-[0.2em] text-white mb-1">Worldwide Delivery</h4>
+                            <p class="text-[10px] text-white/30 tracking-[0.1em] leading-relaxed">Free dispatch to architects and trade professionals across the globe.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-6 py-7 group">
+                        <div class="w-10 h-10 border border-white/10 group-hover:border-[#c5a059]/40 flex items-center justify-center shrink-0 transition-colors">
+                            <i data-lucide="refresh-cw" size="16" class="text-white/30 group-hover:text-[#c5a059] transition-colors"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-[11px] uppercase tracking-[0.2em] text-white mb-1">Always Up-to-Date</h4>
+                            <p class="text-[10px] text-white/30 tracking-[0.1em] leading-relaxed">Subscribe to receive new editions and seasonal collections automatically.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+    <footer class="relative bg-[#0c0c0c] pt-24 pb-12 border-t border-white/5">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-24 mb-24">
+                <div class="space-y-10">
+                    <img src="https://rceramica.com/logo/logo.png" alt="R Ceramica Logo" class="h-16 w-auto object-contain">
+                    <p class="text-white/40 text-[13px] leading-relaxed font-light max-w-sm">
+                        R Ceramica is a brand that believes in continuous development and growth. We always try to innovate and bring something new to reform the approach of the market.
+                    </p>
+                    <div class="flex items-center gap-6">
+                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="facebook" size="18"></i></a>
+                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="instagram" size="18"></i></a>
+                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="linkedin" size="18"></i></a>
+                        <a href="#" class="text-white/30 hover:text-white transition-colors"><i data-lucide="youtube" size="18"></i></a>
+                    </div>
+                </div>
+                <div class="space-y-10">
+                    <h4 class="text-white font-display text-lg tracking-wider font-light">Quick Links</h4>
+                    <ul class="space-y-5 text-[13px] text-white/40 tracking-wide">
+                        <li><a href="explore.html" class="hover:text-white transition-all hover:pl-2 uppercase">Tiles</a></li>
+                        <li><a href="faucets.html" class="hover:text-white transition-all hover:pl-2 uppercase">Bathware</a></li>
+                        <li><a href="catalogue.html" class="hover:text-white transition-all hover:pl-2 uppercase">Catalogue</a></li>
+                        <li><a href="about.html" class="hover:text-white transition-all hover:pl-2 uppercase">About Us</a></li>
+                        <li><a href="contact.html" class="hover:text-white transition-all hover:pl-2 uppercase">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-10">
+                    <h4 class="text-white font-display text-lg tracking-wider font-light">Corporate</h4>
+                    <ul class="space-y-5 text-[13px] text-white/40 tracking-wide">
+                        <li><a href="about.html" class="hover:text-white transition-all hover:pl-2 uppercase">Our Story</a></li>
+                        <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Chairman Message</a></li>
+                        <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">News & Media</a></li>
+                        <li><a href="#" class="hover:text-white transition-all hover:pl-2 uppercase">Career</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-10">
+                    <h4 class="text-white font-display text-lg tracking-wider font-light">Contact Us</h4>
+                    <div class="space-y-6 text-[13px] text-white/40 leading-relaxed">
+                        <div class="flex items-start gap-4 border-b border-white/5 pb-6">
+                            <i data-lucide="map-pin" size="18" class="shrink-0 text-white/20 mt-1"></i>
+                            <p>Opp. Ceramic City, B/h. Meldi Ma Temple, Lalpar, 8-A National Highway, Morbi-363642. Gujarat (INDIA)</p>
+                        </div>
+                        <div class="flex items-center gap-4 hover:text-white transition-colors">
+                            <i data-lucide="phone" size="18" class="text-white/20"></i>
+                            <span>PH: +91 94274 10127</span>
+                        </div>
+                        <div class="flex items-center gap-4 hover:text-white transition-colors">
+                            <i data-lucide="mail" size="18" class="text-white/20"></i>
+                            <span>info@rceramica.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-16 border-t border-white/5 flex flex-col items-center gap-10">
+                <div class="w-full flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-white/20 uppercase tracking-[0.3em] text-center">
+                    <p>© 2024 R Ceramica Global. All Rights Reserved.</p>
+                    <div class="flex gap-8">
+                        <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                        <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    </div>
+                </div>
+                <div class="text-[9px] text-white/10 uppercase tracking-[0.4em] font-light italic">
+                    Developed by <a href="https://codezpark.com/" target="_blank" class="text-white/30 hover:text-white transition-all underline decoration-white/5 underline-offset-8">CODEZPARK</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Sticky -->
+    <a href="https://wa.me/919427410127" target="_blank" class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[100] group cursor-pointer" aria-label="Chat on WhatsApp">
+        <div class="flex flex-col items-center relative">
+            <span class="absolute bottom-full mb-4 whitespace-nowrap bg-white/90 backdrop-blur-md text-[8px] text-black font-bold px-3 py-1.5 rounded-full opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 uppercase tracking-widest shadow-2xl">Chat with us</span>
+            <div class="transition-all duration-500 group-hover:scale-110">
+                <svg class="w-10 h-10 fill-white/40 group-hover:fill-[#25D366] transition-all duration-500 filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .004 5.412.001 12.046c0 2.121.554 4.191 1.606 6.034L0 24l6.117-1.604a11.803 11.803 0 005.93 1.587h.005c6.634 0 12.043-5.413 12.046-12.049a11.796 11.796 0 00-3.417-8.412z"/>
+                </svg>
+            </div>
+        </div>
+    </a>
+
+    <!-- ═══════════════════════ SCRIPTS ═══════════════════════ -->
+    <script>
+        lucide.createIcons();
+
+        // Navbar scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.classList.add('bg-[#0a0a0a]/95');
+            }
+        });
+
+        // Mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const opening = menu.classList.contains('mobile-menu-hidden');
+            if (opening) {
+                menu.classList.replace('mobile-menu-hidden', 'mobile-menu-visible');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.replace('mobile-menu-visible', 'mobile-menu-hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Login dropdown
+        const loginDropdown = document.getElementById('login-dropdown');
+        function toggleLoginDropdown(e) {
+            if (e) e.stopPropagation();
+            loginDropdown.classList.toggle('hidden');
+        }
+        window.addEventListener('click', () => { if (loginDropdown) loginDropdown.classList.add('hidden'); });
+
+        // Search stub
+        function toggleSearch() {}
+
+        // Auth
+        function checkAuth() {
+            const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+            const loggedOutView = document.getElementById('logged-out-view');
+            const loggedInView = document.getElementById('logged-in-view');
+            const userDisplayName = document.getElementById('user-display-name');
+            if (isAuthenticated) {
+                if (loggedOutView) loggedOutView.classList.add('hidden');
+                if (loggedInView) loggedInView.classList.remove('hidden');
+                if (userDisplayName) userDisplayName.innerText = localStorage.getItem('userName') || 'User';
+            }
+        }
+        function logout() {
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userMobile');
+            window.location.reload();
+        }
+        checkAuth();
+
+        // ── Catalogue filter ──
+        function filterCatalogue(category, btn) {
+            // Update pill styles
+            document.querySelectorAll('.filter-pill').forEach(p => {
+                p.classList.remove('active');
+                p.classList.add('text-white/50');
+                p.classList.remove('text-white', 'text-black');
+            });
+            btn.classList.add('active');
+            btn.classList.remove('text-white/50');
+
+            const cards = document.querySelectorAll('#catalogue-grid > div');
+            let visible = 0;
+
+            cards.forEach(card => {
+                const cats = card.dataset.category || '';
+                const show = category === 'all' || cats.includes(category);
+                if (show) {
+                    card.style.display = '';
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(16px)';
+                    requestAnimationFrame(() => {
+                        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    });
+                    visible++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.getElementById('cat-count').textContent = visible;
+        }
+
+        // Scroll-triggered fade-up for cards
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08 });
+
+        document.querySelectorAll('.cat-card').forEach((card, i) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(24px)';
+            card.style.transition = `opacity 0.7s ease ${i * 0.08}s, transform 0.7s ease ${i * 0.08}s`;
+            observer.observe(card);
+        });
+    </script>
+
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</body>
+</html>
