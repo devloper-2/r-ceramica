@@ -311,3 +311,6 @@ body {
 .ctainfoicon:hover .lucide{
   color: rgba(0,0,0,0.62);
 }
+.ctainfoicon:hover .rounded-full.border{
+  background-color: #fff;
+}
