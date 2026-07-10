@@ -60,12 +60,28 @@ jobs:
           NEXT_PUBLIC_API_URL: https://admin.rceramica.com/api/v1
           STATIC_EXPORT: "true"
 
+      - name: Show local build output
+        run: |
+          echo "=== out/ root (must contain index.html, about.html, _next/) ==="
+          ls -la out/ | head -40
+          echo "=== .htaccess present? ==="
+          ls -la out/.htaccess || echo "!!! .htaccess MISSING from out/"
+          echo "=== about.html titleLine2 in this build ==="
+          grep -o -i 'titleLine2[^,}]*' out/about.html | head -3 || echo "not found"
+
       - name: Deploy to Hostinger via FTP
         run: |
           sudo apt-get install -y lftp
           lftp -u "${{ secrets.FTP_USER }}","${{ secrets.FTP_PASS }}" ftp://${{ secrets.FTP_HOST }} <<'FTPEOF'
           set ssl:verify-certificate no
           set ftp:ssl-allow no
-          mirror --reverse --delete --verbose out/ public_html/staging/
+          echo "===== FTP LOGIN DIRECTORY (pwd) ====="
+          pwd
+          echo "===== LISTING OF LOGIN DIRECTORY ====="
+          cls -l ./
+          echo "===== DOES ./staging EXIST? ====="
+          cls -l staging/ || echo "no ./staging here"
+          echo "===== DOES ./public_html/staging EXIST? ====="
+          cls -l public_html/staging/ || echo "no ./public_html/staging here"
           bye
           FTPEOF
