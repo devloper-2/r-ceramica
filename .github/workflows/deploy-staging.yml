@@ -77,11 +77,12 @@ jobs:
           lftp -u "${{ secrets.FTP_USER }}","${{ secrets.FTP_PASS }}" ftp://${{ secrets.FTP_HOST }} <<'FTPEOF'
           set ssl:verify-certificate no
           set ftp:ssl-allow no
+          set xfer:clobber on
           echo "===== FTP LOGIN DIRECTORY (pwd) ====="
           pwd
-          echo "===== MIRRORING out/ -> public_html/staging/ (with --delete) ====="
-          mirror --reverse --delete --verbose out/ public_html/staging/
-          echo "===== TARGET AFTER DEPLOY ====="
-          cls -l public_html/staging/
+          echo "===== MIRRORING out/ -> staging/ (login dir is already public_html) ====="
+          mirror --reverse --delete --verbose out/ staging/
+          echo "===== TARGET AFTER DEPLOY (staging/) ====="
+          cls -l staging/
           bye
           FTPEOF
