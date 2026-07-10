@@ -5,7 +5,6 @@ name: Deploy staging site
 on:
   repository_dispatch:
     types: [rebuild-site]
-  # Also allow manual trigger from GitHub Actions tab (useful for debugging)
   workflow_dispatch:
 
 jobs:
@@ -17,38 +16,37 @@ jobs:
         working-directory: frontend-nextjs
 
     steps:
-      # ── 1. Checkout code ──
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # ── 2. Node.js setup ──
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: frontend-nextjs/package-lock.json
 
-      # ── 3. Install dependencies ──
-      - run: npm ci
+      - name: Install dependencies
+        run: npm install
 
-      # ── 4. Generate site data from live API ──
-      - run: node scripts/gen-site-data.mjs
+      - name: Generate site data from live API
+        run: node scripts/gen-site-data.mjs
         env:
           CONTENT_API_URL: https://admin.rceramica.com/api/v1
           CONTENT_API_KEY: ${{ secrets.CONTENT_API_KEY }}
 
-      # ── 5. Generate sitemap ──
-      - run: node scripts/gen-sitemap.mjs
+      - name: Generate sitemap
+        run: node scripts/gen-sitemap.mjs
 
-      # ── 6. Build static export ──
-      - run: npx cross-env STATIC_EXPORT=true next build
+      - name: Build static export
+        run: npx cross-env STATIC_EXPORT=true next build
         env:
           CONTENT_API_URL: https://admin.rceramica.com/api/v1
           CONTENT_API_KEY: ${{ secrets.CONTENT_API_KEY }}
           NEXT_PUBLIC_API_URL: https://admin.rceramica.com/api/v1
           STATIC_EXPORT: "true"
 
-      # ── 7. Deploy to Hostinger via FTP ──
-      - name: Deploy to Hostinger
+      - name: Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_HOST }}
