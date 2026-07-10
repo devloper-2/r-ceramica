@@ -30,19 +30,28 @@ const securityHeaders = [
 },
 ];
 
+const isExport = process.env.STATIC_EXPORT === "true";
+
 const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "rceramica.com" },
-      { protocol: "https", hostname: "hindwarestg.blob.core.windows.net" },
-    ],
-    formats: ["image/avif", "image/webp"],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
-  },
-  async headers() {
-    return [{ source: "/(.*)", headers: securityHeaders }];
-  },
+  ...(isExport && { output: "export" }),
+  images: isExport
+    ? { unoptimized: true }
+    : {
+        remotePatterns: [
+          { protocol: "https", hostname: "images.unsplash.com" },
+          { protocol: "https", hostname: "rceramica.com" },
+          { protocol: "https", hostname: "hindwarestg.blob.core.windows.net" },
+        ],
+        formats: ["image/avif", "image/webp"],
+        deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+      },
+  ...(isExport
+    ? {}
+    : {
+        async headers() {
+          return [{ source: "/(.*)", headers: securityHeaders }];
+        },
+      }),
   compress: true,
   poweredByHeader: false,
 };
