@@ -65,6 +65,12 @@ $routes->group('admin', ['filter' => 'adminauth', 'namespace' => 'App\Controller
     $routes->post('products/(:num)', 'Products::update/$1');
     $routes->post('products/(:num)/delete', 'Products::delete/$1');
 
+    // Categories
+    $routes->get('categories', 'Categories::index');
+    $routes->post('categories', 'Categories::store');
+    $routes->post('categories/(:num)', 'Categories::update/$1');
+    $routes->post('categories/(:num)/delete', 'Categories::delete/$1');
+
     // Navigation
     $routes->get('navigation', 'Navigation::index');
     $routes->post('navigation', 'Navigation::save');
