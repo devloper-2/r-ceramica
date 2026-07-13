@@ -11,24 +11,20 @@ import { NAV_LINKS, LANGUAGES } from "@/lib/services/site-data";
 const SEARCH_INDEX = [
   { title: "Home",           href: "/",          cat: "Page",    keywords: "home landing" },
   { title: "About Us",       href: "/about",     cat: "Page",    keywords: "about story heritage brand" },
-  { title: "Explore",        href: "/explore",   cat: "Page",    keywords: "explore tiles collections surfaces" },
-  { title: "Bathrooms",      href: "/bathrooms", cat: "Page",    keywords: "bathrooms luxury design" },
-  { title: "Products",       href: "/products",  cat: "Page",    keywords: "products faucets mixers accessories" },
+  { title: "Explore",        href: "/explore",   cat: "Page",    keywords: "explore tiles collections surfaces categories" },
   { title: "Catalogue",      href: "/catalogue", cat: "Page",    keywords: "catalogue download brochure" },
   { title: "Contact Us",     href: "/contact",   cat: "Page",    keywords: "contact support enquiry" },
   { title: "Cart",           href: "/cart",      cat: "Page",    keywords: "cart shopping bag checkout" },
   { title: "Track Order",    href: "/tracking",  cat: "Account", keywords: "track order delivery status" },
   { title: "My Orders",      href: "/orders",    cat: "Account", keywords: "orders history acquisitions" },
   { title: "Sign In",        href: "/login",     cat: "Account", keywords: "login sign in account" },
-  // Products
-  { title: "Fusion Basin Mixer",    href: "/products/1",  cat: "Product", keywords: "basin mixer faucet chrome" },
-  { title: "Zen Exposed Mixer",     href: "/products/2",  cat: "Product", keywords: "exposed mixer bathroom" },
-  { title: "Petra Vessel Filler",   href: "/products/3",  cat: "Product", keywords: "vessel filler tap" },
-  { title: "Obsidian Mono Tap",     href: "/products/4",  cat: "Product", keywords: "mono tap black matte" },
-  { title: "Calcite Floor Tile",    href: "/products/5",  cat: "Product", keywords: "floor tile stone calcite" },
-  { title: "Marble Surface Slab",   href: "/products/6",  cat: "Product", keywords: "marble slab surface white" },
-  { title: "Statuario Signature",   href: "/products/7",  cat: "Product", keywords: "statuario marble signature" },
-  { title: "Aurum Vessel Filler",   href: "/products/8",  cat: "Product", keywords: "gold vessel filler luxury" },
+  // Explore collections
+  { title: "Tiles",          href: "/explore/tiles",        cat: "Collection", keywords: "tiles architectural surfaces floor wall slabs" },
+  { title: "Showers",        href: "/explore/showers",      cat: "Collection", keywords: "showers rain hand panels luxury" },
+  { title: "Faucets",        href: "/explore/faucets",      cat: "Collection", keywords: "faucets mixers taps artisan" },
+  { title: "Sanitaryware",   href: "/explore/sanitaryware", cat: "Collection", keywords: "sanitaryware water closets wc urinals" },
+  { title: "Basins",         href: "/explore/basins",       cat: "Collection", keywords: "basins vessel countertop wall hung" },
+  { title: "FRP Manhole",    href: "/explore/frp-manhole",  cat: "Collection", keywords: "frp manhole covers infrastructure" },
 ];
 
 export default function Navbar() {
@@ -404,14 +400,14 @@ export default function Navbar() {
                 <p className="text-[9px] uppercase tracking-[0.5em] text-white/50 mb-8">Quick Links</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {[
-                    { label: "Products",  href: "/products"  },
+                    { label: "Home",      href: "/"          },
                     { label: "Explore",   href: "/explore"   },
-                    { label: "Bathrooms", href: "/bathrooms" },
                     { label: "Catalogue", href: "/catalogue" },
                     { label: "About Us",  href: "/about"     },
                     { label: "Contact",   href: "/contact"   },
                     { label: "Cart",      href: "/cart"      },
                     { label: "My Orders", href: "/orders"    },
+                    { label: "Track Order", href: "/tracking" },
                   ].map((l) => (
                     <Link
                       key={l.href}

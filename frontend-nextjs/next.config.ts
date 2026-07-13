@@ -40,7 +40,11 @@ const nextConfig: NextConfig = {
         remotePatterns: [
           { protocol: "https", hostname: "images.unsplash.com" },
           { protocol: "https", hostname: "rceramica.com" },
+          { protocol: "https", hostname: "admin.rceramica.com" },
           { protocol: "https", hostname: "hindwarestg.blob.core.windows.net" },
+          // Admin-uploaded media in local dev (CI4 base_url → localhost:8080).
+          { protocol: "http", hostname: "localhost" },
+          { protocol: "http", hostname: "127.0.0.1" },
         ],
         formats: ["image/avif", "image/webp"],
         deviceSizes: [640, 750, 828, 1080, 1200, 1920],

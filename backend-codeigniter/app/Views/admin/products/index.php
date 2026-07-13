@@ -8,13 +8,18 @@
 
 <table style="margin-top:18px">
     <thead>
-        <tr><th>Name</th><th>Category</th><th>Price</th><th>Status</th><th></th></tr>
+        <tr><th>Name</th><th>Category / Subcategory</th><th>Price</th><th>Status</th><th></th></tr>
     </thead>
     <tbody>
     <?php foreach ($products as $p): ?>
         <tr>
             <td><?= esc($p['name']) ?><div class="muted" style="font-size:12px">/<?= esc($p['slug']) ?></div></td>
-            <td class="muted"><?= esc($p['category_name'] ?? '—') ?></td>
+            <td class="muted">
+                <?= esc($p['category_name'] ?? '—') ?>
+                <?php if (! empty($p['subcategory_name'])): ?>
+                    <div style="font-size:12px">↳ <?= esc($p['subcategory_name']) ?></div>
+                <?php endif; ?>
+            </td>
             <td><?= esc($p['currency']) ?> <?= number_format((float) $p['price']) ?></td>
             <td><span class="tag <?= $p['status'] === 'published' ? 'published' : '' ?>"><?= esc($p['status']) ?></span></td>
             <td style="text-align:right"><a class="btn secondary" href="/admin/products/<?= (int) $p['id'] ?>">Edit</a></td>

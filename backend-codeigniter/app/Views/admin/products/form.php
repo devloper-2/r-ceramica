@@ -31,11 +31,15 @@ $action = $isEdit ? '/admin/products/' . (int) $product['id'] : '/admin/products
             <input name="currency" value="<?= esc(old('currency', $product['currency'] ?? 'INR')) ?>">
         </div>
         <div>
-            <label>Category</label>
-            <select name="category_id">
+            <label>Subcategory</label>
+            <select name="subcategory_id">
                 <option value="">—</option>
-                <?php foreach ($categories as $c): ?>
-                    <option value="<?= (int) $c['id'] ?>" <?= ($product['category_id'] ?? '') == $c['id'] ? 'selected' : '' ?>><?= esc($c['name']) ?></option>
+                <?php foreach ($subcategoryGroups as $catName => $subs): ?>
+                    <optgroup label="<?= esc($catName, 'attr') ?>">
+                        <?php foreach ($subs as $s): ?>
+                            <option value="<?= (int) $s['id'] ?>" <?= ($product['subcategory_id'] ?? '') == $s['id'] ? 'selected' : '' ?>><?= esc($s['name']) ?></option>
+                        <?php endforeach; ?>
+                    </optgroup>
                 <?php endforeach; ?>
             </select>
         </div>

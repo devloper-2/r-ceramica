@@ -22,7 +22,7 @@ export const HOME_HERO: HeroContent = {
   mediaType: "video",
   mediaSrc:
     "/images/bathroomvideo.mp4",
-  cta: { label: "Explore Collection", href: "/products" },
+  cta: { label: "Explore Collection", href: "/explore" },
   fullHeight: true,
 };
 
@@ -42,7 +42,7 @@ export const SPACE_CARDS: SpaceCard[] = [
     imageSrc:
       "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1200",
     imageAlt: "Premium sanitary ware basin and mixer tap",
-    href: "/bathrooms",
+    href: "/explore",
   },
 ];
 

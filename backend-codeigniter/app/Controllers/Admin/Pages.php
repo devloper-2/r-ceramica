@@ -7,9 +7,19 @@ use App\Models\SectionModel;
 
 class Pages extends BaseAdminController
 {
+    /**
+     * Landing pages editable as Pages & Sections. Explore / Catalogue and the
+     * category → subcategory → product tree are managed under their own tabs,
+     * so they are intentionally excluded here.
+     */
+    private const LANDING_SLUGS = ['home', 'about', 'contact', 'privacy', 'terms'];
+
     public function index(): string
     {
-        $pages = model(PageModel::class)->orderBy('slug', 'ASC')->findAll();
+        $pages = model(PageModel::class)
+            ->whereIn('slug', self::LANDING_SLUGS)
+            ->orderBy('slug', 'ASC')
+            ->findAll();
 
         return $this->render('pages/index', ['pages' => $pages], 'pages');
     }
@@ -17,8 +27,8 @@ class Pages extends BaseAdminController
     public function edit(int $id): string
     {
         $page = model(PageModel::class)->find($id);
-        if (! $page) {
-            return $this->render('pages/index', ['pages' => model(PageModel::class)->findAll()], 'pages');
+        if (! $page || ! in_array($page['slug'], self::LANDING_SLUGS, true)) {
+            return $this->index();
         }
 
         $sections = model(SectionModel::class)

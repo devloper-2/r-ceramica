@@ -2,16 +2,17 @@
 
 namespace App\Controllers\Admin;
 
-use App\Models\CategoryModel;
 use App\Models\ProductModel;
+use App\Models\SubcategoryModel;
 
 class Products extends BaseAdminController
 {
     public function index(): string
     {
         $products = model(ProductModel::class)
-            ->select('products.*, categories.name AS category_name')
+            ->select('products.*, categories.name AS category_name, subcategories.name AS subcategory_name')
             ->join('categories', 'categories.id = products.category_id', 'left')
+            ->join('subcategories', 'subcategories.id = products.subcategory_id', 'left')
             ->orderBy('products.created_at', 'DESC')
             ->findAll();
 
@@ -21,8 +22,8 @@ class Products extends BaseAdminController
     public function create(): string
     {
         return $this->render('products/form', [
-            'product'    => null,
-            'categories' => model(CategoryModel::class)->orderBy('sort_order')->findAll(),
+            'product'          => null,
+            'subcategoryGroups' => $this->subcategoryGroups(),
         ], 'products');
     }
 
@@ -35,9 +36,28 @@ class Products extends BaseAdminController
         $product['specs_pretty'] = json_encode($product['specs'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         return $this->render('products/form', [
-            'product'    => $product,
-            'categories' => model(CategoryModel::class)->orderBy('sort_order')->findAll(),
+            'product'          => $product,
+            'subcategoryGroups' => $this->subcategoryGroups(),
         ], 'products');
+    }
+
+    /** Subcategories grouped by parent category, for the <optgroup> select. */
+    private function subcategoryGroups(): array
+    {
+        $rows = model(SubcategoryModel::class)
+            ->select('subcategories.id, subcategories.name, subcategories.category_id, categories.name AS category_name, categories.sort_order AS cat_sort')
+            ->join('categories', 'categories.id = subcategories.category_id')
+            ->orderBy('categories.sort_order', 'ASC')
+            ->orderBy('subcategories.sort_order', 'ASC')
+            ->orderBy('subcategories.name', 'ASC')
+            ->findAll();
+
+        $groups = [];
+        foreach ($rows as $r) {
+            $groups[$r['category_name']][] = ['id' => (int) $r['id'], 'name' => $r['name']];
+        }
+
+        return $groups;
     }
 
     public function store()
@@ -76,6 +96,14 @@ class Products extends BaseAdminController
             }
         }
 
+        // Product belongs to a subcategory; derive its parent category from that.
+        $subcategoryId = $this->request->getPost('subcategory_id') ?: null;
+        $categoryId    = null;
+        if ($subcategoryId) {
+            $sub        = model(SubcategoryModel::class)->find((int) $subcategoryId);
+            $categoryId = $sub['category_id'] ?? null;
+        }
+
         $data = [
             'name'              => $name,
             'slug'              => $slug,
@@ -84,7 +112,8 @@ class Products extends BaseAdminController
             'price'             => (float) $this->request->getPost('price'),
             'currency'          => $this->request->getPost('currency') ?: 'INR',
             'specs'             => $specs,
-            'category_id'       => $this->request->getPost('category_id') ?: null,
+            'subcategory_id'    => $subcategoryId,
+            'category_id'       => $categoryId,
             'meta_title'        => $this->request->getPost('meta_title'),
             'meta_description'  => $this->request->getPost('meta_description'),
             'status'            => $this->request->getPost('status'),

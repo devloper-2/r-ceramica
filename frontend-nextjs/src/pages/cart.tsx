@@ -124,7 +124,7 @@ export default function CartPage() {
                     <p className="text-lg font-display font-light uppercase tracking-widest mb-2">Your cart is empty</p>
                     <p className="text-[10px] uppercase tracking-[0.3em] text-white/30">Discover our curated collections</p>
                   </div>
-                  <Link href="/bathrooms"
+                  <Link href="/explore"
                     className="mt-2 px-8 py-4 bg-white text-black text-[9px] uppercase tracking-[0.4em] font-bold hover:bg-neutral-200 transition-colors">
                     Browse Collections
                   </Link>

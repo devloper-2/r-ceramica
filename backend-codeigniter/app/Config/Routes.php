@@ -19,6 +19,13 @@ $routes->group('api/v1', ['filter' => 'apikey', 'namespace' => 'App\Controllers\
     $routes->get('products', 'Products::index');
     $routes->get('products/(:segment)', 'Products::show/$1');
 
+    $routes->get('categories', 'Categories::index');
+    $routes->get('categories/(:segment)', 'Categories::show/$1');
+
+    $routes->get('subcategories/(:segment)', 'Subcategories::show/$1');
+
+    $routes->get('catalogues', 'Catalogues::index');
+
     $routes->get('navigation', 'Navigation::index');
     $routes->get('settings', 'Settings::index');
 });
@@ -65,15 +72,25 @@ $routes->group('admin', ['filter' => 'adminauth', 'namespace' => 'App\Controller
     $routes->post('products/(:num)', 'Products::update/$1');
     $routes->post('products/(:num)/delete', 'Products::delete/$1');
 
-    // Categories
+    // Categories (rich editor + subcategory management)
     $routes->get('categories', 'Categories::index');
     $routes->post('categories', 'Categories::store');
+    $routes->get('categories/(:num)', 'Categories::edit/$1');
     $routes->post('categories/(:num)', 'Categories::update/$1');
     $routes->post('categories/(:num)/delete', 'Categories::delete/$1');
+    $routes->post('categories/(:num)/subcategories', 'Categories::storeSub/$1');
+    $routes->post('categories/(:num)/subcategories/(:num)', 'Categories::updateSub/$1/$2');
+    $routes->post('categories/(:num)/subcategories/(:num)/delete', 'Categories::deleteSub/$1/$2');
 
-    // Navigation
-    $routes->get('navigation', 'Navigation::index');
-    $routes->post('navigation', 'Navigation::save');
+    // Catalogue (CMS-driven /catalogue page)
+    $routes->get('catalogue', 'Catalogue::index');
+    $routes->get('catalogue/new', 'Catalogue::create');
+    $routes->post('catalogue', 'Catalogue::store');
+    $routes->get('catalogue/(:num)', 'Catalogue::edit/$1');
+    $routes->post('catalogue/(:num)', 'Catalogue::update/$1');
+    $routes->post('catalogue/(:num)/delete', 'Catalogue::delete/$1');
+
+    // Navigation is now system-fixed (menu defined in the frontend, not editable).
 
     // Media
     $routes->get('media', 'Media::index');

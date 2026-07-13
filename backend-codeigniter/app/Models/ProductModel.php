@@ -12,7 +12,7 @@ class ProductModel extends Model
     protected $useTimestamps    = true;
     protected $allowedFields    = [
         'slug', 'name', 'short_description', 'description', 'price', 'currency',
-        'specs', 'category_id', 'meta_title', 'meta_description', 'status',
+        'specs', 'category_id', 'subcategory_id', 'meta_title', 'meta_description', 'status',
     ];
 
     protected array $casts = [
@@ -20,12 +20,15 @@ class ProductModel extends Model
         'price' => 'float',
     ];
 
-    /** Published product by slug, with its ordered image paths. */
+    /** Published product by slug, with its ordered image paths + taxonomy slugs. */
     public function getWithImages(string $slug, bool $publishedOnly = true): ?array
     {
-        $builder = $this->where('slug', $slug);
+        $builder = $this->select('products.*, categories.slug AS category_slug, categories.name AS category_name, subcategories.slug AS subcategory_slug, subcategories.name AS subcategory_name')
+            ->join('categories', 'categories.id = products.category_id', 'left')
+            ->join('subcategories', 'subcategories.id = products.subcategory_id', 'left')
+            ->where('products.slug', $slug);
         if ($publishedOnly) {
-            $builder->where('status', 'published');
+            $builder->where('products.status', 'published');
         }
         $product = $builder->first();
         if (! $product) {

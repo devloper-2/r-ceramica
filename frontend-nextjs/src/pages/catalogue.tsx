@@ -2,22 +2,24 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import type { GetStaticProps } from "next";
 import { Download, Eye, Package, Truck, RefreshCw, Send } from "lucide-react";
 import { siteConfig } from "@/config/site";
+import { api, type ApiCatalogue } from "@/lib/services/api";
 
 const TITLE       = `Catalogue | ${siteConfig.name}`;
 const DESCRIPTION = "Explore R Ceramica's complete library of architectural surface catalogues, technical data sheets, and collection lookbooks.";
 
 /* ── Catalogue data ─────────────────────────────────────────── */
 type CatEntry = {
-  id: number;
+  id: number | string;
   title: string;
   titleLine2: string;
   eyebrow: string;
   sub: string;
   pages: number;
   size: string;
-  badge?: { label: string; gold?: boolean };
+  badge?: { label: string; gold?: boolean } | null;
   spineGold?: boolean;
   spineLabel: string;
   img: string;
@@ -26,7 +28,31 @@ type CatEntry = {
   availLabel: string;
   categories: string[];
   technical?: boolean;
+  pdf?: string | null;
 };
+
+/** Map a CMS catalogue row onto the card shape used by this page. */
+function toCatEntry(c: ApiCatalogue): CatEntry {
+  return {
+    id: c.id,
+    title: c.title,
+    titleLine2: c.title_line2 ?? "",
+    eyebrow: c.eyebrow ?? "",
+    sub: c.sub ?? "",
+    pages: Number(c.pages ?? 0),
+    size: c.size ?? "",
+    badge: c.badge_label ? { label: c.badge_label, gold: Number(c.badge_gold) === 1 } : null,
+    spineGold: Number(c.spine_gold) === 1,
+    spineLabel: c.spine_label ?? "R Ceramica",
+    img: c.image ?? "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=800",
+    imgOpacity: Number(c.img_opacity ?? 50),
+    availability: c.availability === "yellow" ? "yellow" : "green",
+    availLabel: c.avail_label ?? "Available",
+    categories: Array.isArray(c.tags) ? c.tags : [],
+    technical: Number(c.technical) === 1,
+    pdf: c.pdf_path ?? null,
+  };
+}
 
 const CATALOGUES: CatEntry[] = [
   {
@@ -119,10 +145,23 @@ const BENEFITS = [
   { icon: RefreshCw, title: "Always Up-to-Date",       body: "Subscribe to receive new editions and seasonal collections automatically." },
 ];
 
-export default function CataloguePage() {
-  const [activeFilter, setActiveFilter] = useState("all");
+export const getStaticProps: GetStaticProps<{ catalogues: CatEntry[] }> = async () => {
+  try {
+    const rows = await api.getCatalogues();
+    if (rows.length) {
+      return { props: { catalogues: rows.map(toCatEntry) }, revalidate: 60 };
+    }
+  } catch (err) {
+    console.error("[catalogue] API failed, using static fallback:", err);
+  }
+  return { props: { catalogues: CATALOGUES } };
+};
 
-  const visible = CATALOGUES.filter((c) =>
+export default function CataloguePage({ catalogues }: { catalogues: CatEntry[] }) {
+  const [activeFilter, setActiveFilter] = useState("all");
+  const source = catalogues?.length ? catalogues : CATALOGUES;
+
+  const visible = source.filter((c) =>
     activeFilter === "all" ? true : c.categories.includes(activeFilter)
   );
 
@@ -358,9 +397,16 @@ function CatalogueCard({ cat, index }: { cat: CatEntry; index: number }) {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            <button className="flex-1 flex items-center justify-center gap-2 bg-white text-black py-3.5 text-[8px] uppercase tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all">
-              <Download size={12} /> Download PDF
-            </button>
+            {cat.pdf ? (
+              <a href={cat.pdf} target="_blank" rel="noopener noreferrer" download
+                className="flex-1 flex items-center justify-center gap-2 bg-white text-black py-3.5 text-[8px] uppercase tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all">
+                <Download size={12} /> Download PDF
+              </a>
+            ) : (
+              <button className="flex-1 flex items-center justify-center gap-2 bg-white text-black py-3.5 text-[8px] uppercase tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all">
+                <Download size={12} /> Download PDF
+              </button>
+            )}
             <button className="flex items-center justify-center w-12 h-12 border border-white/10 hover:border-white/40 text-white/60 hover:text-white transition-all">
               <Eye size={14} />
             </button>

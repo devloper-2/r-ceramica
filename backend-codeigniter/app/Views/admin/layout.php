@@ -480,18 +480,18 @@
       </a>
       <a class="nav-link <?= ($active ?? '') === 'categories' ? 'active' : '' ?>" href="/admin/categories">
         <span class="nav-icon"><i class="bi bi-tags"></i></span>
-        <span class="nav-text">Categories</span>
+        <span class="nav-text">Category</span>
       </a>
       <a class="nav-link <?= ($active ?? '') === 'products' ? 'active' : '' ?>" href="/admin/products">
         <span class="nav-icon"><i class="bi bi-box-seam"></i></span>
         <span class="nav-text">Products</span>
       </a>
+      <a class="nav-link <?= ($active ?? '') === 'catalogue' ? 'active' : '' ?>" href="/admin/catalogue">
+        <span class="nav-icon"><i class="bi bi-journal-richtext"></i></span>
+        <span class="nav-text">Catalogue</span>
+      </a>
 
       <span class="nav-label">Content</span>
-      <a class="nav-link <?= ($active ?? '') === 'navigation' ? 'active' : '' ?>" href="/admin/navigation">
-        <span class="nav-icon"><i class="bi bi-list-nested"></i></span>
-        <span class="nav-text">Navigation</span>
-      </a>
       <a class="nav-link <?= ($active ?? '') === 'media' ? 'active' : '' ?>" href="/admin/media">
         <span class="nav-icon"><i class="bi bi-images"></i></span>
         <span class="nav-text">Media Library</span>
