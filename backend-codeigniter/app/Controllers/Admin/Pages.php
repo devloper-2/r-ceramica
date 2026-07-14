@@ -98,4 +98,15 @@ class Pages extends BaseAdminController
 
         return redirect()->to('/admin/pages/' . $pageId)->with('success', 'Section "' . $section['type'] . '" saved.');
     }
+
+    /** AJAX image upload — returns JSON {url} for the section easy-editor. */
+    public function uploadImage()
+    {
+        try {
+            $result = $this->storeFile($this->request->getFile('file'), 'pages');
+            return $this->response->setJSON(['url' => $result['url']]);
+        } catch (\Exception $e) {
+            return $this->response->setStatusCode(422)->setJSON(['error' => $e->getMessage()]);
+        }
+    }
 }

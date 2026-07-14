@@ -47,7 +47,21 @@ abstract class BaseAdminController extends Controller
         'avif' => ['image/avif'],
         'gif'  => ['image/gif'],
         'pdf'  => ['application/pdf'],
+        'mp4'  => ['video/mp4'],
+        'webm' => ['video/webm'],
+        'mov'  => ['video/quicktime', 'video/mov'],
+        'ogv'  => ['video/ogg'],
     ];
+
+    /**
+     * 3-D model extensions validated by extension only — MIME detection for
+     * binary 3-D formats is unreliable across PHP versions and OS MIME databases
+     * (GLB, for example, may report as application/octet-stream, model/gltf-binary,
+     * or even text/plain depending on the server). Files are renamed on save so
+     * extension-only checking is safe here.
+     */
+    protected const UPLOAD_3D_EXTS = ['glb', 'gltf', 'obj', 'fbx', 'stl'];
+
     protected const UPLOAD_MAX_BYTES = 15 * 1024 * 1024; // 15 MB
 
     /**
@@ -65,20 +79,75 @@ abstract class BaseAdminController extends Controller
         $file = $this->request->getFile($field);
         if (! $file || ! $file->isValid()) {
             // "no file chosen" reports error 4 (UPLOAD_ERR_NO_FILE) — treat as absent.
-            if ($file && $file->getError() === UPLOAD_ERR_NO_FILE) {
-                return null;
-            }
-
             return null;
         }
-        if ($file->getSize() > self::UPLOAD_MAX_BYTES) {
-            throw new \RuntimeException('File too large (max 15 MB).');
+
+        return $this->storeFile($file, $folder)['url'];
+    }
+
+    /**
+     * Validate + store multiple uploaded gallery files from one `field[]` input.
+     * Returns the created media-library IDs in upload order (empty when none).
+     * Throws \RuntimeException on the first rejected file.
+     *
+     * @return int[] media IDs
+     */
+    protected function saveGalleryUploads(string $field, string $folder = 'products'): array
+    {
+        $files = $this->request->getFileMultiple($field);
+        if (! $files) {
+            return [];
         }
 
-        $ext  = strtolower($file->getExtension());
+        $ids = [];
+        foreach ($files as $file) {
+            if (! $file || ! $file->isValid()) {
+                // Skip empty slots (no file chosen); surface real errors.
+                if ($file && $file->getError() === UPLOAD_ERR_NO_FILE) {
+                    continue;
+                }
+                continue;
+            }
+            $ids[] = $this->storeFile($file, $folder)['id'];
+        }
+
+        return $ids;
+    }
+
+    /**
+     * Core file-store routine shared by saveUpload()/saveGalleryUploads():
+     * validates size + type, moves the file under a random name, records it in
+     * the media library, and returns its id + public URL.
+     *
+     * @return array{id:int,url:string}
+     */
+    protected function storeFile(\CodeIgniter\HTTP\Files\UploadedFile $file, string $folder): array
+    {
+        if ($file->getSize() > self::UPLOAD_MAX_BYTES) {
+            throw new \RuntimeException('File too large (max 15 MB): ' . $file->getClientName());
+        }
+
         $mime = $file->getMimeType();
-        if (! isset(self::UPLOAD_ALLOWED[$ext]) || ! in_array($mime, self::UPLOAD_ALLOWED[$ext], true)) {
-            throw new \RuntimeException('Unsupported file type (' . $ext . ' / ' . $mime . ').');
+
+        // NOTE: getExtension() guesses the extension from the detected MIME type
+        // via a reverse lookup in Config\Mimes. Binary 3-D formats (GLB/FBX/…)
+        // usually report as application/octet-stream, so that reverse lookup
+        // returns the WRONG extension (e.g. "dms"/"exe") — never "glb". We must
+        // therefore key off the client-supplied extension for 3-D files.
+        $clientExt = strtolower($file->getClientExtension());
+
+        if (in_array($clientExt, self::UPLOAD_3D_EXTS, true)) {
+            // 3-D model: trust the client extension. The file is renamed to a
+            // random name on save and never executed, so this is safe. MIME
+            // detection for these formats is unreliable, so it is skipped.
+            $ext = $clientExt;
+        } else {
+            // Images / PDF: use the MIME-guessed extension and validate BOTH the
+            // extension and the detected MIME against the whitelist.
+            $ext = strtolower($file->getExtension());
+            if (! isset(self::UPLOAD_ALLOWED[$ext]) || ! in_array($mime, self::UPLOAD_ALLOWED[$ext], true)) {
+                throw new \RuntimeException('Unsupported file type (' . $ext . ' / ' . $mime . ').');
+            }
         }
 
         $dir = FCPATH . 'uploads';
@@ -98,7 +167,7 @@ abstract class BaseAdminController extends Controller
 
         $url = base_url('uploads/' . $newName);
 
-        model(\App\Models\MediaModel::class)->insert([
+        $mediaId = model(\App\Models\MediaModel::class)->insert([
             'filename'   => $newName,
             'path'       => $url,
             'alt_text'   => '',
@@ -107,9 +176,9 @@ abstract class BaseAdminController extends Controller
             'width'      => $width,
             'height'     => $height,
             'size_bytes' => $file->getSize(),
-        ]);
+        ], true);
 
-        return $url;
+        return ['id' => (int) $mediaId, 'url' => $url];
     }
 
     /** Turn a name into a URL slug (lowercase, hyphenated). */

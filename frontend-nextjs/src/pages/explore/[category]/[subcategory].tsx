@@ -1,15 +1,12 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { ChevronRight, ChevronDown, Plus, Minus, ShoppingCart, Filter, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ChevronRight, ChevronDown, Plus, Minus, ShoppingCart, Filter, X, ImageOff } from "lucide-react";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { siteConfig } from "@/config/site";
 import { api, type ApiProductListItem, type ApiSubcategoryDetail } from "@/lib/services/api";
 import { getCart, setCartQuantity } from "@/lib/services/cart";
-
-const FALLBACK_IMAGE =
-  "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=1200";
 
 const CURRENCY_SYMBOLS: Record<string, string> = { INR: "₹", USD: "$", EUR: "€" };
 const fmtPrice = (price: number | string, currency: string) =>
@@ -23,7 +20,8 @@ const SORT_LABELS: Record<SortKey, string> = {
   newest: "Newest Arrivals",
 };
 
-// ── Sub-components defined at MODULE level so React never re-mounts them ────────
+// ─── Module-level components — stable identity, no remount on parent render ──
+
 function FilterAccordion({
   label,
   open,
@@ -36,8 +34,9 @@ function FilterAccordion({
   children: React.ReactNode;
 }) {
   return (
-    <div className="border border-white/5 overflow-hidden">
+    <div className="border border-white/5">
       <button
+        type="button"
         onClick={onToggle}
         className="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group"
       >
@@ -45,13 +44,15 @@ function FilterAccordion({
           {label}
         </span>
         {open ? (
-          <Minus size={14} className="text-white/40 group-hover:text-white" />
+          <Minus size={14} className="text-white/40 group-hover:text-white transition-transform" />
         ) : (
-          <Plus size={14} className="text-white/40 group-hover:text-white" />
+          <Plus size={14} className="text-white/40 group-hover:text-white transition-transform" />
         )}
       </button>
       {open && (
-        <div className="px-6 py-8 space-y-4 bg-black/40">{children}</div>
+        <div className="px-6 py-8 space-y-4 bg-black/40 filter-content-open">
+          {children}
+        </div>
       )}
     </div>
   );
@@ -59,15 +60,16 @@ function FilterAccordion({
 
 function CheckboxOption({ label }: { label: string }) {
   return (
-    <label className="flex items-center gap-3 group cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
+    <label className="flex items-center gap-3 cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
       <input
         type="checkbox"
-        className="w-3.5 h-3.5 rounded-sm bg-white/5 border border-white/10 accent-white"
+        className="w-3.5 h-3.5 bg-white/5 border border-white/20 accent-white"
       />
       <span>{label}</span>
     </label>
   );
 }
+
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -81,7 +83,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
       }
     }
   } catch {
-    /* blocking fallback resolves paths on demand */
+    /* blocking fallback */
   }
   return { paths, fallback: "blocking" };
 };
@@ -133,6 +135,22 @@ export default function SubcategoryProductsPage({
   const [mobileFilter, setMobileFilter] = useState(false);
   const [qty, setQty] = useState<Record<string, number>>({});
 
+  // Ref for direct DOM slider fill — bypasses React re-render for instant visual response
+  const sliderRef = useRef<HTMLInputElement>(null);
+
+  const setSliderFill = (val: number, max: number) => {
+    if (!sliderRef.current || max <= 0) return;
+    const pct = (val / max) * 100;
+    sliderRef.current.style.background =
+      `linear-gradient(to right, #c5a059 0%, #c5a059 ${pct}%, rgba(255,255,255,0.12) ${pct}%, rgba(255,255,255,0.12) 100%)`;
+  };
+
+  // Initialise slider fill on mount
+  useEffect(() => {
+    setSliderFill(maxP, maxPrice);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const toggleAccordion = (key: AccordionKey) =>
     setAccordions((a) => ({ ...a, [key]: !a[key] }));
 
@@ -154,7 +172,6 @@ export default function SubcategoryProductsPage({
   }, [products, sort, applied]);
 
   const isPriceFiltered = applied.min > 0 || applied.max < maxPrice;
-  const sliderPct = maxPrice > 0 ? (maxP / maxPrice) * 100 : 100;
 
   const changeQty = (p: ApiProductListItem, delta: number) => {
     const next = Math.max(0, (qty[p.slug] || 0) + delta);
@@ -178,6 +195,8 @@ export default function SubcategoryProductsPage({
     setMaxP(maxPrice);
     setApplied({ min: 0, max: maxPrice });
     setSort("recommended");
+    if (sliderRef.current) sliderRef.current.value = String(maxPrice);
+    setSliderFill(maxPrice, maxPrice);
   };
 
   const title = `${subcategory.name} | ${siteConfig.name}`;
@@ -197,10 +216,10 @@ export default function SubcategoryProductsPage({
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
-      <main className="pt-32 md:pt-48 pb-24">
+      <main className="pt-28 md:pt-40 pb-16">
         <div className="max-w-[1720px] mx-auto px-6 md:px-12 lg:px-24">
 
-          {/* ── Breadcrumb + count + sort ── */}
+          {/* Breadcrumb + count + sort */}
           <div className="relative z-[70] flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
             <div className="flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-white/40">
               <Link href="/explore" className="hover:text-white transition-colors">Explore</Link>
@@ -218,6 +237,7 @@ export default function SubcategoryProductsPage({
               </p>
               <div className="relative">
                 <button
+                  type="button"
                   onClick={() => setSortOpen((o) => !o)}
                   className="flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-white/80 hover:text-white pb-1 border-b border-white/10 transition-colors"
                 >
@@ -228,6 +248,7 @@ export default function SubcategoryProductsPage({
                     <div className="flex flex-col py-3">
                       {(Object.keys(SORT_LABELS) as SortKey[]).map((k) => (
                         <button
+                          type="button"
                           key={k}
                           onClick={() => { setSort(k); setSortOpen(false); }}
                           className="px-6 py-4 text-[9px] uppercase tracking-[0.3em] text-left text-white/50 hover:text-white hover:bg-white/5 transition-all"
@@ -246,35 +267,36 @@ export default function SubcategoryProductsPage({
 
             {/* ── Filter sidebar ── */}
             <aside className={`sub-filter ${mobileFilter ? "sub-filter-open" : ""} w-full lg:w-80 shrink-0`}>
-              <div className="sub-filter-panel lg:sticky lg:top-40 flex flex-col h-full lg:h-auto bg-[#0a0a0a] lg:bg-transparent">
+              <div className="sub-filter-panel lg:sticky lg:top-40 flex flex-col h-full lg:h-auto">
 
                 {/* Mobile header */}
                 <div className="lg:hidden flex justify-between items-center px-6 py-6 border-b border-white/5 sticky top-0 bg-[#0a0a0a] z-10">
                   <h4 className="text-lg font-display uppercase tracking-widest text-[#c5a059]">Refine By</h4>
-                  <button onClick={() => setMobileFilter(false)} className="text-white/60 hover:text-white transition-colors">
+                  <button type="button" onClick={() => setMobileFilter(false)} className="text-white/60 hover:text-white transition-colors">
                     <X size={24} />
                   </button>
                 </div>
 
-                {/* Scrollable filter panel */}
-                <div className="flex-1 overflow-y-auto px-6 lg:px-0 py-8 lg:py-0 lg:space-y-2 sub-filter-scroll">
+                {/* Scrollable body */}
+                <div className="flex-1 overflow-y-auto px-6 lg:px-0 py-8 lg:py-0 sub-filter-scroll">
 
                   {/* Selected Options */}
-                  <div className="bg-white/5 border border-white/5 p-6 mb-6">
-                    <h4 className="text-[10px] font-display font-medium uppercase tracking-[0.2em] text-white/40 mb-4">
+                  <div className="bg-white/5 border border-white/5 p-6 mb-2">
+                    <h4 className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/40 mb-4">
                       Selected Options
                     </h4>
-                    <div className="flex flex-wrap gap-2 min-h-[28px]">
+                    <div className="flex flex-wrap gap-2 min-h-[26px]">
                       {isPriceFiltered ? (
-                        <span
+                        <button
+                          type="button"
                           onClick={resetFilters}
-                          className="bg-white/10 text-[9px] px-3 py-1.5 uppercase tracking-widest flex items-center gap-2 cursor-pointer hover:bg-white/20 transition-colors"
+                          className="bg-white/10 text-[9px] px-3 py-1.5 uppercase tracking-widest flex items-center gap-2 hover:bg-white/20 transition-colors"
                         >
                           ₹{applied.min.toLocaleString()}–₹{applied.max.toLocaleString()}
                           <X size={10} />
-                        </span>
+                        </button>
                       ) : (
-                        <span className="text-[9px] uppercase tracking-widest text-white/20 leading-7">None</span>
+                        <span className="text-[9px] uppercase tracking-widest text-white/20 leading-[26px]">None</span>
                       )}
                     </div>
                   </div>
@@ -285,25 +307,28 @@ export default function SubcategoryProductsPage({
                     open={accordions.price}
                     onToggle={() => toggleAccordion("price")}
                   >
-                    <div className="space-y-4 pb-4">
-                      <div className="flex justify-between items-center text-[9px] uppercase tracking-widest text-white/40">
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-[9px] uppercase tracking-widest text-white/40">
                         <span>Min: ₹{minP.toLocaleString()}</span>
                         <span>Max: ₹{maxP.toLocaleString()}</span>
                       </div>
+                      {/* Uncontrolled slider — browser owns position, ref owns fill */}
                       <input
+                        ref={sliderRef}
                         type="range"
                         min={0}
                         max={maxPrice}
-                        step={Math.max(1, Math.round(maxPrice / 100))}
-                        value={maxP}
-                        onChange={(e) => setMaxP(Number(e.target.value))}
-                        style={{
-                          background: `linear-gradient(to right, #c5a059 0%, #c5a059 ${sliderPct}%, rgba(255,255,255,0.12) ${sliderPct}%, rgba(255,255,255,0.12) 100%)`,
+                        step={1}
+                        defaultValue={maxPrice}
+                        onInput={(e) => {
+                          const val = Number((e.target as HTMLInputElement).value);
+                          setSliderFill(val, maxPrice);
+                          setMaxP(val);
                         }}
-                        className="sub-range cursor-pointer"
+                        className="sub-range w-full cursor-pointer"
                       />
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4 mt-2">
                       <div className="space-y-2">
                         <label className="text-[8px] uppercase tracking-widest text-white/30">Min Budget</label>
                         <div className="relative">
@@ -325,28 +350,32 @@ export default function SubcategoryProductsPage({
                             type="number"
                             min={0}
                             value={maxP}
-                            onChange={(e) => setMaxP(Math.max(0, Number(e.target.value)))}
+                            onChange={(e) => {
+                              const val = Math.max(0, Number(e.target.value));
+                              setMaxP(val);
+                              setSliderFill(val, maxPrice);
+                              if (sliderRef.current) sliderRef.current.value = String(val);
+                            }}
                             className="w-full bg-white/5 border border-white/10 pl-6 pr-3 py-3 text-[10px] text-white outline-none focus:border-[#c5a059] transition-colors appearance-none"
                           />
                         </div>
                       </div>
                     </div>
                     <button
+                      type="button"
                       onClick={applyRange}
-                      className="w-full py-3 text-[9px] uppercase tracking-[0.2em] font-bold border border-[#c5a059]/20 text-[#c5a059] hover:bg-[#c5a059] hover:text-white transition-all mt-4"
+                      className="w-full py-3 mt-4 text-[9px] uppercase tracking-[0.2em] font-bold border border-[#c5a059]/30 text-[#c5a059] hover:bg-[#c5a059] hover:text-white transition-all"
                     >
                       Apply Range
                     </button>
                   </FilterAccordion>
 
-                  {/* Area */}
                   <FilterAccordion label="Area" open={accordions.area} onToggle={() => toggleAccordion("area")}>
                     <CheckboxOption label="Basin" />
                     <CheckboxOption label="Shower" />
                     <CheckboxOption label="Kitchen" />
                   </FilterAccordion>
 
-                  {/* Color Finishes */}
                   <FilterAccordion label="Color Finishes" open={accordions.color} onToggle={() => toggleAccordion("color")}>
                     <CheckboxOption label="Black Chrome" />
                     <CheckboxOption label="Black Matt" />
@@ -355,20 +384,17 @@ export default function SubcategoryProductsPage({
                     <CheckboxOption label="Gold Bright PVD" />
                   </FilterAccordion>
 
-                  {/* Mounting */}
                   <FilterAccordion label="Mounting" open={accordions.mounting} onToggle={() => toggleAccordion("mounting")}>
                     <CheckboxOption label="Deck Mounted" />
                     <CheckboxOption label="Wall Mounted" />
                   </FilterAccordion>
 
-                  {/* Range */}
                   <FilterAccordion label="Range" open={accordions.range} onToggle={() => toggleAccordion("range")}>
                     <CheckboxOption label="Economy" />
                     <CheckboxOption label="Premium" />
                     <CheckboxOption label="Luxury" />
                   </FilterAccordion>
 
-                  {/* Shape */}
                   <FilterAccordion label="Shape" open={accordions.shape} onToggle={() => toggleAccordion("shape")}>
                     <CheckboxOption label="Square" />
                     <CheckboxOption label="Round" />
@@ -376,8 +402,9 @@ export default function SubcategoryProductsPage({
                   </FilterAccordion>
 
                   {/* Mobile reset inside scroll */}
-                  <div className="pt-8 block lg:hidden">
+                  <div className="pt-6 lg:hidden">
                     <button
+                      type="button"
                       onClick={resetFilters}
                       className="w-full py-5 text-[10px] uppercase tracking-[0.4em] font-bold border border-white/10 hover:bg-white hover:text-black transition-all"
                     >
@@ -387,18 +414,20 @@ export default function SubcategoryProductsPage({
                 </div>
 
                 {/* Mobile apply footer */}
-                <div className="lg:hidden p-6 border-t border-white/5 bg-[#0a0a0a] sticky bottom-0">
+                <div className="lg:hidden p-6 border-t border-white/5 bg-[#0a0a0a]">
                   <button
+                    type="button"
                     onClick={() => setMobileFilter(false)}
-                    className="w-full py-5 text-[10px] uppercase tracking-[0.4em] font-bold bg-[#c5a059] text-white transition-all"
+                    className="w-full py-5 text-[10px] uppercase tracking-[0.4em] font-bold bg-[#c5a059] text-white"
                   >
                     Apply Selection
                   </button>
                 </div>
 
-                {/* Desktop reset below scroll */}
-                <div className="hidden lg:block pt-8">
+                {/* Desktop reset — outside scroll so always visible */}
+                <div className="hidden lg:block pt-6">
                   <button
+                    type="button"
                     onClick={resetFilters}
                     className="w-full py-5 text-[10px] uppercase tracking-[0.4em] font-bold border border-white/10 hover:bg-white hover:text-black transition-all"
                   >
@@ -415,75 +444,103 @@ export default function SubcategoryProductsPage({
                   No products match your selection.
                 </p>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-12 gap-y-20">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-12 gap-y-16">
                   {visible.map((p) => {
                     const q = qty[p.slug] || 0;
                     return (
-                      <div key={p.id} className="product-card group">
+                      <div key={p.id} className="product-card group border border-white/10 bg-[#0e0e0e] hover:border-white/20 transition-colors duration-300">
+                        {/* Image */}
                         <Link
                           href={`/products/${p.slug}`}
-                          className="block relative aspect-[4/5] bg-[#111] overflow-hidden mb-8 cursor-pointer"
+                          className="block relative bg-[#111] overflow-hidden min-h-[240px] max-h-[460px]"
+                          style={{ height: "calc(100vh - 430px)" }}
                         >
-                          <Image
-                            src={p.image || FALLBACK_IMAGE}
-                            alt={p.name}
-                            fill
-                            sizes="(max-width:768px) 100vw,(max-width:1280px) 50vw,33vw"
-                            className="product-img object-cover transition-transform duration-[1.5s] ease-out"
-                          />
-                          <div className="absolute top-6 left-6">
-                            <div className="bg-white/5 backdrop-blur-md border border-white/10 px-3 py-1 text-[8px] uppercase tracking-[0.2em] font-medium text-white/80">
-                              New Arrival
+                          {p.image ? (
+                            <Image
+                              src={p.image}
+                              alt={p.name}
+                              fill
+                              sizes="(max-width:768px) 100vw,(max-width:1280px) 50vw,33vw"
+                              className="product-img object-cover transition-transform duration-[1.5s] ease-out"
+                            />
+                          ) : (
+                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/20 select-none">
+                              <ImageOff size={40} strokeWidth={1} />
+                              <span className="text-[9px] uppercase tracking-[0.3em]">No image</span>
                             </div>
+                          )}
+                          {/* Gold badge */}
+                          <div className="absolute top-4 left-4">
+                            <span className="bg-[#c5a059] text-black text-[7px] uppercase tracking-[0.3em] font-bold px-2.5 py-1">
+                              New
+                            </span>
                           </div>
+                          {/* Hover dim */}
+                          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         </Link>
 
-                        <div className="space-y-6 text-center px-4">
-                          <div className="space-y-2">
-                            <p className="text-[9px] text-[#c5a059] uppercase tracking-[0.4em] font-medium">
-                              {seriesLabel} Series
+                        {/* Info — left-aligned, structured */}
+                        <div className="p-5 border-t border-white/10">
+                          {/* Series */}
+                          <p className="text-[8px] text-[#c5a059] uppercase tracking-[0.4em] font-medium mb-1.5">
+                            {seriesLabel} Series
+                          </p>
+                          {/* Name */}
+                          <Link href={`/products/${p.slug}`}>
+                            <h3 className="text-sm font-display font-semibold uppercase tracking-[0.06em] text-white hover:text-[#c5a059] transition-colors leading-tight mb-1">
+                              {p.name}
+                            </h3>
+                          </Link>
+                          {/* Code / short description */}
+                          {p.short_description && (
+                            <p className="text-[8px] text-white/40 uppercase tracking-[0.1em] truncate mb-4">
+                              {p.short_description}
                             </p>
-                            <Link href={`/products/${p.slug}`}>
-                              <h3 className="text-lg md:text-xl font-display font-light uppercase tracking-[0.15em] group-hover:text-white/80 transition-colors leading-snug">
-                                {p.name}
-                              </h3>
-                            </Link>
-                            <p className="text-[10px] text-white/30 uppercase tracking-[0.2em] truncate">
-                              {p.subcategory_name ?? seriesLabel}
-                            </p>
-                            <p className="text-sm font-sans tracking-[0.1em] text-white/80">
+                          )}
+
+                          {/* Price block */}
+                          <div className="mb-4">
+                            <p className="text-[7px] text-white/40 uppercase tracking-[0.3em] mb-0.5">MRP</p>
+                            <p className="text-xl font-display font-light text-[#c5a059] tracking-tight leading-none mb-0.5">
                               {fmtPrice(p.price, p.currency)}
+                            </p>
+                            <p className="text-[7px] text-white/25 uppercase tracking-[0.2em]">
+                              Inclusive of all taxes
                             </p>
                           </div>
 
-                          <div className="flex flex-col gap-3 pt-2">
+                          {/* Actions */}
+                          <div className="flex flex-col gap-2">
                             {q === 0 ? (
                               <button
+                                type="button"
                                 onClick={() => changeQty(p, 1)}
-                                className="w-full py-4 bg-white text-black text-[9px] uppercase tracking-[0.4em] font-bold hover:bg-neutral-200 transition-all flex items-center justify-center gap-3"
+                                className="w-full py-2.5 bg-white text-black text-[8px] uppercase tracking-[0.35em] font-bold hover:bg-[#c5a059] hover:text-white transition-colors flex items-center justify-center gap-2"
                               >
-                                <ShoppingCart size={14} /> Add to Cart
+                                <ShoppingCart size={12} /> Add to Cart
                               </button>
                             ) : (
-                              <div className="flex items-center justify-between bg-white text-black h-12 px-4 shadow-xl">
+                              <div className="flex items-center justify-between bg-white text-black h-10 px-4">
                                 <button
+                                  type="button"
                                   onClick={() => changeQty(p, -1)}
-                                  className="w-10 h-full flex items-center justify-center hover:bg-neutral-100 transition-colors"
+                                  className="w-8 h-full flex items-center justify-center hover:bg-neutral-100 transition-colors"
                                 >
-                                  <Minus size={12} />
+                                  <Minus size={11} />
                                 </button>
-                                <span className="text-[10px] font-bold tracking-[0.2em]">{q}</span>
+                                <span className="text-[9px] font-bold tracking-[0.2em]">{q}</span>
                                 <button
+                                  type="button"
                                   onClick={() => changeQty(p, 1)}
-                                  className="w-10 h-full flex items-center justify-center hover:bg-neutral-100 transition-colors"
+                                  className="w-8 h-full flex items-center justify-center hover:bg-neutral-100 transition-colors"
                                 >
-                                  <Plus size={12} />
+                                  <Plus size={11} />
                                 </button>
                               </div>
                             )}
                             <Link
                               href={`/products/${p.slug}`}
-                              className="w-full py-4 border border-white/10 text-white/60 text-[9px] uppercase tracking-[0.4em] hover:bg-white/5 hover:text-white transition-all text-center"
+                              className="w-full py-2.5 border border-white/15 text-white/50 text-[8px] uppercase tracking-[0.35em] hover:border-[#c5a059] hover:text-[#c5a059] transition-all text-center"
                             >
                               View Details
                             </Link>
@@ -499,82 +556,92 @@ export default function SubcategoryProductsPage({
         </div>
       </main>
 
-      {/* Mobile filter toggle */}
+      {/* Mobile filter FAB */}
       <div className="lg:hidden fixed bottom-8 right-6 z-[80]">
         <button
+          type="button"
           onClick={() => setMobileFilter(true)}
-          className="flex items-center justify-center bg-white text-black w-12 h-12 rounded-full shadow-2xl active:scale-90 transition-all"
+          className="flex items-center justify-center bg-white text-black w-12 h-12 rounded-full shadow-2xl active:scale-90 transition-transform"
         >
           <Filter size={18} />
         </button>
       </div>
 
       <style jsx>{`
+        /* ── Price range slider ──────────────────────────── */
         .sub-range {
           -webkit-appearance: none;
-          width: 100%;
           height: 2px;
-          outline: none;
           border-radius: 2px;
-          transition: background 0.05s linear;
+          outline: none;
+          /* background set via JS ref — no React re-render needed */
+          background: rgba(255,255,255,0.12);
         }
         .sub-range::-webkit-slider-thumb {
           -webkit-appearance: none;
-          width: 18px;
-          height: 18px;
-          background: #c5a059;
-          cursor: grab;
+          width: 20px;
+          height: 20px;
           border-radius: 50%;
+          background: #c5a059;
           border: 2px solid #0a0a0a;
-          box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.25);
+          box-shadow: 0 0 0 3px rgba(197,160,89,0.3);
+          cursor: grab;
           transition: transform 0.15s, box-shadow 0.15s;
         }
-        .sub-range::-webkit-slider-thumb:hover,
-        .sub-range::-webkit-slider-thumb:active {
-          transform: scale(1.25);
-          box-shadow: 0 0 0 6px rgba(197, 160, 89, 0.2);
+        .sub-range:active::-webkit-slider-thumb {
           cursor: grabbing;
+          transform: scale(1.3);
+          box-shadow: 0 0 0 6px rgba(197,160,89,0.2);
         }
         .sub-range::-moz-range-thumb {
-          width: 18px;
-          height: 18px;
-          background: #c5a059;
-          cursor: grab;
+          width: 20px;
+          height: 20px;
           border-radius: 50%;
+          background: #c5a059;
           border: 2px solid #0a0a0a;
-          box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.25);
+          cursor: grab;
         }
+        .sub-range::-moz-range-track {
+          height: 2px;
+          background: transparent;
+        }
+
+        /* ── Filter accordion open animation ────────────── */
+        .filter-content-open {
+          animation: filterIn 0.2s ease-out both;
+        }
+        @keyframes filterIn {
+          from { opacity: 0; transform: translateY(-6px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Product card image hover zoom ──────────────── */
         .product-card:hover .product-img {
           transform: scale(1.05);
         }
-        .sub-filter-scroll {
-          scrollbar-width: thin;
-          scrollbar-color: #333 #0a0a0a;
-        }
-        .sub-filter-scroll::-webkit-scrollbar {
-          width: 3px;
-        }
-        .sub-filter-scroll::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .sub-filter-scroll::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 10px;
-        }
+
+        /* ── Desktop scrollable filter panel ────────────── */
         @media (min-width: 1024px) {
           .sub-filter-scroll {
-            max-height: calc(100vh - 220px);
+            max-height: calc(100vh - 240px);
             overflow-y: auto;
-            padding-right: 8px;
-            margin-right: -8px;
+            padding-right: 6px;
+            scrollbar-width: thin;
+            scrollbar-color: #333 transparent;
           }
+          .sub-filter-scroll::-webkit-scrollbar { width: 3px; }
+          .sub-filter-scroll::-webkit-scrollbar-track { background: transparent; }
+          .sub-filter-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+          .sub-filter-scroll > * + * { margin-top: 8px; }
         }
+
+        /* ── Mobile filter drawer ───────────────────────── */
         @media (max-width: 1023px) {
           .sub-filter {
             position: fixed;
             inset: 0;
             z-index: 300;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0,0,0,0.55);
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
@@ -589,13 +656,17 @@ export default function SubcategoryProductsPage({
             width: 85%;
             max-width: 360px;
             height: 100%;
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            background: #0a0a0a;
+            border-right: 1px solid rgba(255,255,255,0.05);
             transform: translateX(-100%);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+            display: flex;
+            flex-direction: column;
           }
           .sub-filter-open .sub-filter-panel {
             transform: translateX(0);
           }
+          .sub-filter-scroll > * + * { margin-top: 8px; }
         }
       `}</style>
     </div>

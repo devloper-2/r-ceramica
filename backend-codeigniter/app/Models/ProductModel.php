@@ -13,6 +13,7 @@ class ProductModel extends Model
     protected $allowedFields    = [
         'slug', 'name', 'short_description', 'description', 'price', 'currency',
         'specs', 'category_id', 'subcategory_id', 'meta_title', 'meta_description', 'status',
+        'image_2d', 'image_3d',
     ];
 
     protected array $casts = [

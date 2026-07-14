@@ -92,10 +92,12 @@ $routes->group('admin', ['filter' => 'adminauth', 'namespace' => 'App\Controller
 
     // Navigation is now system-fixed (menu defined in the frontend, not editable).
 
-    // Media
-    $routes->get('media', 'Media::index');
+    // Media upload/delete still used internally by product/category forms
     $routes->post('media/upload', 'Media::upload');
     $routes->post('media/(:num)/delete', 'Media::delete/$1');
+
+    // JSON image upload for AJAX (section editor, etc.)
+    $routes->post('upload-image', 'Pages::uploadImage');
 
     // Settings
     $routes->get('settings', 'Settings::index');

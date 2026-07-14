@@ -491,12 +491,6 @@
         <span class="nav-text">Catalogue</span>
       </a>
 
-      <span class="nav-label">Content</span>
-      <a class="nav-link <?= ($active ?? '') === 'media' ? 'active' : '' ?>" href="/admin/media">
-        <span class="nav-icon"><i class="bi bi-images"></i></span>
-        <span class="nav-text">Media Library</span>
-      </a>
-
       <span class="nav-label">Commerce</span>
       <a class="nav-link <?= ($active ?? '') === 'orders' ? 'active' : '' ?>" href="/admin/orders">
         <span class="nav-icon"><i class="bi bi-bag-check"></i></span>
@@ -593,7 +587,7 @@
 
     <footer class="admin-footer">
       <div class="container-fluid px-3 px-lg-4">
-        <span>© 2025 R Ceramica CMS</span>
+        <span>© <?= date('Y') ?> R Ceramica CMS</span>
         <span style="font-size:.78rem">v1.0</span>
       </div>
     </footer>

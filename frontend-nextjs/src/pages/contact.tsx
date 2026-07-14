@@ -2,7 +2,7 @@ import Head from "next/head";
 import type { GetStaticProps } from "next";
 import { contactPageSchema } from "@/lib/schemas";
 import { siteConfig } from "@/config/site";
-import { api, type ApiPage } from "@/lib/services/api";
+import { api, sectionsByType, type ApiPage } from "@/lib/services/api";
 import ContactHero from "@/components/sections/ContactHero";
 import ContactSection from "@/components/sections/ContactSection";
 
@@ -26,6 +26,9 @@ export const getStaticProps: GetStaticProps<{ page: ApiPage | null }> = async ()
  * the data (@/lib/constants/contact) and styles (styles/contactpage.css) differ.
  */
 export default function ContactUs({ page }: { page: ApiPage | null }) {
+  const s = page ? sectionsByType(page.sections) : null;
+  const hero = s?.contactHero ?? {};
+
   const title = page?.meta_title ?? DEFAULT_TITLE;
   const description = page?.meta_description ?? DEFAULT_DESCRIPTION;
   return (
@@ -39,14 +42,12 @@ export default function ContactUs({ page }: { page: ApiPage | null }) {
         <meta property="og:image" content={siteConfig.ogImage} />
         <meta name="twitter:card" content="summary_large_image" />
         <script
-  type="application/ld+json"
-  dangerouslySetInnerHTML={{
-    __html: JSON.stringify(contactPageSchema),
-  }}
-/>
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(contactPageSchema) }}
+        />
       </Head>
 
-      <ContactHero />
+      <ContactHero {...hero} />
       <ContactSection />
     </div>
   );

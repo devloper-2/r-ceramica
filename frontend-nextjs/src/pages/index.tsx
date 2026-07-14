@@ -48,13 +48,16 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
 export default function HomePage({ page }: HomeProps) {
   const s = page ? sectionsByType(page.sections) : null;
 
-  // CMS content with static fallback per section.
-  const hero = s?.hero ?? HOME_HERO;
-  const spaceCards = s?.mediaGrid?.cards ?? SPACE_CARDS;
-  const slides = s?.productCarousel?.slides ?? CAROUSEL_SLIDES;
-  const features = resolveCardIcons(s?.featureCards?.cards ?? HOME_FEATURES);
-  const narrative = s?.narrative ?? HOME_NARRATIVE;
-  const posts = s?.socialFeed?.posts ?? SOCIAL_POSTS;
+  // When the API is reachable (page !== null), only show sections returned by the API
+  // (i.e. those with is_active=1). Static fallbacks are used only when the API is down.
+  const apiOk = page !== null;
+  const hero       = s?.hero                            ?? HOME_HERO;
+  const spaceCards = s?.mediaGrid?.cards                ?? (apiOk ? null : SPACE_CARDS);
+  const slides          = s?.productCarousel?.slides    ?? (apiOk ? null : CAROUSEL_SLIDES);
+  const carouselEyebrow = s?.productCarousel?.eyebrow  ?? "Spotlight Collection";
+  const features   = resolveCardIcons(s?.featureCards?.cards ?? (apiOk ? [] : HOME_FEATURES));
+  const narrative  = s?.narrative                       ?? (apiOk ? null : HOME_NARRATIVE);
+  const posts      = s?.socialFeed?.posts               ?? (apiOk ? null : SOCIAL_POSTS);
 
   const title = page?.meta_title ?? `${siteConfig.name} | ${siteConfig.tagline}`;
   const description =
@@ -78,11 +81,11 @@ export default function HomePage({ page }: HomeProps) {
       </Head>
 
       <Hero {...hero} />
-      <MediaGrid items={spaceCards} ariaLabel="Architectural Spaces" />
-      <ProductCarousel slides={slides} />
-      <FeatureCards items={features} ariaLabel="Business services and support" />
-      <NarrativeSection {...narrative} />
-      <SocialFeed posts={posts} />
+      {spaceCards  && <MediaGrid items={spaceCards} ariaLabel="Architectural Spaces" />}
+      {slides      && <ProductCarousel slides={slides} eyebrow={carouselEyebrow} />}
+      {features.length > 0 && <FeatureCards items={features} ariaLabel="Business services and support" />}
+      {narrative   && <NarrativeSection {...narrative} />}
+      {posts       && <SocialFeed posts={posts} />}
     </div>
   );
 }
