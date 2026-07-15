@@ -63,7 +63,7 @@ export default function ExploreSection({
         fill
         priority={isH1}
         sizes="100vw"
-        className="object-cover object-center transition-transform duration-[4000ms] group-hover:scale-[1.08] explore-img"
+        className="object-cover object-center transition-transform duration-[4000ms] group-hover:scale-[1.08]"
         style={{ opacity: imageOpacity / 100 }}
       />
 
