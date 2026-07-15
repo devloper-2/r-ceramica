@@ -341,12 +341,12 @@ function CatalogueCard({ cat, index }: { cat: CatEntry; index: number }) {
         )}
 
         {/* Pages count */}
-        <div className="absolute top-6 left-14 bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5">
+        <div className="absolute top-6 left-4 md:left-14 bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5">
           <span className="text-[8px] uppercase tracking-[0.2em] text-white/60">{cat.pages} Pages</span>
         </div>
 
         {/* Bottom content */}
-        <div className="absolute bottom-0 left-0 right-0 p-8 pl-12">
+        <div className="absolute bottom-0 left-0 right-0 p-8 pl-8 md:pl-12">
           <span className="text-[8px] uppercase tracking-[0.5em] text-[#c5a059] block mb-3">
             {cat.eyebrow}
           </span>
