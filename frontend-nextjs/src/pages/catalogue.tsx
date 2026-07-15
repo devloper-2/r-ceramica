@@ -330,18 +330,14 @@ function CatalogueCard({ cat, index }: { cat: CatEntry; index: number }) {
         {/* Badge top-right */}
         {cat.badge && (
           <div className="absolute top-6 right-6">
-            <span className={`text-[7px] uppercase tracking-[0.3em] font-bold px-3 py-1.5
-              ${cat.badge.gold
-                ? "bg-[#c5a059] text-black"
-                : "bg-white/10 backdrop-blur-md border border-white/10 text-white"
-              }`}>
+            <span className={`text-[7px] uppercase tracking-[0.3em] font-bold px-3 py-1.5 leading-3 ${cat.badge.gold ? "bg-[#c5a059] text-black" : "bg-white/10 backdrop-blur-md border border-white/10 text-white"}`}>
               {cat.badge.label}
             </span>
           </div>
         )}
 
         {/* Pages count */}
-        <div className="absolute top-6 left-4 md:left-14 bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5">
+        <div className="absolute top-6 left-4 md:left-14 bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5 leading-3">
           <span className="text-[8px] uppercase tracking-[0.2em] text-white/60">{cat.pages} Pages</span>
         </div>
 
