@@ -131,7 +131,7 @@ export default function BathroomsPage() {
         </section>
 
         {/* ── Showers & Wellness ── */}
-        <section id="showers" className="py-32 px-8 md:px-24 max-w-[1720px] mx-auto border-t border-white/5">
+        <section id="showers" className="py-12 md:py-32 px-8 md:px-24 max-w-[1720px] mx-auto border-t border-white/5">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 gap-10">
             <div className="max-w-xl">
               <h2 className="text-4xl md:text-6xl font-display font-light uppercase tracking-widest text-[#c5a059]">
@@ -171,7 +171,7 @@ export default function BathroomsPage() {
         </section>
 
         {/* ── Sanitary & Basins ── */}
-        <section id="sanitary" className="py-32 px-8 md:px-24 max-w-[1720px] mx-auto border-t border-white/5">
+        <section id="sanitary" className="py-12 md:py-32 px-8 md:px-24 max-w-[1720px] mx-auto border-t border-white/5">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 gap-10">
             <div className="max-w-xl">
               <h2 className="text-4xl md:text-6xl font-display font-light uppercase tracking-widest">

@@ -15,7 +15,7 @@ export default function ManufacturingSection({
   items,
 }: Props) {
   return (
-    <section className="py-16 md:py-24 lg:py-40">
+    <section className="py-12 md:py-18">
       <div className="max-w-[1440px] mx-auto px-6">
 
         <div className="text-center mb-20">

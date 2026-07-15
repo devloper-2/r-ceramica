@@ -27,8 +27,7 @@ export default function StatsGrid({
   ariaLabel = "Statistics",
 }: StatsGridProps) {
   return (
-    <section
-      className="py-16 md:py-24 bg-[#0d0d0d] border-y border-white/5"
+    <section className="py-12 md:py-18 bg-[#0d0d0d]"
       aria-label={ariaLabel}
     >
       <div className="max-w-[1440px] mx-auto px-6">

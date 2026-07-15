@@ -53,11 +53,11 @@ export default function LoginPage() {
       <nav className="absolute top-0 left-0 w-full z-50 py-8 px-8 md:px-16 flex justify-between items-center pointer-events-none">
         <Link href="/" className="pointer-events-auto group">
           <Image
-            src="https://rceramica.com/logo/logo.png"
+            src="/images/logo.webp"
             alt="R Ceramica"
             width={140}
             height={56}
-            className="h-10 md:h-14 w-auto object-contain transition-opacity group-hover:opacity-70"
+            className="h-10 md:h-14 w-auto object-contain"
             priority
           />
         </Link>

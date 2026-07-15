@@ -25,7 +25,7 @@ export default function NarrativeSection({
 
   return (
     <section
-      className="py-32 md:py-48 bg-[var(--color-bg)] relative overflow-hidden border-t border-white/5"
+      className="py-12 md:py-48 bg-[var(--color-bg)] relative overflow-hidden border-t border-white/5"
       aria-label={title.replace(/\n/g, " ")}
     >
       {watermark && (

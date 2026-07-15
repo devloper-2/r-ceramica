@@ -20,7 +20,7 @@ export default function ChairmanQuoteSection({
   imageAlt = "Chairman",
 }: ChairmanQuoteSectionProps) {
   return (
-    <section className="py-16 md:py-24 lg:py-40 bg-[#0d0d0d] relative overflow-hidden">
+    <section className="py-12 md:py-24 bg-[#0d0d0d] relative overflow-hidden">
       {/* Background Text */}
       <div className="absolute top-1/2 left-0 -translate-y-1/2 text-[50vw] md:text-[30vw] font-display font-black text-white/[0.015] whitespace-nowrap pointer-events-none uppercase tracking-tighter select-none">
         {backgroundText}

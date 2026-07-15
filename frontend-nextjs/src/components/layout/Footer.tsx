@@ -49,19 +49,13 @@ const WhatsAppIcon = () => (
 
 export default function Footer() {
   return (
-    <footer className="site-footer relative bg-[var(--color-bg-alt)] pt-24 pb-12 border-t border-white/5 overflow-hidden">
+    <footer className="site-footer relative bg-[var(--color-bg-alt)] pt-12 pb-12 border-t border-white/5 overflow-hidden">
       <div className="max-w-content mx-auto px-[var(--section-px)]">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-24 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-24 mb-12 md:mb-24">
 
           {/* Brand */}
           <div className="space-y-10">
-            <Image
-              src="/images/logo.webp"
-              alt="R Ceramica Logo"
-              width={160}
-              height={64}
-              className="h-16 w-auto object-contain"
-            />
+            <Image src="/images/logo.webp" alt="R Ceramica Logo" width={160} height={64} className="h-16 w-auto object-contain" />
             <p className="text-white/40 text-[13px] leading-relaxed font-light max-w-sm">
               {SITE.shortDescription}
             </p>
@@ -129,7 +123,7 @@ export default function Footer() {
               Contact Us
             </h4>
             <div className="space-y-6 text-[13px] text-white/40 leading-relaxed">
-              <div className="flex items-start gap-4 border-b border-white/5 pb-6">
+              <div className="flex items-start gap-4 border-b border-white/5 pb-0 md:pb-6">
                 <MapPin size={18} className="shrink-0 text-white/20 mt-1" aria-hidden="true" />
                 <p>{ADDRESS.full}</p>
               </div>
@@ -150,7 +144,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-16 border-t border-white/5 flex flex-col items-center gap-10">
+        <div className="pt-0 md:pt-16 border-t border-white/5 flex flex-col items-center gap-10">
           <div className="w-full flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-white/20 uppercase tracking-[0.3em] font-medium text-center">
             <p>© {new Date().getFullYear()} R Ceramica Global. All Rights Reserved.</p>
             <div className="flex gap-8">

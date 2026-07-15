@@ -175,14 +175,14 @@ export default function CataloguePage() {
 
         {/* Stats bar */}
         <div className="relative max-w-[1440px] mx-auto px-6 md:px-16 mt-20 cat-fade-up" style={{ animationDelay: "0.2s" }}>
-          <div className="grid grid-cols-3 border border-white/5 divide-x divide-white/5">
+          <div className="grid grid-cols-1 md:grid-cols-3 border border-white/5 divide-x divide-white/5">
             {[
               { val: "08",   label: "Collections" },
               { val: "500+", label: "Products" },
               { val: "2024", label: "Edition" },
             ].map(({ val, label }) => (
               <div key={label} className="py-8 text-center">
-                <p className="text-2xl md:text-3xl font-display font-light text-white mb-1">{val}</p>
+                <p className="text-4xl md:text-3xl font-display font-light text-white mb-1">{val}</p>
                 <p className="text-[8px] uppercase tracking-[0.4em] text-white/30">{label}</p>
               </div>
             ))}
@@ -213,7 +213,7 @@ export default function CataloguePage() {
       </div>
 
       {/* ══ CATALOGUE GRID ══════════════════════════════════════ */}
-      <main className="py-20 md:py-28 bg-[#0a0a0a]">
+      <main className="py-16 md:py-28 bg-[#0a0a0a]">
         <div className="max-w-[1440px] mx-auto px-6 md:px-16">
 
           {/* Count */}
@@ -234,7 +234,7 @@ export default function CataloguePage() {
       </main>
 
       {/* ══ REQUEST SECTION ═════════════════════════════════════ */}
-      <section className="py-24 md:py-32 bg-[#0c0c0c] border-t border-white/5">
+      <section className="py-16 md:py-32 bg-[#0c0c0c] border-t border-white/5">
         <div className="max-w-[1440px] mx-auto px-6 md:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
@@ -293,8 +293,7 @@ export default function CataloguePage() {
 /* ── Catalogue Card ─────────────────────────────────────────── */
 function CatalogueCard({ cat, index }: { cat: CatEntry; index: number }) {
   return (
-    <div
-      className="cat-card group relative border border-white/5 hover:border-white/15 overflow-hidden cat-fade-up"
+    <div className="cat-card group relative border border-white/5 hover:border-white/15 overflow-hidden cat-fade-up"
       style={{ animationDelay: `${index * 0.08}s` }}
     >
       {/* Image area */}

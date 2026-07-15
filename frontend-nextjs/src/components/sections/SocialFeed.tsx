@@ -62,7 +62,7 @@ export default function SocialFeed({
 }: SocialFeedProps) {
   return (
     <section
-      className="py-24 md:py-32 bg-[var(--color-bg-alt)] border-t border-white/5 overflow-hidden"
+      className="py-12 md:py-32 bg-[var(--color-bg-alt)] border-t border-white/5 overflow-hidden"
       aria-label="Follow R Ceramica on Social Media"
     >
       <div className="max-w-content mx-auto px-[var(--section-px)]">

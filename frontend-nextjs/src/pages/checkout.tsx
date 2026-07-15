@@ -100,12 +100,12 @@ export default function CheckoutPage() {
             <span className="sm:hidden">Cart</span>
           </Link>
           <div className="absolute left-1/2 -translate-x-1/2">
-            <Image src="https://rceramica.com/logo/logo.png" alt="R Ceramica" width={120} height={40}
+            <Image src="/images/logo.webp" alt="R Ceramica" width={120} height={40}
               className="h-8 md:h-10 w-auto object-contain" />
           </div>
           <div className="flex-1 flex justify-end">
             <div className="flex items-center gap-1.5">
-              <Lock size={11} className="text-[#c5a059]" />
+              <Lock size={16} className="text-[#c5a059]" />
               <span className="text-[8px] md:text-[9px] uppercase tracking-[0.3em] font-medium text-white/40 hidden xs:block">Secure</span>
             </div>
           </div>
@@ -161,6 +161,7 @@ export default function CheckoutPage() {
                         value={shipping.lastName} onChange={(e) => setShipping({ ...shipping, lastName: e.target.value })} />
                     </div>
                   </div>
+                   <div className="grid grid-cols-2 md:grid-cols-1 gap-3 md:gap-6">
                   <div>
                     <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">Email</label>
                     <input className="checkout-input" type="email" placeholder="your@email.com" required
@@ -171,12 +172,13 @@ export default function CheckoutPage() {
                     <input className="checkout-input" type="tel" placeholder="+91 00000 00000"
                       value={shipping.phone} onChange={(e) => setShipping({ ...shipping, phone: e.target.value })} />
                   </div>
+                  </div>
                   <div>
                     <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">Address</label>
                     <input className="checkout-input" type="text" placeholder="Street, Building, Area" required
                       value={shipping.address} onChange={(e) => setShipping({ ...shipping, address: e.target.value })} />
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
+                  <div className="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6">
                     <div className="col-span-2 md:col-span-1">
                       <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">City</label>
                       <input className="checkout-input" type="text" placeholder="City" required

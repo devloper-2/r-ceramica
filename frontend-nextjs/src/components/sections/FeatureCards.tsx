@@ -17,9 +17,7 @@ interface FeatureCardsProps {
  */
 export default function FeatureCards({ items, ariaLabel }: FeatureCardsProps) {
   return (
-    <section
-      className="py-24 md:py-32 bg-[var(--color-bg)] border-t border-white/5"
-      aria-label={ariaLabel}
+    <section className="py-12 md:py-32 bg-[var(--color-bg)] border-t border-white/5" aria-label={ariaLabel}
     >
       <div className="max-w-content mx-auto px-[var(--section-px)]">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
