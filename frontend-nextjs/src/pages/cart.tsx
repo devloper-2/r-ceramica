@@ -72,7 +72,7 @@ export default function CartPage() {
         <meta name="robots" content="noindex" />
       </Head>
 
-      <main className="pt-28 md:pt-44 pb-20 min-h-screen">
+      <main className="pt-28 md:pt-44 pb-0 md:pb-20 min-h-screen">
         <div className="max-w-[1440px] mx-auto px-4 md:px-12">
 
           {/* ── Back link ── */}
@@ -213,15 +213,15 @@ export default function CartPage() {
               </div>
 
               {/* ── Service cards ── */}
-              <div className="mt-12 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
+              <div className="mt-12 grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6">
                 {[
                   { icon: <Truck size={18} className="text-[#c5a059]" />, title: "Shipping", body: "Professional installation available." },
                   { icon: <ShieldCheck size={18} className="text-[#c5a059]" />, title: "Guarantee", body: "Lifetime structural assurance." },
                   { icon: <MessageSquare size={18} className="text-[#c5a059]" />, title: "Support", body: "24/7 dedicated concierge." },
                 ].map(({ icon, title, body }, i) => (
                   <div key={i}
-                    className={`cart-glass p-4 md:p-8 rounded-xl md:rounded-2xl ${i === 2 ? "col-span-2 md:col-span-1" : ""}`}>
-                    <div className="mb-3">{icon}</div>
+                    className={`cart-glass p-4 md:p-8 rounded-xl md:rounded-2xl text-center md:text-left`}>
+                    <div className="mb-3 w-full flex justify-center md:justify-start">{icon}</div>
                     <h4 className="text-[8px] md:text-[10px] uppercase tracking-widest font-medium mb-1.5 text-white">
                       {title}
                     </h4>

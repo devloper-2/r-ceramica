@@ -221,7 +221,7 @@ export default function SubcategoryProductsPage({
 
           {/* Breadcrumb + count + sort */}
           <div className="relative z-[70] flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
-            <div className="flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-white/40">
+            <div className="flex items-center w-full gap-3 text-[10px] uppercase tracking-[0.2em] text-white/40">
               <Link href="/explore" className="hover:text-white transition-colors">Explore</Link>
               <ChevronRight size={10} />
               <Link href={`/explore/${categorySlug}`} className="hover:text-white transition-colors">
@@ -231,34 +231,14 @@ export default function SubcategoryProductsPage({
               <span className="text-white">{subcategory.name}</span>
             </div>
 
-            <div className="flex items-center gap-8">
+            <div className="flex items-center  justify-between md:justify-end w-full gap-8">
               <p className="text-[10px] uppercase tracking-[0.2em] text-white/30">
                 <span className="text-white">{visible.length}</span> Products Found
               </p>
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setSortOpen((o) => !o)}
-                  className="flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-white/80 hover:text-white pb-1 border-b border-white/10 transition-colors"
-                >
-                  Sort By: <span>{SORT_LABELS[sort]}</span> <ChevronDown size={12} />
+              <div className="relative text-right lg:hidden">
+                <button type="button" onClick={() => setMobileFilter(true)} className="flex items-center justify-center bg-white text-black w-12 h-12 rounded-full shadow-2xl active:scale-90 transition-transform">
+                  <Filter size={18} />
                 </button>
-                {sortOpen && (
-                  <div className="absolute right-0 mt-3 w-56 bg-[#111] border border-white/5 z-[100] shadow-2xl">
-                    <div className="flex flex-col py-3">
-                      {(Object.keys(SORT_LABELS) as SortKey[]).map((k) => (
-                        <button
-                          type="button"
-                          key={k}
-                          onClick={() => { setSort(k); setSortOpen(false); }}
-                          className="px-6 py-4 text-[9px] uppercase tracking-[0.3em] text-left text-white/50 hover:text-white hover:bg-white/5 transition-all"
-                        >
-                          {SORT_LABELS[k]}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -555,17 +535,6 @@ export default function SubcategoryProductsPage({
           </div>
         </div>
       </main>
-
-      {/* Mobile filter FAB */}
-      <div className="lg:hidden fixed bottom-8 right-6 z-[80]">
-        <button
-          type="button"
-          onClick={() => setMobileFilter(true)}
-          className="flex items-center justify-center bg-white text-black w-12 h-12 rounded-full shadow-2xl active:scale-90 transition-transform"
-        >
-          <Filter size={18} />
-        </button>
-      </div>
 
       <style jsx>{`
         /* ── Price range slider ──────────────────────────── */

@@ -414,7 +414,7 @@ export default function ProductDetailPage({ product, related }: { product: Produ
             </div>
 
             {/* ── Right: Info panel ── */}
-            <div className="lg:sticky lg:top-36 overflow-y-auto" style={{ maxHeight: "calc(100vh - 160px)" }}>
+            <div className="rightpanel">
 
               {product.subcategory_name && (
                 <p className="text-[9px] text-[#c5a059] uppercase tracking-[0.5em] font-medium mb-3">
