@@ -31,6 +31,32 @@ class OrderModel extends Model
         return $this->where('order_number', $orderNumber)->first();
     }
 
+    /** All orders belonging to a customer, newest first (list view). */
+    public function findForCustomer(int $customerId): array
+    {
+        return $this->where('customer_id', $customerId)
+            ->orderBy('created_at', 'DESC')
+            ->findAll();
+    }
+
+    /**
+     * A single order with its line items, scoped to the owning customer so one
+     * customer can never read another's order. Returns null if not found/owned.
+     */
+    public function getWithItems(string $orderNumber, int $customerId): ?array
+    {
+        $order = $this->where('order_number', $orderNumber)
+            ->where('customer_id', $customerId)
+            ->first();
+        if (! $order) {
+            return null;
+        }
+
+        $order['items'] = model(OrderItemModel::class)->forOrder((int) $order['id']);
+
+        return $order;
+    }
+
     /** Generate a unique human-friendly order number, e.g. RC-20260710-A1B2C3. */
     public function generateOrderNumber(): string
     {

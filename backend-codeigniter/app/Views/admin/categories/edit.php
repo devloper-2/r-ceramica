@@ -197,12 +197,13 @@
       <div class="cef-card-header">
         <div class="cef-card-icon"><i class="bi bi-window"></i></div>
         <div>
-          <p class="cef-card-title">Explore Card</p>
-          <p class="cef-card-subtitle">Content shown on the /explore listing page</p>
+          <p class="cef-card-title">Explore Page Card</p>
+          <p class="cef-card-subtitle">All fields here control what is shown on the <strong>/explore</strong> listing page</p>
         </div>
       </div>
       <div class="cef-card-body">
         <div class="row g-3">
+
           <div class="col-md-6">
             <div class="cef-field">
               <label class="cef-label">Admin Name <span style="color:var(--admin-danger)">*</span></label>
@@ -210,7 +211,7 @@
                 <i class="bi bi-tag cef-icon"></i>
                 <input type="text" name="name" required value="<?= esc($category['name'], 'attr') ?>" placeholder="e.g. Tiles">
               </div>
-              <p class="cef-hint">Internal label only.</p>
+              <p class="cef-hint">Internal label — not shown on website.</p>
             </div>
           </div>
           <div class="col-md-6">
@@ -223,31 +224,53 @@
               <p class="cef-hint">URL: /explore/<?= esc($category['slug']) ?></p>
             </div>
           </div>
+
+          <div class="col-12"><div class="cef-divider" style="margin:.25rem 0"></div></div>
+          <div class="col-12">
+            <p class="cef-hint mb-0" style="font-size:.8rem;color:var(--admin-primary);font-weight:700">
+              ↓ These four fields control the text and label on the /explore card
+            </p>
+          </div>
+
           <div class="col-md-6">
             <div class="cef-field">
-              <label class="cef-label">Frontend Title</label>
+              <label class="cef-label">Card Eyebrow <span style="color:var(--admin-primary)">gold label</span></label>
+              <div class="cef-input-wrap no-icon">
+                <input type="text" name="hero_eyebrow" value="<?= esc($category['hero_eyebrow'] ?? '', 'attr') ?>" placeholder="Heritage Collection">
+              </div>
+              <p class="cef-hint">Small gold text above the title (e.g. "Heritage Collection").</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="cef-field">
+              <label class="cef-label">Card Title <span style="color:var(--admin-primary)">big white text</span></label>
               <div class="cef-input-wrap">
                 <i class="bi bi-type cef-icon"></i>
                 <input type="text" name="title" value="<?= esc($category['title'] ?? '', 'attr') ?>" placeholder="Architectural">
               </div>
+              <p class="cef-hint">Large bold heading (e.g. "Architectural").</p>
             </div>
           </div>
           <div class="col-md-6">
             <div class="cef-field">
-              <label class="cef-label">Subtitle</label>
+              <label class="cef-label">Card Subtitle <span style="color:var(--admin-primary)">italic line</span></label>
               <div class="cef-input-wrap no-icon">
                 <input type="text" name="subtitle" value="<?= esc($category['subtitle'] ?? '', 'attr') ?>" placeholder="Surfaces">
               </div>
+              <p class="cef-hint">Italic line below the title (e.g. "Surfaces").</p>
             </div>
           </div>
-          <div class="col-12">
+          <div class="col-md-6">
             <div class="cef-field">
-              <label class="cef-label">Description</label>
+              <label class="cef-label">Card Description <span style="color:var(--admin-primary)">paragraph</span></label>
               <div class="cef-input-wrap no-icon">
-                <textarea name="description" rows="2"><?= esc($category['description'] ?? '') ?></textarea>
+                <textarea name="description" rows="3"><?= esc($category['description'] ?? '') ?></textarea>
               </div>
+              <p class="cef-hint">Short paragraph below the title.</p>
             </div>
           </div>
+
+          <div class="col-12"><div class="cef-divider" style="margin:.25rem 0"></div></div>
           <div class="col-12">
             <div class="cef-field">
               <label class="cef-label">Sort Order</label>
@@ -257,6 +280,7 @@
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -266,34 +290,28 @@
       <div class="cef-card-header">
         <div class="cef-card-icon"><i class="bi bi-easel"></i></div>
         <div>
-          <p class="cef-card-title">Subcategory-Page Hero</p>
-          <p class="cef-card-subtitle">Banner shown at the top of /explore/<?= esc($category['slug']) ?></p>
+          <p class="cef-card-title">Category Detail Page Hero</p>
+          <p class="cef-card-subtitle">Banner shown at the top of /explore/<?= esc($category['slug']) ?> only — does <strong>not</strong> affect the /explore listing</p>
         </div>
       </div>
       <div class="cef-card-body">
         <div class="row g-3">
           <div class="col-md-6">
             <div class="cef-field">
-              <label class="cef-label">Eyebrow</label>
-              <div class="cef-input-wrap no-icon">
-                <input type="text" name="hero_eyebrow" value="<?= esc($category['hero_eyebrow'] ?? '', 'attr') ?>" placeholder="Heritage Collection">
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="cef-field">
               <label class="cef-label">Hero Title</label>
               <div class="cef-input-wrap no-icon">
                 <input type="text" name="hero_title" value="<?= esc($category['hero_title'] ?? '', 'attr') ?>" placeholder="Architectural Surfaces">
               </div>
+              <p class="cef-hint">Main heading on the /explore/<?= esc($category['slug']) ?> page.</p>
             </div>
           </div>
-          <div class="col-12">
+          <div class="col-md-6">
             <div class="cef-field">
               <label class="cef-label">Hero Subtitle</label>
               <div class="cef-input-wrap no-icon">
-                <textarea name="hero_subtitle" rows="2"><?= esc($category['hero_subtitle'] ?? '') ?></textarea>
+                <textarea name="hero_subtitle" rows="3"><?= esc($category['hero_subtitle'] ?? '') ?></textarea>
               </div>
+              <p class="cef-hint">Subtext below the hero title.</p>
             </div>
           </div>
         </div>
@@ -311,8 +329,8 @@
         <div class="cef-card-header">
           <div class="cef-card-icon"><i class="bi bi-image"></i></div>
           <div>
-            <p class="cef-card-title">Card Image</p>
-            <p class="cef-card-subtitle">Shown on /explore listing</p>
+            <p class="cef-card-title">Card Image <span style="color:var(--admin-primary);font-size:.75rem">★ /explore listing</span></p>
+            <p class="cef-card-subtitle">Background image shown on the /explore listing card</p>
           </div>
         </div>
         <div class="cef-card-body">

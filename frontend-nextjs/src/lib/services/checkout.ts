@@ -53,10 +53,13 @@ function loadRazorpay(): Promise<void> {
   return scriptPromise;
 }
 
-async function postJson<T>(path: string, body: unknown): Promise<T> {
+async function postJson<T>(path: string, body: unknown, token?: string | null): Promise<T> {
   const res = await fetch(`${API}${path}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
     body: JSON.stringify(body),
   });
   const json = await res.json();
@@ -79,6 +82,8 @@ export async function payWithRazorpay(opts: {
   customer: CheckoutCustomer;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   shipping?: Record<string, any>;
+  /** Bearer token so the order links to the signed-in customer. */
+  token?: string | null;
   onSuccess: (result: CheckoutResult) => void;
   onError: (message: string) => void;
   onDismiss?: () => void;
@@ -112,7 +117,7 @@ export async function payWithRazorpay(opts: {
             items: lineItems,
             customer: opts.customer,
             shipping: opts.shipping,
-          });
+          }, opts.token);
           opts.onSuccess(result);
         } catch (e) {
           opts.onError(e instanceof Error ? e.message : "Payment verification failed.");

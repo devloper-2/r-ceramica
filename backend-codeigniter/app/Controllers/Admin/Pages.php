@@ -12,7 +12,7 @@ class Pages extends BaseAdminController
      * category → subcategory → product tree are managed under their own tabs,
      * so they are intentionally excluded here.
      */
-    private const LANDING_SLUGS = ['home', 'about', 'contact', 'privacy', 'terms'];
+    private const LANDING_SLUGS = ['home', 'about', 'catalogue', 'contact', 'privacy', 'terms'];
 
     public function index(): string
     {

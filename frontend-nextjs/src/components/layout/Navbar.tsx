@@ -6,6 +6,13 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, Search, ShoppingCart, ArrowRight } from "lucide-react";
 import { NAV_LINKS, LANGUAGES } from "@/lib/services/site-data";
+import {
+  isAuthenticated as checkAuth,
+  getCustomer,
+  logout as authLogout,
+  AUTH_EVENT,
+} from "@/lib/services/auth";
+import { cartCount, CART_EVENT } from "@/lib/services/cart";
 
 /* ── Searchable site index ─────────────────────────────────────────────── */
 const SEARCH_INDEX = [
@@ -41,6 +48,7 @@ export default function Navbar() {
   // the persisted values are loaded in a useEffect after mount (see below).
   const [isAuth, setIsAuth] = useState(false);
   const [userName, setUserName] = useState("");
+  const [count, setCount] = useState(0);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -51,11 +59,25 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Read persisted auth state AFTER mount — running this only on the client
-  // keeps server/client initial HTML identical and avoids hydration mismatch.
+  // Read persisted auth + cart state AFTER mount — running this only on the
+  // client keeps server/client initial HTML identical (no hydration mismatch).
+  // Re-sync whenever auth or cart changes (events fired by the services), and
+  // on cross-tab `storage` events.
   useEffect(() => {
-    setIsAuth(localStorage.getItem("isAuthenticated") === "true");
-    setUserName(localStorage.getItem("userName") || "");
+    const syncAuth = () => {
+      setIsAuth(checkAuth());
+      setUserName(getCustomer()?.name || "");
+    };
+    const syncCart = () => setCount(cartCount());
+    syncAuth();
+    syncCart();
+    window.addEventListener(AUTH_EVENT, syncAuth);
+    window.addEventListener(CART_EVENT, syncCart);
+    window.addEventListener("storage", () => { syncAuth(); syncCart(); });
+    return () => {
+      window.removeEventListener(AUTH_EVENT, syncAuth);
+      window.removeEventListener(CART_EVENT, syncCart);
+    };
   }, []);
 
   // Lock body scroll when mobile menu open
@@ -128,12 +150,11 @@ export default function Navbar() {
   };
 
   const logout = () => {
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("userMobile");
+    authLogout();
     setIsAuth(false);
     setUserName("");
     setLoginOpen(false);
+    router.push("/");
   };
 
   const navbarClass = [
@@ -235,9 +256,11 @@ export default function Navbar() {
         className="text-white/80 group-hover:text-white transition-all"
       />
 
-      <span className="absolute -top-2 -right-3 bg-white text-black text-[9px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
-        0
-      </span>
+      {count > 0 && (
+        <span className="absolute -top-2 -right-3 bg-[var(--color-gold)] text-black text-[9px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+          {count}
+        </span>
+      )}
     </Link>
 
     {/* Language */}
@@ -283,9 +306,11 @@ export default function Navbar() {
         className="text-white/80"
       />
 
-      <span className="absolute -top-2 -right-2 bg-white text-black text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-        0
-      </span>
+      {count > 0 && (
+        <span className="absolute -top-2 -right-2 bg-[var(--color-gold)] text-black text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+          {count}
+        </span>
+      )}
     </Link>
   </div>
 

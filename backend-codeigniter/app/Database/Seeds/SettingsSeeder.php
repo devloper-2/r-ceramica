@@ -25,9 +25,36 @@ class SettingsSeeder extends Seeder
                 'keywords'         => ['porcelain tiles', 'ceramic surfaces', 'luxury tiles', 'bathroom fixtures', 'architectural surfaces', 'R Ceramica'],
             ],
             'contact' => [
-                'phone'    => '+91-94274-10127',
-                'whatsapp' => '+919427410127',
-                'email'    => 'info@rceramica.com',
+                'phone'            => '+91-94274-10127',
+                'phone2'           => '+91-99985-28523',
+                'whatsapp'         => '+919427410127',
+                'email'            => 'info@rceramica.com',
+                'headquarters'     => "Opp. Ceramic City, B/h. Meldi Ma Temple, Lalpar, Morbi-363642\nGujarat (INDIA)",
+                'officeHoursDays'  => 'Mon — Sat',
+                'officeHoursTime'  => '09:00 AM — 07:00 PM',
+                'mapEmbed'         => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3674.341398862413!2d70.86484401150337!3d22.810253824050278!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39598dcd562cce57%3A0xfc120b911b2d75ab!2sR%20CERAMICA!5e0!3m2!1sen!2sin!4v1714896000000!5m2!1sen!2sin',
+                'offices'          => [
+                    [
+                        'title'    => 'Corporate Headquarters',
+                        'address'  => 'Opp. Ceramic City, Lalpar, 8-A National Highway, Morbi-363642, Gujarat, India.',
+                        'contacts' => ['+91 94274 10127', '+91 99985 28523'],
+                    ],
+                    [
+                        'title'    => 'Experience Center',
+                        'address'  => 'Luxury Hub, S.G. Highway, Near Thaltej Cross Roads, Ahmedabad-380054, Gujarat.',
+                        'contacts' => ['+91 98765 43210', 'info@rceramica.com'],
+                    ],
+                    [
+                        'title'    => 'International Desk',
+                        'address'  => 'Suite 1204, Architecture Tower, Business Bay, Dubai, UAE.',
+                        'contacts' => ['+971 50 123 4567'],
+                    ],
+                    [
+                        'title'    => 'Logistic Hub',
+                        'address'  => 'Plot 45, Port Industrial Park, Mundra SEZ, Kutch, Gujarat.',
+                        'contacts' => ['+91 99985 28523'],
+                    ],
+                ],
             ],
             'address' => [
                 'street'      => 'Opp. Ceramic City, 8-A National Highway',

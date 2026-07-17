@@ -44,7 +44,10 @@ export default function AboutPage({ page }: AboutProps) {
   const hero       = s?.aboutHero              ?? ABOUT_HERO_STATIC;
   const philosophy = s?.philosophy             ?? (apiOk ? null : ABOUT_PHILOSOPHY);
   const stats      = s?.stats?.items           ?? (apiOk ? null : ABOUT_STATS);
-  const technology = s?.technology?.items      ?? (apiOk ? null : ABOUT_TECHNOLOGY);
+  const technologySection = s?.technology ?? null;
+  const technology        = technologySection?.items   ?? (apiOk ? null : ABOUT_TECHNOLOGY);
+  const technologyTitle   = technologySection?.title   ?? "Our Manufacturing Process";
+  const technologyEyebrow = technologySection?.eyebrow ?? "Industrial Innovation";
   const chairman   = s?.chairman               ?? (apiOk ? null : ABOUT_CHAIRMAN);
   const footprint  = s?.footprint              ?? (apiOk ? null : ABOUT_FOOTPRINT);
 
@@ -72,7 +75,7 @@ export default function AboutPage({ page }: AboutProps) {
       <AboutHero {...hero} />
       {philosophy  && <PhilosophySection {...philosophy} />}
       {stats       && <StatsGrid items={stats} />}
-      {technology  && <ManufacturingSection title="Our Manufacturing Process" items={technology} />}
+      {technology  && <ManufacturingSection title={technologyTitle} eyebrow={technologyEyebrow} items={technology} />}
       {chairman    && <TestimonialsQuote {...chairman} />}
       {footprint   && <Footprint {...footprint} />}
     </div>

@@ -46,6 +46,35 @@ $routes->group('api/v1/checkout', ['filter' => 'storecors', 'namespace' => 'App\
 
 /*
  * ---------------------------------------------------------------------------
+ * Storefront customer auth (/api/v1/auth/*) — browser-facing, public
+ * ---------------------------------------------------------------------------
+ * Mobile+password and Google login. Returns a signed bearer token. CORS-guarded;
+ * `me` additionally requires a valid token (customerauth).
+ */
+$routes->group('api/v1/auth', ['filter' => 'storecors', 'namespace' => 'App\Controllers\Api'], static function ($routes) {
+    $routes->options('(:any)', static fn () => service('response')->setStatusCode(204)); // preflight
+    $routes->post('register', 'Auth::register');
+    $routes->post('login', 'Auth::login');
+    $routes->post('google', 'Auth::google');
+    $routes->get('me', 'Auth::me', ['filter' => 'customerauth']);
+});
+
+/*
+ * ---------------------------------------------------------------------------
+ * Storefront order history (/api/v1/orders/*) — browser-facing, token-guarded
+ * ---------------------------------------------------------------------------
+ */
+$routes->group('api/v1/orders', ['filter' => 'storecors', 'namespace' => 'App\Controllers\Api'], static function ($routes) {
+    // Preflight: the list request (GET /orders with an Authorization header)
+    // preflights the bare group root, so an OPTIONS handler is needed there too.
+    $routes->options('/', static fn () => service('response')->setStatusCode(204));
+    $routes->options('(:any)', static fn () => service('response')->setStatusCode(204));
+    $routes->get('/', 'Orders::index', ['filter' => 'customerauth']);
+    $routes->get('(:segment)', 'Orders::show/$1', ['filter' => 'customerauth']);
+});
+
+/*
+ * ---------------------------------------------------------------------------
  * Admin panel  (/admin/*)  — PHP-session, server-rendered
  * ---------------------------------------------------------------------------
  */

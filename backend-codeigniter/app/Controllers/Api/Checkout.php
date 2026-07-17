@@ -3,6 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Libraries\Cart;
+use App\Libraries\CustomerToken;
 use App\Models\CustomerModel;
 use App\Models\OrderItemModel;
 use App\Models\OrderModel;
@@ -119,20 +120,29 @@ class Checkout extends BaseApiController
             return $this->response->setStatusCode(422)->setJSON(['error' => 'invalid_email', 'message' => 'A valid email is required.']);
         }
 
-        // 3) Persist customer (upsert by email) + order + items in a transaction.
+        // 3) Persist customer + order + items in a transaction.
         $db = \Config\Database::connect();
         $db->transStart();
 
         $customerModel = model(CustomerModel::class);
-        $existing      = $customerModel->findByEmail($email);
-        if ($existing) {
-            $customerId = (int) $existing['id'];
+
+        // Prefer the signed-in customer (bearer token); fall back to email upsert
+        // for guest flows. This links the order to the account so it shows up in
+        // the customer's order history.
+        $authedId = CustomerToken::fromRequest($this->request);
+        if ($authedId && $customerModel->find($authedId)) {
+            $customerId = (int) $authedId;
         } else {
-            $customerId = (int) $customerModel->insert([
-                'name'  => (string) ($customer['name'] ?? ''),
-                'email' => $email,
-                'phone' => (string) ($customer['phone'] ?? ''),
-            ], true);
+            $existing = $customerModel->findByEmail($email);
+            if ($existing) {
+                $customerId = (int) $existing['id'];
+            } else {
+                $customerId = (int) $customerModel->insert([
+                    'name'  => (string) ($customer['name'] ?? ''),
+                    'email' => $email,
+                    'phone' => (string) ($customer['phone'] ?? ''),
+                ], true);
+            }
         }
 
         $orderModel = model(OrderModel::class);

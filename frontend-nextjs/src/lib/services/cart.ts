@@ -16,28 +16,30 @@ export interface CartLine {
 
 const KEY = "rc_cart_v1";
 
-/** A demo cart of real seeded products so checkout is usable before an
- *  Add-to-Cart flow exists on every product page. */
-const DEFAULT_CART: CartLine[] = [
-  { slug: "petra-vessel-basin", name: "Petra Vessel Basin", price: 24999, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=200", quantity: 1 },
-  { slug: "luxe-chrome-mixer", name: "Luxe Chrome Basin Mixer", price: 12499, image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=200", quantity: 1 },
-];
+/** Fired on any cart mutation so the navbar badge and cart page stay in sync. */
+export const CART_EVENT = "rc-cart-changed";
 
 export function getCart(): CartLine[] {
-  if (typeof window === "undefined") return DEFAULT_CART;
+  if (typeof window === "undefined") return [];
   try {
     const raw = window.localStorage.getItem(KEY);
-    if (!raw) return DEFAULT_CART;
+    if (!raw) return [];
     const parsed = JSON.parse(raw) as CartLine[];
-    return Array.isArray(parsed) && parsed.length ? parsed : DEFAULT_CART;
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
-    return DEFAULT_CART;
+    return [];
   }
 }
 
 export function saveCart(lines: CartLine[]): void {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(KEY, JSON.stringify(lines));
+  window.dispatchEvent(new Event(CART_EVENT));
+}
+
+/** Total number of units across all lines — for the navbar badge. */
+export function cartCount(lines: CartLine[] = getCart()): number {
+  return lines.reduce((sum, l) => sum + l.quantity, 0);
 }
 
 export function addToCart(line: CartLine): void {
@@ -73,6 +75,7 @@ export function setCartQuantity(line: CartLine): void {
 export function clearCart(): void {
   if (typeof window === "undefined") return;
   window.localStorage.removeItem(KEY);
+  window.dispatchEvent(new Event(CART_EVENT));
 }
 
 export function cartSubtotal(lines: CartLine[]): number {

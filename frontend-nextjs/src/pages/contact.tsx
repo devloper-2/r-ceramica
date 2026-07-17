@@ -4,33 +4,39 @@ import { contactPageSchema } from "@/lib/schemas";
 import { siteConfig } from "@/config/site";
 import { api, sectionsByType, type ApiPage } from "@/lib/services/api";
 import ContactHero from "@/components/sections/ContactHero";
-import ContactSection from "@/components/sections/ContactSection";
+import ContactSection, { type ContactSectionData } from "@/components/sections/ContactSection";
 
 const DEFAULT_TITLE = `Contact Us | ${siteConfig.name}`;
 const DEFAULT_DESCRIPTION =
-  "Discover the R Ceramica story — two decades of design-led porcelain manufacturing, sustainable production, and surfaces trusted in 40+ countries.";
+  "Get in touch with R Ceramica — sales, support and studio enquiries.";
 
-export const getStaticProps: GetStaticProps<{ page: ApiPage | null }> = async () => {
+interface Props {
+  page: ApiPage | null;
+  contactSection: ContactSectionData | null;
+}
+
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  let page: ApiPage | null = null;
+  let contactSection: ContactSectionData | null = null;
+
   try {
-    return { props: { page: await api.getPage("contact") } };
+    page = await api.getPage("contact");
+    const s = page ? sectionsByType(page.sections) : null;
+    contactSection = s?.contactSection ?? null;
   } catch {
-    return { props: { page: null } };
+    console.error("[contact] Failed to fetch contact page from API");
   }
+
+  return { props: { page, contactSection } };
 };
 
-/**
- * Contact Us page → "/contact"  (Pages Router: filename `contact` maps to /contact).
- *
- * A teaching example of REUSE: every section here (Hero, NarrativeSection,
- * MediaGrid, FeatureCards) is the SAME component used on the home page — only
- * the data (@/lib/constants/contact) and styles (styles/contactpage.css) differ.
- */
-export default function ContactUs({ page }: { page: ApiPage | null }) {
+export default function ContactUs({ page, contactSection }: Props) {
   const s = page ? sectionsByType(page.sections) : null;
   const hero = s?.contactHero ?? {};
 
-  const title = page?.meta_title ?? DEFAULT_TITLE;
+  const title       = page?.meta_title       ?? DEFAULT_TITLE;
   const description = page?.meta_description ?? DEFAULT_DESCRIPTION;
+
   return (
     <div className="page-contact">
       <Head>
@@ -48,7 +54,7 @@ export default function ContactUs({ page }: { page: ApiPage | null }) {
       </Head>
 
       <ContactHero {...hero} />
-      <ContactSection />
+      <ContactSection contactSection={contactSection ?? undefined} />
     </div>
   );
 }

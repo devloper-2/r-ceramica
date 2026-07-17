@@ -1,72 +1,65 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import {
   ArrowLeft, Minus, Plus, Trash2,
   Truck, ShieldCheck, MessageSquare, Tag,
 } from "lucide-react";
 import { siteConfig } from "@/config/site";
-
-/* ── Initial cart data ──────────────────────────────────────── */
-type CartItem = {
-  id: number;
-  collection: string;
-  name: string;
-  code: string;
-  finish: string;
-  price: number;
-  qty: number;
-  img: string;
-};
-
-const INITIAL_ITEMS: CartItem[] = [
-  {
-    id: 1, collection: "Fusion", name: "Fusion Basin Mixer",
-    code: "F10201CL", finish: "Chrome",
-    price: 12450, qty: 1,
-    img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600",
-  },
-  {
-    id: 8, collection: "Fusion", name: "Zen Exposed Mixer",
-    code: "Z10801EM", finish: "Gold Bright PVD",
-    price: 22400, qty: 1,
-    img: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&q=80&w=600",
-  },
-];
+import { getCart, saveCart, cartSubtotal, type CartLine } from "@/lib/services/cart";
+import { isAuthenticated } from "@/lib/services/auth";
 
 function fmt(n: number) {
   return "₹ " + n.toLocaleString("en-IN");
 }
 
 export default function CartPage() {
-  const [items, setItems] = useState<CartItem[]>(INITIAL_ITEMS);
+  const router = useRouter();
+  const [items, setItems] = useState<CartLine[]>([]);
+  const [ready, setReady] = useState(false);
   const [promoCode, setPromoCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
 
-  /* ── Cart helpers ────────────────────────────────────── */
-  function updateQty(id: number, delta: number) {
-    setItems((prev) =>
-      prev
-        .map((item) =>
-          item.id === id ? { ...item, qty: Math.max(1, item.qty + delta) } : item
-        )
-        .filter((item) => item.qty > 0)
+  // Cart lives in localStorage — read on mount (client only).
+  useEffect(() => {
+    setItems(getCart());
+    setReady(true);
+  }, []);
+
+  /** Persist + reflect a new cart state. */
+  function commit(next: CartLine[]) {
+    setItems(next);
+    saveCart(next);
+  }
+
+  function updateQty(slug: string, delta: number) {
+    commit(
+      items
+        .map((it) => (it.slug === slug ? { ...it, quantity: Math.max(1, it.quantity + delta) } : it))
+        .filter((it) => it.quantity > 0)
     );
   }
 
-  function setQty(id: number, value: number) {
-    const qty = Math.max(1, value || 1);
-    setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, qty } : item))
-    );
+  function setQty(slug: string, value: number) {
+    const quantity = Math.max(1, value || 1);
+    commit(items.map((it) => (it.slug === slug ? { ...it, quantity } : it)));
   }
 
-  function removeItem(id: number) {
-    setItems((prev) => prev.filter((item) => item.id !== id));
+  function removeItem(slug: string) {
+    commit(items.filter((it) => it.slug !== slug));
   }
 
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
+  function goToCheckout() {
+    if (isAuthenticated()) {
+      router.push("/checkout");
+    } else {
+      router.push("/login?redirect=/checkout");
+    }
+  }
+
+  const subtotal = cartSubtotal(items);
   const discount = promoApplied ? Math.round(subtotal * 0.1) : 0;
   const total    = subtotal - discount;
 
@@ -83,7 +76,7 @@ export default function CartPage() {
         <div className="max-w-[1440px] mx-auto px-4 md:px-12">
 
           {/* ── Back link ── */}
-          <Link href="/products"
+          <Link href="/explore"
             className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.4em] text-white/40 hover:text-white transition-colors mb-10 md:mb-14 cart-slide-up">
             <ArrowLeft size={13} />
             Continue Shopping
@@ -115,7 +108,7 @@ export default function CartPage() {
               )}
 
               {/* Empty state */}
-              {items.length === 0 && (
+              {ready && items.length === 0 && (
                 <div className="py-32 flex flex-col items-center gap-6 text-center border border-white/5">
                   <div className="w-16 h-16 border border-white/10 flex items-center justify-center">
                     <Tag size={24} className="text-white/20" />
@@ -134,32 +127,32 @@ export default function CartPage() {
               {/* Item rows */}
               <div className="divide-y divide-white/5">
                 {items.map((item) => (
-                  <div key={item.id} className="cart-item-row py-6 md:py-10">
+                  <div key={item.slug} className="cart-item-row py-6 md:py-10">
                     <div className="flex flex-row gap-4 md:gap-0 md:items-center relative">
 
                       {/* Image */}
                       <div className="relative w-20 h-24 md:w-32 md:h-44 bg-[#111] overflow-hidden flex-shrink-0">
-                        <Image
-                          src={item.img} alt={item.name} fill
-                          sizes="(max-width:768px) 80px, 128px"
-                          className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                        />
+                        {item.image && (
+                          <Image
+                            src={item.image} alt={item.name} fill
+                            sizes="(max-width:768px) 80px, 128px"
+                            className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                          />
+                        )}
                       </div>
 
                       {/* Content */}
                       <div className="flex flex-col md:flex-row flex-1 md:items-center min-w-0 md:pl-8">
 
-                        {/* Name + Meta (6 cols desktop) */}
+                        {/* Name + Meta */}
                         <div className="md:w-[50%] lg:w-[45%] min-w-0 pr-4">
                           <span className="text-[8px] md:text-[10px] uppercase tracking-[0.25em] text-[#c5a059] mb-1 block">
-                            {item.collection} Series
+                            R Ceramica
                           </span>
-                          <h3 className="text-sm md:text-xl font-display font-light tracking-wide md:mb-2 uppercase truncate">
+                          <Link href={`/products/${item.slug}`}
+                            className="text-sm md:text-xl font-display font-light tracking-wide md:mb-2 uppercase truncate block hover:text-[#c5a059] transition-colors">
                             {item.name}
-                          </h3>
-                          <p className="text-[8px] md:text-[9px] uppercase tracking-[0.2em] text-white/25 mt-1">
-                            {item.code} · {item.finish}
-                          </p>
+                          </Link>
                           {/* Mobile price under name */}
                           <div className="md:hidden mt-1.5">
                             <span className="text-xs font-light text-white/50">{fmt(item.price)}</span>
@@ -174,17 +167,17 @@ export default function CartPage() {
                         {/* Quantity pill */}
                         <div className="mt-3 md:mt-0 md:w-[20%] flex items-center md:justify-center">
                           <div className="flex items-center border border-white/10 rounded-full px-3 py-1.5 md:px-4 md:py-2 gap-1">
-                            <button onClick={() => updateQty(item.id, -1)}
+                            <button onClick={() => updateQty(item.slug, -1)}
                               className="text-white/30 hover:text-white p-1 transition-colors" aria-label="Decrease">
                               <Minus size={11} />
                             </button>
                             <input
                               type="number"
-                              value={item.qty}
-                              onChange={(e) => setQty(item.id, Number(e.target.value))}
+                              value={item.quantity}
+                              onChange={(e) => setQty(item.slug, Number(e.target.value))}
                               className="cart-qty w-8 md:w-10 bg-transparent text-center text-xs focus:outline-none text-white"
                             />
-                            <button onClick={() => updateQty(item.id, 1)}
+                            <button onClick={() => updateQty(item.slug, 1)}
                               className="text-white/30 hover:text-white p-1 transition-colors" aria-label="Increase">
                               <Plus size={11} />
                             </button>
@@ -193,15 +186,15 @@ export default function CartPage() {
 
                         {/* Line total (desktop) */}
                         <div className="hidden md:block md:w-[20%] text-right text-base font-medium text-[#c5a059]">
-                          {fmt(item.price * item.qty)}
+                          {fmt(item.price * item.quantity)}
                         </div>
 
                         {/* Mobile: total + remove */}
                         <div className="md:hidden flex justify-between items-center mt-3 pt-3 border-t border-white/5">
                           <span className="text-sm font-semibold text-[#c5a059]">
-                            {fmt(item.price * item.qty)}
+                            {fmt(item.price * item.quantity)}
                           </span>
-                          <button onClick={() => removeItem(item.id)}
+                          <button onClick={() => removeItem(item.slug)}
                             className="text-red-500/60 hover:text-red-500 p-2 transition-colors" aria-label="Remove">
                             <Trash2 size={15} />
                           </button>
@@ -209,7 +202,7 @@ export default function CartPage() {
                       </div>
 
                       {/* Desktop remove */}
-                      <button onClick={() => removeItem(item.id)}
+                      <button onClick={() => removeItem(item.slug)}
                         className="hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2 text-red-500/30 hover:text-red-500 transition-colors p-1"
                         aria-label="Remove item">
                         <Trash2 size={16} />
@@ -252,9 +245,9 @@ export default function CartPage() {
                   <div className="space-y-4 mb-7 pb-7 border-b border-white/5">
                     {/* Line items */}
                     {items.map((item) => (
-                      <div key={item.id} className="flex justify-between text-[9px] uppercase tracking-widest text-white/30">
-                        <span className="truncate pr-4 max-w-[60%]">{item.name} ×{item.qty}</span>
-                        <span className="text-white/60 flex-shrink-0">{fmt(item.price * item.qty)}</span>
+                      <div key={item.slug} className="flex justify-between text-[9px] uppercase tracking-widest text-white/30">
+                        <span className="truncate pr-4 max-w-[60%]">{item.name} ×{item.quantity}</span>
+                        <span className="text-white/60 flex-shrink-0">{fmt(item.price * item.quantity)}</span>
                       </div>
                     ))}
 
@@ -318,15 +311,16 @@ export default function CartPage() {
                   </div>
 
                   {/* Checkout CTA */}
-                  <Link href="/checkout"
+                  <button onClick={goToCheckout}
+                    disabled={items.length === 0}
                     className={`block w-full text-center py-5 rounded-full text-[10px] font-bold tracking-[0.35em] uppercase transition-all shadow-xl
                       ${items.length > 0
                         ? "bg-[#c5a059] text-white hover:bg-[#b8935a] shadow-[#c5a059]/20"
-                        : "bg-white/10 text-white/30 pointer-events-none"
+                        : "bg-white/10 text-white/30 cursor-not-allowed"
                       }`}
                   >
                     {items.length > 0 ? "Proceed to Checkout" : "Cart is Empty"}
-                  </Link>
+                  </button>
 
                   {/* Payment logos */}
                   <div className="mt-8 flex justify-center">

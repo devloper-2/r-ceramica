@@ -5,6 +5,7 @@ namespace Config;
 use App\Filters\AdminAuthFilter;
 use App\Filters\ApiKeyFilter;
 use App\Filters\CorsFilter;
+use App\Filters\CustomerAuthFilter;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
@@ -40,6 +41,7 @@ class Filters extends BaseFilters
         'apikey'        => ApiKeyFilter::class,
         'adminauth'     => AdminAuthFilter::class,
         'storecors'     => CorsFilter::class,
+        'customerauth'  => CustomerAuthFilter::class,
     ];
 
     /**

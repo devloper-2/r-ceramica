@@ -11,7 +11,7 @@ class Categories extends BaseApiController
     public function index(): ResponseInterface
     {
         $categories = model(CategoryModel::class)
-            ->select('id, slug, name, title, subtitle, description, image')
+            ->select('id, slug, name, title, subtitle, description, image, hero_eyebrow, hero_image')
             ->where('status', 'published')
             ->orderBy('sort_order', 'ASC')
             ->orderBy('name', 'ASC')
