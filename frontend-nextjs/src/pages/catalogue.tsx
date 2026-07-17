@@ -313,9 +313,7 @@ export default function CataloguePage({ catalogues, page }: Props) {
 /* ── Catalogue Card ─────────────────────────────────────────── */
 function CatalogueCard({ cat, index }: { cat: CatEntry; index: number }) {
   return (
-    <div className="cat-card group relative border border-white/5 hover:border-white/15 overflow-hidden cat-fade-up"
-      style={{ animationDelay: `${index * 0.08}s` }}
-    >
+    <div className="cat-card group relative border border-white/5 hover:border-white/15 overflow-hidden cat-fade-up" style={{ animationDelay: `${index * 0.08}s` }} >
       <div className="relative aspect-[3/4] overflow-hidden bg-[#111]">
         <Image
           src={cat.img} alt={cat.title}
@@ -341,7 +339,7 @@ function CatalogueCard({ cat, index }: { cat: CatEntry; index: number }) {
         </div>
         {cat.badge && (
           <div className="absolute top-6 right-6">
-            <span className={`text-[7px] uppercase tracking-[0.3em] font-bold px-3 py-1.5 leading-3 ${cat.badge.gold ? "bg-[#c5a059] text-black" : "bg-white/10 backdrop-blur-md border border-white/10 text-white"}`}>
+            <span className={`text-[7px] uppercase tracking-[0.3em] font-bold px-3 py-1.5 leading-3 ${cat.badge.gold ? "bg-[#c5a059] text-black" : "bg-white/10 backdrop-blur-md border border-white/10 text-white"}`}></span>
             <span className={`text-[7px] uppercase tracking-[0.3em] font-bold px-3 py-1.5
               ${cat.badge.gold ? "bg-[#c5a059] text-black" : "bg-white/10 backdrop-blur-md border border-white/10 text-white"}`}>
               {cat.badge.label}
@@ -392,6 +390,7 @@ function CatalogueCard({ cat, index }: { cat: CatEntry; index: number }) {
         </div>
         <span className="text-[8px] uppercase tracking-[0.25em] text-white/20">PDF · {cat.size}</span>
       </div>
+    </div>
     </div>
   );
 }
