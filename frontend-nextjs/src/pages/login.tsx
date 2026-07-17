@@ -23,6 +23,9 @@ export default function LoginPage() {
   const [remember, setRemember] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Google button lifecycle — so a blocked/slow GSI script never leaves a blank gap.
+  const [googleReady, setGoogleReady] = useState(false);
+  const [googleFailed, setGoogleFailed] = useState(false);
   const googleBtnRef = useRef<HTMLDivElement>(null);
 
   /** Where to go after a successful sign-in (?redirect=…), default home. */
@@ -82,6 +85,7 @@ export default function LoginPage() {
         text: "continue_with",
         shape: "rectangular",
       });
+      setGoogleReady(true);
     }
 
     if (document.getElementById(SCRIPT_ID)) {
@@ -93,8 +97,19 @@ export default function LoginPage() {
       s.async = true;
       s.defer = true;
       s.onload = init;
+      s.onerror = () => setGoogleFailed(true);
       document.body.appendChild(s);
     }
+
+    // If Google hasn't painted a button shortly, surface a fallback rather
+    // than leaving an empty gap (blocked script, offline, origin mismatch…).
+    const t = setTimeout(() => {
+      setGoogleReady((ready) => {
+        if (!ready) setGoogleFailed(true);
+        return ready;
+      });
+    }, 4000);
+    return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
@@ -103,7 +118,7 @@ export default function LoginPage() {
   return (
     <div className="page-login">
       <Head>
-        <title>{isRegister ? "Create Account" : "Sign In"} | R Ceramica — Luxury Surfaces</title>
+        <title>{`${isRegister ? "Create Account" : "Sign In"} | R Ceramica — Luxury Surfaces`}</title>
         <meta name="description" content="Sign in to access the exclusive R Ceramica architectural catalogue." />
         <meta name="robots" content="noindex" />
       </Head>
@@ -174,7 +189,7 @@ export default function LoginPage() {
 
           <div className="w-full max-w-[400px] px-10 pt-32 pb-16 md:pt-0 md:pb-0 flex flex-col justify-center">
 
-            <header className="mb-10 text-center md:text-left">
+            <header className="mb-8 text-center md:text-left">
               <h1 className="text-4xl md:text-5xl font-display font-light uppercase tracking-[0.15em] mb-4">
                 {isRegister ? "Create Account" : "Sign In"}
               </h1>
@@ -184,6 +199,27 @@ export default function LoginPage() {
                   : "Access the exclusive architectural catalogue"}
               </p>
             </header>
+
+            {/* Sign In / Create Account switch */}
+            <div className="grid grid-cols-2 p-1 border border-white/10 rounded-full mb-9">
+              {([
+                ["login", "Sign In"],
+                ["register", "Create Account"],
+              ] as const).map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => { setMode(value); setError(null); }}
+                  className={`py-3 rounded-full text-[9px] uppercase tracking-[0.3em] font-bold transition-all ${
+                    mode === value
+                      ? "bg-[#c5a059] text-white shadow-lg shadow-[#c5a059]/20"
+                      : "text-white/40 hover:text-white"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
 
             {error && (
               <div className="mb-6 p-3 rounded-md border border-red-500/30 bg-red-500/10 text-red-300 text-[11px] tracking-wide">
@@ -295,37 +331,32 @@ export default function LoginPage() {
               <div className="flex-1 h-px bg-white/10" />
             </div>
 
-            {/* Google Sign-In */}
-            {GOOGLE_CLIENT_ID ? (
-              <div ref={googleBtnRef} className="flex justify-center min-h-[44px]" />
-            ) : (
-              <button
-                type="button"
-                disabled
-                title="Google login is not configured yet"
-                className="w-full py-4 border border-white/10 text-white/30 text-[10px] uppercase tracking-[0.35em] flex items-center justify-center gap-3 cursor-not-allowed"
-              >
-                <GoogleGlyph />
-                Continue with Google
-              </button>
-            )}
-            {!GOOGLE_CLIENT_ID && (
-              <p className="text-center text-[8px] uppercase tracking-[0.25em] text-white/20 mt-3">
-                Google login not configured yet
-              </p>
+            {/* Google Sign-In — the real GSI button renders into this div. */}
+            {GOOGLE_CLIENT_ID && (
+              <div ref={googleBtnRef} className="flex justify-center" />
             )}
 
-            {/* Mode toggle */}
-            <p className="text-center text-[10px] uppercase tracking-[0.3em] text-white/30 mt-10">
-              {isRegister ? "Already have an account?" : "New to R Ceramica?"}{" "}
-              <button
-                type="button"
-                onClick={() => { setMode(isRegister ? "login" : "register"); setError(null); }}
-                className="text-[#c5a059] hover:text-white transition-colors font-medium"
-              >
-                {isRegister ? "Sign In" : "Create Account"}
-              </button>
-            </p>
+            {/* Fallback whenever the real button isn't showing (not configured,
+                script blocked, offline, or origin not whitelisted). */}
+            {(!GOOGLE_CLIENT_ID || !googleReady) && (
+              <>
+                <button
+                  type="button"
+                  disabled
+                  className="w-full py-4 border border-white/15 bg-white/[0.03] text-white/40 text-[10px] uppercase tracking-[0.35em] flex items-center justify-center gap-3 cursor-not-allowed rounded-sm"
+                >
+                  <GoogleGlyph />
+                  Continue with Google
+                </button>
+                <p className="text-center text-[8px] uppercase tracking-[0.25em] text-white/25 mt-3">
+                  {!GOOGLE_CLIENT_ID
+                    ? "Google login not configured yet"
+                    : googleFailed
+                    ? "Google unavailable — use mobile + password"
+                    : "Loading Google…"}
+                </p>
+              </>
+            )}
           </div>
         </div>
       </main>
