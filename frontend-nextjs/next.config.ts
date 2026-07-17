@@ -14,16 +14,17 @@ const securityHeaders = [
   key: "Content-Security-Policy",
   value: [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://ajax.googleapis.com",
-    "style-src 'self' 'unsafe-inline'",
+    // accounts.google.com + gstatic serve the Google Identity Services (Sign-In) script
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://ajax.googleapis.com https://accounts.google.com https://www.gstatic.com",
+    "style-src 'self' 'unsafe-inline' https://accounts.google.com",
     "img-src 'self' data: blob: https:",
     "media-src 'self' blob: https:",
     "font-src 'self' data:",
     // https: covers the production API + Razorpay; localhost:8080 is the dev API (CI4)
     "connect-src 'self' https: http://localhost:8080",
 
-    // ✅ Google Maps iframe + Razorpay checkout window
-    "frame-src 'self' https://www.google.com https://maps.google.com https://www.google.com/maps https://api.razorpay.com https://checkout.razorpay.com",
+    // ✅ Google Maps iframe + Google Sign-In iframe + Razorpay checkout window
+    "frame-src 'self' https://www.google.com https://maps.google.com https://www.google.com/maps https://accounts.google.com https://api.razorpay.com https://checkout.razorpay.com",
 
     "frame-ancestors 'none'",
   ].join("; "),

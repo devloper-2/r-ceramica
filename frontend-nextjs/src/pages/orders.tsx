@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Package, Clock, ChevronRight, ShoppingBag } from "lucide-react";
 import { authHeader, isAuthenticated } from "@/lib/services/auth";
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080/api/v1";
@@ -13,23 +13,27 @@ interface OrderSummary {
   total: number;
   currency: string;
   created_at: string;
+  item_count?: number;
 }
 
 function fmt(n: number, currency = "INR") {
-  const sym = currency === "INR" ? "₹" : currency + " ";
-  return `${sym} ${Number(n).toLocaleString("en-IN")}`;
+  return new Intl.NumberFormat("en-IN", { style: "currency", currency, maximumFractionDigits: 0 }).format(Number(n));
 }
 
 function fmtDate(iso: string) {
   const d = new Date(iso.replace(" ", "T"));
   return isNaN(d.getTime())
     ? iso
-    : d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+    : d.toLocaleDateString("en-IN", { year: "numeric", month: "short", day: "numeric" });
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  paid: "Paid", pending: "Pending", shipped: "Shipped",
-  transit: "In Transit", delivered: "Delivered", cancelled: "Cancelled",
+const STATUS_BADGE: Record<string, { label: string; cls: string }> = {
+  paid:      { label: "Confirmed",        cls: "od-badge-blue" },
+  pending:   { label: "Pending",          cls: "od-badge-yellow" },
+  shipped:   { label: "Shipped",          cls: "od-badge-purple" },
+  transit:   { label: "Out for Delivery", cls: "od-badge-orange" },
+  delivered: { label: "Delivered",        cls: "od-badge-green" },
+  cancelled: { label: "Cancelled",        cls: "od-badge-red" },
 };
 
 export default function OrdersPage() {
@@ -46,10 +50,7 @@ export default function OrdersPage() {
     (async () => {
       try {
         const res = await fetch(`${API}/orders`, { headers: authHeader() });
-        if (res.status === 401) {
-          router.replace("/login?redirect=/orders");
-          return;
-        }
+        if (res.status === 401) { router.replace("/login?redirect=/orders"); return; }
         const json = await res.json();
         if (!res.ok) throw new Error(json?.message || "Could not load your orders.");
         setOrders(json.data as OrderSummary[]);
@@ -65,93 +66,87 @@ export default function OrdersPage() {
   return (
     <div className="page-orders">
       <Head>
-        <title>Your Acquisitions | R Ceramica</title>
-        <meta name="description" content="Order history and curation records — R Ceramica." />
+        <title>My Orders | R Ceramica</title>
+        <meta name="description" content="Track and manage your orders — R Ceramica." />
         <meta name="robots" content="noindex" />
       </Head>
 
-      <main className="pt-40 md:pt-48 pb-24 px-6 md:px-12 lg:px-24">
-        <div className="max-w-[1200px] mx-auto">
+      <main className="od-main">
+        <div className="od-container">
 
-          <header className="mb-16 orders-slide-up">
-            <h1 className="text-4xl md:text-6xl font-display italic font-light mb-4">
-              Your Acquisitions
-            </h1>
-            <p className="text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-white/30">
-              Order History &amp; Curation Records
-            </p>
+          <header className="od-list-header orders-slide-up">
+            <div>
+              <h1 className="od-list-title">My Orders</h1>
+              <p className="od-list-subtitle">Track, view, and manage your purchases</p>
+            </div>
           </header>
 
+          {/* Loading */}
           {loading && (
-            <div className="py-24 flex justify-center">
-              <span className="w-6 h-6 border-2 border-white/20 border-t-[#c5a059] rounded-full animate-spin" />
+            <div className="od-center-screen" style={{ minHeight: 300 }}>
+              <span className="od-spinner" />
             </div>
           )}
 
+          {/* Error */}
           {!loading && error && (
-            <div className="py-16 text-center text-red-400/70 text-[11px] uppercase tracking-[0.3em]">
-              {error}
+            <div className="od-empty-state">
+              <Package size={40} style={{ color: "rgba(255,255,255,0.15)" }} />
+              <p className="od-empty-title">Something went wrong</p>
+              <p className="od-empty-sub">{error}</p>
             </div>
           )}
 
+          {/* Empty */}
           {!loading && !error && orders.length === 0 && (
-            <div className="py-24 flex flex-col items-center gap-6 text-center border border-white/5 rounded-2xl">
-              <p className="text-lg font-display font-light uppercase tracking-widest">No orders yet</p>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-white/30">Your acquisitions will appear here</p>
-              <Link href="/explore"
-                className="mt-2 px-8 py-4 bg-white text-black text-[9px] uppercase tracking-[0.4em] font-bold hover:bg-[#c5a059] hover:text-white transition-colors rounded-full">
+            <div className="od-empty-state">
+              <ShoppingBag size={40} style={{ color: "rgba(255,255,255,0.15)" }} />
+              <p className="od-empty-title">No orders yet</p>
+              <p className="od-empty-sub">Your purchases will appear here once you place an order.</p>
+              <Link href="/explore" className="od-browse-btn">
                 Browse Collections
+                <ArrowRight size={14} />
               </Link>
             </div>
           )}
 
-          <div className="space-y-6">
-            {orders.map((order) => {
-              const active = ["paid", "pending", "shipped", "transit"].includes(order.status);
-              return (
-                <div key={order.order_number} className="order-card orders-glass p-6 md:p-10 rounded-2xl">
-                  <div className="flex flex-col md:flex-row justify-between gap-8 items-start md:items-center">
-
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-4">
-                        <span className={`text-[9px] uppercase tracking-[0.3em] font-bold px-3 py-1 rounded-full
-                          ${active ? "bg-[#c5a059]/10 text-[#c5a059]" : "bg-white/5 text-white/40"}`}>
-                          {STATUS_LABELS[order.status] ?? order.status}
-                        </span>
-                        <span className="text-[9px] uppercase tracking-[0.3em] text-white/30">
-                          #{order.order_number}
-                        </span>
+          {/* Order list */}
+          {!loading && !error && orders.length > 0 && (
+            <div className="od-list">
+              {orders.map((order) => {
+                const badge = STATUS_BADGE[order.status] ?? { label: order.status, cls: "od-badge-yellow" };
+                return (
+                  <Link key={order.order_number} href={`/orders/${order.order_number}`} className="od-list-card order-card orders-glass">
+                    <div className="od-list-card-left">
+                      <div className="od-list-icon">
+                        <Package size={20} />
                       </div>
-                      <h3 className="text-xl md:text-2xl font-light mb-2">Order {order.order_number}</h3>
-                      <p className="text-[10px] uppercase tracking-widest text-white/30">
-                        Ordered on {fmtDate(order.created_at)}
-                      </p>
-                    </div>
-
-                    <div className="flex flex-col items-start md:items-end gap-5 w-full md:w-auto">
-                      <div className="md:text-right">
-                        <span className="text-[10px] uppercase tracking-[0.2em] text-white/20 block mb-1">
-                          Acquisition Total
-                        </span>
-                        <span className="text-2xl md:text-3xl font-light">{fmt(order.total, order.currency)}</span>
+                      <div className="od-list-info">
+                        <div className="od-list-top">
+                          <span className="od-list-number">#{order.order_number}</span>
+                          <span className={`od-badge ${badge.cls}`}>{badge.label}</span>
+                        </div>
+                        <p className="od-list-date">
+                          <Clock size={12} />
+                          Placed on {fmtDate(order.created_at)}
+                        </p>
                       </div>
-
-                      <Link href={`/orders/${order.order_number}`}
-                        className="w-full md:w-auto px-10 py-4 border border-white/10 text-white/60 text-[9px] font-bold uppercase tracking-[0.3em] rounded-full transition-all hover:bg-white hover:text-black text-center">
-                        Order Details
-                      </Link>
                     </div>
+                    <div className="od-list-card-right">
+                      <span className="od-list-total">{fmt(order.total, order.currency)}</span>
+                      <span className="od-list-arrow">
+                        View Details <ChevronRight size={14} />
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
 
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="mt-20 text-center">
-            <Link href="/explore"
-              className="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.4em] text-white/30 hover:text-white transition-colors">
-              <span>Explore New Collections</span>
+          <div className="od-list-footer">
+            <Link href="/explore" className="od-back-link">
+              <span>Explore Collections</span>
               <ArrowRight size={14} />
             </Link>
           </div>
