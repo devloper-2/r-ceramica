@@ -14,7 +14,7 @@ import type {
 // ─── Hero — image variant, shorter than the homepage video hero ───────────────
 export const CONTACT_HERO: HeroContent = {
   eyebrow: "Connectivity",
-  title: "Get In Touch",
+  title: "Get In Touch 123",
   description: "Experience architectural excellence first hand. Our consultants are ready to assist your vision.",
   mediaType: "image",
   mediaSrc:

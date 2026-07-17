@@ -11,13 +11,19 @@ class Products extends BaseApiController
     public function index(): ResponseInterface
     {
         $model = model(ProductModel::class)
-            ->select('products.id, products.slug, products.name, products.short_description, products.price, products.currency, products.status, categories.slug AS category, categories.name AS category_name')
+            ->select('products.id, products.slug, products.name, products.short_description, products.price, products.currency, products.status, categories.slug AS category, categories.name AS category_name, subcategories.slug AS subcategory, subcategories.name AS subcategory_name')
             ->join('categories', 'categories.id = products.category_id', 'left')
+            ->join('subcategories', 'subcategories.id = products.subcategory_id', 'left')
             ->where('products.status', 'published');
 
         $category = $this->request->getGet('category');
         if ($category) {
             $model->where('categories.slug', $category);
+        }
+
+        $subcategory = $this->request->getGet('subcategory');
+        if ($subcategory) {
+            $model->where('subcategories.slug', $subcategory);
         }
 
         $products = $model->orderBy('products.created_at', 'DESC')->findAll();

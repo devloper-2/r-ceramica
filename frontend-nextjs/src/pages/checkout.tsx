@@ -1,11 +1,13 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useMemo, useState, FormEvent } from "react";
 import { ArrowLeft, Lock, Check, ChevronRight, ShieldCheck } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { getCart, clearCart, cartSubtotal, type CartLine } from "@/lib/services/cart";
 import { payWithRazorpay, type CheckoutResult } from "@/lib/services/checkout";
+import { getCustomer, getToken, isAuthenticated } from "@/lib/services/auth";
 
 function fmt(n: number) {
   return "₹ " + n.toLocaleString("en-IN");
@@ -15,6 +17,7 @@ type Step = 1 | 2 | 3;
 const STEP_LABELS = ["Ship", "Pay", "Confirm"] as const;
 
 export default function CheckoutPage() {
+  const router = useRouter();
   const [step, setStep] = useState<Step>(1);
   const [placing, setPlacing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -22,17 +25,35 @@ export default function CheckoutPage() {
 
   // Cart comes from localStorage (client only).
   const [cart, setCart] = useState<CartLine[]>([]);
-  useEffect(() => {
-    setCart(getCart());
-  }, []);
-
-  const subtotal = useMemo(() => cartSubtotal(cart), [cart]);
-  const total = subtotal; // server is authoritative; no GST/shipping for now
 
   const [shipping, setShipping] = useState({
     firstName: "", lastName: "", address: "",
     city: "", state: "", zip: "", phone: "", email: "",
   });
+
+  // Login is required to check out — redirect guests. Also prefill from account.
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.replace("/login?redirect=/checkout");
+      return;
+    }
+    setCart(getCart());
+    const c = getCustomer();
+    if (c) {
+      const [firstName, ...rest] = (c.name || "").trim().split(" ");
+      setShipping((s) => ({
+        ...s,
+        firstName: s.firstName || firstName || "",
+        lastName: s.lastName || rest.join(" "),
+        email: s.email || c.email || "",
+        phone: s.phone || c.phone || "",
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const subtotal = useMemo(() => cartSubtotal(cart), [cart]);
+  const total = subtotal; // server is authoritative; no GST/shipping for now
 
   function handleShippingSubmit(e: FormEvent) {
     e.preventDefault();
@@ -53,21 +74,25 @@ export default function CheckoutPage() {
     setPlacing(true);
     payWithRazorpay({
       items: cart,
+      token: getToken(),
       customer: {
         name: `${shipping.firstName} ${shipping.lastName}`.trim(),
         email: shipping.email,
         phone: shipping.phone,
       },
       shipping: {
+        name: `${shipping.firstName} ${shipping.lastName}`.trim(),
         address: shipping.address, city: shipping.city,
         state: shipping.state, zip: shipping.zip,
+        phone: shipping.phone,
       },
       onSuccess: (r) => {
-        setPlacing(false);
         setResult(r);
         clearCart();
         setStep(3);
         window.scrollTo({ top: 0, behavior: "smooth" });
+        // Land the customer on their real order after a brief confirmation.
+        setTimeout(() => router.push(`/orders/${r.orderNumber}`), 1600);
       },
       onError: (msg) => {
         setPlacing(false);

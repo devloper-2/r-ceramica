@@ -19,6 +19,13 @@ $routes->group('api/v1', ['filter' => 'apikey', 'namespace' => 'App\Controllers\
     $routes->get('products', 'Products::index');
     $routes->get('products/(:segment)', 'Products::show/$1');
 
+    $routes->get('categories', 'Categories::index');
+    $routes->get('categories/(:segment)', 'Categories::show/$1');
+
+    $routes->get('subcategories/(:segment)', 'Subcategories::show/$1');
+
+    $routes->get('catalogues', 'Catalogues::index');
+
     $routes->get('navigation', 'Navigation::index');
     $routes->get('settings', 'Settings::index');
 });
@@ -35,6 +42,35 @@ $routes->group('api/v1/checkout', ['filter' => 'storecors', 'namespace' => 'App\
     $routes->options('verify', 'Checkout::verify');
     $routes->post('order', 'Checkout::order');
     $routes->post('verify', 'Checkout::verify');
+});
+
+/*
+ * ---------------------------------------------------------------------------
+ * Storefront customer auth (/api/v1/auth/*) — browser-facing, public
+ * ---------------------------------------------------------------------------
+ * Mobile+password and Google login. Returns a signed bearer token. CORS-guarded;
+ * `me` additionally requires a valid token (customerauth).
+ */
+$routes->group('api/v1/auth', ['filter' => 'storecors', 'namespace' => 'App\Controllers\Api'], static function ($routes) {
+    $routes->options('(:any)', static fn () => service('response')->setStatusCode(204)); // preflight
+    $routes->post('register', 'Auth::register');
+    $routes->post('login', 'Auth::login');
+    $routes->post('google', 'Auth::google');
+    $routes->get('me', 'Auth::me', ['filter' => 'customerauth']);
+});
+
+/*
+ * ---------------------------------------------------------------------------
+ * Storefront order history (/api/v1/orders/*) — browser-facing, token-guarded
+ * ---------------------------------------------------------------------------
+ */
+$routes->group('api/v1/orders', ['filter' => 'storecors', 'namespace' => 'App\Controllers\Api'], static function ($routes) {
+    // Preflight: the list request (GET /orders with an Authorization header)
+    // preflights the bare group root, so an OPTIONS handler is needed there too.
+    $routes->options('/', static fn () => service('response')->setStatusCode(204));
+    $routes->options('(:any)', static fn () => service('response')->setStatusCode(204));
+    $routes->get('/', 'Orders::index', ['filter' => 'customerauth']);
+    $routes->get('(:segment)', 'Orders::show/$1', ['filter' => 'customerauth']);
 });
 
 /*
@@ -65,14 +101,32 @@ $routes->group('admin', ['filter' => 'adminauth', 'namespace' => 'App\Controller
     $routes->post('products/(:num)', 'Products::update/$1');
     $routes->post('products/(:num)/delete', 'Products::delete/$1');
 
-    // Navigation
-    $routes->get('navigation', 'Navigation::index');
-    $routes->post('navigation', 'Navigation::save');
+    // Categories (rich editor + subcategory management)
+    $routes->get('categories', 'Categories::index');
+    $routes->post('categories', 'Categories::store');
+    $routes->get('categories/(:num)', 'Categories::edit/$1');
+    $routes->post('categories/(:num)', 'Categories::update/$1');
+    $routes->post('categories/(:num)/delete', 'Categories::delete/$1');
+    $routes->post('categories/(:num)/subcategories', 'Categories::storeSub/$1');
+    $routes->post('categories/(:num)/subcategories/(:num)', 'Categories::updateSub/$1/$2');
+    $routes->post('categories/(:num)/subcategories/(:num)/delete', 'Categories::deleteSub/$1/$2');
 
-    // Media
-    $routes->get('media', 'Media::index');
+    // Catalogue (CMS-driven /catalogue page)
+    $routes->get('catalogue', 'Catalogue::index');
+    $routes->get('catalogue/new', 'Catalogue::create');
+    $routes->post('catalogue', 'Catalogue::store');
+    $routes->get('catalogue/(:num)', 'Catalogue::edit/$1');
+    $routes->post('catalogue/(:num)', 'Catalogue::update/$1');
+    $routes->post('catalogue/(:num)/delete', 'Catalogue::delete/$1');
+
+    // Navigation is now system-fixed (menu defined in the frontend, not editable).
+
+    // Media upload/delete still used internally by product/category forms
     $routes->post('media/upload', 'Media::upload');
     $routes->post('media/(:num)/delete', 'Media::delete/$1');
+
+    // JSON image upload for AJAX (section editor, etc.)
+    $routes->post('upload-image', 'Pages::uploadImage');
 
     // Settings
     $routes->get('settings', 'Settings::index');

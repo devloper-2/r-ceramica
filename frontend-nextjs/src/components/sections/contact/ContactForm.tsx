@@ -3,9 +3,19 @@ import ContactSelect from "./ContactSelect";
 import ContactTextarea from "./ContactTextarea";
 import Button from "@/components/ui/Button";
 import { ArrowRight } from "lucide-react";
-import OfficeLocations from "./OfficeLocations";
+import OfficeLocations, { type Office } from "./OfficeLocations";
 
-export default function ContactForm() {
+interface Props {
+  formTitle?: string;
+  formSubtitle?: string;
+  offices?: Office[];
+}
+
+export default function ContactForm({
+  formTitle = "Send a Message",
+  formSubtitle = "Fill out the form below and an R Ceramica expert will reach out to you within 24 hours.",
+  offices,
+}: Props) {
   return (
     <div className="bg-white/[0.03] backdrop-blur-3xl p-8 md:p-10 border border-white/10 rounded-sm shadow-2xl relative overflow-hidden">
 
@@ -15,12 +25,11 @@ export default function ContactForm() {
 
       <div className="mb-10">
         <h2 className="text-2xl md:text-3xl font-display font-light text-white uppercase tracking-wider mb-3">
-          Send a Message
+          {formTitle}
         </h2>
 
         <p className="text-xs text-white/40 uppercase tracking-widest leading-relaxed">
-          Fill out the form below and an R Ceramica expert
-          will reach out to you within 24 hours.
+          {formSubtitle}
         </p>
       </div>
 
@@ -96,7 +105,7 @@ export default function ContactForm() {
   </Button>
 </div>
       </form>
-<OfficeLocations />
+<OfficeLocations offices={offices} />
     </div>
   );
 }

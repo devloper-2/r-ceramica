@@ -11,5 +11,5 @@ class MediaModel extends Model
     protected $returnType       = 'array';
     protected $useTimestamps    = true;
     protected $updatedField     = '';
-    protected $allowedFields    = ['filename', 'path', 'alt_text', 'mime', 'width', 'height', 'size_bytes'];
+    protected $allowedFields    = ['filename', 'path', 'alt_text', 'folder', 'product_id', 'mime', 'width', 'height', 'size_bytes'];
 }

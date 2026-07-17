@@ -7,11 +7,13 @@ interface Item {
 
 interface Props {
   title: string;
+  eyebrow?: string;
   items: Item[];
 }
 
 export default function ManufacturingSection({
   title,
+  eyebrow = "Industrial Innovation",
   items,
 }: Props) {
   return (
@@ -20,7 +22,7 @@ export default function ManufacturingSection({
 
         <div className="text-center mb-20">
           <span className="text-[10px] uppercase tracking-[0.5em] text-white/30">
-            Industrial Innovation
+            {eyebrow}
           </span>
 
           <h2 className="text-3xl md:text-5xl lg:text-7xl font-display font-light text-white uppercase mt-6">

@@ -18,5 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call('PagesSeeder');
         $this->call('LegalSeeder');
         $this->call('ProductsSeeder');
+        $this->call('CategoriesSeeder');
+        $this->call('SubcategoriesSeeder');
+        $this->call('CatalogueSeeder');
     }
 }

@@ -29,21 +29,27 @@ interface AboutProps {
 export const getStaticProps: GetStaticProps<AboutProps> = async () => {
   try {
     const page = await api.getPage("about");
+    console.log("[about] getStaticProps: fetched from API, sections:", page?.sections?.length ?? 0);
     return { props: { page } };
-  } catch {
+  } catch (err) {
+    console.error("[about] getStaticProps: API fetch failed — using static fallback:", err instanceof Error ? err.message : String(err));
     return { props: { page: null } };
   }
 };
 
 export default function AboutPage({ page }: AboutProps) {
   const s = page ? sectionsByType(page.sections) : null;
+  const apiOk = page !== null;
 
-  const hero = s?.aboutHero ?? ABOUT_HERO_STATIC;
-  const philosophy = s?.philosophy ?? ABOUT_PHILOSOPHY;
-  const stats = s?.stats?.items ?? ABOUT_STATS;
-  const technology = s?.technology?.items ?? ABOUT_TECHNOLOGY;
-  const chairman = s?.chairman ?? ABOUT_CHAIRMAN;
-  const footprint = s?.footprint ?? ABOUT_FOOTPRINT;
+  const hero       = s?.aboutHero              ?? ABOUT_HERO_STATIC;
+  const philosophy = s?.philosophy             ?? (apiOk ? null : ABOUT_PHILOSOPHY);
+  const stats      = s?.stats?.items           ?? (apiOk ? null : ABOUT_STATS);
+  const technologySection = s?.technology ?? null;
+  const technology        = technologySection?.items   ?? (apiOk ? null : ABOUT_TECHNOLOGY);
+  const technologyTitle   = technologySection?.title   ?? "Our Manufacturing Process";
+  const technologyEyebrow = technologySection?.eyebrow ?? "Industrial Innovation";
+  const chairman   = s?.chairman               ?? (apiOk ? null : ABOUT_CHAIRMAN);
+  const footprint  = s?.footprint              ?? (apiOk ? null : ABOUT_FOOTPRINT);
 
   const title = page?.meta_title ?? `About Us | ${siteConfig.name}`;
   const description =
@@ -67,11 +73,11 @@ export default function AboutPage({ page }: AboutProps) {
       </Head>
 
       <AboutHero {...hero} />
-      <PhilosophySection {...philosophy} />
-      <StatsGrid items={stats} />
-      <ManufacturingSection title="Our Manufacturing Process" items={technology} />
-      <TestimonialsQuote {...chairman} />
-      <Footprint {...footprint} />
+      {philosophy  && <PhilosophySection {...philosophy} />}
+      {stats       && <StatsGrid items={stats} />}
+      {technology  && <ManufacturingSection title={technologyTitle} eyebrow={technologyEyebrow} items={technology} />}
+      {chairman    && <TestimonialsQuote {...chairman} />}
+      {footprint   && <Footprint {...footprint} />}
     </div>
   );
 }

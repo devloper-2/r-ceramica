@@ -15,6 +15,10 @@ import {
   Leaf,
   ShieldCheck,
   Users,
+  Package,
+  Truck,
+  RefreshCw,
+  Send,
   type LucideIcon,
 } from "lucide-react";
 import type { FeatureCard } from "@/lib/types";
@@ -28,6 +32,10 @@ const ICONS: Record<string, LucideIcon> = {
   Leaf,
   ShieldCheck,
   Users,
+  Package,
+  Truck,
+  RefreshCw,
+  Send,
 };
 
 /** Resolve an icon by name; falls back to Building2 for unknown names. */

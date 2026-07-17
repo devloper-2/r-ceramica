@@ -39,7 +39,65 @@ export interface ApiProductListItem {
   currency: string;
   category?: string | null;
   category_name?: string | null;
+  subcategory?: string | null;
+  subcategory_name?: string | null;
   image?: string | null;
+}
+
+export interface ApiSubcategory {
+  id: string | number;
+  category_id: string | number;
+  slug: string;
+  name: string;
+  subtitle?: string | null;
+  description?: string | null;
+  image?: string | null;
+  sort_order?: string | number;
+  status?: string;
+}
+
+export interface ApiCategory {
+  id: string | number;
+  slug: string;
+  name: string;
+  title?: string | null;
+  subtitle?: string | null;
+  description?: string | null;
+  image?: string | null;
+  hero_eyebrow?: string | null;
+  hero_title?: string | null;
+  hero_subtitle?: string | null;
+  hero_image?: string | null;
+  subcategories?: ApiSubcategory[];
+}
+
+export interface ApiSubcategoryDetail extends ApiSubcategory {
+  category_slug?: string | null;
+  category_name?: string | null;
+  category_title?: string | null;
+  products: ApiProductListItem[];
+}
+
+export interface ApiCatalogue {
+  id: string | number;
+  slug: string;
+  title: string;
+  title_line2?: string | null;
+  eyebrow?: string | null;
+  sub?: string | null;
+  pages?: number | null;
+  size?: string | null;
+  badge_label?: string | null;
+  badge_gold?: number | string;
+  spine_gold?: number | string;
+  spine_label?: string | null;
+  image?: string | null;
+  img_opacity?: number | string;
+  availability?: "green" | "yellow";
+  avail_label?: string | null;
+  tags?: string[] | null;
+  technical?: number | string;
+  pdf_path?: string | null;
 }
 
 async function apiGet<T>(path: string): Promise<T> {
@@ -58,8 +116,14 @@ export const api = {
   getPages: () => apiGet<Array<Pick<ApiPage, "slug" | "title" | "meta_title" | "meta_description">>>(`/pages`),
   getProducts: (category?: string) =>
     apiGet<ApiProductListItem[]>(`/products${category ? `?category=${encodeURIComponent(category)}` : ""}`),
+  getProductsBySubcategory: (subcategory: string) =>
+    apiGet<ApiProductListItem[]>(`/products?subcategory=${encodeURIComponent(subcategory)}`),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getProduct: (slug: string) => apiGet<Record<string, any>>(`/products/${slug}`),
+  getCategories: () => apiGet<ApiCategory[]>(`/categories`),
+  getCategory: (slug: string) => apiGet<ApiCategory>(`/categories/${slug}`),
+  getSubcategory: (slug: string) => apiGet<ApiSubcategoryDetail>(`/subcategories/${slug}`),
+  getCatalogues: () => apiGet<ApiCatalogue[]>(`/catalogues`),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getNavigation: () => apiGet<any[]>(`/navigation`),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

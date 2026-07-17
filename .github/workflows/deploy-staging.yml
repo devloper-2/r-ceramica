@@ -1,11 +1,8 @@
 name: Deploy staging site
 
-# Fires when admin clicks "Publish site" in the CI4 admin panel.
-# The Publish controller sends a repository_dispatch event to GitHub.
 on:
   repository_dispatch:
     types: [rebuild-site]
-  # Also allow manual trigger from GitHub Actions tab (useful for debugging)
   workflow_dispatch:
 
 jobs:
@@ -17,43 +14,75 @@ jobs:
         working-directory: frontend-nextjs
 
     steps:
-      # ── 1. Checkout code ──
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # ── 2. Node.js setup ──
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: frontend-nextjs/package-lock.json
 
-      # ── 3. Install dependencies ──
-      - run: npm ci
+      - name: Install dependencies
+        run: npm install
 
-      # ── 4. Generate site data from live API ──
-      - run: node scripts/gen-site-data.mjs
+      - name: Verify content API is reachable
+        run: |
+          echo "--- Fetching /api/v1/pages/about from live server ---"
+          curl -s \
+            -H "X-API-Key: ${{ secrets.CONTENT_API_KEY }}" \
+            -w "\n\nHTTP status: %{http_code}\n" \
+            "https://admin.rceramica.com/api/v1/pages/about" | head -c 4000
+          echo ""
+          HTTP=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "X-API-Key: ${{ secrets.CONTENT_API_KEY }}" \
+            "https://admin.rceramica.com/api/v1/pages/about")
+          if [ "$HTTP" != "200" ]; then
+            echo "::error::Content API returned HTTP $HTTP"
+            exit 1
+          fi
+
+      - name: Generate site data from live API
+        run: node scripts/gen-site-data.mjs
         env:
           CONTENT_API_URL: https://admin.rceramica.com/api/v1
           CONTENT_API_KEY: ${{ secrets.CONTENT_API_KEY }}
 
-      # ── 5. Generate sitemap ──
-      - run: node scripts/gen-sitemap.mjs
+      - name: Generate sitemap
+        run: node scripts/gen-sitemap.mjs
 
-      # ── 6. Build static export ──
-      - run: npx cross-env STATIC_EXPORT=true next build
+      - name: Build static export
+        run: npx cross-env STATIC_EXPORT=true next build
         env:
           CONTENT_API_URL: https://admin.rceramica.com/api/v1
           CONTENT_API_KEY: ${{ secrets.CONTENT_API_KEY }}
           NEXT_PUBLIC_API_URL: https://admin.rceramica.com/api/v1
           STATIC_EXPORT: "true"
 
-      # ── 7. Deploy to Hostinger via FTP ──
-      - name: Deploy to Hostinger
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASS }}
-          local-dir: frontend-nextjs/out/
-          server-dir: public_html/staging/
-          dangerous-clean-slate: false
+      - name: Prepare output for Apache
+        run: |
+          # Guarantee .htaccess ships (Next.js export can skip dotfiles in public/).
+          cp public/.htaccess out/.htaccess
+          echo "=== out/ root ==="
+          ls -la out/ | head -40
+          echo "=== .htaccess in out/ ==="
+          ls -la out/.htaccess
+          echo "=== about.html titleLine2 in this build ==="
+          grep -o -i 'titleLine2[^,}]*' out/about.html | head -3 || echo "not found"
+
+      - name: Deploy to Hostinger via FTP
+        run: |
+          sudo apt-get install -y lftp
+          lftp -u "${{ secrets.FTP_USER }}","${{ secrets.FTP_PASS }}" ftp://${{ secrets.FTP_HOST }} <<'FTPEOF'
+          set ssl:verify-certificate no
+          set ftp:ssl-allow no
+          set xfer:clobber on
+          echo "===== FTP LOGIN DIRECTORY (pwd) ====="
+          pwd
+          echo "===== MIRRORING out/ -> staging/ (login dir is already public_html) ====="
+          mirror --reverse --delete --verbose out/ staging/
+          echo "===== TARGET AFTER DEPLOY (staging/) ====="
+          cls -l staging/
+          bye
+          FTPEOF

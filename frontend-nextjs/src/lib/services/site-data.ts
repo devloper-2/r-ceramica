@@ -18,9 +18,28 @@ export interface SiteLanguage {
   label: string;
 }
 
-export const NAV_LINKS: SiteLink[] = data.nav;
+/**
+ * The primary menu is SYSTEM-FIXED by design — it is not editable from the
+ * admin panel. Explore drives the Category → Subcategory → Product tree;
+ * Catalogue and the landing pages round out the site.
+ */
+export const NAV_LINKS: SiteLink[] = [
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about" },
+  { label: "Explore", href: "/explore" },
+  { label: "Catalogue", href: "/catalogue" },
+  { label: "Contact Us", href: "/contact" },
+];
+
 export const LANGUAGES: SiteLanguage[] = data.languages;
-export const FOOTER_QUICK_LINKS: SiteLink[] = data.footer.quickLinks;
+
+/** Footer quick links kept in sync with the fixed menu (no dead routes). */
+export const FOOTER_QUICK_LINKS: SiteLink[] = [
+  { label: "Explore", href: "/explore" },
+  { label: "Catalogue", href: "/catalogue" },
+  { label: "About Us", href: "/about" },
+  { label: "Contact Us", href: "/contact" },
+];
 export const FOOTER_CORPORATE_LINKS: SiteLink[] = data.footer.corporateLinks;
 export const CONTACT = data.contact;
 export const ADDRESS = data.address;
