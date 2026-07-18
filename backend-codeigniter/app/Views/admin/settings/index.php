@@ -4,14 +4,38 @@
 <?php
 // Per-setting metadata: icon, description, field hints
 $meta = [
-    'site'      => ['icon' => 'bi-globe2',          'label' => 'Site Identity',    'desc' => 'Site name, tagline, URL, SEO description and keywords.'],
-    'contact'   => ['icon' => 'bi-telephone',        'label' => 'Contact Details',  'desc' => 'Phone, WhatsApp and email address shown across the site.'],
-    'address'   => ['icon' => 'bi-geo-alt',          'label' => 'Business Address', 'desc' => 'Physical address used in footer and structured data.'],
-    'socials'   => ['icon' => 'bi-share',            'label' => 'Social Media',     'desc' => 'Instagram, Facebook and other social profile links.'],
-    'branding'  => ['icon' => 'bi-palette',          'label' => 'Branding',         'desc' => 'Logo image path and Open Graph / social share image.'],
-    'footer'    => ['icon' => 'bi-layout-text-window','label' => 'Footer Links',    'desc' => 'Quick links and corporate links shown in the site footer.'],
-    'languages' => ['icon' => 'bi-translate',        'label' => 'Languages',        'desc' => 'Language switcher options displayed in the navbar.'],
+    'site'      => ['icon' => 'bi-globe2',             'label' => 'Site Identity',    'desc' => 'Site name, tagline, URL, SEO description and keywords.'],
+    'contact'   => ['icon' => 'bi-telephone',           'label' => 'Contact Details',  'desc' => 'Phone, WhatsApp and email address shown across the site.'],
+    'address'   => ['icon' => 'bi-geo-alt',             'label' => 'Business Address', 'desc' => 'Physical address used in footer and structured data.'],
+    'socials'   => ['icon' => 'bi-share',               'label' => 'Social Media',     'desc' => 'Instagram, Facebook and other social profile links.'],
+    'branding'  => ['icon' => 'bi-palette',             'label' => 'Branding',         'desc' => 'Logo image path and Open Graph / social share image.'],
+    'footer'    => ['icon' => 'bi-layout-text-window',  'label' => 'Footer Links',     'desc' => 'Quick links and corporate links shown in the site footer.'],
+    'languages' => ['icon' => 'bi-translate',           'label' => 'Languages',        'desc' => 'Language switcher options displayed in the navbar.'],
 ];
+
+// Two-section grouping
+$groups = [
+    'header' => [
+        'icon'   => 'bi-layout-text-window-reverse',
+        'label'  => 'Header Settings',
+        'eyebrow'=> 'Navigation & Brand',
+        'desc'   => 'Controls site identity, logo, branding, and navigation language options.',
+        'keys'   => ['site', 'branding', 'languages'],
+    ],
+    'footer' => [
+        'icon'   => 'bi-layout-text-window',
+        'label'  => 'Footer Settings',
+        'eyebrow'=> 'Footer & Contact',
+        'desc'   => 'Controls contact information, business address, social links, and footer navigation.',
+        'keys'   => ['contact', 'address', 'socials', 'footer'],
+    ],
+];
+
+// Index settings by key for quick lookup
+$settingsByKey = [];
+foreach ($settings as $s) {
+    $settingsByKey[$s['key']] = $s;
+}
 ?>
 
 <style>
@@ -21,9 +45,10 @@ $meta = [
         border: 1px solid var(--admin-border);
         border-radius: 12px;
         box-shadow: var(--admin-shadow-sm);
-        margin-bottom: 20px;
+        margin-bottom: 0;
         overflow: hidden;
         transition: box-shadow .18s;
+        height: 100%;
     }
     .setting-card:hover { box-shadow: var(--admin-shadow); }
 
@@ -39,8 +64,31 @@ $meta = [
     }
     .setting-title { font-size: 1rem; font-weight: 700; margin: 0; }
     .setting-desc  { font-size: .8rem; color: var(--admin-muted); margin: 2px 0 0; }
-
     .setting-body  { padding: 0 22px 20px; }
+
+    /* ── Section banners ── */
+    .settings-section { margin-bottom: 2.5rem; }
+    .ssh {
+        display: flex; align-items: center; gap: 1rem;
+        padding: 1.1rem 1.4rem;
+        background: linear-gradient(120deg, rgba(201,162,75,.07) 0%, transparent 80%);
+        border: 1px solid rgba(201,162,75,.22);
+        border-left: 4px solid var(--admin-primary);
+        border-radius: 12px;
+        margin-bottom: 1.25rem;
+    }
+    .ssh-icon {
+        width: 46px; height: 46px; flex-shrink: 0;
+        background: rgba(201,162,75,.13); border-radius: 11px;
+        display: grid; place-items: center;
+        color: var(--admin-primary); font-size: 1.25rem;
+    }
+    .ssh-eyebrow {
+        font-size: .68rem; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .08em; color: var(--admin-primary); margin: 0 0 .15rem;
+    }
+    .ssh-title { font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--admin-text); line-height: 1.2; }
+    .ssh-desc  { font-size: .8rem; color: var(--admin-muted); margin: .2rem 0 0; }
 
     /* Tabs */
     .stabs { display: flex; gap: 6px; margin-bottom: 18px; }
@@ -124,9 +172,9 @@ $meta = [
 </style>
 
 <!-- Page heading -->
-<div class="page-heading">
+<div class="page-heading mb-4">
     <div class="page-heading-copy">
-        <span class="page-icon"><i class="bi bi-gear"></i></span>
+        <span class="page-icon"><i class="bi bi-gear-fill"></i></span>
         <div>
             <p class="eyebrow mb-1">System</p>
             <h1>Settings</h1>
@@ -135,58 +183,81 @@ $meta = [
     </div>
 </div>
 
-<?php foreach ($settings as $s):
-    $k    = $s['key'];
-    $info = $meta[$k] ?? ['icon' => 'bi-sliders', 'label' => ucfirst($k), 'desc' => ''];
-?>
-<div class="setting-card">
+<?php foreach ($groups as $groupId => $group): ?>
+<div class="settings-section">
 
-    <!-- Header -->
-    <div class="setting-header">
-        <div class="setting-header-left">
-            <span class="setting-icon"><i class="bi <?= esc($info['icon']) ?>"></i></span>
-            <div>
-                <div class="setting-title"><?= esc($info['label']) ?></div>
-                <?php if ($info['desc']): ?>
-                    <div class="setting-desc"><?= esc($info['desc']) ?></div>
-                <?php endif; ?>
-            </div>
+    <!-- Section banner -->
+    <div class="ssh">
+        <div class="ssh-icon"><i class="bi <?= esc($group['icon']) ?>"></i></div>
+        <div>
+            <p class="ssh-eyebrow"><?= esc($group['eyebrow']) ?></p>
+            <h2 class="ssh-title"><?= esc($group['label']) ?></h2>
+            <p class="ssh-desc"><?= esc($group['desc']) ?></p>
         </div>
     </div>
 
-    <!-- Body -->
-    <div class="setting-body">
-        <form action="/admin/settings" method="post" class="setting-form">
-            <?= csrf_field() ?>
-            <input type="hidden" name="key" value="<?= esc($k) ?>">
+    <!-- Cards grid -->
+    <div class="row g-3">
+        <?php foreach ($group['keys'] as $k):
+            if (!isset($settingsByKey[$k])) continue;
+            $s    = $settingsByKey[$k];
+            $info = $meta[$k] ?? ['icon' => 'bi-sliders', 'label' => ucfirst($k), 'desc' => ''];
+        ?>
+        <div class="col-md-6">
+            <div class="setting-card">
 
-            <!-- Tabs -->
-            <div class="stabs">
-                <span class="stab active" data-mode="simple">
-                    <i class="bi bi-ui-checks me-1"></i>Easy editor
-                </span>
-                <span class="stab" data-mode="advanced">
-                    <i class="bi bi-code-slash me-1"></i>Advanced (code)
-                </span>
+                <!-- Header -->
+                <div class="setting-header">
+                    <div class="setting-header-left">
+                        <span class="setting-icon"><i class="bi <?= esc($info['icon']) ?>"></i></span>
+                        <div>
+                            <div class="setting-title"><?= esc($info['label']) ?></div>
+                            <?php if ($info['desc']): ?>
+                                <div class="setting-desc"><?= esc($info['desc']) ?></div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Body -->
+                <div class="setting-body">
+                    <form action="/admin/settings" method="post" class="setting-form">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="key" value="<?= esc($k) ?>">
+
+                        <!-- Tabs -->
+                        <div class="stabs">
+                            <span class="stab active" data-mode="simple">
+                                <i class="bi bi-ui-checks me-1"></i>Easy editor
+                            </span>
+                            <span class="stab" data-mode="advanced">
+                                <i class="bi bi-code-slash me-1"></i>Advanced (code)
+                            </span>
+                        </div>
+
+                        <!-- Easy editor mount -->
+                        <div class="editor-mount"></div>
+
+                        <!-- Raw JSON (advanced mode) -->
+                        <textarea class="raw-json" spellcheck="false"></textarea>
+
+                        <!-- Hidden: actual POST value -->
+                        <textarea name="value" style="display:none"><?= esc($s['value_pretty']) ?></textarea>
+
+                        <div class="save-row">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="bi bi-check-lg me-1"></i>Save <?= esc($info['label']) ?>
+                            </button>
+                            <span class="save-label">Changes go live after you click <strong>Publish Site</strong></span>
+                        </div>
+                    </form>
+                </div>
+
             </div>
-
-            <!-- Easy editor mount -->
-            <div class="editor-mount"></div>
-
-            <!-- Raw JSON (advanced mode) -->
-            <textarea class="raw-json" spellcheck="false"></textarea>
-
-            <!-- Hidden: actual POST value -->
-            <textarea name="value" style="display:none"><?= esc($s['value_pretty']) ?></textarea>
-
-            <div class="save-row">
-                <button class="btn btn-primary" type="submit">
-                    <i class="bi bi-check-lg me-1"></i>Save <?= esc($info['label']) ?>
-                </button>
-                <span class="save-label">Changes go live after you click <strong>Publish Site</strong></span>
-            </div>
-        </form>
+        </div>
+        <?php endforeach; ?>
     </div>
+
 </div>
 <?php endforeach; ?>
 

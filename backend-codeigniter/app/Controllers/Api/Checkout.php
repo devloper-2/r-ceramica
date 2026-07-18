@@ -161,6 +161,11 @@ class Checkout extends BaseApiController
             'status'           => 'paid',
             'payment_provider' => 'razorpay',
             'payment_ref'      => $body['razorpay_payment_id'],
+            'notes'            => json_encode([
+                'razorpay_order_id'   => $body['razorpay_order_id'],
+                'razorpay_payment_id' => $body['razorpay_payment_id'],
+                'razorpay_signature'  => substr($body['razorpay_signature'], 0, 16) . '…',
+            ]),
         ], true);
 
         $itemModel = model(OrderItemModel::class);
