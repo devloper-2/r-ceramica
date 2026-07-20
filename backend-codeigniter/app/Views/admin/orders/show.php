@@ -50,6 +50,37 @@
 }
 .od-addr-line { font-size: .88rem; color: var(--admin-text); line-height: 1.7; }
 .od-addr-name { font-weight: 700; }
+
+/* ── Razorpay payment detail ── */
+.rzp-badge {
+  font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;
+  color:#3395ff;background:#e8f1ff;border:1px solid #b3d0ff;
+  padding:.15rem .5rem;border-radius:20px;flex-shrink:0;
+}
+.rzp-row-label {
+  font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--admin-muted);margin-bottom:.2rem;
+}
+.rzp-id-row { display:flex;align-items:center;gap:.35rem; }
+.rzp-mono {
+  font-family:"SFMono-Regular",Consolas,monospace;
+  font-size:.76rem;font-weight:700;color:var(--admin-text);word-break:break-all;flex:1;
+}
+.rzp-copy-btn {
+  flex-shrink:0;background:none;border:1px solid var(--admin-border);
+  border-radius:5px;padding:2px 6px;font-size:.7rem;color:var(--admin-muted);
+  cursor:pointer;line-height:1;text-decoration:none;
+  transition:color .15s,background .15s;
+}
+.rzp-copy-btn:hover{background:var(--admin-surface-soft);color:var(--admin-text);}
+.rzp-copy-btn.copied{color:#065f46;background:#dcfce7;border-color:#86efac;}
+.rzp-verified {
+  display:inline-flex;align-items:center;gap:.25rem;
+  font-size:.68rem;font-weight:700;white-space:nowrap;
+  color:#065f46;background:#dcfce7;border:1px solid #86efac;
+  padding:.15rem .45rem;border-radius:20px;
+}
+.rzp-divider { border-top:1px solid var(--admin-border);margin:.6rem 0; }
 </style>
 
 <?php
@@ -64,6 +95,16 @@ $statusIcons = [
 $addr = !empty($order['shipping_address'])
   ? (is_string($order['shipping_address']) ? json_decode($order['shipping_address'], true) : $order['shipping_address'])
   : [];
+
+$notes = [];
+if (!empty($order['notes'])) {
+  $decoded = json_decode($order['notes'], true);
+  if (is_array($decoded)) $notes = $decoded;
+}
+$rzpPaymentId = $notes['razorpay_payment_id'] ?? $order['payment_ref'] ?? '';
+$rzpOrderId   = $notes['razorpay_order_id'] ?? '';
+$rzpSig       = $notes['razorpay_signature'] ?? '';
+$isRazorpay   = strtolower($order['payment_provider'] ?? '') === 'razorpay';
 ?>
 
 <!-- Breadcrumb -->
@@ -120,16 +161,80 @@ $addr = !empty($order['shipping_address'])
   <!-- Payment -->
   <div class="col-md-4">
     <div class="od-info-card">
-      <div class="od-info-label"><i class="bi bi-credit-card-fill"></i> Payment</div>
-      <div class="od-info-primary"><?= esc($order['payment_provider'] ?: '—') ?></div>
-      <?php if (!empty($order['payment_ref'])): ?>
-        <div class="od-info-secondary" style="font-size:.76rem;word-break:break-all">
-          Ref: <?= esc($order['payment_ref']) ?>
+
+      <!-- Header row -->
+      <div class="od-info-label d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-credit-card-fill"></i> Payment</span>
+        <?php if ($isRazorpay): ?>
+          <span class="rzp-badge">Razorpay</span>
+        <?php endif; ?>
+      </div>
+
+      <?php if ($isRazorpay && $rzpPaymentId): ?>
+
+        <!-- Payment ID -->
+        <div style="margin-bottom:.55rem">
+          <div class="rzp-row-label">Payment ID</div>
+          <div class="rzp-id-row">
+            <span class="rzp-mono"><?= esc($rzpPaymentId) ?></span>
+            <button class="rzp-copy-btn" type="button" onclick="rzpCopy(this,'<?= esc($rzpPaymentId) ?>')" title="Copy Payment ID">
+              <i class="bi bi-copy"></i>
+            </button>
+            <a class="rzp-copy-btn" href="https://dashboard.razorpay.com/app/payments/<?= urlencode($rzpPaymentId) ?>" target="_blank" rel="noopener noreferrer" title="Open in Razorpay Dashboard">
+              <i class="bi bi-box-arrow-up-right"></i>
+            </a>
+          </div>
         </div>
+
+        <?php if ($rzpOrderId): ?>
+        <!-- Razorpay Order ID -->
+        <div style="margin-bottom:.55rem">
+          <div class="rzp-row-label">Razorpay Order ID</div>
+          <div class="rzp-id-row">
+            <span class="rzp-mono" style="font-size:.71rem"><?= esc($rzpOrderId) ?></span>
+            <button class="rzp-copy-btn" type="button" onclick="rzpCopy(this,'<?= esc($rzpOrderId) ?>')" title="Copy Order ID">
+              <i class="bi bi-copy"></i>
+            </button>
+          </div>
+        </div>
+        <?php endif; ?>
+
+        <!-- Amount -->
+        <div style="margin-bottom:.55rem">
+          <div class="rzp-row-label">Amount Paid</div>
+          <div style="font-size:.9rem;font-weight:800;color:var(--admin-text)">
+            ₹<?= number_format((float)$order['total'], 2) ?>
+            <span style="font-size:.72rem;font-weight:600;color:var(--admin-muted)"><?= esc($order['currency'] ?? 'INR') ?></span>
+          </div>
+        </div>
+
+        <?php if ($rzpSig): ?>
+        <!-- Signature -->
+        <div style="margin-bottom:.55rem">
+          <div class="rzp-row-label">Signature</div>
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="rzp-mono" style="font-size:.67rem;color:var(--admin-muted)"><?= esc($rzpSig) ?></span>
+            <span class="rzp-verified"><i class="bi bi-shield-check-fill"></i> Verified</span>
+          </div>
+        </div>
+        <?php endif; ?>
+
+      <?php else: ?>
+        <div class="od-info-primary"><?= esc($order['payment_provider'] ?: '—') ?></div>
+        <?php if (!empty($order['payment_ref'])): ?>
+          <div class="od-info-secondary" style="font-size:.76rem;word-break:break-all">
+            Ref: <?= esc($order['payment_ref']) ?>
+          </div>
+        <?php endif; ?>
       <?php endif; ?>
-      <div class="od-info-secondary mt-1" style="font-size:.76rem">
+
+      <!-- Date paid -->
+      <div class="rzp-divider"></div>
+      <div class="od-info-secondary" style="font-size:.74rem">
+        <i class="bi bi-calendar3 me-1"></i>
         <?= date('d M Y, H:i', strtotime($order['created_at'])) ?>
       </div>
+
     </div>
   </div>
 </div>
@@ -255,5 +360,20 @@ $addr = !empty($order['shipping_address'])
   </div>
 
 </div>
+
+<script>
+function rzpCopy(btn, text) {
+  if (!navigator.clipboard) return;
+  navigator.clipboard.writeText(text).then(function () {
+    var prev = btn.innerHTML;
+    btn.classList.add('copied');
+    btn.innerHTML = '<i class="bi bi-check-lg"></i>';
+    setTimeout(function () {
+      btn.classList.remove('copied');
+      btn.innerHTML = prev;
+    }, 1600);
+  });
+}
+</script>
 
 <?= $this->endSection() ?>
