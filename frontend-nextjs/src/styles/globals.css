@@ -197,6 +197,9 @@ body {
   pointer-events: none;
   transition: all 0.5s ease-in-out;
 }
+button:hover{
+  cursor: pointer;
+}
 
 @media (min-width: 1024px) {
   .is-searching #nav-right {

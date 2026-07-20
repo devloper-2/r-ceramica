@@ -554,3 +554,59 @@
 
 /* Hover card animation */
 .order-card { transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1); }
+
+
+@media only screen and (max-width: 640px) {
+  .od-tracker-card{
+    padding: 20px 0px;
+  }
+  .od-tracker{
+    flex-direction: column;
+    min-width: auto;
+    align-items: center;
+    gap: 0px;
+  }
+  .od-track-item{
+    flex-direction: column;
+    align-items: center;
+  }
+  .od-connector-done{
+    width: 2px;
+    height: 60px;
+    flex: none;
+    margin-top: 0;
+  }
+  .od-step-icon{
+    width: 50px;
+    height: 50px;
+  }
+  .od-step{
+    width: 100%;
+  }
+  .od-header{
+    align-items: center;
+    flex-direction: column-reverse;
+  }
+  .od-item{
+    flex-direction: column;
+  }
+  .od-item-name{
+    font-size: 18px;
+  }
+  .od-item-info{
+    text-align: center;
+  }
+  .od-list-card,.od-list-card-left{
+    flex-direction: column;
+  }
+  .od-list-card-right,.od-list-card-left{
+    align-items: center;
+  }
+  .od-list-top{
+    flex-direction: column-reverse;
+  }
+  .od-list-header{
+    justify-content: center;
+    text-align: center;
+  }
+}

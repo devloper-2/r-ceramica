@@ -40,7 +40,7 @@ function FilterAccordion({
         onClick={onToggle}
         className="w-full flex justify-between items-center bg-[#111] px-6 py-5 hover:bg-[#151515] transition-colors group"
       >
-        <span className="text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 group-hover:text-white">
+        <span className="text-[11px] uppercase tracking-[0.2em] font-medium text-white/60 cursor-pointer group-hover:text-white">
           {label}
         </span>
         {open ? (
@@ -61,10 +61,7 @@ function FilterAccordion({
 function CheckboxOption({ label }: { label: string }) {
   return (
     <label className="flex items-center gap-3 cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
-      <input
-        type="checkbox"
-        className="w-3.5 h-3.5 bg-white/5 border border-white/20 accent-white"
-      />
+      <input type="checkbox" className="w-3.5 h-3.5 bg-white/5 border border-white/20 accent-white" />
       <span>{label}</span>
     </label>
   );

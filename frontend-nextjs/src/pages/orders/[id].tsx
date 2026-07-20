@@ -150,7 +150,7 @@ export default function OrderDetailsPage() {
 
           {/* ── Status tracker ── */}
           {order.status !== "cancelled" ? (
-            <div className="od-tracker-card orders-slide-up">
+            <div className="od-tracker-card orders-slide-up"> 
               <div className="od-tracker">
                 {STEPS.map((step, i) => {
                   const done = i < stepIdx;

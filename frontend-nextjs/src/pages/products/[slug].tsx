@@ -211,18 +211,9 @@ export default function ProductDetailPage({ product, related }: { product: Produ
 
       {/* ── 3D Modal ── */}
       {modal3D && img3D && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm"
-          onClick={() => setModal3D(false)}
-        >
-          <div
-            className="bg-[#111] border border-white/10 p-6 w-full max-w-3xl mx-4 relative max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setModal3D(false)}
-              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center border border-white/15 text-white/50 hover:border-white/40 hover:text-white transition-all"
-            >
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm" onClick={() => setModal3D(false)} >
+          <div className="bg-[#111] border border-white/10 p-6 w-full max-w-3xl mx-4 relative max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()} >
+            <button onClick={() => setModal3D(false)} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center border border-white/15 text-white/50 hover:border-white/40 hover:text-white transition-all" >
               <X size={13} />
             </button>
             <p className="text-[9px] uppercase tracking-[0.5em] text-white/40 mb-1">3D Model</p>
@@ -256,11 +247,7 @@ export default function ProductDetailPage({ product, related }: { product: Produ
                 <p className="text-[#c5a059] text-[9px] uppercase tracking-[0.4em] mb-6">
                   {ext3D.toUpperCase()} 3D Model
                 </p>
-                <a
-                  href={img3D}
-                  download
-                  className="inline-flex items-center gap-2 px-8 py-3 bg-[#c5a059] text-black text-[9px] uppercase tracking-[0.35em] font-bold hover:bg-white transition-colors"
-                >
+                <a href={img3D} download className="inline-flex items-center gap-2 px-8 py-3 bg-[#c5a059] text-black text-[9px] uppercase tracking-[0.35em] font-bold hover:bg-white transition-colors">
                   Download 3D Model
                 </a>
                 <p className="text-white/25 text-[10px] mt-4">
@@ -272,13 +259,7 @@ export default function ProductDetailPage({ product, related }: { product: Produ
             {/* Legacy: old entry stored a render image in this field */}
             {is3DImageFile && !is3DModelFile && (
               <div className="bg-[#e8e8e8] p-4">
-                <Image
-                  src={img3D}
-                  alt="3D Model View"
-                  width={900}
-                  height={600}
-                  className="w-full h-auto object-contain"
-                />
+                <Image src={img3D} alt="3D Model View" width={900} height={600} className="w-full h-auto object-contain" />
               </div>
             )}
           </div>
@@ -302,10 +283,7 @@ export default function ProductDetailPage({ product, related }: { product: Produ
             {product.category_slug && product.subcategory_slug && (
               <>
                 <ChevronRight size={9} />
-                <Link
-                  href={`/explore/${product.category_slug}/${product.subcategory_slug}`}
-                  className="hover:text-white transition-colors"
-                >
+                <Link href={`/explore/${product.category_slug}/${product.subcategory_slug}`} className="hover:text-white transition-colors" >
                   {product.subcategory_name}
                 </Link>
               </>
@@ -324,13 +302,7 @@ export default function ProductDetailPage({ product, related }: { product: Produ
                 {images.length > 1 && (
                   <div className="flex flex-col gap-2 w-[68px] flex-shrink-0">
                     {images.map((src, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setMainImg(i)}
-                        className={`relative w-[68px] h-[68px] overflow-hidden border-2 transition-all flex-shrink-0 ${
-                          i === mainImg ? "border-[#c5a059]" : "border-white/10 hover:border-white/30"
-                        }`}
-                      >
+                      <button key={i} onClick={() => setMainImg(i)} className={`relative w-[68px] h-[68px] overflow-hidden border-2 transition-all flex-shrink-0 ${ i === mainImg ? "border-[#c5a059]" : "border-white/10 hover:border-white/30" }`} >
                         <Image src={src} alt="" fill sizes="68px" className="object-cover" />
                       </button>
                     ))}
@@ -338,37 +310,20 @@ export default function ProductDetailPage({ product, related }: { product: Produ
                 )}
 
                 {/* Main image — viewport-fitted height */}
-                <div
-                  className="flex-1 relative bg-[#111] overflow-hidden group"
-                  style={{ height: "calc(100vh - 240px)", maxHeight: "720px", minHeight: "380px" }}
-                >
+                <div className="flex-1 relative bg-[#111] overflow-hidden group" style={{ height: "calc(100vh - 240px)", maxHeight: "720px", minHeight: "380px" }} >
                   {hasImages ? (
                     <>
-                      <Image
-                        key={mainImg}
-                        src={images[mainImg]}
-                        alt={product.name}
-                        fill
-                        priority
-                        sizes="(max-width:1024px) 100vw, 55vw"
-                        className="object-cover transition-transform duration-[2s] group-hover:scale-[1.03]"
-                      />
+                      <Image key={mainImg} src={images[mainImg]} alt={product.name} fill priority sizes="(max-width:1024px) 100vw, 55vw" className="object-cover transition-transform duration-[2s] group-hover:scale-[1.03]" />
 
                       {/* Prev / Next arrows */}
                       {images.length > 1 && (
                         <>
-                          <button
-                            onClick={() => setMainImg((i) => (i - 1 + images.length) % images.length)}
-                            className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
+                          <button onClick={() => setMainImg((i) => (i - 1 + images.length) % images.length)} className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur flex  items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
                             aria-label="Previous"
                           >
                             <ChevronLeft size={15} />
                           </button>
-                          <button
-                            onClick={() => setMainImg((i) => (i + 1) % images.length)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
-                            aria-label="Next"
-                          >
+                          <button onClick={() => setMainImg((i) => (i + 1) % images.length)} className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70" aria-label="Next" >
                             <ChevronRight size={15} />
                           </button>
                         </>
@@ -384,9 +339,7 @@ export default function ProductDetailPage({ product, related }: { product: Produ
 
                   {/* 2D / 3D overlay buttons — always visible */}
                   <div className="absolute bottom-4 left-4 flex gap-2">
-                    <button
-                      onClick={() => img2D && setModal2D(true)}
-                      className={`w-12 h-12 rounded-full border bg-black/70 backdrop-blur text-[9px] font-bold uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-0.5 ${
+                    <button onClick={() => img2D && setModal2D(true)} className={`w-12 h-12 rounded-full border bg-black/70 backdrop-blur text-[9px] font-bold uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-0.5 ${
                         img2D
                           ? "border-white/40 text-white hover:border-[#c5a059] hover:text-[#c5a059] cursor-pointer"
                           : "border-white/15 text-white/25 cursor-not-allowed"
@@ -396,9 +349,7 @@ export default function ProductDetailPage({ product, related }: { product: Produ
                       <span className="text-[10px] font-bold leading-none">2D</span>
                       <span className="text-[6px] uppercase tracking-[0.1em] leading-none opacity-70">View</span>
                     </button>
-                    <button
-                      onClick={() => img3D && setModal3D(true)}
-                      className={`w-12 h-12 rounded-full border bg-black/70 backdrop-blur text-[9px] font-bold uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-0.5 ${
+                    <button onClick={() => img3D && setModal3D(true)} className={`w-12 h-12 rounded-full border bg-black/70 backdrop-blur text-[9px] font-bold uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-0.5 ${
                         img3D
                           ? "border-white/40 text-white hover:border-[#c5a059] hover:text-[#c5a059] cursor-pointer"
                           : "border-white/15 text-white/25 cursor-not-allowed"
@@ -491,29 +442,16 @@ export default function ProductDetailPage({ product, related }: { product: Produ
               {/* Qty + Add to Cart */}
               <div className="flex gap-3 mb-5">
                 <div className="flex items-center border border-white/20 h-12 flex-shrink-0">
-                  <button
-                    onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    className="w-11 h-full flex items-center justify-center hover:bg-white/5 text-white/50 hover:text-white transition-colors"
-                  >
+                  <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-11 h-full flex items-center justify-center hover:bg-white/5 text-white/50 hover:text-white transition-colors" >
                     <Minus size={13} />
                   </button>
-                  <input
-                    type="number"
-                    value={qty}
-                    onChange={(e) => setQty(Math.max(1, Number(e.target.value)))}
-                    className="w-10 h-full bg-transparent text-center text-sm text-white outline-none"
-                  />
-                  <button
-                    onClick={() => setQty((q) => q + 1)}
-                    className="w-11 h-full flex items-center justify-center hover:bg-white/5 text-white/50 hover:text-white transition-colors"
-                  >
+                  <input type="number" value={qty} onChange={(e) => setQty(Math.max(1, Number(e.target.value)))} className="w-10 h-full bg-transparent text-center text-sm text-white outline-none" />
+                  <button onClick={() => setQty((q) => q + 1)} className="w-11 h-full flex items-center justify-center hover:bg-white/5 text-white/50 hover:text-white transition-colors" >
                     <Plus size={13} />
                   </button>
                 </div>
 
-                <button
-                  onClick={handleAdd}
-                  className={`flex-1 h-12 flex items-center justify-center gap-2 text-[9px] uppercase tracking-[0.35em] font-bold transition-all ${
+                <button onClick={handleAdd} className={`flex-1 h-12 flex items-center justify-center gap-2 text-[9px] uppercase tracking-[0.35em] font-bold transition-all ${
                     inCart
                       ? "bg-[#c5a059] text-white"
                       : "bg-white text-black hover:bg-[#c5a059] hover:text-white"

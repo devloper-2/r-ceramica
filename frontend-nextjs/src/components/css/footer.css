@@ -8,5 +8,5 @@
 }
 
 .site-footer a {
-  transition: color 0.3s var(--ease-smooth);
+  transition: all 0.3s var(--ease-smooth);
 }
