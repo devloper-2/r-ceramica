@@ -267,7 +267,7 @@ export default function ProductDetailPage({ product, related }: { product: Produ
       )}
 
       <div className="pt-28 md:pt-36 pb-24">
-        <div className="max-w-[1720px] mx-auto px-6 md:px-12 lg:px-24">
+        <div className="productfileter">
 
           {/* Breadcrumb */}
           <nav className="flex items-center flex-wrap gap-2 text-[9px] uppercase tracking-[0.25em] text-white/30 mb-8">
@@ -494,7 +494,7 @@ export default function ProductDetailPage({ product, related }: { product: Produ
 
       {/* Related products */}
       {related.length > 0 && (
-        <section className="border-t border-white/5 max-w-[1720px] mx-auto px-6 md:px-12 lg:px-24 py-20">
+        <section className="border-t border-white/5 productfileter py-20">
           <div className="flex justify-between items-end mb-10">
             <h2 className="text-xl md:text-3xl font-display font-light uppercase tracking-widest">You May Also Like</h2>
             {product.category_slug && product.subcategory_slug && (

@@ -214,7 +214,7 @@ export default function SubcategoryProductsPage({
       </Head>
 
       <main className="pt-28 md:pt-40 pb-16">
-        <div className="max-w-[1720px] mx-auto px-6 md:px-12 lg:px-24">
+        <div className="productfileter">
 
           {/* Breadcrumb + count + sort */}
           <div className="relative z-[70] flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
@@ -240,10 +240,10 @@ export default function SubcategoryProductsPage({
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-16">
+          <div className="flex flex-col lg:flex-row gap-5 md:gap-10">
 
             {/* ── Filter sidebar ── */}
-            <aside className={`sub-filter ${mobileFilter ? "sub-filter-open" : ""} w-full lg:w-80 shrink-0`}>
+            <aside className={`sub-filter ${mobileFilter ? "sub-filter-open" : ""} sub-filter w-full lg:w-64 xl:w-80 shrink-0`}>
               <div className="sub-filter-panel lg:sticky lg:top-40 flex flex-col h-full lg:h-auto">
 
                 {/* Mobile header */}
@@ -421,7 +421,7 @@ export default function SubcategoryProductsPage({
                   No products match your selection.
                 </p>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-12 gap-y-16">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-5 gap-y-16">
                   {visible.map((p) => {
                     const q = qty[p.slug] || 0;
                     return (

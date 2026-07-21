@@ -173,7 +173,7 @@ export default function Navbar() {
 <div className="relative flex items-center justify-between p-5">
 
   {/* Mobile Menu */}
-  <div className="lg:hidden w-1/5">
+  <div className="lg:hidden w-12">
     <button
       onClick={() => setMobileOpen(true)}
       className="text-white hover:text-white/80 transition-colors p-2 -ml-2"
@@ -231,7 +231,7 @@ export default function Navbar() {
   </div>
 
   {/* Desktop Right Tools */}
-  <div className="hidden lg:flex flex-1 justify-end items-center gap-10">
+  <div className="hidden lg:flex flex-1 justify-end items-center gap-5">
 
     {/* Search */}
     <button
@@ -349,7 +349,7 @@ export default function Navbar() {
         {/* ── Login Dropdown ── */}
         {loginOpen && (
           <div
-            className="absolute right-4 md:right-12 top-[80px] md:top-[128px] lg:top-[144px] w-56 bg-black/60 backdrop-blur-2xl border border-white/10 p-1.5 rounded-sm shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] z-[110]"
+            className="absolute right-4 md:right-12 top-[80px] md:top-[80px] lg:top-[100px] w-56 bg-black/60 backdrop-blur-2xl border border-white/10 p-1.5 rounded-sm shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] z-[110]"
             onClick={(e) => e.stopPropagation()}
           >
             {!isAuth ? (
