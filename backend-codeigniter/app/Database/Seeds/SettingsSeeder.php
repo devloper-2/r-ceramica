@@ -67,6 +67,9 @@ class SettingsSeeder extends Seeder
             'socials' => [
                 'instagram' => 'https://www.instagram.com/rceramica',
                 'facebook'  => 'https://www.facebook.com/rceramica',
+                'linkedin'  => 'https://www.linkedin.com/company/rceramica',
+                'youtube'   => 'https://www.youtube.com/@rceramica',
+                'whatsapp'  => 'https://wa.me/919427410127',
             ],
             'branding' => [
                 'logo'    => null,
