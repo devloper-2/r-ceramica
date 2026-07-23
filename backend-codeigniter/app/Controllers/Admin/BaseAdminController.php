@@ -62,7 +62,7 @@ abstract class BaseAdminController extends Controller
      */
     protected const UPLOAD_3D_EXTS = ['glb', 'gltf', 'obj', 'fbx', 'stl'];
 
-    protected const UPLOAD_MAX_BYTES = 15 * 1024 * 1024; // 15 MB
+    protected const UPLOAD_MAX_BYTES = 50 * 1024 * 1024; // 50 MB
 
     /**
      * Validate + store an uploaded file (image or PDF) using the same hardened
@@ -124,7 +124,7 @@ abstract class BaseAdminController extends Controller
     protected function storeFile(\CodeIgniter\HTTP\Files\UploadedFile $file, string $folder): array
     {
         if ($file->getSize() > self::UPLOAD_MAX_BYTES) {
-            throw new \RuntimeException('File too large (max 15 MB): ' . $file->getClientName());
+            throw new \RuntimeException('File too large (max 50 MB): ' . $file->getClientName());
         }
 
         $mime = $file->getMimeType();

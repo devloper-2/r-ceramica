@@ -487,7 +487,7 @@ export default function SubcategoryProductsPage({
                           </div>
 
                           {/* Actions */}
-                          <div className="flex flex-col gap-2">
+                          <div className="flex gap-2">
                             {q === 0 ? (
                               <button
                                 type="button"

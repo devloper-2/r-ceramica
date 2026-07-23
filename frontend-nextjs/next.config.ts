@@ -35,6 +35,14 @@ const isExport = process.env.STATIC_EXPORT === "true";
 
 const nextConfig: NextConfig = {
   ...(isExport && { output: "export" }),
+   async rewrites() {
+    return [
+      {
+        source: "/uploads/:path*",
+        destination: "http://localhost:8080/uploads/:path*",
+      },
+    ];
+  },
   images: isExport
     ? { unoptimized: true }
     : {

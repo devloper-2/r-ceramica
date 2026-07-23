@@ -78,20 +78,15 @@ class Filters extends BaseFilters
      *     after: array<string, array{except: list<string>|string}>|list<string>
      * }
      */
-    public array $globals = [
-        'before' => [
-            // CSRF protects all state-changing (POST/PUT/DELETE) requests.
-            // The read-only content API authenticates with X-API-Key instead,
-            // so it is excluded here (browsers can't attach CSRF tokens cross-origin).
-            'csrf' => ['except' => ['api/*']],
-            // 'honeypot',
-            // 'invalidchars',
-        ],
-        'after' => [
-            // 'honeypot',
-            'secureheaders',
-        ],
-    ];
+   public array $globals = [
+    'before' => [
+        'cors',
+        'csrf' => ['except' => ['api/*']],
+    ],
+    'after' => [
+        'secureheaders',
+    ],
+];
 
     /**
      * List of filter aliases that works on a

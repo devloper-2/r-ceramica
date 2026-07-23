@@ -148,6 +148,11 @@ export default function ProductDetailPage({ product, related }: { product: Produ
   const is3DModelFile = MODEL_EXTS.includes(ext3D);
   const is3DImageFile = IMAGE_EXTS.includes(ext3D);
   const isGltf = ext3D === "glb" || ext3D === "gltf";
+  const modelSrc =
+  img3D?.replace(
+    "http://localhost:8080/uploads/",
+    "/uploads/"
+  ) ?? "";
 
   // Inject <model-viewer> CDN script once when a GLB/GLTF file is present
   useEffect(() => {
@@ -210,7 +215,7 @@ export default function ProductDetailPage({ product, related }: { product: Produ
       )}
 
       {/* ── 3D Modal ── */}
-      {modal3D && img3D && (
+      {modal3D && modelSrc && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm" onClick={() => setModal3D(false)} >
           <div className="bg-[#111] border border-white/10 p-6 w-full max-w-3xl mx-4 relative max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()} >
             <button onClick={() => setModal3D(false)} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center border border-white/15 text-white/50 hover:border-white/40 hover:text-white transition-all" >
@@ -229,7 +234,7 @@ export default function ProductDetailPage({ product, related }: { product: Produ
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-ignore */}
                 <model-viewer
-                  src={img3D}
+                  src={modelSrc}
                   alt={`${product.name} 3D model`}
                   auto-rotate=""
                   camera-controls=""
@@ -247,7 +252,7 @@ export default function ProductDetailPage({ product, related }: { product: Produ
                 <p className="text-[#c5a059] text-[9px] uppercase tracking-[0.4em] mb-6">
                   {ext3D.toUpperCase()} 3D Model
                 </p>
-                <a href={img3D} download className="inline-flex items-center gap-2 px-8 py-3 bg-[#c5a059] text-black text-[9px] uppercase tracking-[0.35em] font-bold hover:bg-white transition-colors">
+                <a href={modelSrc} download className="inline-flex items-center gap-2 px-8 py-3 bg-[#c5a059] text-black text-[9px] uppercase tracking-[0.35em] font-bold hover:bg-white transition-colors">
                   Download 3D Model
                 </a>
                 <p className="text-white/25 text-[10px] mt-4">
@@ -259,7 +264,7 @@ export default function ProductDetailPage({ product, related }: { product: Produ
             {/* Legacy: old entry stored a render image in this field */}
             {is3DImageFile && !is3DModelFile && (
               <div className="bg-[#e8e8e8] p-4">
-                <Image src={img3D} alt="3D Model View" width={900} height={600} className="w-full h-auto object-contain" />
+                <Image src={modelSrc} alt="3D Model View" width={900} height={600} className="w-full h-auto object-contain" />
               </div>
             )}
           </div>
@@ -297,10 +302,10 @@ export default function ProductDetailPage({ product, related }: { product: Produ
 
             {/* ── Left: Gallery ── */}
             <div>
-              <div className="flex gap-3">
+              <div className="flex flex-col md:flex-row gap-3">
                 {/* Vertical thumbnails */}
                 {images.length > 1 && (
-                  <div className="flex flex-col gap-2 w-[68px] flex-shrink-0">
+                  <div className="flex flex-row md:flex-col gap-2 w-[68px] flex-shrink-0">
                     {images.map((src, i) => (
                       <button key={i} onClick={() => setMainImg(i)} className={`relative w-[68px] h-[68px] overflow-hidden border-2 transition-all flex-shrink-0 ${ i === mainImg ? "border-[#c5a059]" : "border-white/10 hover:border-white/30" }`} >
                         <Image src={src} alt="" fill sizes="68px" className="object-cover" />
@@ -349,12 +354,12 @@ export default function ProductDetailPage({ product, related }: { product: Produ
                       <span className="text-[10px] font-bold leading-none">2D</span>
                       <span className="text-[6px] uppercase tracking-[0.1em] leading-none opacity-70">View</span>
                     </button>
-                    <button onClick={() => img3D && setModal3D(true)} className={`w-12 h-12 rounded-full border bg-black/70 backdrop-blur text-[9px] font-bold uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-0.5 ${
-                        img3D
+                    <button onClick={() => modelSrc && setModal3D(true)} className={`w-12 h-12 rounded-full border bg-black/70 backdrop-blur text-[9px] font-bold uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-0.5 ${
+                        modelSrc
                           ? "border-white/40 text-white hover:border-[#c5a059] hover:text-[#c5a059] cursor-pointer"
                           : "border-white/15 text-white/25 cursor-not-allowed"
                       }`}
-                      title={img3D ? "View 3D Model" : "3D model not available"}
+                      title={modelSrc ? "View 3D Model" : "3D model not available"}
                     >
                       <span className="text-[10px] font-bold leading-none">3D</span>
                       <span className="text-[6px] uppercase tracking-[0.1em] leading-none opacity-70">View</span>
