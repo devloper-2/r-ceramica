@@ -82,7 +82,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   } catch {
     /* blocking fallback */
   }
-  return { paths, fallback: "blocking" };
+  return { paths, fallback: false };
 };
 
 export const getStaticProps: GetStaticProps<{
@@ -93,7 +93,7 @@ export const getStaticProps: GetStaticProps<{
   const subSlug = String(params?.subcategory);
   try {
     const subcategory = await api.getSubcategory(subSlug);
-    return { props: { subcategory, categorySlug }, revalidate: 60 };
+    return { props: { subcategory, categorySlug } };
   } catch {
     return { notFound: true };
   }

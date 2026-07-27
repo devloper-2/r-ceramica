@@ -13,10 +13,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const categories = await api.getCategories();
     return {
       paths: categories.map((c) => ({ params: { category: c.slug } })),
-      fallback: "blocking",
+      fallback: false,
     };
   } catch {
-    return { paths: [], fallback: "blocking" };
+    return { paths: [], fallback: false };
   }
 };
 
@@ -24,7 +24,7 @@ export const getStaticProps: GetStaticProps<{ category: ApiCategory }> = async (
   const slug = String(params?.category);
   try {
     const category = await api.getCategory(slug);
-    return { props: { category }, revalidate: 60 };
+    return { props: { category } };
   } catch {
     return { notFound: true };
   }

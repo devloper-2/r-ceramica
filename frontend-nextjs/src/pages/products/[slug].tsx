@@ -79,10 +79,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const products = await api.getProducts();
     return {
       paths: products.map((p) => ({ params: { slug: p.slug } })),
-      fallback: "blocking",
+      fallback: false,
     };
   } catch {
-    return { paths: [], fallback: "blocking" };
+    return { paths: [], fallback: false };
   }
 };
 
@@ -98,7 +98,7 @@ export const getStaticProps: GetStaticProps<{ product: Product; related: Related
         .slice(0, 4)
         .map((p) => ({ slug: p.slug, name: p.name, price: p.price, currency: p.currency, image: p.image }));
     }
-    return { props: { product, related }, revalidate: 60 };
+    return { props: { product, related } };
   } catch {
     return { notFound: true };
   }

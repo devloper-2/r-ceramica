@@ -34,7 +34,7 @@ function categoryToSection(cat: ApiCategory, i: number): ExploreItem {
   return {
     eyebrow: cat.hero_eyebrow || cat.name,
     title: cat.title || cat.name,
-    italicLine: cat.subtitle || undefined,
+    italicLine: cat.subtitle || null,
     description: cat.description || "",
     image: cat.image || cat.hero_image || FALLBACK_IMAGE,
     imageAlt: cat.name,
