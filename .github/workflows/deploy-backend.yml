@@ -1,0 +1,47 @@
+name: Deploy Backend (CI4) to Hostinger
+
+on:
+  workflow_dispatch:        # manual trigger from GitHub → Actions tab
+  push:
+    branches: [wordpress]
+    paths:
+      - 'backend-codeigniter/app/**'
+      - 'backend-codeigniter/public/**'
+      - 'backend-codeigniter/deploy/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy app/ to ci4-app/ via FTP
+        run: |
+          sudo apt-get install -y lftp
+          lftp -u "${{ secrets.FTP_USER }}","${{ secrets.FTP_PASS }}" ftp://${{ secrets.FTP_HOST }} <<'FTPEOF'
+          set ssl:verify-certificate no
+          set ftp:ssl-allow no
+          set xfer:clobber on
+
+          echo "===== uploading ci4-app/app/ ====="
+          mirror --reverse --delete --verbose \
+            --exclude writable/ \
+            backend-codeigniter/app/ \
+            ../ci4-app/app/
+
+          echo "===== uploading public assets to public_html/admin/ ====="
+          mirror --reverse --verbose \
+            --exclude uploads/ \
+            --exclude index.php \
+            backend-codeigniter/public/ \
+            admin/
+
+          echo "===== uploading production index.php ====="
+          put backend-codeigniter/deploy/index.php -o admin/index.php
+
+          echo "===== done ====="
+          bye
+          FTPEOF
