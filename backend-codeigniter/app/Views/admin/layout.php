@@ -6,8 +6,8 @@
   <meta name="robots" content="noindex, nofollow">
   <title><?= esc($title ?? 'Admin') ?> — R Ceramica</title>
 
-  <link rel="icon" href="/images/logo.webp" type="image/webp">
-  <link rel="shortcut icon" href="/images/logo.webp">
+  <link rel="icon" href="<?= base_url('images/logo.webp') ?>" type="image/webp">
+  <link rel="shortcut icon" href="<?= base_url('images/logo.webp') ?>">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -461,7 +461,7 @@
   <aside class="admin-sidebar" id="adminSidebar" aria-label="Main navigation">
     <div class="sidebar-header">
       <a class="brand-mark" href="/admin" aria-label="R Ceramica Admin">
-        <img class="brand-logo-img" src="/images/logo.webp" alt="R Ceramica"
+        <img class="brand-logo-img" src="<?= base_url('images/logo.webp') ?>" alt="R Ceramica"
              onerror="this.style.display='none'">
         <span class="brand-copy">
           <span class="brand-title">R Ceramica</span>

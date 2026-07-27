@@ -6,8 +6,8 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Sign In — R Ceramica Admin</title>
 
-  <link rel="icon" href="/images/logo.webp" type="image/webp">
-  <link rel="shortcut icon" href="/images/logo.webp">
+  <link rel="icon" href="<?= base_url('images/logo.webp') ?>" type="image/webp">
+  <link rel="shortcut icon" href="<?= base_url('images/logo.webp') ?>">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
   <style>
@@ -278,7 +278,7 @@
 
       <!-- Logo -->
       <div class="lp-logo-wrap">
-        <img src="/images/logo.webp" alt="R Ceramica" onerror="this.parentElement.style.background='rgba(201,162,75,.12)'">
+        <img src="<?= base_url('images/logo.webp') ?>" alt="R Ceramica" onerror="this.style.display='none'">
       </div>
 
       <div class="lp-tagline">Content Management System</div>
