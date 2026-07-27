@@ -152,13 +152,13 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-0 md:pt-16 border-t border-white/5 flex flex-col items-center gap-10">
-          <div className="w-full flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-white/20 uppercase tracking-[0.3em] font-medium text-center">
+          <div className="w-full flex flex-col lg:flex-row justify-between items-center gap-6 text-[10px] text-white/20 uppercase tracking-[0.3em] font-medium text-center">
             <p>© {new Date().getFullYear()} R Ceramica Global. All Rights Reserved.</p>
             <div className="flex gap-8">
               <Link href="/privacy" className="hover:text-white transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="hover:text-white transition-colors">
+              <Link href="/terms" className="hover:text-white transition-colors"> 
                 Terms of Service
               </Link>
             </div>

@@ -1,6 +1,6 @@
 const WhatsAppSVG = () => (
   <svg
-    className="w-10 h-10 fill-white/40 group-hover:fill-[#25D366] transition-all duration-500 filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
+    className="w-10 h-10 whatsapiconcolor group-hover:fill-[#25D366] transition-all duration-500 filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
     viewBox="0 0 24 24"
     aria-hidden="true"
   >

@@ -81,7 +81,7 @@
 .text-white\/30 { color: rgba(255,255,255,0.55) !important; }
 
 /* white/40 → white/62 */
-.text-white\/40 { color: rgba(255,255,255,0.62) !important; }
+.text-white\/40 { color: rgba(255,255,255,0.80) !important; }
 
 
 /* Borders — keep decorative borders subtle but just a touch more visible */
@@ -316,4 +316,7 @@ button:hover{
 }
 .ctainfoicon:hover .rounded-full.border{
   background-color: #fff;
+}
+.whatsapiconcolor{
+  fill: green;
 }
