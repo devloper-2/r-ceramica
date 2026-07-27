@@ -99,14 +99,6 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    .lp-logo-wrap {
-      width: 160px; height: 160px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .lp-logo-wrap img {
-      width: 100%; height: 100%; object-fit: contain;
-    }
-
     .lp-tagline {
       font-size: .72rem; text-transform: uppercase;
       letter-spacing: .28em; color: rgba(255,255,255,.35);
@@ -275,11 +267,6 @@
     <div class="lp-watermark">RC</div>
 
     <div class="lp-brand">
-
-      <!-- Logo -->
-      <div class="lp-logo-wrap">
-        <img src="https://staging.rceramica.com/images/logo.webp" alt="R Ceramica">
-      </div>
 
       <div class="lp-tagline">Content Management System</div>
 
