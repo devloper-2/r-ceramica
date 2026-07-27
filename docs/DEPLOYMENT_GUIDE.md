@@ -343,46 +343,88 @@ Log in with `admin@rceramica.com` / `Admin@12345`. **Change the password immedia
 
 ## 6. Initial Frontend Deployment (Next.js)
 
-### 6.1 Build the static export locally
+### 6.1 Build the static export — creates the `out/` folder
 
-Open PowerShell inside `frontend-nextjs/`:
+Open **PowerShell** and navigate to the frontend folder:
 
 ```bash
-cd frontend-nextjs
+cd C:\xampp\htdocs\r-ceramica\frontend-nextjs
+```
+
+**Option A — Simple (recommended, reads `.env.production` automatically):**
+
+```bash
 npm run build:export
 ```
 
-This runs `cross-env STATIC_EXPORT=true next build`. It reads `frontend-nextjs/.env.production` automatically (which already points to `https://admin.rceramica.com/api/v1`).
-
-The build fetches all content from the live API and generates static HTML files in `frontend-nextjs/out/`.
-
-> **Build takes 2-4 minutes.** You will see Next.js logging each page as it generates.
-> If it fails with "API unreachable", make sure step 5 is complete and the backend is live.
-
-### 6.2 Check the .htaccess is in the build output
-
-After the build, verify `frontend-nextjs/out/.htaccess` exists. It is copied by the build script. If missing, copy manually:
+**Option B — Explicit (use this if Option A fails or you need to override env vars):**
 
 ```bash
-copy frontend-nextjs\public\.htaccess frontend-nextjs\out\.htaccess
+Remove-Item -Recurse -Force .next; $env:STATIC_EXPORT="true"; $env:CONTENT_API_URL="https://admin.rceramica.com/api/v1"; $env:CONTENT_API_KEY="646aecba511131b674cc9a1ae0b214e841dbb284ee1a7d1b"; $env:NEXT_PUBLIC_API_URL="https://admin.rceramica.com/api/v1"; npx next build
 ```
 
-### 6.3 Upload to Hostinger
+> `Remove-Item -Recurse -Force .next` clears the build cache first — always do this
+> when you hit TypeScript or type errors from a previous build.
 
-1. In Hostinger File Manager → navigate to `public_html/staging/`
-2. Delete everything inside it (if re-deploying)
-3. Zip the **contents** of `frontend-nextjs/out/` (select all files inside `out/`, not the `out/` folder itself) → `staging.zip`
-4. Upload `staging.zip` to `public_html/staging/` → Extract Here
+Both commands do the same thing: run `STATIC_EXPORT=true next build`, fetch all content
+from the live API (`https://admin.rceramica.com/api/v1`), and output static HTML/CSS/JS
+into `frontend-nextjs/out/`.
 
-> **Important**: Upload the **contents** of `out/`, not the folder itself.
-> The result should be `staging/index.html`, not `staging/out/index.html`.
+**What a successful build looks like:**
+
+```
+✓ Compiled successfully
+✓ Collecting page data
+✓ Generating static pages (XX/XX)
+✓ Finalizing page optimization
+```
+
+**Build takes 2–5 minutes.** Each page is listed as it generates. If the build fails:
+- `API unreachable` → backend is not live yet (complete Section 5 first)
+- `undefined cannot be serialized` → a `getStaticProps` is returning `undefined` instead of `null`
+- `ISR cannot be used with output: export` → a page has `revalidate` or `fallback: "blocking"` — remove both
+
+### 6.2 Verify the `out/` folder was created
+
+After a successful build, confirm the output exists:
+
+```bash
+dir out
+```
+
+You should see files like `index.html`, `about.html`, `explore.html`, `catalogue.html`,
+a `_next/` folder, and a `.htaccess` file. If `.htaccess` is missing, copy it manually:
+
+```bash
+copy public\.htaccess out\.htaccess
+```
+
+> `.htaccess` is critical — without it, all page URLs except `/` will return 404 on Hostinger.
+
+### 6.3 Upload `out/` to Hostinger
+
+1. Open Windows Explorer → navigate to `frontend-nextjs\out\`
+2. Select **all files and folders** inside `out\` (Ctrl+A)
+3. Right-click → **Send to → Compressed (zipped) folder** → name it `staging.zip`
+4. In Hostinger **File Manager** → navigate to `public_html/staging/`
+5. Delete everything currently inside `staging/` (select all → delete)
+6. Upload `staging.zip` → once uploaded, right-click → **Extract Here**
+7. Delete `staging.zip` after extracting
+
+> **Critical**: Select the **contents** of `out/` before zipping, not the `out/` folder itself.
+> Correct result: `staging/index.html` ✓
+> Wrong result: `staging/out/index.html` ✗
 
 ### 6.4 Verify the frontend is live
 
-- `https://staging.rceramica.com` → home page renders
-- `https://staging.rceramica.com/about` → about page renders
-- `https://staging.rceramica.com/explore` → explore categories page renders
-- `https://staging.rceramica.com/catalogue` → catalogue page renders
+| URL | Expected |
+|---|---|
+| `https://staging.rceramica.com` | Home page renders |
+| `https://staging.rceramica.com/about` | About page renders |
+| `https://staging.rceramica.com/explore` | Explore categories page |
+| `https://staging.rceramica.com/catalogue` | Catalogue page |
+| `https://staging.rceramica.com/explore/tiles` | Category page (tiles) |
+| `https://staging.rceramica.com/products/petra-vessel-basin` | Product detail page |
 
 ---
 

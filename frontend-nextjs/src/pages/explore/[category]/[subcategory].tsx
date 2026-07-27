@@ -210,11 +210,16 @@ export default function SubcategoryProductsPage({
         <link rel="canonical" href={`${siteConfig.url}/explore/${categorySlug}/${subcategory.slug}`} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
+        <meta property="og:image" content={siteConfig.ogImage} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
       <main className="pt-28 md:pt-40 pb-16">
         <div className="productfileter">
+
+          <h1 className="text-3xl md:text-5xl font-display font-light uppercase tracking-tight text-white mb-10 leading-tight">
+            {subcategory.name}
+          </h1>
 
           {/* Breadcrumb + count + sort */}
           <div className="relative z-[70] flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">

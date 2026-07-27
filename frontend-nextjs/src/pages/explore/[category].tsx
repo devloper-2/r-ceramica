@@ -119,9 +119,9 @@ export default function CategoryPage({ category }: { category: ApiCategory }) {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-lg md:text-xl font-display font-light uppercase tracking-[0.2em] group-hover:text-[#c5a059] transition-colors">
+                    <h2 className="text-lg md:text-xl font-display font-light uppercase tracking-[0.2em] group-hover:text-[#c5a059] transition-colors">
                       {sub.name}
-                    </h3>
+                    </h2>
                     <p className="text-[9px] text-white/30 uppercase tracking-[0.3em]">
                       {sub.subtitle || `${category.name} Series`}
                     </p>
