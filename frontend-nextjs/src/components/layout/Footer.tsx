@@ -57,125 +57,537 @@ const WhatsAppIcon = ({
 export default function Footer() {
   console.log("SOCIALS", SOCIALS);
   return (
-    <footer className="site-footer relative bg-[var(--color-bg-alt)] pt-12 pb-12 border-t border-white/5 overflow-hidden">
-      <div className="max-w-content mx-auto px-[var(--section-px)]">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-24 mb-12 md:mb-24">
+   <footer className="site-footer relative overflow-hidden bg-[#080808] border-t border-white/[0.06]">
+  {/* Subtle ambient glow */}
+  <div
+    className="pointer-events-none absolute -top-40 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full
+               bg-[#C8954D]/[0.035] blur-[120px]"
+  />
 
-          {/* Brand */}
-          <div className="space-y-10">
-            <Image src="/images/logo.webp" alt="R Ceramica Logo" width={160} height={64} className="h-16 w-auto object-contain" />
-            <p className="text-white/40 text-[13px] leading-relaxed font-light max-w-sm">
-              {SITE.shortDescription}
-            </p>
-            <div className="flex items-center gap-6 pt-4">
-              {[
-                { href: SOCIALS.facebook, icon: <FacebookIcon />, label: "Facebook" },
-                { href: SOCIALS.instagram, icon: <InstagramIcon />, label: "Instagram" },
-                { href: SOCIALS.linkedin, icon: <LinkedinIcon />, label: "LinkedIn" },
-                { href: SOCIALS.youtube, icon: <YoutubeIcon />, label: "YouTube" },
-                { href: SOCIALS.whatsapp, icon: <WhatsAppIcon />, label: "WhatsApp" },
-              ].filter((s) => s.href).map((s) => (
-                <Link
-                  key={s.label}
-                  href={s.href}
-                  aria-label={s.label}
-                  className="text-white/30 hover:text-white transition-colors"
-                >
-                  {s.icon}
-                </Link>
-                
-              ))}
-            </div>
-          </div>
+  {/* Animated top line */}
+  <div className="absolute left-0 top-0 h-px w-full overflow-hidden">
+    <div className="footer-gold-line h-full w-1/3 bg-gradient-to-r from-transparent via-[#C8954D]/60 to-transparent" />
+  </div>
 
-          {/* Quick Links */}
-          <div className="space-y-10">
-            <h4 className="text-white font-display text-lg tracking-wider font-light">
-              Quick Links
-            </h4>
-            <ul className="space-y-5 text-[13px] text-white/40 tracking-wide">
-              {FOOTER_QUICK_LINKS.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="hover:text-white hover:pl-2 transition-all uppercase"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+  <div className="relative mx-auto max-w-content px-[var(--section-px)] py-16 md:py-20 lg:py-24">
 
-          {/* Corporate */}
-          <div className="space-y-10">
-            <h4 className="text-white font-display text-lg tracking-wider font-light">
-              Corporate
-            </h4>
-            <ul className="space-y-5 text-[13px] text-white/40 tracking-wide">
-              {FOOTER_CORPORATE_LINKS.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="hover:text-white hover:pl-2 transition-all uppercase"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+    {/* ================= MAIN FOOTER ================= */}
+    <div className="grid grid-cols-1 gap-14 md:grid-cols-2 md:gap-x-16 md:gap-y-20 lg:grid-cols-4 lg:gap-x-16">
 
-          {/* Contact */}
-          <address className="space-y-10 not-italic">
-            <h4 className="text-white font-display text-lg tracking-wider font-light">
-              Contact Us
-            </h4>
-            <div className="space-y-6 text-[13px] text-white/40 leading-relaxed">
-              <div className="flex items-start gap-4 border-b border-white/5 pb-0 md:pb-6">
-                <MapPin size={18} className="shrink-0 text-white/20 mt-1" aria-hidden="true" />
-                <p>{ADDRESS.full}</p>
-              </div>
-              <a href={`tel:+${digits(CONTACT.phone)}`} className="flex items-center gap-4 hover:text-white transition-colors">
-                <Phone size={18} className="text-white/20" aria-hidden="true" />
-                <span>PH: {CONTACT.phone}</span>
-              </a>
-              <a href={`https://wa.me/${digits(CONTACT.whatsapp)}`} className="flex items-center gap-4 hover:text-white transition-colors"><WhatsAppIcon className="w-4 h-4 text-white/20" /><span>{CONTACT.whatsapp}</span>
-              </a>
-              <a href={`mailto:${CONTACT.email}`} className="flex items-center gap-4 hover:text-white transition-colors">
-                <Mail size={18} className="text-white/20" aria-hidden="true" />
-                <span>{CONTACT.email}</span>
-              </a>
-            </div>
-          </address>
+      {/* ================= BRAND ================= */}
+      <div className="footer-reveal group text-left max-md:flex max-md:flex-col max-md:items-center max-md:text-center">
+
+        <div className="relative inline-block">
+          <Image
+            src="/images/logo.webp"
+            alt="R Ceramica Logo"
+            width={160}
+            height={64}
+            className="
+              h-16 w-auto object-contain
+              transition-all duration-700 ease-out
+              group-hover:scale-[1.03]
+              group-hover:brightness-110
+            "
+          />
+
+          {/* Logo underline */}
+          <span
+            className="
+              absolute -bottom-3 left-0 h-px w-0
+              bg-[#C8954D]
+              transition-all duration-700
+              group-hover:w-full
+            "
+          />
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-0 md:pt-16 border-t border-white/5 flex flex-col items-center gap-10">
-          <div className="w-full flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-white/20 uppercase tracking-[0.3em] font-medium text-center">
-            <p>© {new Date().getFullYear()} R Ceramica Global. All Rights Reserved.</p>
-            <div className="flex gap-8">
-              <Link href="/privacy" className="hover:text-white transition-colors">
-                Privacy Policy
+        <p
+          className="
+            mt-8 max-w-sm
+            text-[13px] font-light leading-[1.9]
+            tracking-wide text-white/35
+            transition-colors duration-500
+            group-hover:text-white/50
+          "
+        >
+          {SITE.shortDescription}
+        </p>
+
+        {/* Social icons */}
+        <div className="mt-8 flex items-center gap-3">
+          {[
+            {
+              href: SOCIALS.facebook,
+              icon: <FacebookIcon />,
+              label: "Facebook",
+            },
+            {
+              href: SOCIALS.instagram,
+              icon: <InstagramIcon />,
+              label: "Instagram",
+            },
+            {
+              href: SOCIALS.linkedin,
+              icon: <LinkedinIcon />,
+              label: "LinkedIn",
+            },
+            {
+              href: SOCIALS.youtube,
+              icon: <YoutubeIcon />,
+              label: "YouTube",
+            },
+            {
+              href: SOCIALS.whatsapp,
+              icon: <WhatsAppIcon />,
+              label: "WhatsApp",
+            },
+          ]
+            .filter((s) => s.href)
+            .map((social, index) => (
+              <Link
+                key={social.label}
+                href={social.href}
+                aria-label={social.label}
+                className="
+                  footer-social
+                  flex h-9 w-9 items-center justify-center
+                  border border-white/[0.08]
+                  text-white/35
+                  transition-all duration-500
+                  hover:border-[#C8954D]/50
+                  hover:bg-[#C8954D]/[0.06]
+                  hover:text-[#C8954D]
+                "
+                style={{
+                  transitionDelay: `${index * 40}ms`,
+                }}
+              >
+                <span className="h-4 w-4">
+                  {social.icon}
+                </span>
               </Link>
-              <Link href="/terms" className="hover:text-white transition-colors">
-                Terms of Service
-              </Link>
-            </div>
-          </div>
-          <div className="text-[9px] text-white/10 uppercase tracking-[0.4em] font-light italic">
-            Developed by{" "}
-            <a
-              href="https://codezpark.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/30 hover:text-white transition-all underline decoration-white/5 underline-offset-8"
-            >
-              CODEZPARK
-            </a>
-          </div>
+            ))}
         </div>
       </div>
-    </footer>
+
+      {/* ================= QUICK LINKS ================= */}
+      <div className="footer-reveal">
+        <h4
+          className="
+            mb-8
+            font-display text-[15px] font-light
+            uppercase tracking-[0.18em]
+            text-[#F4F0E8]
+          "
+        >
+          Quick Links
+        </h4>
+
+        <ul className="space-y-4">
+          {FOOTER_QUICK_LINKS.map((link) => (
+            <li key={link.label}>
+              <Link
+                href={link.href}
+                className="
+                  footer-link
+                  group relative inline-flex
+                  items-center
+                  text-[12px] font-light
+                  uppercase tracking-[0.12em]
+                  text-white/35
+                  transition-all duration-400
+                  hover:text-[#D6A765]
+                "
+              >
+                <span
+                  className="
+                    absolute -left-4 h-px w-0
+                    bg-[#C8954D]
+                    transition-all duration-400
+                    group-hover:w-2
+                  "
+                />
+
+                <span className="transition-transform duration-400 group-hover:translate-x-2">
+                  {link.label}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* ================= CORPORATE ================= */}
+      <div className="footer-reveal">
+        <h4
+          className="
+            mb-8
+            font-display text-[15px] font-light
+            uppercase tracking-[0.18em]
+            text-[#F4F0E8]
+          "
+        >
+          Corporate
+        </h4>
+
+        <ul className="space-y-4">
+          {FOOTER_CORPORATE_LINKS.map((link) => (
+            <li key={link.label}>
+              <Link
+                href={link.href}
+                className="
+                  footer-link
+                  group relative inline-flex
+                  items-center
+                  text-[12px] font-light
+                  uppercase tracking-[0.12em]
+                  text-white/35
+                  transition-all duration-400
+                  hover:text-[#D6A765]
+                "
+              >
+                <span
+                  className="
+                    absolute -left-4 h-px w-0
+                    bg-[#C8954D]
+                    transition-all duration-400
+                    group-hover:w-2
+                  "
+                />
+
+                <span className="transition-transform duration-400 group-hover:translate-x-2">
+                  {link.label}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* ================= CONTACT ================= */}
+      <address className="footer-reveal not-italic">
+        <h4
+          className="
+            mb-7
+            font-display text-[15px] font-light
+            uppercase tracking-[0.18em]
+            text-[#F4F0E8]
+          "
+        >
+          Contact Us
+        </h4>
+
+        <div className="divide-y divide-white/[0.10]">
+
+          {/* ADDRESS */}
+          <a
+            href="https://www.google.com/maps/place/R+CERAMICA/@22.8102538,70.864844,17z/data=!4m16!1m9!3m8!1s0x39598dcd562cce57:0xfc120b911b2d75ab!2sR+CERAMICA!8m2!3d22.8102489!4d70.8674189!9m1!1b1!16s%2Fg%2F11y5hw547j!3m5!1s0x39598dcd562cce57:0xfc120b911b2d75ab!8m2!3d22.8102489!4d70.8674189!16s%2Fg%2F11y5hw547j"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="
+              contact-row
+              group flex items-start gap-4
+              py-5
+              text-[13px] font-light
+              leading-[1.8]
+              text-white/40
+              transition-all duration-500
+              hover:text-[#D6A765]
+            "
+          >
+            <span
+              className="
+                mt-0.5 flex h-7 w-7 shrink-0
+                items-center justify-center
+                text-[#C8954D]/80
+                transition-all duration-500
+                group-hover:scale-110
+              "
+            >
+              <MapPin size={18} strokeWidth={1.4} />
+            </span>
+
+            <span className="transition-transform duration-500 group-hover:translate-x-1  hover:text-[#D6A765]">
+              {ADDRESS.full}
+            </span>
+          </a>
+
+          {/* PHONE */}
+          <a
+            href={`tel:+${digits(CONTACT.phone)}`}
+            className="
+              contact-row
+              group flex items-center gap-4
+              py-5
+              text-[13px] font-light
+              text-white/40
+              transition-all duration-500
+              hover:text-[#D6A765]
+            "
+          >
+            <span
+              className="
+                flex h-7 w-7 shrink-0
+                items-center justify-center
+                text-[#C8954D]/80
+                transition-all duration-500
+                group-hover:scale-110
+                group-hover:text-[#D6A765]
+              "
+            >
+              <Phone size={17} strokeWidth={1.4} />
+            </span>
+
+            <span className="transition-transform duration-500 group-hover:translate-x-1  hover:text-[#D6A765]">
+              PH: {CONTACT.phone}
+            </span>
+          </a>
+
+          {/* WHATSAPP */}
+          <a
+            href={`https://wa.me/${digits(CONTACT.whatsapp)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="
+              contact-row
+              group flex items-center gap-4
+              py-5
+              text-[13px] font-light
+              text-white/40
+              transition-all duration-500
+              hover:text-[#D6A765]
+            "
+          >
+            <span
+              className="
+                flex h-7 w-7 shrink-0
+                items-center justify-center
+                text-[#C8954D]/80
+                transition-all duration-500
+                group-hover:scale-110
+                group-hover:text-[#D6A765]
+              "
+            >
+              <WhatsAppIcon className="h-[17px] w-[17px]" />
+            </span>
+
+            <span className="transition-transform duration-500 group-hover:translate-x-1  hover:text-[#D6A765]">
+              {CONTACT.whatsapp}
+            </span>
+          </a>
+
+          {/* EMAIL */}
+          <a
+            href={`mailto:${CONTACT.email}`}
+            className="
+              contact-row
+              group flex items-center gap-4
+              py-5
+              text-[13px] font-light
+              text-white/40
+              transition-all duration-500
+              hover:text-[#D6A765]
+            "
+          >
+            <span
+              className="
+                flex h-7 w-7 shrink-0
+                items-center justify-center
+                text-[#C8954D]/80
+                transition-all duration-500
+                group-hover:scale-110
+                group-hover:text-[#D6A765]
+              "
+            >
+              <Mail size={17} strokeWidth={1.4} />
+            </span>
+
+            <span className="transition-transform duration-500 group-hover:translate-x-1  hover:text-[#D6A765]">
+              {CONTACT.email}
+            </span>
+          </a>
+
+        </div>
+      </address>
+    </div>
+
+    {/* ================= BOTTOM BAR ================= */}
+    <div
+      className="
+        mt-16 border-t border-white/[0.07]
+        pt-7
+        md:mt-20
+      "
+    >
+      <div
+        className="
+          flex flex-col
+          items-center justify-between
+          gap-5
+          md:flex-row
+        "
+      >
+
+        {/* Copyright */}
+        <p
+          className="
+            text-center
+            text-[9px]
+            font-medium
+            uppercase
+            tracking-[0.25em]
+            text-white/20
+            md:text-left
+          "
+        >
+          © {new Date().getFullYear()} R Ceramica Global.
+          <span className="ml-1">
+            All Rights Reserved.
+          </span>
+        </p>
+
+        {/* Legal links */}
+        <div className="flex items-center gap-3">
+          <Link
+            href="/privacy"
+            className="
+              group relative
+              flex items-center gap-3
+              border border-white/[0.10]
+              bg-white/[0.015]
+              px-5 py-3
+              overflow-hidden
+              text-[9px]
+              font-medium
+              uppercase
+              tracking-[0.2em]
+              text-white/35
+              transition-all duration-500
+              hover:border-[#C8954D]/50
+              hover:text-[#D6A765]
+            "
+          >
+            {/* Gold hover fill */}
+            <span
+              className="
+                absolute inset-0
+                origin-left scale-x-0
+                bg-[#C8954D]/[0.06]
+                transition-transform duration-500
+                group-hover:scale-x-100
+              "
+            />
+        
+            <span className="relative z-10">
+              Privacy Policy
+            </span>
+                
+            <span
+              className="
+                relative z-10
+                text-[#C8954D]/50
+                transition-all duration-500
+                group-hover:translate-x-1
+                group-hover:text-[#D6A765]
+              "
+            >
+              →
+            </span>
+          </Link>
+                
+          <Link
+            href="/terms"
+            className="
+              group relative
+              flex items-center gap-3
+              border border-white/[0.10]
+              bg-white/[0.015]
+              px-5 py-3
+              overflow-hidden
+              text-[9px]
+              font-medium
+              uppercase
+              tracking-[0.2em]
+              text-white/35
+              transition-all duration-500
+              hover:border-[#C8954D]/50
+              hover:text-[#D6A765]
+            "
+          >
+            <span
+              className="
+                absolute inset-0
+                origin-left scale-x-0
+                bg-[#C8954D]/[0.06]
+                transition-transform duration-500
+                group-hover:scale-x-100
+              "
+            />
+        
+            <span className="relative z-10">
+              Terms of Service
+            </span>
+                
+            <span
+              className="
+                relative z-10
+                text-[#C8954D]/50
+                transition-all duration-500
+                group-hover:translate-x-1
+                group-hover:text-[#D6A765]
+              "
+            >
+              →
+            </span>
+          </Link>
+        </div>
+      </div>
+
+      {/* Developed by */}
+      <div className="mt-7 text-center">
+        <a
+          href="https://codezpark.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="
+            group
+            inline-flex items-center gap-2
+            text-[8px]
+            font-light
+            uppercase
+            tracking-[0.35em]
+            text-white/25
+            transition-colors duration-500
+            hover:text-white
+          "
+        >
+          <span>Developed by</span>
+
+          <span
+            className="
+              relative text-white/30
+              transition-colors duration-500
+              group-hover:text-[#C8954D]
+            "
+          >
+            CODEZPARK
+
+            <span
+              className="
+                absolute -bottom-1 left-0
+                h-px w-0
+                bg-[#C8954D]
+                transition-all duration-500
+                group-hover:w-full
+              "
+            />
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</footer>
   );
 }

@@ -83,7 +83,7 @@ export default function HomePage({ page }: HomeProps) {
       <Hero {...hero} />
       {spaceCards  && <MediaGrid items={spaceCards} ariaLabel="Architectural Spaces" />}
       {slides      && <ProductCarousel slides={slides} eyebrow={carouselEyebrow} />}
-      {features.length > 0 && <FeatureCards items={features} ariaLabel="Business services and support" />}
+      {/* {features.length > 0 && <FeatureCards items={features} ariaLabel="Business services and support" />} */}
       {narrative   && <NarrativeSection {...narrative} />}
       {posts       && <SocialFeed posts={posts} />}
     </div>
