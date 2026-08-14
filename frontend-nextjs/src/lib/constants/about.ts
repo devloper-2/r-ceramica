@@ -172,7 +172,7 @@ export const ABOUT_PHILOSOPHY = {
     "Starting as a boutique facility in Morbi, the hub of ceramic innovation, we have evolved into a global powerhouse, merging traditional craftsmanship with state-of-the-art nanotechnology. Our journey is driven by one core philosophy: the surface is the soul of any space.",
 
   image:
-    "/images/materiallab.webp",
+    "/images/rceramica.webp",
 
   imageAlt: "Material Lab",
 

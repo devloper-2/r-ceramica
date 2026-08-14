@@ -1,433 +1,1834 @@
-/* =====================================================================
-   loginpage.css — Sign In / Create Account page (/login).
-   ===================================================================== */
+/* ============================================================
+   R CERAMICA AUTH PAGE
+   ============================================================ */
 
 .page-login {
-  background-color: #0a0a0a;
-  min-height: 100vh;
-  color: white;
-}
-
-/* ── Split layout ── */
-.lp-layout {
-  display: flex;
-  min-height: 100vh;
-}
-
-/* ── Left panel (60%) ── */
-.lp-left {
-  display: none;
-  position: relative;
-  overflow: hidden;
-}
-@media (min-width: 768px) {
-  .lp-left { display: block; width: 65%; }
-}
-
-.lp-left-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    rgba(0,0,0,0.55) 0%,
-    rgba(0,0,0,0.15) 50%,
-    rgba(0,0,0,0.72) 100%
-  );
-}
-
-.lp-back-left {
-  position: absolute;
-  top: 32px;
-  left: 32px;
-  z-index: 20;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.38em;
-  color: rgba(255,255,255,0.35);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.lp-back-left:hover { color: white; }
-
-.lp-left-text {
-  position: absolute;
-  bottom: 60px;
-  left: 48px;
-  z-index: 10;
-  max-width: 360px;
-}
-.lp-left-eyebrow {
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.5em;
-  color: rgba(255,255,255,0.35);
-  margin: 0 0 14px 0;
-}
-.lp-left-heading {
-  font-size: clamp(36px, 4vw, 52px);
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  line-height: 1.15;
-  margin: 0 0 16px 0;
-}
-.lp-left-sub {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
-  color: rgba(255,255,255,0.35);
-  line-height: 1.8;
-  margin: 0;
-}
-
-/* ── Right panel (40%) ── */
-.lp-right {
   width: 100%;
   min-height: 100vh;
-  background: #0a0a0a;
-  border-left: 1px solid rgba(255,255,255,0.05);
-  display: flex;
-  flex-direction: column;
-}
-@media (min-width: 768px) {
-  .lp-right { width: 35%; }
+
+  background: #090909;
+
+  color: #fff;
+
+  overflow: hidden;
 }
 
-/* Mobile back button (hidden on desktop since left panel shows it) */
-.lp-mobile-back {
-  display: flex;
+
+/* ============================================================
+   MAIN LAYOUT
+   ============================================================ */
+
+.lp-layout {
+  position: relative;
+
+  width: 100%;
+  height: 100vh;
+
+  overflow: hidden;
+}
+
+.lp-stage {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+}
+
+
+/* ============================================================
+   BACK BUTTON
+   ============================================================ */
+
+.lp-back {
+  position: fixed;
+
+  top: 30px;
+  left: 32px;
+
+  z-index: 100;
+
+  display: inline-flex;
+
   align-items: center;
-  padding: 24px 32px;
-}
-@media (min-width: 768px) {
-  .lp-mobile-back { display: none; }
-}
-/* On mobile, lp-back-left is not absolute-positioned inside lp-mobile-back */
-.lp-mobile-back .lp-back-left {
-  position: static;
+
+  gap: 8px;
+
+  color: rgba(255,255,255,0.45);
+
+  text-decoration: none;
+
+  font-size: 8px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.35em;
+
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
 }
 
-/* Logo block */
+.lp-back:hover {
+  color: #fff;
+
+  transform: translateX(-3px);
+}
+
+
+/* ============================================================
+   ============================================================
+   VISUAL PANEL
+   ============================================================
+   ============================================================ */
+
+.lp-visual-panel {
+  position: absolute;
+
+  top: 0;
+  left: 50%;
+
+  width: 50%;
+  height: 100%;
+
+  overflow: hidden;
+
+  z-index: 20;
+
+  background: #111;
+
+  transition:
+    transform 0.85s cubic-bezier(
+      0.77,
+      0,
+      0.175,
+      1
+    );
+}
+
+
+/*
+   LOGIN:
+   Image = RIGHT
+
+   REGISTER:
+   Image = LEFT
+*/
+
+.lp-register-mode .lp-visual-panel {
+  transform: translateX(-100%);
+}
+
+
+/* ============================================================
+   IMAGE
+   ============================================================ */
+
+.lp-visual-image {
+  object-fit: cover;
+
+  object-position: center;
+
+  transform: scale(1.04);
+
+  transition:
+    transform 1.2s cubic-bezier(
+      0.77,
+      0,
+      0.175,
+      1
+    );
+}
+
+.lp-visual-panel:hover
+.lp-visual-image {
+  transform: scale(1);
+}
+
+
+/* ============================================================
+   IMAGE OVERLAY
+   ============================================================ */
+
+.lp-visual-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,0.05),
+      rgba(0,0,0,0.42)
+    ),
+    linear-gradient(
+      0deg,
+      rgba(0,0,0,0.82),
+      rgba(0,0,0,0.05) 70%
+    );
+
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   GRAIN
+   ============================================================ */
+
+.lp-visual-grain {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 2;
+
+  pointer-events: none;
+
+  opacity: 0.055;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.5'/%3E%3C/svg%3E");
+}
+
+
+/* ============================================================
+   VISUAL CONTENT
+   ============================================================ */
+
+.lp-visual-content {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 5;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  padding: 34px 42px 48px;
+
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   VISUAL TOP
+   ============================================================ */
+
+.lp-visual-top {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding-left: 10px;
+}
+
+.lp-visual-brand {
+  color: rgba(255,255,255,0.55);
+
+  font-size: 8px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.45em;
+}
+
+.lp-visual-number {
+  color: rgba(255,255,255,0.32);
+
+  font-size: 8px;
+
+  letter-spacing: 0.3em;
+}
+
+
+/* ============================================================
+   VISUAL BOTTOM
+   ============================================================ */
+
+.lp-visual-bottom {
+  max-width: 470px;
+}
+
+.lp-visual-eyebrow {
+  display: block;
+
+  margin-bottom: 15px;
+
+  color: rgba(255,255,255,0.48);
+
+  font-size: 8px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.45em;
+}
+
+
+/* ============================================================
+   VISUAL COPY
+   ============================================================ */
+
+.lp-visual-copy {
+  animation:
+    lp-content-in
+    0.55s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+@keyframes lp-content-in {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+.lp-visual-copy h2 {
+  margin: 0;
+
+  color: #fff;
+
+  font-size: clamp(
+    40px,
+    4vw,
+    60px
+  );
+
+  font-weight: 200;
+
+  line-height: 0.98;
+
+  letter-spacing: -0.04em;
+}
+
+.lp-visual-copy h2 strong {
+  font-weight: 500;
+}
+
+.lp-visual-copy p {
+  max-width: 390px;
+
+  margin: 20px 0 0;
+
+  color: rgba(255,255,255,0.53);
+
+  font-size: 10px;
+
+  line-height: 1.8;
+
+  letter-spacing: 0.025em;
+}
+
+
+/* ============================================================
+   VISUAL SWITCH
+   ============================================================ */
+
+.lp-visual-switch {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 22px;
+
+  margin-top: 27px;
+
+  padding: 12px 0;
+
+  background: transparent;
+
+  border: none;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,0.32);
+
+  color: #fff;
+
+  font-size: 8px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.22em;
+
+  cursor: pointer;
+
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.lp-visual-switch:hover {
+  color: #c5a059;
+
+  border-color: #c5a059;
+}
+
+
+/* ============================================================
+   ============================================================
+   FORM PANEL
+   ============================================================
+   ============================================================ */
+
+.lp-form-panel {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 50%;
+  height: 100%;
+
+  z-index: 10;
+
+  background: #090909;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: flex-start;
+
+  overflow-y: auto;
+
+  overflow-x: hidden;
+
+  scrollbar-width: none;
+
+  transition:
+    transform 0.85s cubic-bezier(
+      0.77,
+      0,
+      0.175,
+      1
+    );
+}
+
+.lp-form-panel::-webkit-scrollbar {
+  display: none;
+}
+
+
+/*
+   LOGIN:
+   Form = LEFT
+
+   REGISTER:
+   Form = RIGHT
+*/
+
+.lp-register-mode .lp-form-panel {
+  transform: translateX(100%);
+}
+
+
+/* ============================================================
+   FORM INNER
+   ============================================================ */
+
+.lp-form-inner {
+  width: min(
+    520px,
+    calc(100% - 80px)
+  );
+
+  padding: 72px 0 42px;
+
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   LOGO
+   ============================================================ */
+
 .lp-logo-wrap {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 48px 40px 0;
-  flex-shrink: 0;
-}
-@media (min-width: 768px) {
-  .lp-logo-wrap { padding: 56px 48px 0; }
+
+  justify-content: flex-start;
+
+  margin-bottom: 34px;
 }
 
-/* ── Square tabs ── */
-.lp-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border: 1px solid rgba(255,255,255,0.1);
-  max-width: 380px;
-  width: 380px;
-  margin: 0 auto 40px;
-  align-self: center;
-  flex-shrink: 0;
+.lp-logo {
+  width: 128px;
+
+  height: auto;
+
+  object-fit: contain;
 }
 
-.lp-tab {
-  padding: 13px 6px;
-  font-size: 10px;
+
+/* ============================================================
+   FORM HEADING
+   ============================================================ */
+
+.lp-form-heading {
+  margin-bottom: 30px;
+
+  animation:
+    lp-form-heading-in
+    0.5s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+@keyframes lp-form-heading-in {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+.lp-kicker {
+  display: block;
+
+  margin-bottom: 11px;
+
+  color: #c5a059;
+
+  font-size: 8px;
+
   font-weight: 600;
+
   text-transform: uppercase;
-  letter-spacing: 0.18em;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  border-radius: 0;
+
+  letter-spacing: 0.42em;
 }
-.lp-tab-active {
-  background: #c5a059;
-  color: white;
+
+
+/*
+   NOT HUGE ANYMORE
+*/
+
+.lp-form-heading h1 {
+  max-width: 450px;
+
+  margin: 0;
+
+  color: #fff;
+
+  font-size: clamp(
+    34px,
+    3.2vw,
+    48px
+  );
+
+  font-weight: 300;
+
+  line-height: 1.03;
+
+  letter-spacing: -0.025em;
 }
-.lp-tab-inactive {
-  background: transparent;
+
+.lp-form-heading p {
+  max-width: 420px;
+
+  margin: 14px 0 0;
+
   color: rgba(255,255,255,0.35);
-}
-.lp-tab-inactive:hover {
-  background: rgba(255,255,255,0.05);
-  color: white;
+
+  font-size: 10px;
+
+  line-height: 1.7;
+
+  letter-spacing: 0.025em;
 }
 
-/* ── Form area ── */
-.lp-form-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 28px 24px 36px;
-  max-width: 380px;
-  width: 380px;
-  margin: 0 auto;
-  align-self: center;
-  box-sizing: content-box;
-}
 
-/* Error */
+/* ============================================================
+   ERROR
+   ============================================================ */
+
 .lp-error {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 24px;
-  padding: 12px 16px;
-  background: rgba(239,68,68,0.08);
-  border: 1px solid rgba(239,68,68,0.2);
-  font-size: 12px;
+
+  align-items: stretch;
+
+  gap: 10px;
+
+  margin-bottom: 22px;
+
+  padding: 11px 13px;
+
+  background:
+    rgba(239,68,68,0.07);
+
+  border:
+    1px solid
+    rgba(239,68,68,0.18);
+
   color: #fca5a5;
+
+  font-size: 10px;
+
   line-height: 1.5;
 }
+
 .lp-error-bar {
   width: 2px;
-  align-self: stretch;
-  background: #ef4444;
+
   flex-shrink: 0;
-  border-radius: 1px;
+
+  background: #ef4444;
 }
 
-/* Form */
-.lp-form { display: flex; flex-direction: column; gap: 28px; }
 
-.lp-field { display: flex; flex-direction: column; gap: 10px; }
+/* ============================================================
+   FORM
+   ============================================================ */
+
+.lp-form {
+  width: 100%;
+}
+
+
+/* ============================================================
+   FORM GRID
+   ============================================================ */
+
+.lp-form-fields {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  column-gap: 22px;
+
+  row-gap: 20px;
+}
+
+
+/* ============================================================
+   FIELD
+   ============================================================ */
+
+.lp-field {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+
+  min-width: 0;
+}
+
+.lp-field-half {
+  grid-column: span 1;
+}
+
+.lp-field-full {
+  grid-column: 1 / -1;
+}
+
+
+/* ============================================================
+   LABEL
+   ============================================================ */
 
 .lp-label {
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.4em;
-  color: rgba(255,255,255,0.3);
-}
+  color:
+    rgba(255,255,255,0.32);
 
-.lp-phone-row {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-}
-.lp-phone-code {
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  font-size: 14px;
-  font-weight: 300;
-  letter-spacing: 0.18em;
-  color: rgba(255,255,255,0.4);
-  flex-shrink: 0;
-  line-height: 1;
-}
-
-/* Remember + recovery */
-.lp-remember-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 4px;
-}
-.lp-remember {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  color: rgba(255,255,255,0.3);
-  cursor: pointer;
-  user-select: none;
-  transition: color 0.2s;
-}
-.lp-remember:hover { color: rgba(255,255,255,0.7); }
-.lp-checkbox {
-  width: 14px;
-  height: 14px;
-  border: 1px solid rgba(255,255,255,0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: all 0.2s;
-}
-.lp-checkbox-on { border-color: #c5a059; background: #c5a059; }
-.lp-recovery {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  color: rgba(255,255,255,0.3);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.lp-recovery:hover { color: #c5a059; }
-
-/* Submit button */
-.lp-submit {
-  width: 100%;
-  padding: 18px;
-  background: white;
-  color: #0a0a0a;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.45em;
-  border: none;
-  cursor: pointer;
-  transition: background 0.4s, color 0.4s;
-  border-radius: 0;
-}
-.lp-submit:hover:not(:disabled) { background: #c5a059; color: white; }
-.lp-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-.lp-submit-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-.lp-btn-spinner {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 1.5px solid rgba(0,0,0,0.2);
-  border-top-color: #0a0a0a;
-  border-radius: 50%;
-  animation: lp-spin 0.7s linear infinite;
-}
-@keyframes lp-spin { to { transform: rotate(360deg); } }
-
-/* Divider */
-.lp-divider {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin: 28px 0;
-}
-.lp-divider-line {
-  flex: 1;
-  height: 1px;
-  background: rgba(255,255,255,0.07);
-}
-.lp-divider-text {
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.35em;
-  color: rgba(255,255,255,0.2);
-  white-space: nowrap;
-}
-
-/* Google real button container */
-.lp-google-real {
-  display: flex;
-  justify-content: center;
-  min-height: 44px;
-}
-
-/* Google fallback button */
-.lp-google-wrap { display: flex; flex-direction: column; gap: 10px; }
-
-.lp-google-btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 0;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: rgba(255,255,255,0.75);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-  border-radius: 0;
-  overflow: hidden;
-  text-align: left;
-}
-.lp-google-btn:hover:not(:disabled) {
-  background: rgba(255,255,255,0.08);
-  border-color: rgba(255,255,255,0.2);
-}
-.lp-google-btn:disabled { opacity: 0.45; cursor: default; }
-
-.lp-google-icon-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  background: white;
-  flex-shrink: 0;
-}
-.lp-google-label {
-  flex: 1;
-  padding: 0 16px;
-}
-.lp-google-badge {
-  margin-right: 14px;
-  padding: 3px 8px;
-  border: 1px solid rgba(255,255,255,0.12);
   font-size: 8px;
+
+  font-weight: 500;
+
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: rgba(255,255,255,0.25);
+
+  letter-spacing: 0.34em;
 }
 
-.lp-google-status {
-  font-size: 10px;
-  text-align: center;
-  color: rgba(255,255,255,0.2);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin: 0;
-}
 
-/* ── Underline inputs ── */
+/* ============================================================
+   INPUT
+   ============================================================ */
+
 .login-underline-input {
   width: 100%;
+
+  height: 40px;
+
+  padding: 5px 0 9px;
+
+  box-sizing: border-box;
+
   background: transparent;
+
   border: none;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  padding: 12px 0;
-  color: white;
-  font-size: 14px;
-  font-weight: 300;
-  letter-spacing: 0.12em;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,0.12);
+
   outline: none;
-  transition: border-color 0.25s, box-shadow 0.25s;
-  -webkit-appearance: none;
-  appearance: none;
-}
-.login-underline-input::placeholder { color: rgba(255,255,255,0.18); }
-.login-underline-input:focus {
-  border-bottom-color: rgba(255,255,255,0.35);
-  box-shadow: 0 1px 0 0 rgba(197,160,89,0.4);
+
+  color: #fff;
+
+  font-size: 13px;
+
+  font-weight: 300;
+
+  letter-spacing: 0.06em;
+
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-/* Kill autofill flash */
+.login-underline-input::placeholder {
+  color:
+    rgba(255,255,255,0.16);
+}
+
+.login-underline-input:focus {
+  border-bottom-color:
+    #c5a059;
+
+  box-shadow:
+    0 1px 0
+    rgba(197,160,89,0.35);
+}
+
+
+/* ============================================================
+   AUTOFILL
+   ============================================================ */
+
 .login-underline-input:-webkit-autofill,
 .login-underline-input:-webkit-autofill:hover,
 .login-underline-input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px #0a0a0a inset !important;
-  -webkit-text-fill-color: white !important;
+
+  -webkit-box-shadow:
+    0 0 0 1000px
+    #090909 inset !important;
+
+  -webkit-text-fill-color:
+    white !important;
+
   caret-color: white;
-  border-bottom-color: rgba(255,255,255,0.1);
 }
 
-@media only screen and (max-width: 768px) {
-  .lp-form-area,.lp-tabs{
-  max-width: 100%;
+
+/* ============================================================
+   PHONE
+   ============================================================ */
+
+.lp-phone-row {
+  display: flex;
+
+  align-items: flex-end;
+
   width: 100%;
-      box-sizing: inherit;
+
+  gap: 12px;
 }
+
+.lp-phone-code {
+  display: flex;
+
+  align-items: center;
+
+  flex-shrink: 0;
+
+  height: 40px;
+
+  padding-bottom: 9px;
+
+  box-sizing: border-box;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,0.12);
+
+  color:
+    rgba(255,255,255,0.4);
+
+  font-size: 12px;
+
+  letter-spacing: 0.12em;
 }
-@media only screen and (max-width: 600px) {
-  .lp-logo-wrap{
-    padding: 20px 40px 0;
+
+
+/* ============================================================
+   REMEMBER
+   ============================================================ */
+
+.lp-remember-row {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-top: 18px;
+}
+
+.lp-remember {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  color:
+    rgba(255,255,255,0.3);
+
+  font-size: 8px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.2em;
+
+  cursor: pointer;
+
+  user-select: none;
+}
+
+.lp-checkbox {
+  width: 13px;
+  height: 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border:
+    1px solid
+    rgba(255,255,255,0.2);
+
+  flex-shrink: 0;
+}
+
+.lp-checkbox-on {
+  background: #c5a059;
+
+  border-color: #c5a059;
+}
+
+.lp-recovery {
+  color:
+    rgba(255,255,255,0.3);
+
+  font-size: 8px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.18em;
+
+  text-decoration: none;
+}
+
+.lp-recovery:hover {
+  color: #c5a059;
+}
+
+
+/* ============================================================
+   SUBMIT
+   ============================================================ */
+
+.lp-submit {
+  width: 100%;
+
+  height: 52px;
+
+  margin-top: 24px;
+
+  padding: 0 20px;
+
+  border: none;
+
+  background: #fff;
+
+  color: #090909;
+
+  font-size: 9px;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.4em;
+
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.lp-submit:hover:not(:disabled) {
+  background: #c5a059;
+
+  color: #fff;
+
+  transform: translateY(-1px);
+}
+
+.lp-submit:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+.lp-submit-loading {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 9px;
+}
+
+
+/* ============================================================
+   SPINNER
+   ============================================================ */
+
+.lp-btn-spinner {
+  width: 13px;
+  height: 13px;
+
+  border:
+    1.5px solid
+    rgba(0,0,0,0.2);
+
+  border-top-color:
+    #090909;
+
+  border-radius: 50%;
+
+  animation:
+    lp-spin
+    0.7s
+    linear
+    infinite;
+}
+
+@keyframes lp-spin {
+
+  to {
+    transform: rotate(360deg);
   }
-  .lp-tabs{
-    margin-bottom: 20px;
+
+}
+
+
+/* ============================================================
+   DIVIDER
+   ============================================================ */
+
+.lp-divider {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin: 22px 0 15px;
+}
+
+.lp-divider-line {
+  flex: 1;
+
+  height: 1px;
+
+  background:
+    rgba(255,255,255,0.07);
+}
+
+.lp-divider-text {
+  white-space: nowrap;
+
+  color:
+    rgba(255,255,255,0.2);
+
+  font-size: 7px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.28em;
+}
+
+/* ============================================================
+   R CERAMICA — GOOGLE BUTTON
+   ============================================================ */
+
+.lp-google-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+
+/* ============================================================
+   GOOGLE BUTTON
+   ============================================================ */
+
+.lp-google-btn {
+  position: relative;
+
+  width: 100%;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  border-radius: 0;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-family: inherit;
+
+  font-size: 9px;
+  font-weight: 500;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.18em;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  transition:
+    color 0.35s ease,
+    border-color 0.35s ease,
+    background 0.35s ease,
+    transform 0.35s ease;
+}
+
+
+/* Gold line animation */
+
+.lp-google-btn::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  width: 0;
+  height: 1px;
+
+  background: #c5a059;
+
+  transition:
+    width 0.4s cubic-bezier(
+      0.77,
+      0,
+      0.175,
+      1
+    );
+}
+
+.lp-google-btn:hover:not(:disabled)::before {
+  width: 100%;
+}
+
+
+/* Hover */
+
+.lp-google-btn:hover:not(:disabled) {
+  background:
+    rgba(197, 160, 89, 0.045);
+
+  border-color:
+    rgba(197, 160, 89, 0.45);
+
+  color: #fff;
+
+  transform: translateY(-1px);
+}
+
+
+/* Disabled */
+
+.lp-google-btn:disabled {
+  opacity: 0.45;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* ============================================================
+   GOOGLE ICON
+   ============================================================ */
+
+.lp-google-icon-box {
+  position: absolute;
+
+  left: 0;
+
+  width: 52px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+
+  border-right:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  flex-shrink: 0;
+
+  transition:
+    border-color 0.35s ease,
+    background 0.35s ease;
+}
+
+.lp-google-btn:hover:not(:disabled)
+.lp-google-icon-box {
+  border-right-color:
+    rgba(197, 160, 89, 0.22);
+
+  background:
+    rgba(197, 160, 89, 0.035);
+}
+
+
+/* ============================================================
+   GOOGLE LABEL
+   ============================================================ */
+
+.lp-google-label {
+  display: block;
+
+  padding: 0 60px;
+
+  text-align: center;
+
+  white-space: nowrap;
+
+  line-height: 1;
+
+  transition:
+    color 0.3s ease;
+}
+
+
+/* ============================================================
+   "SOON" BADGE
+   ============================================================ */
+
+.lp-google-badge {
+  position: absolute;
+
+  right: 12px;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  margin: 0;
+
+  padding: 4px 7px;
+
+  border:
+    1px solid
+    rgba(255,255,255,0.1);
+
+  color:
+    rgba(255,255,255,0.25);
+
+  font-size: 6px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.18em;
+}
+
+
+/* ============================================================
+   GOOGLE STATUS
+   ============================================================ */
+
+.lp-google-status {
+  margin: 2px 0 0;
+
+  color:
+    rgba(255,255,255,0.18);
+
+  font-size: 7px;
+
+  text-align: center;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.12em;
+}
+
+/* ============================================================
+   SWITCH
+   ============================================================ */
+
+.lp-switch {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 7px;
+
+  margin-top: 17px;
+
+  color:
+    rgba(255,255,255,0.25);
+
+  font-size: 8px;
+
+  letter-spacing: 0.03em;
+}
+
+.lp-switch button {
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: #c5a059;
+
+  font-size: 8px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.17em;
+
+  cursor: pointer;
+}
+
+.lp-switch button:hover {
+  color: #fff;
+}
+
+
+/* ============================================================
+   ============================================================
+   TABLET
+   ============================================================
+   ============================================================ */
+
+@media (max-width: 1100px)
+  and (min-width: 768px) {
+
+  .lp-form-inner {
+    width:
+      calc(100% - 56px);
+
+    padding-top: 70px;
   }
-  .lp-form{
-    gap: 20px;
+
+  .lp-logo-wrap {
+    margin-bottom: 30px;
   }
+
+  .lp-form-heading {
+    margin-bottom: 25px;
+  }
+
+  .lp-form-heading h1 {
+    font-size: 38px;
+  }
+
+  .lp-form-heading p {
+    font-size: 9px;
+  }
+
+  .lp-form-fields {
+    column-gap: 16px;
+
+    row-gap: 17px;
+  }
+
+  .lp-visual-content {
+    padding:
+      30px 32px 38px;
+  }
+
+  .lp-visual-copy h2 {
+    font-size: 43px;
+  }
+
+}
+
+
+/* ============================================================
+   ============================================================
+   MOBILE
+   ============================================================
+   ============================================================
+
+   IMPORTANT:
+
+   There is ONLY ONE IMAGE.
+
+   Image:
+   ┌───────────────────┐
+   │                   │
+   │     IMAGE         │
+   │                   │
+   └───────────────────┘
+
+   Form:
+   ┌───────────────────┐
+   │     SIGN IN       │
+   │                   │
+   │      FORM         │
+   └───────────────────┘
+
+   No second image.
+   No desktop horizontal movement.
+   ============================================================ */
+
+@media (max-width: 767px) {
+
+  .page-login {
+    overflow-x: hidden;
+
+    overflow-y: auto;
+  }
+
+  .lp-layout {
+    height: auto;
+
+    min-height: 100vh;
+
+    overflow: visible;
+  }
+
+  .lp-stage {
+    height: auto;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+  }
+
+
+  /* ==========================================================
+     BACK
+     ========================================================== */
+
+  .lp-back {
+    top: 18px;
+
+    left: 18px;
+
+    color:
+      rgba(255,255,255,0.65);
+
+    font-size: 7px;
+  }
+
+
+  /* ==========================================================
+     VISUAL
+     ========================================================== */
+
+  .lp-visual-panel {
+
+    /*
+       RESET DESKTOP POSITION
+    */
+
+    position: relative;
+
+    top: auto;
+    left: auto;
+
+    width: 100%;
+
+    /*
+       IMPORTANT:
+       NOT 100vh.
+    */
+
+    height: 430px;
+
+    min-height: 430px;
+
+    flex-shrink: 0;
+
+    transform: none !important;
+
+    order: 1;
+
+    overflow: hidden;
+
+    z-index: 1;
+  }
+
+
+  /*
+     IMPORTANT:
+     Signup DOES NOT move
+     the image to the bottom.
+  */
+
+  .lp-register-mode
+  .lp-visual-panel {
+
+    position: relative;
+
+    top: auto;
+    left: auto;
+
+    transform: none !important;
+
+    order: 1;
+  }
+
+
+  /* ==========================================================
+     IMAGE
+     ========================================================== */
+
+  .lp-visual-image {
+    object-position: center;
+
+    transform: none !important;
+  }
+
+
+  /* ==========================================================
+     VISUAL CONTENT
+     ========================================================== */
+
+  .lp-visual-content {
+    padding:
+      25px 22px 30px;
+
+    justify-content:
+      space-between;
+  }
+
+  .lp-visual-top {
+    padding-left: 0;
+  }
+
+  .lp-visual-brand {
+    font-size: 7px;
+
+    letter-spacing: 0.35em;
+  }
+
+  .lp-visual-number {
+    font-size: 7px;
+  }
+
+
+  .lp-visual-bottom {
+    max-width: 100%;
+  }
+
+  .lp-visual-eyebrow {
+    margin-bottom: 11px;
+
+    font-size: 7px;
+  }
+
+  .lp-visual-copy h2 {
+    font-size: 43px;
+
+    line-height: 0.96;
+  }
+
+  .lp-visual-copy p {
+    max-width: 330px;
+
+    margin-top: 15px;
+
+    font-size: 9px;
+
+    line-height: 1.7;
+  }
+
+  .lp-visual-switch {
+    margin-top: 20px;
+
+    font-size: 7px;
+
+    letter-spacing: 0.16em;
+  }
+
+
+  /* ==========================================================
+     FORM
+     ========================================================== */
+
+  .lp-form-panel {
+
+    position: relative;
+
+    top: auto;
+    left: auto;
+
+    width: 100%;
+
+    height: auto;
+
+    min-height: auto;
+
+    transform: none !important;
+
+    order: 2;
+
+    overflow: visible;
+
+    z-index: 2;
+
+    display: block;
+  }
+
+
+  /*
+     VERY IMPORTANT:
+
+     Signup does NOT move form
+     above/below the image.
+  */
+
+  .lp-register-mode
+  .lp-form-panel {
+
+    position: relative;
+
+    top: auto;
+    left: auto;
+
+    transform: none !important;
+
+    order: 2;
+  }
+
+
+  /* ==========================================================
+     FORM INNER
+     ========================================================== */
+
+  .lp-form-inner {
+
+    width:
+      calc(100% - 36px);
+
+    max-width: 500px;
+
+    margin: 0 auto;
+
+    padding:
+      42px 0 45px;
+  }
+
+
+  /* ==========================================================
+     LOGO
+     ========================================================== */
+
+  .lp-logo-wrap {
+    justify-content: center;
+
+    margin-bottom: 28px;
+  }
+
+  .lp-logo {
+    width: 115px;
+  }
+
+
+  /* ==========================================================
+     HEADING
+     ========================================================== */
+
+  .lp-form-heading {
+
+    text-align: center;
+
+    margin-bottom: 27px;
+  }
+
+  .lp-kicker {
+    font-size: 7px;
+
+    margin-bottom: 10px;
+
+    letter-spacing: 0.35em;
+  }
+
+  .lp-form-heading h1 {
+
+    max-width: 100%;
+
+    font-size: 32px;
+
+    line-height: 1.04;
+  }
+
+  .lp-form-heading p {
+
+    max-width: 330px;
+
+    margin:
+      12px auto 0;
+
+    font-size: 9px;
+
+    line-height: 1.65;
+  }
+
+
+  /* ==========================================================
+     FORM GRID
+
+     MOBILE = ONE COLUMN
+  ========================================================== */
+
+  .lp-form-fields {
+
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    column-gap: 0;
+
+    row-gap: 19px;
+  }
+
+  .lp-field-half,
+  .lp-field-full {
+
+    grid-column:
+      1 / -1;
+  }
+
+
+  /* ==========================================================
+     INPUT
+  ========================================================== */
+
+  .login-underline-input {
+
+    height: 40px;
+
+    font-size: 12px;
+  }
+
+
+  /* ==========================================================
+     PHONE
+  ========================================================== */
+
+  .lp-phone-row {
+    gap: 10px;
+  }
+
+  .lp-phone-code {
+    font-size: 11px;
+  }
+
+
+  /* ==========================================================
+     REMEMBER
+  ========================================================== */
+
+  .lp-remember-row {
+    margin-top: 17px;
+  }
+
+
+  /* ==========================================================
+     BUTTON
+  ========================================================== */
+
+  .lp-submit {
+
+    height: 52px;
+
+    margin-top: 23px;
+
+    font-size: 8px;
+
+    letter-spacing: 0.32em;
+  }
+
+
+  /* ==========================================================
+     GOOGLE
+  ========================================================== */
+
+  .lp-divider {
+
+    margin:
+      21px 0 14px;
+  }
+
+  .lp-google-btn {
+
+    height: 48px;
+  }
+
+
+  /* ==========================================================
+     SWITCH
+  ========================================================== */
+
+  .lp-switch {
+
+    margin-top: 17px;
+
+    padding-bottom: 5px;
+  }
+
+}
+
+
+/* ============================================================
+   ============================================================
+   SMALL PHONE
+   ============================================================
+   ============================================================ */
+
+@media (max-width: 420px) {
+
+  .lp-visual-panel {
+
+    height: 390px;
+
+    min-height: 390px;
+  }
+
+  .lp-visual-content {
+    padding:
+      22px 18px 25px;
+  }
+
+  .lp-visual-copy h2 {
+    font-size: 39px;
+  }
+
+  .lp-visual-copy p {
+    font-size: 8px;
+
+    max-width: 290px;
+  }
+
+  .lp-form-inner {
+
+    width:
+      calc(100% - 30px);
+
+    padding:
+      36px 0 40px;
+  }
+
+  .lp-logo-wrap {
+    margin-bottom: 25px;
+  }
+
+  .lp-logo {
+    width: 105px;
+  }
+
+  .lp-form-heading h1 {
+    font-size: 29px;
+  }
+
+  .lp-form-heading p {
+    font-size: 8px;
+  }
+
+  .lp-form-fields {
+    row-gap: 17px;
+  }
+
+  .lp-switch {
+
+    flex-direction: column;
+
+    gap: 8px;
+  }
+
+}
+
+
+/* ============================================================
+   ============================================================
+   REDUCED MOTION
+   ============================================================
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .lp-form-panel,
+  .lp-visual-panel,
+  .lp-visual-image,
+  .lp-form-heading,
+  .lp-visual-copy {
+
+    transition: none !important;
+
+    animation: none !important;
+  }
+
 }

@@ -16,7 +16,7 @@ export default function AboutHero({
   titleLine2,
 }: AboutHeroProps) {
   return (
-    <header className="about-hero relative min-h-screen md:min-h-[85vh] flex items-center justify-center pt-20 md:pt-24 pb-20 overflow-hidden group/hero">
+    <header className="about-hero relative min-h-screen md:min-h-[100vh] flex items-center justify-center pt-20 md:pt-24 pb-20 overflow-hidden group/hero">
       {/* Background image */}
       <div className="absolute inset-0 z-0">
         <Image

@@ -50,7 +50,7 @@ const WhatsAppIcon = ({
     <path
       d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .004 5.412.001 12.046c0 2.121.554 4.191 1.606 6.034L0 24l6.117-1.604a11.803 11.803 0 005.93 1.587h.005c6.634 0 12.043-5.413 12.046-12.049a11.796 11.796 0 00-3.417-8.412z"
       fill="currentColor"
-    />
+      />
   </svg>
 );
 
@@ -114,62 +114,172 @@ export default function Footer() {
           {SITE.shortDescription}
         </p>
 
-        {/* Social icons */}
-        <div className="mt-8 flex items-center gap-3">
-          {[
-            {
-              href: SOCIALS.facebook,
-              icon: <FacebookIcon />,
-              label: "Facebook",
-            },
-            {
-              href: SOCIALS.instagram,
-              icon: <InstagramIcon />,
-              label: "Instagram",
-            },
-            {
-              href: SOCIALS.linkedin,
-              icon: <LinkedinIcon />,
-              label: "LinkedIn",
-            },
-            {
-              href: SOCIALS.youtube,
-              icon: <YoutubeIcon />,
-              label: "YouTube",
-            },
-            {
-              href: SOCIALS.whatsapp,
-              icon: <WhatsAppIcon />,
-              label: "WhatsApp",
-            },
-          ]
-            .filter((s) => s.href)
-            .map((social, index) => (
-              <Link
-                key={social.label}
-                href={social.href}
-                aria-label={social.label}
-                className="
-                  footer-social
-                  flex h-9 w-9 items-center justify-center
-                  border border-white/[0.08]
-                  text-white/35
-                  transition-all duration-500
-                  hover:border-[#C8954D]/50
-                  hover:bg-[#C8954D]/[0.06]
-                  hover:text-[#C8954D]
-                "
-                style={{
-                  transitionDelay: `${index * 40}ms`,
-                }}
-              >
-                <span className="h-4 w-4">
-                  {social.icon}
-                </span>
-              </Link>
-            ))}
-        </div>
-      </div>
+        {/* =========================
+                SOCIAL LINKS
+            ========================= */}
+            <div className="mt-9">
+              <p className="mb-4 text-[9px] font-medium uppercase tracking-[0.35em] text-white/25">
+                Follow Us
+              </p>
+
+              <div className="flex flex-wrap items-center gap-2.5">
+                {[
+                  {
+                    href: SOCIALS.facebook,
+                    icon: <FacebookIcon />,
+                    label: "Facebook",
+                    color: "#3c5a9a",
+                  },
+                  {
+                    href: SOCIALS.instagram,
+                    icon: <InstagramIcon />,
+                    label: "Instagram",
+                    color: "#E1306C",
+                  },
+                  {
+                    href: SOCIALS.linkedin,
+                    icon: <LinkedinIcon />,
+                    label: "LinkedIn",
+                    color: "#0077B7",
+                  },
+                  {
+                    href: SOCIALS.youtube,
+                    icon: <YoutubeIcon />,
+                    label: "YouTube",
+                    color: "#F61C0D",
+                  },
+                  {
+                    href: SOCIALS.whatsapp,
+                    icon: <WhatsAppIcon />,
+                    label: "WhatsApp",
+                    color: "#67C15E",
+                  },
+                ]
+                  .filter((social) => social.href)
+                  .map((social, index) => (
+                    <Link
+                      key={social.label}
+                      href={social.href}
+                      aria-label={`Visit our ${social.label}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="
+                        footer-social
+                        group
+                        relative
+                        flex
+                        h-11
+                        w-11
+                        items-center
+                        justify-center
+                        overflow-hidden
+                        rounded-xl
+                        border
+                        border-white/[0.08]
+                        bg-white/[0.025]
+                        text-white/45
+                  
+                        transition-all
+                        duration-500
+                        ease-out
+                  
+                        hover:-translate-y-1
+                        hover:border-white/[0.18]
+                        hover:bg-white/[0.06]
+                        hover:text-white
+                  
+                        active:translate-y-0
+                        active:scale-95
+                      "
+                      style={
+                        {
+                          "--social-color": social.color,
+                          animationDelay: `${index * 70}ms`,
+                        } as React.CSSProperties
+                      }
+                    >
+                      {/* Soft hover glow */}
+                      {/* <span
+                        className="
+                          pointer-events-none
+                          absolute
+                          -inset-4
+                          rounded-full
+                          opacity-0
+                          blur-xl
+                          transition-opacity
+                          duration-500
+                          group-hover:opacity-20
+                        "
+                        style={{
+                          backgroundColor: social.color,
+                        }}
+                      /> */}
+
+                      {/* Bottom accent */}
+                      <span
+                        className="
+                          pointer-events-none
+                          absolute
+                          bottom-0
+                          left-1/2
+                          h-[2px]
+                          w-0
+                          -translate-x-1/2
+                          rounded-full
+                          transition-all
+                          duration-500
+                          group-hover:w-5
+                        "
+                        style={{
+                          backgroundColor: social.color,
+                          boxShadow: `0 0 10px ${social.color}`,
+                        }}
+                      />
+
+                      {/* Icon */}
+                      <span
+                        className="
+                          relative
+                          z-10
+                          flex
+                          h-[21px]
+                          w-[21px]
+                          items-center
+                          justify-center
+                      
+                          transition-all
+                          duration-500
+                          ease-out
+                      
+                          group-hover:scale-110
+                          group-hover:-rotate-3
+                        "
+                      >
+                        {social.icon}
+                      </span>
+                      
+                      {/* Shine */}
+                      {/* <span
+                        className="
+                          pointer-events-none
+                          absolute
+                          inset-0
+                          -translate-x-full
+                          bg-gradient-to-r
+                          from-transparent
+                          via-white/[0.08]
+                          to-transparent
+                          transition-transform
+                          duration-700
+                          group-hover:translate-x-full
+                        "
+                      /> */}
+                    </Link>
+                  ))}
+              </div>
+            </div>
+            </div>
 
       {/* ================= QUICK LINKS ================= */}
       <div className="footer-reveal">
