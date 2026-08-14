@@ -162,7 +162,7 @@ export const ABOUT_TECHNOLOGY = [
 ];
 
 export const ABOUT_PHILOSOPHY = {
-  title: "We don't just manufacture surfaces; we engineer",
+  title: "We don't just manufacture surfaces we engineer",
   highlight: " sensory experiences.",
 
   intro:
