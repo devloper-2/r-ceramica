@@ -150,11 +150,13 @@ export default function Navbar() {
   };
 
   const logout = () => {
-    authLogout();
-    setIsAuth(false);
-    setUserName("");
-    setLoginOpen(false);
-    router.push("/");
+    if (window.confirm("Are you sure you want to log out?")) {
+      authLogout();
+      setIsAuth(false);
+      setUserName("");
+      setLoginOpen(false);
+      router.push("/");
+    }
   };
 
   const navbarClass = [

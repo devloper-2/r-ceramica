@@ -100,6 +100,47 @@ export interface ApiCatalogue {
   pdf_path?: string | null;
 }
 
+// Media map loaded at build time to rewrite external URLs to local downloads.
+// In Next.js getStaticProps, `fs` works normally.
+let mediaMap: Record<string, string> | null = null;
+function loadMediaMap() {
+  if (mediaMap !== null) return;
+  mediaMap = {};
+  if (typeof window === "undefined") {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const fs = require("node:fs");
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const path = require("node:path");
+      const mapPath = path.join(process.cwd(), "src/lib/generated/media-map.json");
+      if (fs.existsSync(mapPath)) {
+        mediaMap = JSON.parse(fs.readFileSync(mapPath, "utf8"));
+      }
+    } catch (err) {
+      // ignore
+    }
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function rewriteMediaUrls(obj: any): any {
+  if (!obj || !mediaMap) return obj;
+  if (typeof obj === "string") {
+    return mediaMap[obj] || obj;
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(rewriteMediaUrls);
+  }
+  if (typeof obj === "object") {
+    const newObj: Record<string, unknown> = {};
+    for (const key in obj) {
+      newObj[key] = rewriteMediaUrls(obj[key]);
+    }
+    return newObj;
+  }
+  return obj;
+}
+
 async function apiGet<T>(path: string): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     headers: { "X-API-Key": KEY },
@@ -108,7 +149,8 @@ async function apiGet<T>(path: string): Promise<T> {
     throw new Error(`Content API ${path} responded ${res.status}`);
   }
   const json = (await res.json()) as { data: T };
-  return json.data;
+  loadMediaMap();
+  return rewriteMediaUrls(json.data) as T;
 }
 
 export const api = {

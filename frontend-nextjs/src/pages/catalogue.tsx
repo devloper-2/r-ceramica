@@ -1,9 +1,9 @@
 import Head from "next/head";
 import Image from "next/image";
-import Link from "next/link";
+
 import { useState } from "react";
 import type { GetStaticProps } from "next";
-import { Download, Eye, Package, Truck, RefreshCw, Send } from "lucide-react";
+import { Download, Eye } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import {
   api,
@@ -11,7 +11,7 @@ import {
   type ApiCatalogue,
   type ApiPage,
 } from "@/lib/services/api";
-import { iconByName } from "@/lib/utils/icons";
+
 
 const DEFAULT_TITLE = `Catalogue | ${siteConfig.name}`;
 const DEFAULT_DESCRIPTION =
@@ -64,144 +64,6 @@ function toCatEntry(c: ApiCatalogue): CatEntry {
   };
 }
 
-const STATIC_CATALOGUES: CatEntry[] = [
-  {
-    id: 1,
-    title: "Master",
-    titleLine2: "Collection 2024",
-    eyebrow: "Complete Collection",
-    sub: "Tiles · Bathrooms · Kitchen · Accessories",
-    pages: 148,
-    size: "24 MB",
-    badge: { label: "New Edition", gold: true },
-    spineGold: true,
-    spineLabel: "R Ceramica · 2024",
-    img: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=800",
-    imgOpacity: 50,
-    availability: "green",
-    availLabel: "Available",
-    categories: [
-      "all",
-      "tiles",
-      "bathroom",
-      "kitchen",
-      "slabs",
-      "outdoor",
-      "technical",
-    ],
-  },
-  {
-    id: 2,
-    title: "Architectural",
-    titleLine2: "Tiles",
-    eyebrow: "Surface Studio",
-    sub: "Floor · Wall · Large Format · Mosaic",
-    pages: 96,
-    size: "18 MB",
-    spineLabel: "R Ceramica · Tiles",
-    img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=800",
-    imgOpacity: 50,
-    availability: "green",
-    availLabel: "Available",
-    categories: ["tiles"],
-  },
-  {
-    id: 3,
-    title: "Bathroom",
-    titleLine2: "Collection",
-    eyebrow: "Sanctuary Series",
-    sub: "Faucets · Showers · Basins · Accessories",
-    pages: 112,
-    size: "21 MB",
-    badge: { label: "Updated" },
-    spineLabel: "R Ceramica · Bath",
-    img: "https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&q=80&w=800",
-    imgOpacity: 50,
-    availability: "green",
-    availLabel: "Available",
-    categories: ["bathroom"],
-  },
-  {
-    id: 4,
-    title: "Kitchen",
-    titleLine2: "Concepts",
-    eyebrow: "Culinary Studio",
-    sub: "Counter Tops · Backsplash · Sinks",
-    pages: 64,
-    size: "12 MB",
-    spineLabel: "R Ceramica · Kitchen",
-    img: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&q=80&w=800",
-    imgOpacity: 50,
-    availability: "green",
-    availLabel: "Available",
-    categories: ["kitchen"],
-  },
-  {
-    id: 5,
-    title: "Large Format",
-    titleLine2: "Slabs",
-    eyebrow: "Monolith Series",
-    sub: "1200×2400 · 1600×3200 · Bookmatch",
-    pages: 80,
-    size: "32 MB",
-    badge: { label: "Exclusive", gold: true },
-    spineGold: true,
-    spineLabel: "R Ceramica · Slabs",
-    img: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&q=80&w=800",
-    imgOpacity: 50,
-    availability: "green",
-    availLabel: "Available",
-    categories: ["slabs", "tiles"],
-  },
-  {
-    id: 6,
-    title: "Outdoor",
-    titleLine2: "Porcelain",
-    eyebrow: "Terrace & Garden",
-    sub: "R11 Anti-Slip · Pool Copings · Pavers",
-    pages: 72,
-    size: "15 MB",
-    spineLabel: "R Ceramica · Outdoor",
-    img: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&q=80&w=800",
-    imgOpacity: 50,
-    availability: "green",
-    availLabel: "Available",
-    categories: ["outdoor", "tiles"],
-  },
-  {
-    id: 7,
-    title: "Technical",
-    titleLine2: "Data Sheets",
-    eyebrow: "Engineering Specs",
-    sub: "ISO Ratings · Certifications · Dimensions",
-    pages: 48,
-    size: "8 MB",
-    spineLabel: "R Ceramica · Technical",
-    img: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&q=80&w=800",
-    imgOpacity: 30,
-    availability: "green",
-    availLabel: "Available",
-    categories: ["technical"],
-    technical: true,
-  },
-  {
-    id: 8,
-    title: "Lookbook",
-    titleLine2: "2024",
-    eyebrow: "Visual Inspiration",
-    sub: "Lifestyle · Interiors · Project Showcase",
-    pages: 56,
-    size: "28 MB",
-    badge: { label: "Limited" },
-    spineGold: true,
-    spineLabel: "R Ceramica · Look",
-    img: "https://images.unsplash.com/photo-1604709177225-055f99402ea3?auto=format&fit=crop&q=80&w=800",
-    imgOpacity: 50,
-    availability: "yellow",
-    availLabel: "Limited Run",
-    categories: ["all"],
-  },
-];
 
 const FILTER_PILLS = [
   { id: "all", label: "All" },
@@ -211,24 +73,6 @@ const FILTER_PILLS = [
   { id: "slabs", label: "Large Format" },
   { id: "outdoor", label: "Outdoor" },
   { id: "technical", label: "Technical" },
-];
-
-const STATIC_BENEFITS = [
-  {
-    icon: Package,
-    title: "Premium Print Quality",
-    body: "Printed on 170gsm art paper with true-to-life colour reproduction.",
-  },
-  {
-    icon: Truck,
-    title: "Worldwide Delivery",
-    body: "Free dispatch to architects and trade professionals across the globe.",
-  },
-  {
-    icon: RefreshCw,
-    title: "Always Up-to-Date",
-    body: "Subscribe to receive new editions and seasonal collections automatically.",
-  },
 ];
 
 /* ── Default hero / request content ────────────────────────── */
@@ -244,26 +88,13 @@ const STATIC_HERO = {
     { val: "2024", label: "Edition" },
   ],
 };
-
-const STATIC_REQUEST = {
-  eyebrow: "Bespoke Service",
-  title: "Request a",
-  titleGhost: "Physical",
-  titleLine3: "Catalogue",
-  description:
-    "Request our premium printed catalogues delivered to your studio or showroom. Available for architects, interior designers, and trade professionals.",
-  ctaPrimary: { label: "Request Copy", href: "/contact" },
-  ctaSecondary: { label: "Contact Us", href: "/contact" },
-};
-
-/* ── Props ──────────────────────────────────────────────────── */
 interface Props {
   catalogues: CatEntry[];
   page: ApiPage | null;
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  let catalogues: CatEntry[] = STATIC_CATALOGUES;
+  let catalogues: CatEntry[] = [];
   let page: ApiPage | null = null;
 
   try {
@@ -271,10 +102,10 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
       api.getCatalogues(),
       api.getPage("catalogue"),
     ]);
-    if (rows.length) catalogues = rows.map(toCatEntry);
+    if (rows && rows.length) catalogues = rows.map(toCatEntry);
     page = fetchedPage;
   } catch (err) {
-    console.error("[catalogue] API failed, using static fallback:", err);
+    console.error("[catalogue] API failed, using empty fallback:", err);
   }
 
   return { props: { catalogues, page } };
@@ -282,7 +113,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
 export default function CataloguePage({ catalogues, page }: Props) {
   const [activeFilter, setActiveFilter] = useState("all");
-  const source = catalogues?.length ? catalogues : STATIC_CATALOGUES;
+  const source = catalogues || [];
 
   const visible = source.filter((c) =>
     activeFilter === "all" ? true : c.categories.includes(activeFilter),
@@ -292,22 +123,7 @@ export default function CataloguePage({ catalogues, page }: Props) {
   const s = page ? sectionsByType(page.sections) : null;
 
   const hero = s?.catalogueHero ?? STATIC_HERO;
-  const request = s?.catalogueRequest ?? STATIC_REQUEST;
-
   const heroStats = hero.stats ?? STATIC_HERO.stats;
-  const benefits = request.benefits
-    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (request.benefits as any[]).map(
-        (b: { icon: string; title: string; body: string }) => ({
-          icon: iconByName(b.icon),
-          title: b.title,
-          body: b.body,
-        }),
-      )
-    : STATIC_BENEFITS;
-
-  const ctaPrimary = request.ctaPrimary ?? STATIC_REQUEST.ctaPrimary;
-  const ctaSecondary = request.ctaSecondary ?? STATIC_REQUEST.ctaSecondary;
 
   const title = page?.meta_title ?? DEFAULT_TITLE;
   const description = page?.meta_description ?? DEFAULT_DESCRIPTION;
@@ -325,31 +141,28 @@ export default function CataloguePage({ catalogues, page }: Props) {
       </Head>
       {/* ══ HERO ════════════════════════════════════════════════ */}
       <header className="relative overflow-hidden bg-[#080808] pt-32 pb-16 md:pt-40 md:pb-20">
-        {/* Ambient glow */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute left-1/2 top-1/3 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-[#D6A765]/[0.035] blur-[140px]" />
+        {/* ═════════════ BACKGROUND ═════════════ */}
+        <div className="pointer-events-none absolute inset-0">
+          {/* Soft ambient glow */}
+          <div className="absolute -top-52 -left-52 h-[600px] w-[600px] rounded-full bg-[#c5a059]/[0.035] blur-[160px]" />
+
+          <div className="absolute -bottom-52 -right-52 h-[600px] w-[600px] rounded-full bg-[#c5a059]/[0.04] blur-[160px]" />
+
+          {/* Architectural grid */}
+          <div
+            className="absolute inset-0 opacity-[0.018]"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+              backgroundSize: "90px 90px",
+            }}
+          />
+
+          {/* Subtle vertical architectural lines */}
+          <div className="absolute left-[8%] top-0 h-full w-px bg-white/[0.025]" />
+          <div className="absolute left-[52%] top-0 h-full w-px bg-white/[0.018]" />
+          <div className="absolute right-[8%] top-0 h-full w-px bg-white/[0.025]" />
         </div>
-
-        {/* Large watermark */}
-        {/* <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none select-none">
-    <span
-      className="
-        catalogue-watermark
-        font-display font-black uppercase
-        tracking-[-0.08em]
-        text-white/[0.018]
-        whitespace-nowrap
-        text-[22vw]
-        leading-none
-      "
-    >
-      CATALOGUE
-    </span>
-  </div> */}
-
-        {/* Vertical borders */}
-        <div className="absolute left-4 md:left-12 top-0 h-full w-px bg-gradient-to-b from-transparent via-white/[0.07] to-transparent" />
-        <div className="absolute right-4 md:right-12 top-0 h-full w-px bg-gradient-to-b from-transparent via-white/[0.07] to-transparent" />
 
         {/* Main content */}
         <div
@@ -600,392 +413,6 @@ export default function CataloguePage({ catalogues, page }: Props) {
         </div>
       </main>
 
-      {/* ══ REQUEST SECTION ═════════════════════════════════════ */}
-      <section className="relative overflow-hidden bg-[#090909] py-20 md:py-28 lg:py-36 border-t border-white/[0.06]">
-        {/* ═════════════ BACKGROUND ═════════════ */}
-        <div className="pointer-events-none absolute inset-0">
-          {/* Soft ambient glow */}
-          <div className="absolute -top-52 -left-52 h-[600px] w-[600px] rounded-full bg-[#c5a059]/[0.035] blur-[160px]" />
-
-          <div className="absolute -bottom-52 -right-52 h-[600px] w-[600px] rounded-full bg-[#c5a059]/[0.04] blur-[160px]" />
-
-          {/* Architectural grid */}
-          <div
-            className="absolute inset-0 opacity-[0.018]"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
-              backgroundSize: "90px 90px",
-            }}
-          />
-
-          {/* Subtle vertical architectural lines */}
-          <div className="absolute left-[8%] top-0 h-full w-px bg-white/[0.025]" />
-          <div className="absolute left-[52%] top-0 h-full w-px bg-white/[0.018]" />
-          <div className="absolute right-[8%] top-0 h-full w-px bg-white/[0.025]" />
-        </div>
-
-        {/* ═════════════ CONTENT ═════════════ */}
-        <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-10 lg:px-16">
-          <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-24">
-            {/* ═════════════ LEFT SIDE ═════════════ */}
-            <div className="max-w-[720px]">
-              {/* Eyebrow */}
-              <div className="mb-8 flex items-center gap-4 md:mb-10">
-                <span className="h-px w-12 bg-[#c5a059]/70" />
-
-                <span className="text-[10px] font-medium uppercase tracking-[0.38em] text-[#c5a059] md:text-[11px]">
-                  {request.eyebrow}
-                </span>
-
-                <span className="h-px w-8 bg-white/[0.12]" />
-              </div>
-
-              {/* ═════════════ MAIN TITLE ═════════════ */}
-              <h2
-                className="
-            font-display
-            text-[43px]
-            font-light
-            uppercase
-            leading-[0.94]
-            tracking-[-0.015em]
-            text-white
-            sm:text-[54px]
-            md:text-[64px]
-            lg:text-[70px]
-            xl:text-[78px]
-          "
-              >
-                {/* REQUEST A */}
-                <span className="block text-white">{request.title}</span>
-
-                {/* PHYSICAL */}
-                <span
-                  className="
-              block
-              mt-1
-              text-transparent
-              [-webkit-text-stroke:1px_rgba(197,160,89,0.72)]
-              transition-all
-              duration-500
-              hover:[-webkit-text-stroke:1px_rgba(197,160,89,1)]
-            "
-                >
-                  {request.titleGhost}
-                </span>
-
-                {/* CATALOGUE */}
-                <span className="block mt-1 text-white">
-                  {request.titleLine3}
-                </span>
-              </h2>
-
-              {/* Gold divider */}
-              <div className="mt-9 mb-7 flex items-center gap-3">
-                <span className="h-px w-20 bg-[#c5a059]" />
-
-                <span className="h-px w-8 bg-[#c5a059]/30" />
-
-                <span className="h-px w-2 bg-[#c5a059]/15" />
-              </div>
-
-              {/* Description */}
-              <p
-                className="
-            max-w-[570px]
-            text-[12px]
-            leading-[1.9]
-            tracking-[0.055em]
-            text-white/45
-            sm:text-[13px]
-            md:text-[14px]
-          "
-              >
-                {request.description}
-              </p>
-
-              {/* ═════════════ CTA BUTTONS ═════════════ */}
-              <div className="mt-10 flex flex-col gap-3 sm:mt-12 sm:flex-row">
-                {/* ───────── PRIMARY GLASS BUTTON ───────── */}
-                <Link
-                  href={ctaPrimary.href}
-                  className="
-              group
-              relative
-              inline-flex
-              min-h-[58px]
-              items-center
-              justify-center
-              gap-4
-              overflow-hidden
-              border
-              border-[#c5a059]/50
-              bg-[#c5a059]/[0.10]
-              px-8
-              text-[10px]
-              font-medium
-              uppercase
-              tracking-[0.30em]
-              text-[#e3c27d]
-              backdrop-blur-xl
-              transition-all
-              duration-500
-              hover:-translate-y-0.5
-              hover:border-[#c5a059]
-              hover:bg-[#c5a059]/[0.16]
-              hover:shadow-[0_12px_40px_rgba(197,160,89,0.12)]
-              md:min-h-[62px]
-              md:px-10
-              md:text-[11px]
-            "
-                >
-                  {/* Glass highlight */}
-                  <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/20" />
-
-                  {/* Left icon */}
-                  <Send
-                    size={15}
-                    strokeWidth={1.5}
-                    className="
-                text-[#c5a059]
-                transition-transform
-                duration-500
-                group-hover:translate-x-1
-                group-hover:-translate-y-0.5
-              "
-                  />
-
-                  <span>{ctaPrimary.label}</span>
-
-                  {/* Arrow */}
-                  <span
-                    className="
-                ml-2
-                text-[#c5a059]/70
-                transition-transform
-                duration-500
-                group-hover:translate-x-1
-              "
-                  >
-                    →
-                  </span>
-
-                  {/* Bottom hover line */}
-                  <span
-                    className="
-                absolute
-                bottom-0
-                left-0
-                h-px
-                w-0
-                bg-[#c5a059]
-                transition-all
-                duration-500
-                group-hover:w-full
-              "
-                  />
-                </Link>
-
-                {/* ───────── SECONDARY GLASS BUTTON ───────── */}
-                <Link
-                  href={ctaSecondary.href}
-                  className="
-              group
-              relative
-              inline-flex
-              min-h-[58px]
-              items-center
-              justify-center
-              gap-4
-              overflow-hidden
-              border
-              border-white/[0.13]
-              bg-white/[0.025]
-              px-8
-              text-[10px]
-              font-medium
-              uppercase
-              tracking-[0.30em]
-              text-white/60
-              backdrop-blur-xl
-              transition-all
-              duration-500
-              hover:-translate-y-0.5
-              hover:border-white/25
-              hover:bg-white/[0.055]
-              hover:text-white
-              md:min-h-[62px]
-              md:px-10
-              md:text-[11px]
-            "
-                >
-                  {/* Glass highlight */}
-                  <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/[0.14]" />
-
-                  <span>{ctaSecondary.label}</span>
-
-                  <span
-                    className="
-                text-[#c5a059]
-                transition-transform
-                duration-500
-                group-hover:translate-x-1
-              "
-                  >
-                    →
-                  </span>
-
-                  {/* Bottom accent */}
-                  <span
-                    className="
-                absolute
-                bottom-0
-                left-0
-                h-px
-                w-0
-                bg-[#c5a059]/60
-                transition-all
-                duration-500
-                group-hover:w-full
-              "
-                  />
-                </Link>
-              </div>
-
-              {/* Reassurance */}
-              <div
-                className="
-            mt-7
-            text-[9px]
-            uppercase
-            tracking-[0.20em]
-            text-white/25
-            md:text-[10px]
-          "
-              >
-                Premium service
-                <span className="mx-2 text-white/10">/</span>
-                Direct consultation
-                <span className="mx-2 text-white/10">/</span>
-                Tailored response
-              </div>
-            </div>
-
-            {/* ═════════════ RIGHT SIDE ═════════════ */}
-            <div className="relative">
-              {/* Main glass panel */}
-              <div
-                className="
-            relative
-            border
-            border-white/[0.08]
-            bg-white/[0.015]
-            p-2
-            backdrop-blur-sm
-            md:p-3
-          "
-              >
-                {/* Architectural corner — NO DOT */}
-                <span className="absolute left-[-1px] top-[-1px] h-12 w-12 border-l border-t border-[#c5a059]/50" />
-
-                <span className="absolute bottom-[-1px] right-[-1px] h-12 w-12 border-b border-r border-[#c5a059]/30" />
-
-                {/* Inner glass */}
-                <div className="border border-white/[0.055] bg-[#0e0e0e]/80 backdrop-blur-xl">
-                  {/* Panel header */}
-                  <div
-                    className="
-                flex
-                items-center
-                justify-between
-                border-b
-                border-white/[0.06]
-                px-6
-                py-5
-                md:px-8
-              "
-                  >
-                    <span className="text-[9px] uppercase tracking-[0.32em] text-white/35 md:text-[10px]">
-                      Why work with us
-                    </span>
-
-                    <span className="text-[9px] tracking-[0.22em] text-[#c5a059]/65">
-                      01 — 0{benefits.length}
-                    </span>
-                  </div>
-
-                  {/* ═════════════ BENEFITS ═════════════ */}
-                  <div>
-                    {benefits.map(({ icon: Icon, title: bTitle, body }, i) => (
-                      <div
-                        key={i}
-                        className={`
-                      group
-                      relative
-                      flex
-                      gap-5
-                      px-6
-                      py-7
-                      transition-all
-                      duration-500
-                      hover:bg-white/[0.025]
-                      md:gap-6
-                      md:px-8
-                      md:py-8
-                      ${
-                        i < benefits.length - 1
-                          ? "border-b border-white/[0.055]"
-                          : ""
-                      }
-                    `}
-                      >
-                        {/* Number */}
-                        <div className="w-5 shrink-0 pt-1 text-[9px] tracking-[0.18em] text-[#c5a059]/40">
-                          0{i + 1}
-                        </div>
-
-                        {/* Icon glass box */}
-                        <div
-                          className=" relative flex h-11 w-11 shrink-0 items-center justify-center border border-white/[0.10] bg-white/[0.025] backdrop-blur-md transition-all duration-500 group-hover:border-[#c5a059]/40 group-hover:bg-[#c5a059]/[0.055]"
-                        >
-                          <Icon
-                            size={17}
-                            strokeWidth={1.35}
-                            className=" text-white/35 transition-colors duration-500 group-hover:text-[#c5a059]"
-                          />
-                        </div>
-
-                        {/* Content */}
-                        <div className="min-w-0 flex-1">
-                          <h4
-                            className="text-[11px]font-mediumuppercasetracking-[0.20em]text-whitemd:text-[12px]"
-                          >
-                            {bTitle}
-                          </h4>
-
-                          <p
-                            className="mt-2max-w-[430px]text-[10px]leading-[1.8]tracking-[0.035em]text-white/32md:text-[11px]"
-                          >
-                            {body}
-                          </p>
-                        </div>
-
-                        {/* Arrow */}
-                        <div
-                          className=" hidden self-center text-[16px] text-white/10 transition-all duration-500 group-hover:translate-x-1 group-hover:text-[#c5a059] sm:block"
-                        >
-                          →
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
@@ -1130,37 +557,41 @@ function CatalogueCard({ cat, index }: { cat: CatEntry; index: number }) {
               )}
 
               {/* Preview */}
-              <button
-                type="button"
-                aria-label="Preview catalogue"
-                className=" group/preview relative h-12 w-12 shrink-0 flex items-center justify-center overflow-hidden rounded-sm border border-[#D6A765]/30 bg-[#D6A765]/[0.035] backdrop-blur-md text-[#D6A765]/80 hover:border-[#D6A765]/80 hover:bg-[#D6A765]/[0.16] hover:text-[#F4D9A9] hover:shadow-[0_0_25px_rgba(214,167,101,0.16)] hover:transition-all hover:duration-300 hover:ease-out"
-              >
-                {/* Shine */}
-                <span
-                  className=" pointer-events-none absolute inset-y-0 -left-[100%] w-[55%] skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/[0.15] to-transparent group-hover/preview:animate-[glassShine_700ms_ease-out_forwards]"
-                />
-
-                {/* Inner border */}
-                <span
-                  className=" pointer-events-none absolute inset-0 border border-transparent group-hover/preview:border-[#D6A765]/20 group-hover/preview:transition-colors group-hover/preview:duration-300"
-                />
-
-                {/* Eye */}
-                <Eye
-                  size={16}
-                  strokeWidth={1.5}
-                  className=" relative z-10 group-hover/preview:scale-110 group-hover/preview:transition-transform group-hover/preview:duration-300"
-                />
-                {/* Corner vertical */}
-                <span
-                  className=" absolute right-0 top-0 h-2 w-px bg-[#D6A765]/60 group-hover/preview:h-3 group-hover/preview:bg-[#D6A765] group-hover/preview:transition-colors group-hover/preview:duration-300"
-                />
-
-                {/* Corner horizontal */}
-                <span
-                  className=" absolute right-0 top-0 h-px w-2 bg-[#D6A765]/60 group-hover/preview:w-3 group-hover/preview:bg-[#D6A765] group-hover/preview:transition-colors group-hover/preview:duration-300"
-                />
-              </button>
+              {cat.pdf ? (
+                <a
+                  href={cat.pdf}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Preview catalogue"
+                  className=" group/preview relative h-12 w-12 shrink-0 flex items-center justify-center overflow-hidden rounded-sm border border-[#D6A765]/30 bg-[#D6A765]/[0.035] backdrop-blur-md text-[#D6A765]/80 hover:border-[#D6A765]/80 hover:bg-[#D6A765]/[0.16] hover:text-[#F4D9A9] hover:shadow-[0_0_25px_rgba(214,167,101,0.16)] hover:transition-all hover:duration-300 hover:ease-out"
+                >
+                  <span className=" pointer-events-none absolute inset-y-0 -left-[100%] w-[55%] skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/[0.15] to-transparent group-hover/preview:animate-[glassShine_700ms_ease-out_forwards]" />
+                  <span className=" pointer-events-none absolute inset-0 border border-transparent group-hover/preview:border-[#D6A765]/20 group-hover/preview:transition-colors group-hover/preview:duration-300" />
+                  <Eye
+                    size={16}
+                    strokeWidth={1.5}
+                    className=" relative z-10 group-hover/preview:scale-110 group-hover/preview:transition-transform group-hover/preview:duration-300"
+                  />
+                  <span className=" absolute right-0 top-0 h-2 w-px bg-[#D6A765]/60 group-hover/preview:h-3 group-hover/preview:bg-[#D6A765] group-hover/preview:transition-colors group-hover/preview:duration-300" />
+                  <span className=" absolute right-0 top-0 h-px w-2 bg-[#D6A765]/60 group-hover/preview:w-3 group-hover/preview:bg-[#D6A765] group-hover/preview:transition-colors group-hover/preview:duration-300" />
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  aria-label="Preview catalogue"
+                  className=" group/preview relative h-12 w-12 shrink-0 flex items-center justify-center overflow-hidden rounded-sm border border-[#D6A765]/30 bg-[#D6A765]/[0.035] backdrop-blur-md text-[#D6A765]/80 hover:border-[#D6A765]/80 hover:bg-[#D6A765]/[0.16] hover:text-[#F4D9A9] hover:shadow-[0_0_25px_rgba(214,167,101,0.16)] hover:transition-all hover:duration-300 hover:ease-out"
+                >
+                  <span className=" pointer-events-none absolute inset-y-0 -left-[100%] w-[55%] skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/[0.15] to-transparent group-hover/preview:animate-[glassShine_700ms_ease-out_forwards]" />
+                  <span className=" pointer-events-none absolute inset-0 border border-transparent group-hover/preview:border-[#D6A765]/20 group-hover/preview:transition-colors group-hover/preview:duration-300" />
+                  <Eye
+                    size={16}
+                    strokeWidth={1.5}
+                    className=" relative z-10 group-hover/preview:scale-110 group-hover/preview:transition-transform group-hover/preview:duration-300"
+                  />
+                  <span className=" absolute right-0 top-0 h-2 w-px bg-[#D6A765]/60 group-hover/preview:h-3 group-hover/preview:bg-[#D6A765] group-hover/preview:transition-colors group-hover/preview:duration-300" />
+                  <span className=" absolute right-0 top-0 h-px w-2 bg-[#D6A765]/60 group-hover/preview:w-3 group-hover/preview:bg-[#D6A765] group-hover/preview:transition-colors group-hover/preview:duration-300" />
+                </button>
+              )}
             </div>
           </div>
         </div>

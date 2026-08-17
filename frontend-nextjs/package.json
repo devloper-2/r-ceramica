@@ -6,7 +6,7 @@
     "dev": "cross-env NODE_OPTIONS=--max-old-space-size=512 next dev --webpack",
     "gen:site-data": "node scripts/gen-site-data.mjs",
     "gen:sitemap": "node scripts/gen-sitemap.mjs",
-    "prebuild": "node scripts/gen-site-data.mjs && node scripts/gen-sitemap.mjs",
+    "prebuild": "node scripts/gen-site-data.mjs && node scripts/gen-sitemap.mjs && node scripts/download-media.mjs",
     "build": "next build",
     "build:export": "cross-env STATIC_EXPORT=true next build",
     "start": "next start",
