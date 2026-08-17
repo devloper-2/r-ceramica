@@ -53,13 +53,24 @@ export default function SocialFeed({
               aria-label={post.imageAlt}
               className="min-w-[280px] md:min-w-[320px] aspect-square bg-[var(--color-bg-card)] snap-center relative group/post overflow-hidden rounded-sm border border-white/5 flex-shrink-0 block"
             >
-              <Image
-                src={post.imageSrc}
-                alt={post.imageAlt}
-                fill
-                sizes="320px"
-                className="object-cover opacity-60 group-hover/post:opacity-80 transition-all duration-700 group-hover/post:scale-105"
-              />
+              {post.imageSrc.match(/\.(mp4|webm|mov)(\?.*)?$/i) ? (
+                <video
+                  src={post.imageSrc}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="object-cover opacity-60 group-hover/post:opacity-80 transition-all duration-700 group-hover/post:scale-105 w-full h-full"
+                />
+              ) : (
+                <Image
+                  src={post.imageSrc}
+                  alt={post.imageAlt}
+                  fill
+                  sizes="320px"
+                  className="object-cover opacity-60 group-hover/post:opacity-80 transition-all duration-700 group-hover/post:scale-105"
+                />
+              )}
               <div className="absolute inset-0 bg-black/0 group-hover/post:bg-black/20 transition-all duration-500 flex items-center justify-center">
                 <span className="text-[9px] uppercase tracking-[0.4em] text-white opacity-0 group-hover/post:opacity-100 transition-all duration-500 translate-y-2 group-hover/post:translate-y-0">
                   View Collection

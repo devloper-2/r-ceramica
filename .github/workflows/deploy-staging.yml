@@ -39,11 +39,10 @@ jobs:
           HTTP=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 15 --max-time 30 --retry 3 --retry-delay 5 \
             -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
             -H "X-API-Key: ${{ secrets.CONTENT_API_KEY }}" \
-            "https://admin.rceramica.com/api/v1/pages/about")
+            "https://admin.rceramica.com/api/v1/pages/about" || echo "000")
           if [ "$HTTP" != "200" ]; then
-            echo "::error::Content API returned HTTP $HTTP"
+            echo "::warning::Content API returned HTTP $HTTP (or timed out)."
             echo "Proceeding anyway in case of WAF blocking GitHub Actions IPs..."
-            # exit 1 (removed to allow build to continue if API is just blocking the Github Action Runner)
           fi
 
       - name: Generate site data from live API
