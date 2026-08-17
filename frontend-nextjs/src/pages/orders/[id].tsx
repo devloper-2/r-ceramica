@@ -41,23 +41,23 @@ function fmtDate(iso: string) {
 
 /* ── Status tracker ────────────────────────────────────── */
 const STEPS = [
-  { key: "pending",   label: "Order Placed",       Icon: CheckCircle },
-  { key: "paid",      label: "Payment Confirmed",  Icon: CreditCard },
-  { key: "shipped",   label: "Shipped",            Icon: Package },
-  { key: "transit",   label: "Out for Delivery",   Icon: Truck },
-  { key: "delivered", label: "Delivered",          Icon: Home },
+  { key: "pending", label: "Order Placed", Icon: CheckCircle },
+  { key: "paid", label: "Payment Confirmed", Icon: CreditCard },
+  { key: "shipped", label: "Shipped", Icon: Package },
+  { key: "transit", label: "Out for Delivery", Icon: Truck },
+  { key: "delivered", label: "Delivered", Icon: Home },
 ];
 const STEP_INDEX: Record<string, number> = {
   pending: 0, paid: 1, shipped: 2, transit: 3, delivered: 4,
 };
 
 const STATUS_BADGE: Record<string, { label: string; cls: string }> = {
-  paid:      { label: "Confirmed",        cls: "od-badge-blue" },
-  pending:   { label: "Pending",          cls: "od-badge-yellow" },
-  shipped:   { label: "Shipped",          cls: "od-badge-purple" },
-  transit:   { label: "Out for Delivery", cls: "od-badge-orange" },
-  delivered: { label: "Delivered",        cls: "od-badge-green" },
-  cancelled: { label: "Cancelled",        cls: "od-badge-red" },
+  paid: { label: "Confirmed", cls: "od-badge-blue" },
+  pending: { label: "Pending", cls: "od-badge-yellow" },
+  shipped: { label: "Shipped", cls: "od-badge-purple" },
+  transit: { label: "Out for Delivery", cls: "od-badge-orange" },
+  delivered: { label: "Delivered", cls: "od-badge-green" },
+  cancelled: { label: "Cancelled", cls: "od-badge-red" },
 };
 
 export default function OrderDetailsPage() {
@@ -114,7 +114,7 @@ export default function OrderDetailsPage() {
     addr.address,
     [addr.city, addr.state].filter(Boolean).join(", "),
     addr.zip,
-    addr.phone ? `Ph: ${addr.phone}` : null,
+    addr.phone ? `${addr.phone}` : null,
   ].filter(Boolean) as string[];
 
   return (
@@ -150,7 +150,7 @@ export default function OrderDetailsPage() {
 
           {/* ── Status tracker ── */}
           {order.status !== "cancelled" ? (
-            <div className="od-tracker-card orders-slide-up"> 
+            <div className="od-tracker-card orders-slide-up">
               <div className="od-tracker">
                 {STEPS.map((step, i) => {
                   const done = i < stepIdx;
