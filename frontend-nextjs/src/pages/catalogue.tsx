@@ -327,7 +327,7 @@ export default function CataloguePage({ catalogues, page }: Props) {
       " />
 
       {heroStats.map(
-        ({ val, label }: { val: string; label: string }, index) => (
+        ({ val, label }: { val: string; label: string }, index: number) => (
           <div
             key={label}
             className={`
