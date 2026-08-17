@@ -75,12 +75,19 @@ export default function CartPage() {
       <main className="pt-28 md:pt-44 pb-0 md:pb-20 min-h-screen">
         <div className="max-w-[1440px] mx-auto px-4 md:px-12">
 
-          {/* ── Back link ── */}
-          <Link href="/explore"
-            className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.4em] text-white/40 hover:text-white transition-colors mb-10 md:mb-14 cart-slide-up">
-            <ArrowLeft size={13} />
-            Continue Shopping
-          </Link>
+          {/* ── Top Navigation ── */}
+          <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-10 md:mb-14 cart-slide-up">
+            <Link href="/explore"
+              className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.4em] text-white/40 hover:text-white transition-colors">
+              <ArrowLeft size={13} />
+              Continue Shopping
+            </Link>
+
+            <Link href="/orders"
+              className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.4em] text-[#c5a059]/80 hover:text-[#c5a059] transition-colors border border-[#c5a059]/30 px-5 py-2.5 rounded-sm hover:bg-[#c5a059]/10">
+              View Past Orders
+            </Link>
+          </div>
 
           {/* ── Page header ── */}
           <header className="mb-10 md:mb-20 cart-slide-up" style={{ animationDelay: "0.05s" }}>

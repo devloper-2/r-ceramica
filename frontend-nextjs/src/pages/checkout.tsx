@@ -8,6 +8,7 @@ import { siteConfig } from "@/config/site";
 import { getCart, clearCart, cartSubtotal, type CartLine } from "@/lib/services/cart";
 import { payWithRazorpay, type CheckoutResult } from "@/lib/services/checkout";
 import { getCustomer, getToken, isAuthenticated } from "@/lib/services/auth";
+import { State, City } from "country-state-city";
 
 function fmt(n: number) {
   return "₹ " + n.toLocaleString("en-IN");
@@ -31,12 +32,20 @@ export default function CheckoutPage() {
     city: "", state: "", zip: "", phone: "", email: "",
   });
 
+  const states = useMemo(() => State.getStatesOfCountry("IN"), []);
+  const cities = useMemo(() => {
+    if (!shipping.state) return [];
+    const selectedState = states.find(s => s.name === shipping.state);
+    return selectedState ? City.getCitiesOfState("IN", selectedState.isoCode) : [];
+  }, [shipping.state, states]);
+
   // Login is required to check out — redirect guests. Also prefill from account.
   useEffect(() => {
     if (!isAuthenticated()) {
       router.replace("/login?redirect=/checkout");
       return;
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCart(getCart());
     const c = getCustomer();
     if (c) {
@@ -194,7 +203,7 @@ export default function CheckoutPage() {
                   </div>
                   <div>
                     <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">Phone</label>
-                    <input className="checkout-input" type="tel" placeholder="+91 00000 00000"
+                    <input className="checkout-input" type="tel" placeholder="+91 00000 00000" required
                       value={shipping.phone} onChange={(e) => setShipping({ ...shipping, phone: e.target.value })} />
                   </div>
                   </div>
@@ -204,19 +213,25 @@ export default function CheckoutPage() {
                       value={shipping.address} onChange={(e) => setShipping({ ...shipping, address: e.target.value })} />
                   </div>
                   <div className="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6">
-                    <div className="col-span-2 md:col-span-1">
-                      <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">City</label>
-                      <input className="checkout-input" type="text" placeholder="City" required
-                        value={shipping.city} onChange={(e) => setShipping({ ...shipping, city: e.target.value })} />
-                    </div>
                     <div>
                       <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">State</label>
-                      <input className="checkout-input" type="text" placeholder="Gujarat"
-                        value={shipping.state} onChange={(e) => setShipping({ ...shipping, state: e.target.value })} />
+                      <select className="checkout-input appearance-none bg-black" required
+                        value={shipping.state} onChange={(e) => setShipping({ ...shipping, state: e.target.value, city: "" })}>
+                        <option value="">Select State</option>
+                        {states.map(s => <option key={s.isoCode} value={s.name}>{s.name}</option>)}
+                      </select>
+                    </div>
+                    <div className="col-span-1 md:col-span-1">
+                      <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">City</label>
+                      <select className="checkout-input appearance-none bg-black" required
+                        value={shipping.city} onChange={(e) => setShipping({ ...shipping, city: e.target.value })}>
+                        <option value="">Select City</option>
+                        {cities.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
+                      </select>
                     </div>
                     <div>
                       <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">PIN Code</label>
-                      <input className="checkout-input" type="text" placeholder="363642"
+                      <input className="checkout-input" type="text" placeholder="363642" required
                         value={shipping.zip} onChange={(e) => setShipping({ ...shipping, zip: e.target.value })} />
                     </div>
                   </div>
