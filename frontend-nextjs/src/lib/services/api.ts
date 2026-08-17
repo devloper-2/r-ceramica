@@ -141,10 +141,50 @@ function rewriteMediaUrls(obj: any): any {
   return obj;
 }
 
+// Hostinger's WAF (hcdn) in front of admin.rceramica.com drops requests that
+// don't look like a browser. Node's fetch sends no User-Agent, so the dropped
+// connection surfaced as an opaque "fetch failed" and killed the CI build.
+// The deploy workflow already spoofs a browser UA for its curl health-check —
+// the build client needs the same treatment.
+const BROWSER_UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+
+const REQUEST_TIMEOUT_MS = 30_000;
+const MAX_ATTEMPTS = 3;
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * fetch with a browser UA and bounded retries. Shared hosting behind a WAF
+ * drops the occasional connection; a whole deploy should not fail on one.
+ */
+async function fetchWithRetry(url: string): Promise<Response> {
+  const headers: Record<string, string> = { "X-API-Key": KEY, Accept: "application/json" };
+  // Browsers forbid setting User-Agent; this client only runs server-side at
+  // build time, but guard anyway so it stays safe if imported client-side.
+  if (typeof window === "undefined") headers["User-Agent"] = BROWSER_UA;
+
+  let lastErr: unknown;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    try {
+      return await fetch(url, { headers, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
+    } catch (err) {
+      lastErr = err;
+      if (attempt < MAX_ATTEMPTS) await sleep(1000 * 2 ** (attempt - 1));
+    }
+  }
+
+  // Surface the underlying cause (ENOTFOUND / ECONNRESET / ETIMEDOUT …).
+  // "fetch failed" on its own is undiagnosable in a CI log.
+  const cause = (lastErr as { cause?: { code?: string } })?.cause;
+  throw new Error(
+    `${(lastErr as Error).message}${cause?.code ? ` (${cause.code})` : ""} ` +
+      `after ${MAX_ATTEMPTS} attempts — ${url}`
+  );
+}
+
 async function apiGet<T>(path: string): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
-    headers: { "X-API-Key": KEY },
-  });
+  const res = await fetchWithRetry(`${BASE}${path}`);
   if (!res.ok) {
     throw new Error(`Content API ${path} responded ${res.status}`);
   }

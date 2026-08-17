@@ -24,8 +24,17 @@ if (existsSync(envPath)) {
 const BASE = process.env.CONTENT_API_URL || "http://localhost:8080/api/v1";
 const KEY = process.env.CONTENT_API_KEY || "";
 
+// The API sits behind Hostinger's WAF, which drops requests with no browser
+// User-Agent — without this the fetch fails and the committed fallback data is
+// silently used instead of the live content.
+const BROWSER_UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+
 async function get(path) {
-  const res = await fetch(`${BASE}${path}`, { headers: { "X-API-Key": KEY } });
+  const res = await fetch(`${BASE}${path}`, {
+    headers: { "X-API-Key": KEY, "User-Agent": BROWSER_UA, Accept: "application/json" },
+    signal: AbortSignal.timeout(30_000),
+  });
   if (!res.ok) throw new Error(`${path} -> ${res.status}`);
   return (await res.json()).data;
 }

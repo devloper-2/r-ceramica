@@ -73,13 +73,16 @@ function CheckboxOption({ label }: { label: string }) {
 export const getStaticPaths: GetStaticPaths = async () =>
   cmsStaticPaths("/explore/[category]/[subcategory]", async () => {
     const categories = await api.getCategories();
-    // One request per category rather than N sequential awaits in a loop.
-    const full = await Promise.all(categories.map((cat) => api.getCategory(cat.slug)));
-    return categories.flatMap((cat, i) =>
-      (full[i].subcategories ?? []).map((sub) => ({
-        params: { category: cat.slug, subcategory: sub.slug },
-      }))
-    );
+    // Sequential on purpose: the API sits behind a shared-hosting WAF that
+    // rate-limits bursts, and a blocked request fails the whole build.
+    const paths: { params: { category: string; subcategory: string } }[] = [];
+    for (const cat of categories) {
+      const full = await api.getCategory(cat.slug);
+      for (const sub of full.subcategories ?? []) {
+        paths.push({ params: { category: cat.slug, subcategory: sub.slug } });
+      }
+    }
+    return paths;
   });
 
 export const getStaticProps: GetStaticProps<{
