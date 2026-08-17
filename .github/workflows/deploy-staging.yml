@@ -61,6 +61,7 @@ jobs:
           CONTENT_API_URL: https://admin.rceramica.com/api/v1
           CONTENT_API_KEY: ${{ secrets.CONTENT_API_KEY }}
           NEXT_PUBLIC_API_URL: https://admin.rceramica.com/api/v1
+          NEXT_PUBLIC_GOOGLE_CLIENT_ID: "376075689230-udl2q86u08ij33bq0mrdj3ovj0p0dnn0.apps.googleusercontent.com"
           STATIC_EXPORT: "true"
 
       - name: Prepare output for Apache
