@@ -335,10 +335,12 @@
         </div>
         <div class="cef-card-body">
           <?php if (!empty($category['image'])): ?>
-            <img src="<?= esc($category['image'], 'attr') ?>" class="cef-img-preview" alt="">
+            <img src="<?= esc($category['image'], 'attr') ?>" class="cef-img-preview" alt="" id="preview_image">
+          <?php else: ?>
+            <img src="" class="cef-img-preview d-none" alt="" id="preview_image">
           <?php endif; ?>
           <div class="cef-upload-zone">
-            <input type="file" name="image" accept="image/*">
+            <input type="file" name="image" accept="image/*" onchange="previewUploadZone(this, 'preview_image')">
             <i class="bi bi-cloud-arrow-up cef-upload-zone-icon"></i>
             <div class="cef-upload-zone-text"><strong>Click to upload</strong> or drag &amp; drop<br>JPG, PNG, WEBP — up to 15 MB</div>
           </div>
@@ -357,10 +359,12 @@
         </div>
         <div class="cef-card-body">
           <?php if (!empty($category['hero_image'])): ?>
-            <img src="<?= esc($category['hero_image'], 'attr') ?>" class="cef-img-preview" alt="">
+            <img src="<?= esc($category['hero_image'], 'attr') ?>" class="cef-img-preview" alt="" id="preview_hero_image">
+          <?php else: ?>
+            <img src="" class="cef-img-preview d-none" alt="" id="preview_hero_image">
           <?php endif; ?>
           <div class="cef-upload-zone">
-            <input type="file" name="hero_image" accept="image/*">
+            <input type="file" name="hero_image" accept="image/*" onchange="previewUploadZone(this, 'preview_hero_image')">
             <i class="bi bi-cloud-arrow-up cef-upload-zone-icon"></i>
             <div class="cef-upload-zone-text"><strong>Click to upload</strong> or drag &amp; drop<br>JPG, PNG, WEBP — up to 15 MB</div>
           </div>
@@ -423,6 +427,7 @@
                     data-description="<?= esc($sub['description'] ?? '', 'attr') ?>"
                     data-sort="<?= (int) $sub['sort_order'] ?>"
                     data-status="<?= esc($sub['status'], 'attr') ?>"
+                    data-image="<?= esc($sub['image'] ?? '', 'attr') ?>"
                     data-bs-toggle="modal" data-bs-target="#editSubModal">
               <i class="bi bi-pencil"></i>
             </button>
@@ -501,27 +506,74 @@
 </div>
 
 <script>
-const CAT_ID = <?= (int) $category['id'] ?>;
+  const CAT_ID = <?= (int) $category['id'] ?>;
+  
+  document.querySelectorAll('.sub-edit-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const d = btn.dataset;
+      document.getElementById('editSubForm').action = '/admin/categories/' + CAT_ID + '/subcategories/' + d.id;
+      document.getElementById('edit_name').value        = d.name || '';
+      document.getElementById('edit_slug').value        = d.slug || '';
+      document.getElementById('edit_subtitle').value    = d.subtitle || '';
+      document.getElementById('edit_description').value = d.description || '';
+      document.getElementById('edit_sort_order').value  = d.sort || 0;
+      document.getElementById('edit_status').value      = d.status || 'published';
 
-document.querySelectorAll('.sub-edit-btn').forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    const d = btn.dataset;
-    document.getElementById('editSubForm').action = '/admin/categories/' + CAT_ID + '/subcategories/' + d.id;
-    document.getElementById('edit_name').value        = d.name || '';
-    document.getElementById('edit_slug').value        = d.slug || '';
-    document.getElementById('edit_subtitle').value    = d.subtitle || '';
-    document.getElementById('edit_description').value = d.description || '';
-    document.getElementById('edit_sort_order').value  = d.sort || 0;
-    document.getElementById('edit_status').value      = d.status || 'published';
+      const imgPreview = document.getElementById('edit_image_preview');
+      const imgContainer = document.getElementById('edit_image_preview_container');
+      const fileInput = document.getElementById('edit_image');
+      if(fileInput) fileInput.value = '';
+      
+      if (d.image && d.image.trim() !== '') {
+        imgPreview.src = d.image;
+        imgPreview.dataset.originalSrc = d.image;
+        imgContainer.classList.remove('d-none');
+      } else {
+        imgPreview.src = '';
+        imgPreview.dataset.originalSrc = '';
+        imgContainer.classList.add('d-none');
+      }
+    });
   });
-});
+  
+  document.querySelectorAll('.sub-del-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.getElementById('delSubForm').action = '/admin/categories/' + CAT_ID + '/subcategories/' + btn.dataset.id + '/delete';
+      document.getElementById('delSubName').textContent = '"' + btn.dataset.name + '"';
+    });
+  });
 
-document.querySelectorAll('.sub-del-btn').forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    document.getElementById('delSubForm').action = '/admin/categories/' + CAT_ID + '/subcategories/' + btn.dataset.id + '/delete';
-    document.getElementById('delSubName').textContent = '"' + btn.dataset.name + '"';
-  });
-});
+  function previewSubImage(input, previewId) {
+    const preview = document.getElementById(previewId);
+    const container = document.getElementById(previewId + '_container');
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+        container.classList.remove('d-none');
+      }
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      if (!preview.dataset.originalSrc) {
+          container.classList.add('d-none');
+      } else {
+          preview.src = preview.dataset.originalSrc;
+          container.classList.remove('d-none');
+      }
+    }
+  }
+
+  function previewUploadZone(input, previewId) {
+    const preview = document.getElementById(previewId);
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+        preview.classList.remove('d-none');
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
 </script>
 
 <?= $this->endSection() ?>
