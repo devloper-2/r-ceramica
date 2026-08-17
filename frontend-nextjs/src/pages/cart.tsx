@@ -68,7 +68,7 @@ export default function CartPage() {
       <Head>
         <title>{`Your Cart | ${siteConfig.name}`}</title>
         <meta name="description" content="Review your curated R Ceramica selections before checkout." />
-        <link rel="canonical" href={`${siteConfig.url}/cart`} />
+        <link rel="canonical" href={`${siteConfig.url}/cart/`} />
         <meta name="robots" content="noindex" />
       </Head>
 

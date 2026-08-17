@@ -1,14 +1,28 @@
-Options -MultiViews
+# Static-export hosting rules for the Next.js `out/` directory.
+#
+# `trailingSlash: true` (next.config.ts) exports every route as its own
+# directory + index.html, so DirectoryIndex resolves clean URLs on its own.
+#
+# The previous export wrote BOTH a file `explore/tiles.html` and a directory
+# `explore/tiles/` (holding the subcategory pages). Apache resolves an existing
+# directory before trying <name>.html, DirectorySlash redirected /explore/tiles
+# to /explore/tiles/, there was no index.html inside, and Options -Indexes
+# turned that into 403 Forbidden. Same for /products/ and /orders/.
+
+Options -MultiViews -Indexes
 DirectoryIndex index.html
+DirectorySlash On
+
 RewriteEngine On
 
-# Serve pre-rendered .html files for clean URLs (e.g. /about → about.html)
+# Legacy links to the old export's filenames (/about.html, /explore/tiles.html)
+# now that those files are gone — send them to the directory form.
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}.html -f
-RewriteRule ^(.+)$ $1.html [L,QSA]
+RewriteRule ^(.+)\.html$ /$1/ [L,R=301]
 
-# 404 fallback
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ 404.html [L]
+# Anything genuinely missing gets the branded page with a REAL 404 status. The
+# old `RewriteRule ^ 404.html [L]` returned the 404 body under a 200, which let
+# search engines index dead URLs and left the Next client router hydrating a
+# /404 payload on a non-404 URL — the source of the
+# "Application error: a client-side exception has occurred" screen.
+ErrorDocument 404 /404.html

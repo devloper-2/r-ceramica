@@ -9,6 +9,7 @@ import type { GetStaticPaths, GetStaticProps } from "next";
 import { siteConfig } from "@/config/site";
 import { api } from "@/lib/services/api";
 import { addToCart } from "@/lib/services/cart";
+import { cmsStaticPaths } from "@/lib/utils/static-paths";
 
 // model-viewer web component type declaration
 declare global {
@@ -74,17 +75,11 @@ interface Product {
 }
 interface RelatedItem { slug: string; name: string; price: number; currency: string; image?: string | null }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  try {
+export const getStaticPaths: GetStaticPaths = async () =>
+  cmsStaticPaths("/products/[slug]", async () => {
     const products = await api.getProducts();
-    return {
-      paths: products.map((p) => ({ params: { slug: p.slug } })),
-      fallback: false,
-    };
-  } catch {
-    return { paths: [], fallback: false };
-  }
-};
+    return products.map((p) => ({ params: { slug: p.slug } }));
+  });
 
 export const getStaticProps: GetStaticProps<{ product: Product; related: RelatedItem[] }> = async ({ params }) => {
   const slug = String(params?.slug);
@@ -173,7 +168,7 @@ export default function ProductDetailPage({ product, related }: { product: Produ
       <Head>
         <title>{TITLE}</title>
         <meta name="description" content={metaDesc ?? ""} />
-        <link rel="canonical" href={`${siteConfig.url}/products/${product.slug}`} />
+        <link rel="canonical" href={`${siteConfig.url}/products/${product.slug}/`} />
         <meta property="og:title" content={TITLE} />
         <meta property="og:description" content={metaDesc ?? ""} />
         <meta property="og:image" content={ogImage} />

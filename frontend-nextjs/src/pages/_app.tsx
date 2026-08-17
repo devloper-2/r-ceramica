@@ -1,8 +1,10 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
+import ErrorBoundary from "@/components/layout/ErrorBoundary";
 import { outfit, inter } from "@/lib/fonts";
 
 
@@ -38,6 +40,15 @@ type PageWithLayout = typeof import("react").Component & { noLayout?: boolean };
 
 export default function App({ Component, pageProps }: AppProps) {
   const noLayout = (Component as unknown as PageWithLayout).noLayout === true;
+  // Keying by path remounts the boundary on navigation, so a single broken
+  // page does not leave the visitor stuck on the error screen.
+  const { asPath } = useRouter();
+  const page = (
+    <ErrorBoundary key={asPath}>
+      <Component {...pageProps} />
+    </ErrorBoundary>
+  );
+
   return (
     <main className={`${outfit.variable} ${inter.variable}`}>
   <Head>
@@ -47,13 +58,11 @@ export default function App({ Component, pageProps }: AppProps) {
   </Head>
 
   {noLayout ? (
-    <Component {...pageProps} />
+    page
   ) : (
     <>
       <Navbar />
-      <main id="main-content">
-        <Component {...pageProps} />
-      </main>
+      <main id="main-content">{page}</main>
       <Footer />
       <WhatsAppButton />
     </>

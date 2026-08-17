@@ -35,6 +35,14 @@ const isExport = process.env.STATIC_EXPORT === "true";
 
 const nextConfig: NextConfig = {
   ...(isExport && { output: "export" }),
+  // Emit out/explore/tiles/index.html instead of out/explore/tiles.html.
+  //
+  // Without this the export writes BOTH a file `explore/tiles.html` and a
+  // directory `explore/tiles/` (holding the subcategory pages). Apache resolves
+  // /explore/tiles to the directory, DirectorySlash redirects to
+  // /explore/tiles/, there is no index.html inside, and the request 403s.
+  // Giving every route its own directory + index.html removes the collision.
+  trailingSlash: true,
    async rewrites() {
     return [
       {

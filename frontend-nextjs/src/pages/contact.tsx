@@ -42,7 +42,7 @@ export default function ContactUs({ page, contactSection }: Props) {
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={`${siteConfig.url}/contact`} />
+        <link rel="canonical" href={`${siteConfig.url}/contact/`} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={siteConfig.ogImage} />

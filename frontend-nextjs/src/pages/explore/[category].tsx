@@ -6,21 +6,16 @@ import { siteConfig } from "@/config/site";
 import { api, type ApiCategory } from "@/lib/services/api";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/router";
+import { cmsStaticPaths } from "@/lib/utils/static-paths";
 
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=1600";
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  try {
+export const getStaticPaths: GetStaticPaths = async () =>
+  cmsStaticPaths("/explore/[category]", async () => {
     const categories = await api.getCategories();
-    return {
-      paths: categories.map((c) => ({ params: { category: c.slug } })),
-      fallback: false,
-    };
-  } catch {
-    return { paths: [], fallback: false };
-  }
-};
+    return categories.map((c) => ({ params: { category: c.slug } }));
+  });
 
 export const getStaticProps: GetStaticProps<{ category: ApiCategory }> = async ({ params }) => {
   const slug = String(params?.category);
@@ -46,7 +41,7 @@ export default function CategoryPage({ category }: { category: ApiCategory }) {
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={`${siteConfig.url}/explore/${category.slug}`} />
+        <link rel="canonical" href={`${siteConfig.url}/explore/${category.slug}/`} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={heroImage} />

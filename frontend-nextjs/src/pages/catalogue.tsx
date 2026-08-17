@@ -133,7 +133,7 @@ export default function CataloguePage({ catalogues, page }: Props) {
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={`${siteConfig.url}/catalogue`} />
+        <link rel="canonical" href={`${siteConfig.url}/catalogue/`} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={siteConfig.ogImage} />

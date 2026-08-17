@@ -9,9 +9,13 @@ const paths = [
   "/login", "/tracking", "/orders", "/privacy", "/terms",
 ];
 
+// `trailingSlash: true` means /about redirects to /about/. Emit the final URL
+// so the sitemap does not point search engines at a chain of 301s.
+const withSlash = (p) => (p.endsWith("/") ? p : `${p}/`);
+
 const urls = paths
   .map(
-    (p) => `  <url>\n    <loc>${SITE_URL}${p}</loc>\n    <changefreq>weekly</changefreq>\n  </url>`
+    (p) => `  <url>\n    <loc>${SITE_URL}${withSlash(p)}</loc>\n    <changefreq>weekly</changefreq>\n  </url>`
   )
   .join("\n");
 

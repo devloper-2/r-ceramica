@@ -7,6 +7,7 @@ import type { GetStaticPaths, GetStaticProps } from "next";
 import { siteConfig } from "@/config/site";
 import { api, type ApiProductListItem, type ApiSubcategoryDetail } from "@/lib/services/api";
 import { getCart, setCartQuantity } from "@/lib/services/cart";
+import { cmsStaticPaths } from "@/lib/utils/static-paths";
 
 const CURRENCY_SYMBOLS: Record<string, string> = { INR: "₹", USD: "$", EUR: "€" };
 const fmtPrice = (price: number | string, currency: string) =>
@@ -69,21 +70,17 @@ function CheckboxOption({ label }: { label: string }) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths: { params: { category: string; subcategory: string } }[] = [];
-  try {
+export const getStaticPaths: GetStaticPaths = async () =>
+  cmsStaticPaths("/explore/[category]/[subcategory]", async () => {
     const categories = await api.getCategories();
-    for (const cat of categories) {
-      const full = await api.getCategory(cat.slug);
-      for (const sub of full.subcategories ?? []) {
-        paths.push({ params: { category: cat.slug, subcategory: sub.slug } });
-      }
-    }
-  } catch {
-    /* blocking fallback */
-  }
-  return { paths, fallback: false };
-};
+    // One request per category rather than N sequential awaits in a loop.
+    const full = await Promise.all(categories.map((cat) => api.getCategory(cat.slug)));
+    return categories.flatMap((cat, i) =>
+      (full[i].subcategories ?? []).map((sub) => ({
+        params: { category: cat.slug, subcategory: sub.slug },
+      }))
+    );
+  });
 
 export const getStaticProps: GetStaticProps<{
   subcategory: ApiSubcategoryDetail;
@@ -207,7 +204,7 @@ export default function SubcategoryProductsPage({
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={`${siteConfig.url}/explore/${categorySlug}/${subcategory.slug}`} />
+        <link rel="canonical" href={`${siteConfig.url}/explore/${categorySlug}/${subcategory.slug}/`} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={siteConfig.ogImage} />

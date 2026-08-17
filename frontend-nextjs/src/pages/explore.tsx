@@ -63,7 +63,7 @@ export default function ExplorePage({ sections }: { sections: ExploreItem[] }) {
       <Head>
         <title>{TITLE}</title>
         <meta name="description" content={DESCRIPTION} />
-        <link rel="canonical" href={`${siteConfig.url}/explore`} />
+        <link rel="canonical" href={`${siteConfig.url}/explore/`} />
         <meta property="og:title" content={TITLE} />
         <meta property="og:description" content={DESCRIPTION} />
         <meta property="og:image" content={siteConfig.ogImage} />
