@@ -195,7 +195,7 @@ export default function PrivacyPage({ page }: { page: ApiPage | null }) {
       </Head>
 
       {/* ── Hero ── */}
-      <section className="relative pt-48 pb-24 px-6 md:px-24 overflow-hidden">
+      <section className="relative pt-25 pb-24 px-6 md:px-24 overflow-hidden">
         {/* Decorative grid lines */}
         <div className="absolute inset-0 pointer-events-none"
           style={{
