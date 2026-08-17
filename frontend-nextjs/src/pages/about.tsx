@@ -20,11 +20,7 @@ import {
   ABOUT_FOOTPRINT,
 } from "@/lib/constants/about";
 
-import {
-  api,
-  sectionsByType,
-  type ApiPage,
-} from "@/lib/services/api";
+import { api, sectionsByType, type ApiPage } from "@/lib/services/api";
 
 import { aboutPageSchema } from "@/lib/schemas";
 import { siteConfig } from "@/config/site";
@@ -52,7 +48,7 @@ export const getStaticProps: GetStaticProps<AboutProps> = async () => {
 
     console.log(
       "[about] getStaticProps: fetched from API, sections:",
-      page?.sections?.length ?? 0
+      page?.sections?.length ?? 0,
     );
 
     return {
@@ -63,7 +59,7 @@ export const getStaticProps: GetStaticProps<AboutProps> = async () => {
   } catch (err) {
     console.error(
       "[about] getStaticProps: API fetch failed — using static fallback:",
-      err instanceof Error ? err.message : String(err)
+      err instanceof Error ? err.message : String(err),
     );
 
     return {
@@ -87,9 +83,7 @@ export default function AboutPage({ page }: AboutProps) {
    * ----------------------------------------------------------
    */
 
-  const sections = page
-    ? sectionsByType(page.sections)
-    : null;
+  const sections = page ? sectionsByType(page.sections) : null;
 
   const apiOk = page !== null;
 
@@ -99,41 +93,26 @@ export default function AboutPage({ page }: AboutProps) {
    * ----------------------------------------------------------
    */
 
-  const hero =
-    sections?.aboutHero ??
-    ABOUT_HERO_STATIC;
+  const hero = sections?.aboutHero ?? ABOUT_HERO_STATIC;
 
-  const philosophy =
-    sections?.philosophy ??
-    (apiOk ? null : ABOUT_PHILOSOPHY);
+  const philosophy = sections?.philosophy ?? (apiOk ? null : ABOUT_PHILOSOPHY);
 
-  const stats =
-    sections?.stats?.items ??
-    (apiOk ? null : ABOUT_STATS);
+  const stats = sections?.stats?.items ?? (apiOk ? null : ABOUT_STATS);
 
-  const technologySection =
-    sections?.technology ??
-    null;
+  const technologySection = sections?.technology ?? null;
 
   const technology =
-    technologySection?.items ??
-    (apiOk ? null : ABOUT_TECHNOLOGY);
+    technologySection?.items ?? (apiOk ? null : ABOUT_TECHNOLOGY);
 
   const technologyTitle =
-    technologySection?.title ??
-    "Our Manufacturing Process";
+    technologySection?.title ?? "Our Manufacturing Process";
 
   const technologyEyebrow =
-    technologySection?.eyebrow ??
-    "Industrial Innovation";
+    technologySection?.eyebrow ?? "Industrial Innovation";
 
-  const chairman =
-    sections?.chairman ??
-    (apiOk ? null : ABOUT_CHAIRMAN);
+  const chairman = sections?.chairman ?? (apiOk ? null : ABOUT_CHAIRMAN);
 
-  const footprint =
-    sections?.footprint ??
-    (apiOk ? null : ABOUT_FOOTPRINT);
+  const footprint = sections?.footprint ?? (apiOk ? null : ABOUT_FOOTPRINT);
 
   /**
    * ----------------------------------------------------------
@@ -141,9 +120,7 @@ export default function AboutPage({ page }: AboutProps) {
    * ----------------------------------------------------------
    */
 
-  const title =
-    page?.meta_title ??
-    `About Us | ${siteConfig.name}`;
+  const title = page?.meta_title ?? `About Us | ${siteConfig.name}`;
 
   const description =
     page?.meta_description ??
@@ -158,42 +135,22 @@ export default function AboutPage({ page }: AboutProps) {
       <Head>
         <title>{title}</title>
 
-        <meta
-          name="description"
-          content={description}
-        />
+        <meta name="description" content={description} />
 
-        <link
-          rel="canonical"
-          href={`${siteConfig.url}/about`}
-        />
+        <link rel="canonical" href={`${siteConfig.url}/about`} />
 
-        <meta
-          property="og:title"
-          content={title}
-        />
+        <meta property="og:title" content={title} />
 
-        <meta
-          property="og:description"
-          content={description}
-        />
+        <meta property="og:description" content={description} />
 
-        <meta
-          property="og:image"
-          content={siteConfig.ogImage}
-        />
+        <meta property="og:image" content={siteConfig.ogImage} />
 
-        <meta
-          name="twitter:card"
-          content="summary_large_image"
-        />
+        <meta name="twitter:card" content="summary_large_image" />
 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(
-              aboutPageSchema
-            ),
+            __html: JSON.stringify(aboutPageSchema),
           }}
         />
       </Head>

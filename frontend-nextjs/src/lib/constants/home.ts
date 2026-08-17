@@ -20,8 +20,7 @@ import type {
 export const HOME_HERO: HeroContent = {
   title: "Redefining Spaces",
   mediaType: "video",
-  mediaSrc:
-    "/images/bathroomvideo.mp4",
+  mediaSrc: "/images/bathroomvideo.mp4",
   cta: { label: "Explore Collection", href: "/explore" },
   fullHeight: true,
 };
@@ -58,7 +57,7 @@ export const CAROUSEL_SLIDES: CarouselSlide[] = [
     title: "Obsidian Mono",
     subtitle: "Hand-Carved Basalt / Textured",
     videoSrc:
-      "https://assets.mixkit.co/videos/preview/mixkit-modern-bathroom-interior-4158-large.mp4",
+      "https://smpczgluxvzrlaoaxlbl.supabase.co/storage/v1/object/public/cabin-images/ae5eb07a-52f8-45fa-98ea-c427f8dde36f.mp4",
   },
   {
     title: "Calcite Flow",
@@ -119,27 +118,32 @@ export const HOME_NARRATIVE: NarrativeContent = {
 export const SOCIAL_POSTS: SocialPost[] = [
   {
     id: 1,
-    imageSrc: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=600",
+    imageSrc:
+      "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=600",
     imageAlt: "Luxury bathroom with wall-hung faucet and white basin",
   },
   {
     id: 2,
-    imageSrc: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600",
+    imageSrc:
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600",
     imageAlt: "Premium chrome basin mixer tap close-up",
   },
   {
     id: 3,
-    imageSrc: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&q=80&w=600",
+    imageSrc:
+      "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&q=80&w=600",
     imageAlt: "Modern exposed shower mixer in matte black",
   },
   {
     id: 4,
-    imageSrc: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&q=80&w=600",
+    imageSrc:
+      "https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&q=80&w=600",
     imageAlt: "Contemporary bathroom interior with luxury fittings",
   },
   {
     id: 5,
-    imageSrc: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&q=80&w=600",
+    imageSrc:
+      "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&q=80&w=600",
     imageAlt: "Elegant freestanding bath with floor-mounted filler tap",
   },
 ];

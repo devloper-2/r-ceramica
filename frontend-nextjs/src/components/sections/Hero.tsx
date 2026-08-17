@@ -59,25 +59,26 @@ export default function Hero({
 
       {/* ── Overlay content ── */}
       <div className="relative z-10 max-w-content w-full mx-auto px-6 md:px-16 flex flex-col items-center text-center animate-fade-in-up">
-        {eyebrow && <SectionLabel text={eyebrow} color="muted" className="mb-6 block" />}
+        {eyebrow && (
+          <SectionLabel text={eyebrow} color="muted" className="mb-6 block" />
+        )}
         <h1 className="text-4xl md:text-7xl font-display tracking-[0.3em] font-light text-white uppercase drop-shadow-2xl">
           {title}
         </h1>
-        <div className="mt-8 w-16 h-px bg-white/40 mx-auto mb-10" role="presentation" />
+        <div
+          className="mt-8 w-16 h-px bg-white/40 mx-auto mb-10"
+          role="presentation"
+        />
         {description && (
-    <p className="max-w-2xl text-base md:text-lg text-white/80 leading-relaxed mb-10">
-      {description}
-    </p>
-  )}
+          <p className="max-w-2xl text-base md:text-lg text-white/80 leading-relaxed mb-10">
+            {description}
+          </p>
+        )}
         {cta && (
-            <Button
-  as="link"
-  href={cta.href}
-  variant={cta.variant ?? "outline"}
->
-  {cta.label}
-</Button>
-          )}
+          <Button as="link" href={cta.href} variant={cta.variant ?? "outline"}>
+            {cta.label}
+          </Button>
+        )}
       </div>
     </header>
   );

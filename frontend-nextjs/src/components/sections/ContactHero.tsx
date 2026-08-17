@@ -16,7 +16,7 @@ export default function ContactHero({
   mediaAlt = "Contact Us Background",
 }: ContactHeroProps) {
   return (
-    <header className="contact-hero relative min-h-screen md:min-h-[85vh] w-full flex items-center justify-center overflow-hidden bg-black pt-20 md:pt-24 group/hero">
+    <header className="contact-hero relative min-h-screen md:min-h-[100vh] w-full flex items-center justify-center overflow-hidden bg-black pt-20 md:pt-24 group/hero">
       {/* Background image */}
       <div className="absolute inset-0 z-0">
         <Image
