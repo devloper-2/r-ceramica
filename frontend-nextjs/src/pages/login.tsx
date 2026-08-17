@@ -314,8 +314,8 @@ export default function LoginPage() {
 
                 <span className="lp-visual-eyebrow">
                   {isRegister
-                    ? "Begin Your Journey"
-                    : "Welcome Back"}
+                    ? "Exclusive Membership"
+                    : "Surface Studio"}
                 </span>
                 <div
                   key={mode}
@@ -325,7 +325,7 @@ export default function LoginPage() {
                   <h2>
                     {isRegister ? (
                       <>
-                        Welcome to
+                        Discover
                         <br />
                         <strong>
                           R Ceramica.
@@ -407,8 +407,8 @@ export default function LoginPage() {
               >
                 <span className="lp-kicker">
                   {isRegister
-                    ? "Begin Your Journey"
-                    : "Welcome Back"}
+                    ? "Create Account"
+                    : "Account Access"}
                 </span>
                 <h1>
                   {isRegister
@@ -417,8 +417,8 @@ export default function LoginPage() {
                 </h1>
                 <p>
                   {isRegister
-                    ? "Join R Ceramica and explore a world of refined architectural surfaces."
-                    : "Enter your details to continue your R Ceramica experience."}
+                    ? "Join R Ceramica to explore refined architectural collections."
+                    : "Enter your credentials to continue your R Ceramica experience."}
                 </p>
               </div>
 
