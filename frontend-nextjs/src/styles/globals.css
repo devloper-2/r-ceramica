@@ -317,3 +317,12 @@ button:hover{
 .ctainfoicon:hover .rounded-full.border{
   background-color: #fff;
 }
+@keyframes glassShine {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 130%;
+  }
+}
