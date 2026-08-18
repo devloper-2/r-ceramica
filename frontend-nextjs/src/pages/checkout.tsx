@@ -215,7 +215,7 @@ export default function CheckoutPage() {
                   <div className="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6">
                     <div>
                       <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">State</label>
-                      <select className="checkout-input appearance-none bg-black" required
+                      <select className="checkout-input appearance-none" required
                         value={shipping.state} onChange={(e) => setShipping({ ...shipping, state: e.target.value, city: "" })}>
                         <option value="">Select State</option>
                         {states.map(s => <option key={s.isoCode} value={s.name}>{s.name}</option>)}
@@ -223,7 +223,7 @@ export default function CheckoutPage() {
                     </div>
                     <div className="col-span-1 md:col-span-1">
                       <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">City</label>
-                      <select className="checkout-input appearance-none bg-black" required
+                      <select className="checkout-input appearance-none" required
                         value={shipping.city} onChange={(e) => setShipping({ ...shipping, city: e.target.value })}>
                         <option value="">Select City</option>
                         {cities.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}

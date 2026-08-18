@@ -32,6 +32,53 @@
   box-shadow: 0 0 20px rgba(197, 160, 89, 0.1);
 }
 
+/* ── Native selects (State / City) ──────────────────────────────────────────
+   The <option> elements inherit .checkout-input's white text, but the browser
+   paints the native dropdown popup WHITE unless the control opts into a dark
+   colour scheme. Result: every state rendered white-on-white and the list
+   looked empty — only the highlighted row was readable.
+
+   `color-scheme: dark` makes the browser draw the popup (and its scrollbar)
+   dark; the explicit option colours cover engines that ignore it. */
+select.checkout-input {
+  color-scheme: dark;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.03);
+  /* Tailwind's appearance-none strips the native arrow — put one back. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c5a059' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1.2rem center;
+  background-size: 14px;
+  padding-right: 3rem;
+  text-overflow: ellipsis;
+}
+select.checkout-input:focus {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Both selects are `required` with an empty placeholder value, so :invalid
+   matches until a real choice is made — dim the closed control to match the
+   ::placeholder treatment on the text inputs beside it. */
+select.checkout-input:invalid {
+  color: rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+select.checkout-input option {
+  background-color: var(--color-bg-card);
+  color: var(--color-text);
+  padding: 0.5rem 0.75rem;
+}
+/* The empty placeholder row reads as a prompt, not a choice. */
+select.checkout-input option[value=""] {
+  color: var(--color-text-muted);
+}
+select.checkout-input option:checked {
+  background-color: var(--color-gold);
+  color: #000;
+}
+
 /* ── Step indicator ── */
 .step-active  { color: white; opacity: 1;   }
 .step-done    { color: #c5a059; opacity: 1; }
