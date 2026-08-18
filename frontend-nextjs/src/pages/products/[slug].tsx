@@ -87,11 +87,22 @@ export const getStaticProps: GetStaticProps<{ product: Product; related: Related
     const product = (await api.getProduct(slug)) as unknown as Product;
     let related: RelatedItem[] = [];
     if (product.subcategory_slug) {
-      const siblings = await api.getProductsBySubcategory(product.subcategory_slug);
-      related = siblings
-        .filter((p) => p.slug !== product.slug)
-        .slice(0, 4)
-        .map((p) => ({ slug: p.slug, name: p.name, price: p.price, currency: p.currency, image: p.image }));
+      // The related-products strip is decorative. The content API currently
+      // 500s on /products?subcategory=... for some subcategories, and that must
+      // not stop the product page itself from being exported — its own data
+      // already loaded fine above. Degrade to an empty strip and log it.
+      try {
+        const siblings = await api.getProductsBySubcategory(product.subcategory_slug);
+        related = siblings
+          .filter((p) => p.slug !== product.slug)
+          .slice(0, 4)
+          .map((p) => ({ slug: p.slug, name: p.name, price: p.price, currency: p.currency, image: p.image }));
+      } catch (err) {
+        console.warn(
+          `[products] related products for "${slug}" unavailable, rendering without them — ` +
+            (err as Error).message
+        );
+      }
     }
     return { product, related };
   });
