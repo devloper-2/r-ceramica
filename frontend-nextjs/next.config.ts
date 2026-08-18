@@ -81,6 +81,15 @@ const nextConfig: NextConfig = {
           return [{ source: "/(.*)", headers: securityHeaders }];
         },
       }),
+  // Build with a single worker. The content API runs on shared hosting whose
+  // MySQL refuses new connections once a few land at once (mysqli "Operation
+  // not permitted" -> CodeIgniter 500). Three parallel workers generating 70+
+  // pages reliably tripped that limit and failed the export. One worker is
+  // slower but keeps the build inside the host's connection budget.
+  experimental: {
+    cpus: 1,
+    workerThreads: false,
+  },
   compress: true,
   poweredByHeader: false,
 };
