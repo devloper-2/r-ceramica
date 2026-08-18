@@ -14,13 +14,9 @@ import {
 } from "lucide-react";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { siteConfig } from "@/config/site";
-import {
-  api,
-  type ApiProductListItem,
-  type ApiSubcategoryDetail,
-} from "@/lib/services/api";
 import { getCart, setCartQuantity } from "@/lib/services/cart";
-import { cmsStaticPaths, cmsStaticProps } from "@/lib/utils/static-paths";
+
+import { STATIC_PRODUCTS, type StaticProduct } from "@/lib/constants/products";
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   INR: "₹",
@@ -94,31 +90,78 @@ function CheckboxOption({ label }: { label: string }) {
   );
 }
 
-export const getStaticPaths: GetStaticPaths = async () =>
-  cmsStaticPaths("/explore/[category]/[subcategory]", async () => {
-    const categories = await api.getCategories();
-    // Sequential on purpose: the API sits behind a shared-hosting WAF that
-    // rate-limits bursts, and a blocked request fails the whole build.
-    const paths: { params: { category: string; subcategory: string } }[] = [];
-    for (const cat of categories) {
-      const full = await api.getCategory(cat.slug);
-      for (const sub of full.subcategories ?? []) {
-        paths.push({ params: { category: cat.slug, subcategory: sub.slug } });
-      }
-    }
-    return paths;
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = Array.from(
+    new Set(
+      STATIC_PRODUCTS.filter(
+        (product) => product.category_slug && product.subcategory_slug,
+      ).map(
+        (product) =>
+          `/explore/${product.category_slug}/${product.subcategory_slug}`,
+      ),
+    ),
+  ).map((path) => {
+    const [, , category, subcategory] = path.split("/");
+
+    return {
+      params: {
+        category,
+        subcategory,
+      },
+    };
   });
 
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+export interface StaticSubcategory {
+  slug: string;
+  name: string;
+  subtitle?: string;
+  description?: string;
+  image?: string;
+  category_name: string;
+}
+
 export const getStaticProps: GetStaticProps<{
-  subcategory: ApiSubcategoryDetail;
+  subcategory: StaticSubcategory;
   categorySlug: string;
 }> = async ({ params }) => {
   const categorySlug = String(params?.category);
   const subSlug = String(params?.subcategory);
-  return cmsStaticProps(`/explore/${categorySlug}/${subSlug}`, async () => ({
-    subcategory: await api.getSubcategory(subSlug),
-    categorySlug,
-  }));
+
+  const products = STATIC_PRODUCTS.filter(
+    (product) =>
+      product.category_slug === categorySlug &&
+      product.subcategory_slug === subSlug,
+  );
+
+  if (products.length === 0) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const firstProduct = products[0];
+
+  const subcategory: StaticSubcategory = {
+    slug: subSlug,
+    name: firstProduct.subcategory_name,
+    subtitle: `${firstProduct.category_name} collection.`,
+    description: `Explore the ${firstProduct.subcategory_name} collection by R Ceramica.`,
+    image: firstProduct.images?.[0]?.path,
+    category_name: firstProduct.category_name,
+  };
+
+  return {
+    props: {
+      subcategory,
+      categorySlug,
+    },
+  };
 };
 
 type AccordionKey = "price" | "area" | "color" | "mounting" | "range" | "shape";
@@ -127,10 +170,14 @@ export default function SubcategoryProductsPage({
   subcategory,
   categorySlug,
 }: {
-  subcategory: ApiSubcategoryDetail;
+  subcategory: StaticSubcategory;
   categorySlug: string;
 }) {
-  const products = subcategory.products ?? [];
+  const products = STATIC_PRODUCTS.filter(
+    (product) =>
+      product.category_slug === categorySlug &&
+      product.subcategory_slug === subcategory.slug,
+  );
   const seriesLabel = subcategory.name;
 
   const maxPrice = useMemo(
@@ -205,14 +252,14 @@ export default function SubcategoryProductsPage({
 
   const isPriceFiltered = applied.min > 0 || applied.max < maxPrice;
 
-  const changeQty = (p: ApiProductListItem, delta: number) => {
+  const changeQty = (p: StaticProduct, delta: number) => {
     const next = Math.max(0, (qty[p.slug] || 0) + delta);
     setQty((q) => ({ ...q, [p.slug]: next }));
     setCartQuantity({
       slug: p.slug,
       name: p.name,
       price: Number(p.price),
-      image: p.image || undefined,
+      image: p.images?.[0]?.path || undefined,
       quantity: next,
     });
   };
@@ -538,9 +585,9 @@ export default function SubcategoryProductsPage({
                           className="block relative bg-[#111] overflow-hidden min-h-[240px] max-h-[460px]"
                           style={{ height: "calc(100vh - 430px)" }}
                         >
-                          {p.image ? (
+                          {p.images?.[0]?.path ? (
                             <Image
-                              src={p.image}
+                              src={p.images[0].path}
                               alt={p.name}
                               fill
                               sizes="(max-width:768px) 100vw,(max-width:1280px) 50vw,33vw"

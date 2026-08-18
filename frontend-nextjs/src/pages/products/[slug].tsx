@@ -7,7 +7,11 @@ import {
 } from "lucide-react";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { siteConfig } from "@/config/site";
-import { api } from "@/lib/services/api";
+import {
+  STATIC_PRODUCTS,
+  getStaticProduct,
+  type StaticProduct,
+} from "@/lib/constants/products";
 import { addToCart } from "@/lib/services/cart";
 import { cmsStaticPaths, cmsStaticProps } from "@/lib/utils/static-paths";
 
@@ -55,60 +59,58 @@ const FINISH_COLORS: Record<string, string> = {
   "Matte Black": "#1a1a1a",
 };
 
-interface ProductImage { path: string; alt_text?: string | null }
-interface Product {
-  id: string | number;
-  slug: string;
-  name: string;
-  short_description?: string | null;
-  description?: string | null;
-  price: number;
-  currency: string;
-  specs?: Record<string, string> | null;
-  images?: ProductImage[];
-  image_2d?: string | null;
-  image_3d?: string | null;
-  category_slug?: string | null;
-  category_name?: string | null;
-  subcategory_slug?: string | null;
-  subcategory_name?: string | null;
-}
+
 interface RelatedItem { slug: string; name: string; price: number; currency: string; image?: string | null }
 
-export const getStaticPaths: GetStaticPaths = async () =>
-  cmsStaticPaths("/products/[slug]", async () => {
-    const products = await api.getProducts();
-    return products.map((p) => ({ params: { slug: p.slug } }));
-  });
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: STATIC_PRODUCTS.map((product) => ({
+      params: {
+        slug: product.slug,
+      },
+    })),
 
-export const getStaticProps: GetStaticProps<{ product: Product; related: RelatedItem[] }> = async ({ params }) => {
-  const slug = String(params?.slug);
-  return cmsStaticProps(`/products/${slug}`, async () => {
-    const product = (await api.getProduct(slug)) as unknown as Product;
-    let related: RelatedItem[] = [];
-    if (product.subcategory_slug) {
-      // The related-products strip is decorative. The content API currently
-      // 500s on /products?subcategory=... for some subcategories, and that must
-      // not stop the product page itself from being exported — its own data
-      // already loaded fine above. Degrade to an empty strip and log it.
-      try {
-        const siblings = await api.getProductsBySubcategory(product.subcategory_slug);
-        related = siblings
-          .filter((p) => p.slug !== product.slug)
-          .slice(0, 4)
-          .map((p) => ({ slug: p.slug, name: p.name, price: p.price, currency: p.currency, image: p.image }));
-      } catch (err) {
-        console.warn(
-          `[products] related products for "${slug}" unavailable, rendering without them — ` +
-            (err as Error).message
-        );
-      }
-    }
-    return { product, related };
-  });
+    fallback: false,
+  };
 };
 
-export default function ProductDetailPage({ product, related }: { product: Product; related: RelatedItem[] }) {
+export const getStaticProps: GetStaticProps<{
+  product: StaticProduct;
+  related: StaticProduct[];
+}> = async ({ params }) => {
+  const slug = String(params?.slug);
+
+  const product = getStaticProduct(slug);
+
+  if (!product) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const related = STATIC_PRODUCTS
+    .filter(
+      (item) =>
+        item.slug !== product.slug &&
+        item.category_slug === product.category_slug
+    )
+    .slice(0, 4);
+
+  return {
+    props: {
+      product,
+      related,
+    },
+  };
+};
+
+export default function ProductDetailPage({
+  product,
+  related,
+}: {
+  product: StaticProduct;
+  related: StaticProduct[];
+}) {
   const images = product.images?.length ? product.images.map((i) => i.path) : [];
   const hasImages = images.length > 0;
   const ogImage = hasImages ? images[0] : `${siteConfig.url}${siteConfig.ogImage}`;
@@ -525,9 +527,9 @@ export default function ProductDetailPage({ product, related }: { product: Produ
                   className="group border border-white/10 hover:border-white/20 transition-colors bg-[#0e0e0e]"
                 >
                   <div className="relative aspect-[4/5] bg-[#111] overflow-hidden">
-                    {p.image ? (
-                      <Image
-                        src={p.image}
+                    {p.images?.[0]?.path ? (
+                     <Image
+                       src={p.images[0].path}
                         alt={p.name}
                         fill
                         sizes="(max-width:640px) 50vw,(max-width:1024px) 33vw,25vw"
