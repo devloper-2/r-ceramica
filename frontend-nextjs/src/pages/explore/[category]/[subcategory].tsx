@@ -2,14 +2,31 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronRight, ChevronDown, Plus, Minus, ShoppingCart, Filter, X, ImageOff } from "lucide-react";
+import {
+  ChevronRight,
+  ChevronDown,
+  Plus,
+  Minus,
+  ShoppingCart,
+  Filter,
+  X,
+  ImageOff,
+} from "lucide-react";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { siteConfig } from "@/config/site";
-import { api, type ApiProductListItem, type ApiSubcategoryDetail } from "@/lib/services/api";
+import {
+  api,
+  type ApiProductListItem,
+  type ApiSubcategoryDetail,
+} from "@/lib/services/api";
 import { getCart, setCartQuantity } from "@/lib/services/cart";
 import { cmsStaticPaths, cmsStaticProps } from "@/lib/utils/static-paths";
 
-const CURRENCY_SYMBOLS: Record<string, string> = { INR: "₹", USD: "$", EUR: "€" };
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  INR: "₹",
+  USD: "$",
+  EUR: "€",
+};
 const fmtPrice = (price: number | string, currency: string) =>
   `${CURRENCY_SYMBOLS[currency] ?? currency} ${Number(price).toLocaleString()}`;
 
@@ -45,9 +62,15 @@ function FilterAccordion({
           {label}
         </span>
         {open ? (
-          <Minus size={14} className="text-white/40 group-hover:text-white transition-transform" />
+          <Minus
+            size={14}
+            className="text-white/40 group-hover:text-white transition-transform"
+          />
         ) : (
-          <Plus size={14} className="text-white/40 group-hover:text-white transition-transform" />
+          <Plus
+            size={14}
+            className="text-white/40 group-hover:text-white transition-transform"
+          />
         )}
       </button>
       {open && (
@@ -62,13 +85,14 @@ function FilterAccordion({
 function CheckboxOption({ label }: { label: string }) {
   return (
     <label className="flex items-center gap-3 cursor-pointer text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors">
-      <input type="checkbox" className="w-3.5 h-3.5 bg-white/5 border border-white/20 accent-white" />
+      <input
+        type="checkbox"
+        className="w-3.5 h-3.5 bg-white/5 border border-white/20 accent-white"
+      />
       <span>{label}</span>
     </label>
   );
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
 
 export const getStaticPaths: GetStaticPaths = async () =>
   cmsStaticPaths("/explore/[category]/[subcategory]", async () => {
@@ -111,7 +135,7 @@ export default function SubcategoryProductsPage({
 
   const maxPrice = useMemo(
     () => Math.max(1000, ...products.map((p) => Number(p.price) || 0)),
-    [products]
+    [products],
   );
 
   const [sort, setSort] = useState<SortKey>("recommended");
@@ -128,6 +152,18 @@ export default function SubcategoryProductsPage({
     shape: false,
   });
   const [mobileFilter, setMobileFilter] = useState(false);
+  useEffect(() => {
+    if (!mobileFilter) {
+      document.body.style.overflow = "";
+      return;
+    }
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileFilter]);
   const [qty, setQty] = useState<Record<string, number>>({});
 
   // Ref for direct DOM slider fill — bypasses React re-render for instant visual response
@@ -136,8 +172,7 @@ export default function SubcategoryProductsPage({
   const setSliderFill = (val: number, max: number) => {
     if (!sliderRef.current || max <= 0) return;
     const pct = (val / max) * 100;
-    sliderRef.current.style.background =
-      `linear-gradient(to right, #c5a059 0%, #c5a059 ${pct}%, rgba(255,255,255,0.12) ${pct}%, rgba(255,255,255,0.12) 100%)`;
+    sliderRef.current.style.background = `linear-gradient(to right, #c5a059 0%, #c5a059 ${pct}%, rgba(255,255,255,0.12) ${pct}%, rgba(255,255,255,0.12) 100%)`;
   };
 
   // Initialise slider fill on mount
@@ -160,8 +195,10 @@ export default function SubcategoryProductsPage({
       const pr = Number(p.price) || 0;
       return pr >= applied.min && pr <= applied.max;
     });
-    if (sort === "price-low") list = [...list].sort((a, b) => Number(a.price) - Number(b.price));
-    else if (sort === "price-high") list = [...list].sort((a, b) => Number(b.price) - Number(a.price));
+    if (sort === "price-low")
+      list = [...list].sort((a, b) => Number(a.price) - Number(b.price));
+    else if (sort === "price-high")
+      list = [...list].sort((a, b) => Number(b.price) - Number(a.price));
     else if (sort === "newest") list = [...list].reverse();
     return list;
   }, [products, sort, applied]);
@@ -205,7 +242,10 @@ export default function SubcategoryProductsPage({
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={`${siteConfig.url}/explore/${categorySlug}/${subcategory.slug}/`} />
+        <link
+          rel="canonical"
+          href={`${siteConfig.url}/explore/${categorySlug}/${subcategory.slug}/`}
+        />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={siteConfig.ogImage} />
@@ -214,7 +254,6 @@ export default function SubcategoryProductsPage({
 
       <main className="pt-28 md:pt-40 pb-16">
         <div className="productfileter">
-
           <h1 className="text-3xl md:text-5xl font-display font-light uppercase tracking-tight text-white mb-10 leading-tight">
             {subcategory.name}
           </h1>
@@ -222,9 +261,17 @@ export default function SubcategoryProductsPage({
           {/* Breadcrumb + count + sort */}
           <div className="relative z-[70] flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
             <div className="flex items-center w-full gap-3 text-[10px] uppercase tracking-[0.2em] text-white/40">
-              <Link href="/explore" className="hover:text-white transition-colors">Explore</Link>
+              <Link
+                href="/explore"
+                className="hover:text-white transition-colors"
+              >
+                Explore
+              </Link>
               <ChevronRight size={10} />
-              <Link href={`/explore/${categorySlug}`} className="hover:text-white transition-colors">
+              <Link
+                href={`/explore/${categorySlug}`}
+                className="hover:text-white transition-colors"
+              >
                 {subcategory.category_name || categorySlug}
               </Link>
               <ChevronRight size={10} />
@@ -233,33 +280,50 @@ export default function SubcategoryProductsPage({
 
             <div className="flex items-center  justify-between md:justify-end w-full gap-8">
               <p className="text-[10px] uppercase tracking-[0.2em] text-white/30">
-                <span className="text-white">{visible.length}</span> Products Found
+                <span className="text-white">{visible.length}</span> Products
+                Found
               </p>
               <div className="relative text-right lg:hidden">
-                <button type="button" onClick={() => setMobileFilter(true)} className="flex items-center justify-center bg-white text-black w-12 h-12 rounded-full shadow-2xl active:scale-90 transition-transform">
-                  <Filter size={18} />
+                <button
+                  type="button"
+                  onClick={() => setMobileFilter(true)}
+                  className="mobile-filter-trigger"
+                >
+                  <Filter size={16} strokeWidth={1.5} />
                 </button>
               </div>
             </div>
           </div>
 
           <div className="flex flex-col lg:flex-row gap-5 md:gap-10">
-
             {/* ── Filter sidebar ── */}
-            <aside className={`sub-filter ${mobileFilter ? "sub-filter-open" : ""} sub-filter w-full lg:w-64 xl:w-80 shrink-0`}>
+            <aside
+              className={`sub-filter ${mobileFilter ? "sub-filter-open" : ""} sub-filter w-full lg:w-64 xl:w-80 shrink-0`}
+            >
               <div className="sub-filter-panel lg:sticky lg:top-40 flex flex-col h-full lg:h-auto">
-
                 {/* Mobile header */}
-                <div className="lg:hidden flex justify-between items-center px-6 py-6 border-b border-white/5 sticky top-0 bg-[#0a0a0a] z-10">
-                  <h4 className="text-lg font-display uppercase tracking-widest text-[#c5a059]">Refine By</h4>
-                  <button type="button" onClick={() => setMobileFilter(false)} className="text-white/60 hover:text-white transition-colors">
-                    <X size={24} />
+                <div className="lg:hidden flex justify-between items-center px-6 pt-8 pb-5 border-b border-white/5 bg-[#0a0a0a] z-10">
+                  <div>
+                    <p className="text-[8px] uppercase tracking-[0.35em] text-[#c5a059] mb-1">
+                      Refine
+                    </p>
+
+                    <h4 className="text-lg font-display uppercase tracking-widest text-white">
+                      Filters
+                    </h4>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setMobileFilter(false)}
+                    className="w-10 h-10 flex items-center justify-center border border-white/10 text-white/50 hover:text-white hover:border-white/30 transition-all"
+                  >
+                    <X size={18} strokeWidth={1.5} />
                   </button>
                 </div>
 
                 {/* Scrollable body */}
                 <div className="flex-1 overflow-y-auto px-6 lg:px-0 py-8 lg:py-0 sub-filter-scroll">
-
                   {/* Selected Options */}
                   <div className="bg-white/5 border border-white/5 p-6 mb-2">
                     <h4 className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/40 mb-4">
@@ -272,11 +336,14 @@ export default function SubcategoryProductsPage({
                           onClick={resetFilters}
                           className="bg-white/10 text-[9px] px-3 py-1.5 uppercase tracking-widest flex items-center gap-2 hover:bg-white/20 transition-colors"
                         >
-                          ₹{applied.min.toLocaleString()}–₹{applied.max.toLocaleString()}
+                          ₹{applied.min.toLocaleString()}–₹
+                          {applied.max.toLocaleString()}
                           <X size={10} />
                         </button>
                       ) : (
-                        <span className="text-[9px] uppercase tracking-widest text-white/20 leading-[26px]">None</span>
+                        <span className="text-[9px] uppercase tracking-widest text-white/20 leading-[26px]">
+                          None
+                        </span>
                       )}
                     </div>
                   </div>
@@ -301,7 +368,9 @@ export default function SubcategoryProductsPage({
                         step={1}
                         defaultValue={maxPrice}
                         onInput={(e) => {
-                          const val = Number((e.target as HTMLInputElement).value);
+                          const val = Number(
+                            (e.target as HTMLInputElement).value,
+                          );
                           setSliderFill(val, maxPrice);
                           setMaxP(val);
                         }}
@@ -310,22 +379,32 @@ export default function SubcategoryProductsPage({
                     </div>
                     <div className="grid grid-cols-2 gap-4 mt-2">
                       <div className="space-y-2">
-                        <label className="text-[8px] uppercase tracking-widest text-white/30">Min Budget</label>
+                        <label className="text-[8px] uppercase tracking-widest text-white/30">
+                          Min Budget
+                        </label>
                         <div className="relative">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[9px] text-white/40">₹</span>
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[9px] text-white/40">
+                            ₹
+                          </span>
                           <input
                             type="number"
                             min={0}
                             value={minP}
-                            onChange={(e) => setMinP(Math.max(0, Number(e.target.value)))}
+                            onChange={(e) =>
+                              setMinP(Math.max(0, Number(e.target.value)))
+                            }
                             className="w-full bg-white/5 border border-white/10 pl-6 pr-3 py-3 text-[10px] text-white outline-none focus:border-[#c5a059] transition-colors appearance-none"
                           />
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[8px] uppercase tracking-widest text-white/30">Max Budget</label>
+                        <label className="text-[8px] uppercase tracking-widest text-white/30">
+                          Max Budget
+                        </label>
                         <div className="relative">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[9px] text-white/40">₹</span>
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[9px] text-white/40">
+                            ₹
+                          </span>
                           <input
                             type="number"
                             min={0}
@@ -334,7 +413,8 @@ export default function SubcategoryProductsPage({
                               const val = Math.max(0, Number(e.target.value));
                               setMaxP(val);
                               setSliderFill(val, maxPrice);
-                              if (sliderRef.current) sliderRef.current.value = String(val);
+                              if (sliderRef.current)
+                                sliderRef.current.value = String(val);
                             }}
                             className="w-full bg-white/5 border border-white/10 pl-6 pr-3 py-3 text-[10px] text-white outline-none focus:border-[#c5a059] transition-colors appearance-none"
                           />
@@ -350,13 +430,21 @@ export default function SubcategoryProductsPage({
                     </button>
                   </FilterAccordion>
 
-                  <FilterAccordion label="Area" open={accordions.area} onToggle={() => toggleAccordion("area")}>
+                  <FilterAccordion
+                    label="Area"
+                    open={accordions.area}
+                    onToggle={() => toggleAccordion("area")}
+                  >
                     <CheckboxOption label="Basin" />
                     <CheckboxOption label="Shower" />
                     <CheckboxOption label="Kitchen" />
                   </FilterAccordion>
 
-                  <FilterAccordion label="Color Finishes" open={accordions.color} onToggle={() => toggleAccordion("color")}>
+                  <FilterAccordion
+                    label="Color Finishes"
+                    open={accordions.color}
+                    onToggle={() => toggleAccordion("color")}
+                  >
                     <CheckboxOption label="Black Chrome" />
                     <CheckboxOption label="Black Matt" />
                     <CheckboxOption label="Blush Gold PVD" />
@@ -364,18 +452,30 @@ export default function SubcategoryProductsPage({
                     <CheckboxOption label="Gold Bright PVD" />
                   </FilterAccordion>
 
-                  <FilterAccordion label="Mounting" open={accordions.mounting} onToggle={() => toggleAccordion("mounting")}>
+                  <FilterAccordion
+                    label="Mounting"
+                    open={accordions.mounting}
+                    onToggle={() => toggleAccordion("mounting")}
+                  >
                     <CheckboxOption label="Deck Mounted" />
                     <CheckboxOption label="Wall Mounted" />
                   </FilterAccordion>
 
-                  <FilterAccordion label="Range" open={accordions.range} onToggle={() => toggleAccordion("range")}>
+                  <FilterAccordion
+                    label="Range"
+                    open={accordions.range}
+                    onToggle={() => toggleAccordion("range")}
+                  >
                     <CheckboxOption label="Economy" />
                     <CheckboxOption label="Premium" />
                     <CheckboxOption label="Luxury" />
                   </FilterAccordion>
 
-                  <FilterAccordion label="Shape" open={accordions.shape} onToggle={() => toggleAccordion("shape")}>
+                  <FilterAccordion
+                    label="Shape"
+                    open={accordions.shape}
+                    onToggle={() => toggleAccordion("shape")}
+                  >
                     <CheckboxOption label="Square" />
                     <CheckboxOption label="Round" />
                     <CheckboxOption label="Curved" />
@@ -428,7 +528,10 @@ export default function SubcategoryProductsPage({
                   {visible.map((p) => {
                     const q = qty[p.slug] || 0;
                     return (
-                      <div key={p.id} className="product-card group border border-white/10 bg-[#0e0e0e] hover:border-white/20 transition-colors duration-300">
+                      <div
+                        key={p.id}
+                        className="product-card group border border-white/10 bg-[#0e0e0e] hover:border-white/20 transition-colors duration-300"
+                      >
                         {/* Image */}
                         <Link
                           href={`/products/${p.slug}`}
@@ -446,7 +549,9 @@ export default function SubcategoryProductsPage({
                           ) : (
                             <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/20 select-none">
                               <ImageOff size={40} strokeWidth={1} />
-                              <span className="text-[9px] uppercase tracking-[0.3em]">No image</span>
+                              <span className="text-[9px] uppercase tracking-[0.3em]">
+                                No image
+                              </span>
                             </div>
                           )}
                           {/* Gold badge */}
@@ -480,7 +585,9 @@ export default function SubcategoryProductsPage({
 
                           {/* Price block */}
                           <div className="mb-4">
-                            <p className="text-[7px] text-white/40 uppercase tracking-[0.3em] mb-0.5">MRP</p>
+                            <p className="text-[7px] text-white/40 uppercase tracking-[0.3em] mb-0.5">
+                              MRP
+                            </p>
                             <p className="text-xl font-display font-light text-[#c5a059] tracking-tight leading-none mb-0.5">
                               {fmtPrice(p.price, p.currency)}
                             </p>
@@ -508,7 +615,9 @@ export default function SubcategoryProductsPage({
                                 >
                                   <Minus size={11} />
                                 </button>
-                                <span className="text-[9px] font-bold tracking-[0.2em]">{q}</span>
+                                <span className="text-[9px] font-bold tracking-[0.2em]">
+                                  {q}
+                                </span>
                                 <button
                                   type="button"
                                   onClick={() => changeQty(p, 1)}
@@ -544,7 +653,7 @@ export default function SubcategoryProductsPage({
           border-radius: 2px;
           outline: none;
           /* background set via JS ref — no React re-render needed */
-          background: rgba(255,255,255,0.12);
+          background: rgba(255, 255, 255, 0.12);
         }
         .sub-range::-webkit-slider-thumb {
           -webkit-appearance: none;
@@ -553,14 +662,16 @@ export default function SubcategoryProductsPage({
           border-radius: 50%;
           background: #c5a059;
           border: 2px solid #0a0a0a;
-          box-shadow: 0 0 0 3px rgba(197,160,89,0.3);
+          box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.3);
           cursor: grab;
-          transition: transform 0.15s, box-shadow 0.15s;
+          transition:
+            transform 0.15s,
+            box-shadow 0.15s;
         }
         .sub-range:active::-webkit-slider-thumb {
           cursor: grabbing;
           transform: scale(1.3);
-          box-shadow: 0 0 0 6px rgba(197,160,89,0.2);
+          box-shadow: 0 0 0 6px rgba(197, 160, 89, 0.2);
         }
         .sub-range::-moz-range-thumb {
           width: 20px;
@@ -580,8 +691,14 @@ export default function SubcategoryProductsPage({
           animation: filterIn 0.2s ease-out both;
         }
         @keyframes filterIn {
-          from { opacity: 0; transform: translateY(-6px); }
-          to   { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(-6px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         /* ── Product card image hover zoom ──────────────── */
@@ -598,44 +715,263 @@ export default function SubcategoryProductsPage({
             scrollbar-width: thin;
             scrollbar-color: #333 transparent;
           }
-          .sub-filter-scroll::-webkit-scrollbar { width: 3px; }
-          .sub-filter-scroll::-webkit-scrollbar-track { background: transparent; }
-          .sub-filter-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-          .sub-filter-scroll > * + * { margin-top: 8px; }
+          .sub-filter-scroll::-webkit-scrollbar {
+            width: 3px;
+          }
+          .sub-filter-scroll::-webkit-scrollbar-track {
+            background: transparent;
+          }
+          .sub-filter-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+          }
+          .sub-filter-scroll > * + * {
+            margin-top: 8px;
+          }
         }
 
-        /* ── Mobile filter drawer ───────────────────────── */
+        /* ── Mobile filter bottom sheet ───────────────────── */
+
         @media (max-width: 1023px) {
+          /* Dark background overlay */
           .sub-filter {
             position: fixed;
             inset: 0;
             z-index: 300;
-            background: rgba(0,0,0,0.55);
+
+            background: rgba(0, 0, 0, 0.58);
+
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+
+            transition:
+              opacity 0.35s ease,
+              visibility 0.35s ease;
           }
+
+          /* Overlay becomes visible */
           .sub-filter-open {
             opacity: 1;
             visibility: visible;
             pointer-events: auto;
           }
+
+          /* ─────────────────────────────────────
+     Bottom sheet
+     ───────────────────────────────────── */
+
           .sub-filter-panel {
-            width: 85%;
-            max-width: 360px;
-            height: 100%;
+            position: absolute;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            width: 100%;
+            max-width: none;
+
+            height: 88vh;
+            max-height: 760px;
+
             background: #0a0a0a;
-            border-right: 1px solid rgba(255,255,255,0.05);
-            transform: translateX(-100%);
-            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+
+            border: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+            border-radius: 24px 24px 0 0;
+
+            transform: translateY(100%);
+
+            transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+
             display: flex;
             flex-direction: column;
+
+            overflow: hidden;
+
+            box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.5);
           }
+
+          /* Open animation */
           .sub-filter-open .sub-filter-panel {
-            transform: translateX(0);
+            transform: translateY(0);
           }
-          .sub-filter-scroll > * + * { margin-top: 8px; }
+
+          /* ─────────────────────────────────────
+     Drag handle
+     ───────────────────────────────────── */
+
+          .sub-filter-panel::before {
+            content: "";
+
+            position: absolute;
+
+            top: 10px;
+            left: 50%;
+
+            width: 42px;
+            height: 4px;
+
+            transform: translateX(-50%);
+
+            background: rgba(255, 255, 255, 0.25);
+
+            border-radius: 999px;
+
+            z-index: 20;
+          }
+
+          /* ─────────────────────────────────────
+          Header
+          ───────────────────────────────────── */
+
+          .sub-filter-panel > .lg\:hidden {
+            flex-shrink: 0;
+
+            padding-top: 32px;
+            padding-bottom: 18px;
+          }
+
+          /* ─────────────────────────────────────
+           Scroll area
+           ───────────────────────────────────── */
+
+          .sub-filter-scroll {
+            flex: 1;
+
+            min-height: 0;
+
+            overflow-y: auto;
+
+            -webkit-overflow-scrolling: touch;
+
+            overscroll-behavior: contain;
+
+            scrollbar-width: none;
+          }
+
+          .sub-filter-scroll::-webkit-scrollbar {
+            display: none;
+          }
+
+          .sub-filter-scroll > * + * {
+            margin-top: 8px;
+          }
+
+          /* ─────────────────────────────────────
+          Bottom apply button
+          ───────────────────────────────────── */
+
+          .sub-filter-panel > .lg\:hidden:last-child {
+            flex-shrink: 0;
+
+            padding: 16px 24px 24px;
+
+            background: #0a0a0a;
+
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+            padding-bottom: calc(24px + env(safe-area-inset-bottom));
+          }
+        } /* ── Mobile filter button ───────────────────────── */
+
+        .mobile-filter-trigger {
+          position: relative;
+
+          width: 44px;
+          height: 44px;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          background: transparent;
+
+          color: rgba(255, 255, 255, 0.65);
+
+          border: 1px solid rgba(255, 255, 255, 0.16);
+
+          overflow: hidden;
+
+          cursor: pointer;
+
+          transition:
+            color 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+            border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+            background 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+            box-shadow 0.4s ease;
+        }
+
+        /* animated gold line */
+        .mobile-filter-trigger::before {
+          content: "";
+
+          position: absolute;
+
+          left: 0;
+          bottom: 0;
+
+          width: 100%;
+          height: 1px;
+
+          background: #c5a059;
+
+          transform: scaleX(0);
+          transform-origin: left;
+
+          transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* subtle background sweep */
+        .mobile-filter-trigger::after {
+          content: "";
+
+          position: absolute;
+
+          inset: 0;
+
+          background: rgba(197, 160, 89, 0.06);
+
+          transform: translateY(100%);
+
+          transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* hover */
+        .mobile-filter-trigger:hover {
+          color: #c5a059;
+
+          border-color: rgba(197, 160, 89, 0.45);
+
+          background: rgba(197, 160, 89, 0.03);
+
+          box-shadow: 0 0 20px rgba(197, 160, 89, 0.08);
+        }
+
+        .mobile-filter-trigger:hover::before {
+          transform: scaleX(1);
+        }
+
+        .mobile-filter-trigger:hover::after {
+          transform: translateY(0);
+        }
+
+        /* icon must stay above animation */
+        .mobile-filter-trigger svg {
+          position: relative;
+          z-index: 2;
+
+          transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .mobile-filter-trigger:hover svg {
+          transform: scale(1.12) rotate(-8deg);
+        }
+
+        /* press */
+        .mobile-filter-trigger:active {
+          transform: scale(0.94);
         }
       `}</style>
     </div>
