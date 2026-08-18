@@ -150,38 +150,18 @@ const BROWSER_UA =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
 const REQUEST_TIMEOUT_MS = 30_000;
-const MAX_ATTEMPTS = 3;
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const MAX_ATTEMPTS = 4;
+const RETRY_BASE_MS = 1_000;
 
 /**
- * fetch with a browser UA and bounded retries. Shared hosting behind a WAF
- * drops the occasional connection; a whole deploy should not fail on one.
+ * Statuses worth retrying. A 5xx here is usually not a code fault: the build
+ * fans out across parallel workers and the shared MySQL behind the API starts
+ * refusing connections (mysqli "Operation not permitted"), which CodeIgniter
+ * turns into a 500. Backing off lets connections drain so the retry succeeds.
  */
-async function fetchWithRetry(url: string): Promise<Response> {
-  const headers: Record<string, string> = { "X-API-Key": KEY, Accept: "application/json" };
-  // Browsers forbid setting User-Agent; this client only runs server-side at
-  // build time, but guard anyway so it stays safe if imported client-side.
-  if (typeof window === "undefined") headers["User-Agent"] = BROWSER_UA;
+const RETRY_STATUSES = new Set([429, 500, 502, 503, 504]);
 
-  let lastErr: unknown;
-  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-    try {
-      return await fetch(url, { headers, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
-    } catch (err) {
-      lastErr = err;
-      if (attempt < MAX_ATTEMPTS) await sleep(1000 * 2 ** (attempt - 1));
-    }
-  }
-
-  // Surface the underlying cause (ENOTFOUND / ECONNRESET / ETIMEDOUT …).
-  // "fetch failed" on its own is undiagnosable in a CI log.
-  const cause = (lastErr as { cause?: { code?: string } })?.cause;
-  throw new Error(
-    `${(lastErr as Error).message}${cause?.code ? ` (${cause.code})` : ""} ` +
-      `after ${MAX_ATTEMPTS} attempts — ${url}`
-  );
-}
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /** Carries the HTTP status so callers can tell "absent" (404) from "broken" (5xx). */
 export class ApiHttpError extends Error {
@@ -192,6 +172,46 @@ export class ApiHttpError extends Error {
     super(message);
     this.name = "ApiHttpError";
   }
+}
+
+/**
+ * fetch with a browser UA, bounded retries and jittered backoff. Retries both
+ * transport failures and the retryable statuses above.
+ */
+async function fetchWithRetry(url: string): Promise<Response> {
+  const headers: Record<string, string> = { "X-API-Key": KEY, Accept: "application/json" };
+  // Browsers forbid setting User-Agent; this client only runs server-side at
+  // build time, but guard anyway so it stays safe if imported client-side.
+  if (typeof window === "undefined") headers["User-Agent"] = BROWSER_UA;
+
+  let lastErr: unknown;
+
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    try {
+      const res = await fetch(url, { headers, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
+      if (res.ok || !RETRY_STATUSES.has(res.status)) return res;
+      lastErr = new ApiHttpError(`Content API ${url} responded ${res.status}`, res.status);
+    } catch (err) {
+      lastErr = err;
+    }
+
+    if (attempt < MAX_ATTEMPTS) {
+      // Jitter so parallel build workers do not retry in lockstep and rebuild
+      // the very connection burst that caused the failure.
+      const backoff = RETRY_BASE_MS * 2 ** (attempt - 1) + Math.floor(Math.random() * 500);
+      console.warn(`[api] ${url} attempt ${attempt}/${MAX_ATTEMPTS} failed — retrying in ${backoff}ms`);
+      await sleep(backoff);
+    }
+  }
+
+  if (lastErr instanceof ApiHttpError) throw lastErr;
+
+  // Surface the underlying cause (ENOTFOUND / ECONNRESET / ETIMEDOUT ...).
+  const cause = (lastErr as { cause?: { code?: string } })?.cause;
+  throw new Error(
+    `${(lastErr as Error).message}${cause?.code ? ` (${cause.code})` : ""} ` +
+      `after ${MAX_ATTEMPTS} attempts — ${url}`
+  );
 }
 
 async function apiGet<T>(path: string): Promise<T> {
