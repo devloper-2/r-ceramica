@@ -20,6 +20,16 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.+)\.html$ /$1/ [L,R=301]
 
+# /orders/<order-number>/ is rendered on the client. Order numbers are created
+# at checkout, so getStaticPaths cannot pre-render them and the export only
+# contains the shell at orders/[id]/index.html. Serve that shell for any order
+# URL — the page reads the id back off the URL (router.query) once the router
+# is ready and fetches the order from the API. Without this, a hard load of an
+# order link (reload, payment-gateway return, emailed link) 404s.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^orders/[^/]+/?$ /orders/[id]/index.html [L]
+
 # Anything genuinely missing gets the branded page with a REAL 404 status. The
 # old `RewriteRule ^ 404.html [L]` returned the 404 body under a 200, which let
 # search engines index dead URLs and left the Next client router hydrating a

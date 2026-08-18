@@ -60,6 +60,25 @@ const STATUS_BADGE: Record<string, { label: string; cls: string }> = {
   cancelled: { label: "Cancelled", cls: "od-badge-red" },
 };
 
+/**
+ * Read the order number straight off the address bar.
+ *
+ * Order numbers are created at checkout, so this route has no getStaticPaths
+ * and `output: export` ships it as a single shell at /orders/[id]/index.html.
+ * Apache serves that shell for every real order URL, but the shell has the
+ * literal route baked into __NEXT_DATA__ — the client router reports asPath
+ * "/orders/[id]", never becomes ready, and router.query.id stays empty. On a
+ * hard load (reload, payment-gateway return, emailed link) that left the page
+ * unable to fetch anything. The URL itself is the reliable source.
+ */
+function orderIdFromLocation(): string | null {
+  if (typeof window === "undefined") return null;
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  const seg = parts[0] === "orders" ? parts[1] : undefined;
+  if (!seg || seg === "[id]") return null;
+  return decodeURIComponent(seg);
+}
+
 export default function OrderDetailsPage() {
   const router = useRouter();
   const { id } = router.query;
@@ -68,15 +87,26 @@ export default function OrderDetailsPage() {
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    if (!router.isReady) return;
-    if (!isAuthenticated()) {
-      router.replace(`/login?redirect=/orders/${id}`);
-      return;
-    }
+    // Prefer the router; fall back to the URL when the exported shell keeps
+    // the router permanently un-ready (see orderIdFromLocation).
+    const orderId = (typeof id === "string" && id) || orderIdFromLocation();
+
+    // Nothing usable yet and the router may still resolve — wait for the rerun.
+    if (!orderId && !router.isReady) return;
+
     (async () => {
+      if (!orderId) {
+        setNotFound(true);
+        setLoading(false);
+        return;
+      }
+      if (!isAuthenticated()) {
+        router.replace(`/login?redirect=/orders/${orderId}`);
+        return;
+      }
       try {
-        const res = await fetch(`${API}/orders/${encodeURIComponent(String(id))}`, { headers: authHeader() });
-        if (res.status === 401) { router.replace(`/login?redirect=/orders/${id}`); return; }
+        const res = await fetch(`${API}/orders/${encodeURIComponent(orderId)}`, { headers: authHeader() });
+        if (res.status === 401) { router.replace(`/login?redirect=/orders/${orderId}`); return; }
         if (!res.ok) { setNotFound(true); return; }
         const json = await res.json();
         setOrder(json.data as OrderDetail);
