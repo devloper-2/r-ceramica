@@ -234,9 +234,9 @@ export default function CartPage() {
             </div>
 
             {/* ── Right: Order Summary ── */}
-            <div className="lg:col-span-4 mt-6 lg:mt-0 cart-slide-up" style={{ animationDelay: "0.18s" }}>
+            <div className="order-last lg:order-none lg:col-span-4 mt-8 mb-12 lg:mt-0 lg:mb-0 cart-slide-up" style={{ animationDelay: "0.18s" }}>
               <div className="relative lg:sticky lg:top-32">
-                <div className="cart-glass p-6 md:p-10 rounded-2xl md:rounded-3xl">
+                <div className="cart-glass p-5 sm:p-6 md:p-10 rounded-2xl md:rounded-3xl">
 
                   <h2 className="text-xl md:text-2xl font-display italic font-light mb-7 text-white/95">
                     Summary
