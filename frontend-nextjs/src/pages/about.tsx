@@ -137,7 +137,7 @@ export default function AboutPage({ page }: AboutProps) {
 
         <meta name="description" content={description} />
 
-        <link rel="canonical" href={`${siteConfig.url}/about`} />
+        <link rel="canonical" href={`${siteConfig.url}/about/`} />
 
         <meta property="og:title" content={title} />
 

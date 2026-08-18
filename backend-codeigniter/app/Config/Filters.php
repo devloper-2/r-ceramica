@@ -80,7 +80,7 @@ class Filters extends BaseFilters
      */
    public array $globals = [
     'before' => [
-        'cors',
+        // 'cors', // Removed to avoid conflict with custom storecors filter
         'csrf' => ['except' => ['api/*']],
     ],
     'after' => [

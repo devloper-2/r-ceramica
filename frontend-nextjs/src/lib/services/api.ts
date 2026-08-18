@@ -100,15 +100,108 @@ export interface ApiCatalogue {
   pdf_path?: string | null;
 }
 
+// Media map loaded at build time to rewrite external URLs to local downloads.
+// In Next.js getStaticProps, `fs` works normally.
+let mediaMap: Record<string, string> | null = null;
+function loadMediaMap() {
+  if (mediaMap !== null) return;
+  mediaMap = {};
+  if (typeof window === "undefined") {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const fs = require("node:fs");
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const path = require("node:path");
+      const mapPath = path.join(process.cwd(), "src/lib/generated/media-map.json");
+      if (fs.existsSync(mapPath)) {
+        mediaMap = JSON.parse(fs.readFileSync(mapPath, "utf8"));
+      }
+    } catch (err) {
+      // ignore
+    }
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function rewriteMediaUrls(obj: any): any {
+  if (!obj || !mediaMap) return obj;
+  if (typeof obj === "string") {
+    return mediaMap[obj] || obj;
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(rewriteMediaUrls);
+  }
+  if (typeof obj === "object") {
+    const newObj: Record<string, unknown> = {};
+    for (const key in obj) {
+      newObj[key] = rewriteMediaUrls(obj[key]);
+    }
+    return newObj;
+  }
+  return obj;
+}
+
+// Hostinger's WAF (hcdn) in front of admin.rceramica.com drops requests that
+// don't look like a browser. Node's fetch sends no User-Agent, so the dropped
+// connection surfaced as an opaque "fetch failed" and killed the CI build.
+// The deploy workflow already spoofs a browser UA for its curl health-check —
+// the build client needs the same treatment.
+const BROWSER_UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+
+const REQUEST_TIMEOUT_MS = 30_000;
+const MAX_ATTEMPTS = 3;
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * fetch with a browser UA and bounded retries. Shared hosting behind a WAF
+ * drops the occasional connection; a whole deploy should not fail on one.
+ */
+async function fetchWithRetry(url: string): Promise<Response> {
+  const headers: Record<string, string> = { "X-API-Key": KEY, Accept: "application/json" };
+  // Browsers forbid setting User-Agent; this client only runs server-side at
+  // build time, but guard anyway so it stays safe if imported client-side.
+  if (typeof window === "undefined") headers["User-Agent"] = BROWSER_UA;
+
+  let lastErr: unknown;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    try {
+      return await fetch(url, { headers, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
+    } catch (err) {
+      lastErr = err;
+      if (attempt < MAX_ATTEMPTS) await sleep(1000 * 2 ** (attempt - 1));
+    }
+  }
+
+  // Surface the underlying cause (ENOTFOUND / ECONNRESET / ETIMEDOUT …).
+  // "fetch failed" on its own is undiagnosable in a CI log.
+  const cause = (lastErr as { cause?: { code?: string } })?.cause;
+  throw new Error(
+    `${(lastErr as Error).message}${cause?.code ? ` (${cause.code})` : ""} ` +
+      `after ${MAX_ATTEMPTS} attempts — ${url}`
+  );
+}
+
+/** Carries the HTTP status so callers can tell "absent" (404) from "broken" (5xx). */
+export class ApiHttpError extends Error {
+  constructor(
+    message: string,
+    readonly status: number
+  ) {
+    super(message);
+    this.name = "ApiHttpError";
+  }
+}
+
 async function apiGet<T>(path: string): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
-    headers: { "X-API-Key": KEY },
-  });
+  const res = await fetchWithRetry(`${BASE}${path}`);
   if (!res.ok) {
-    throw new Error(`Content API ${path} responded ${res.status}`);
+    throw new ApiHttpError(`Content API ${path} responded ${res.status}`, res.status);
   }
   const json = (await res.json()) as { data: T };
-  return json.data;
+  loadMediaMap();
+  return rewriteMediaUrls(json.data) as T;
 }
 
 export const api = {

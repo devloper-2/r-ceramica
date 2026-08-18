@@ -184,12 +184,12 @@ export default function PrivacyPage({ page }: { page: ApiPage | null }) {
       <Head>
         <title>{TITLE}</title>
         <meta name="description" content={DESCRIPTION} />
-        <link rel="canonical" href={`${siteConfig.url}/privacy`} />
+        <link rel="canonical" href={`${siteConfig.url}/privacy/`} />
         <meta property="og:title" content={TITLE} />
         <meta property="og:description" content={DESCRIPTION} />
         <meta property="og:image" content={siteConfig.ogImage} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={`${siteConfig.url}/privacy`} />
+        <meta property="og:url" content={`${siteConfig.url}/privacy/`} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="robots" content="index,follow" />
       </Head>

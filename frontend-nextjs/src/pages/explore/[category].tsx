@@ -4,33 +4,28 @@ import Link from "next/link";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { siteConfig } from "@/config/site";
 import { api, type ApiCategory } from "@/lib/services/api";
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/router";
+import { cmsStaticPaths, cmsStaticProps } from "@/lib/utils/static-paths";
 
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=1600";
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  try {
+export const getStaticPaths: GetStaticPaths = async () =>
+  cmsStaticPaths("/explore/[category]", async () => {
     const categories = await api.getCategories();
-    return {
-      paths: categories.map((c) => ({ params: { category: c.slug } })),
-      fallback: false,
-    };
-  } catch {
-    return { paths: [], fallback: false };
-  }
-};
+    return categories.map((c) => ({ params: { category: c.slug } }));
+  });
 
 export const getStaticProps: GetStaticProps<{ category: ApiCategory }> = async ({ params }) => {
   const slug = String(params?.category);
-  try {
-    const category = await api.getCategory(slug);
-    return { props: { category } };
-  } catch {
-    return { notFound: true };
-  }
+  return cmsStaticProps(`/explore/${slug}`, async () => ({
+    category: await api.getCategory(slug),
+  }));
 };
 
 export default function CategoryPage({ category }: { category: ApiCategory }) {
+  const router = useRouter();
   const subs = (category.subcategories ?? []).filter((s) => s.status !== "draft");
   const heroImage = category.hero_image || category.image || FALLBACK_IMAGE;
   const heroTitle = category.hero_title || category.title || category.name;
@@ -43,7 +38,7 @@ export default function CategoryPage({ category }: { category: ApiCategory }) {
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={`${siteConfig.url}/explore/${category.slug}`} />
+        <link rel="canonical" href={`${siteConfig.url}/explore/${category.slug}/`} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={heroImage} />
@@ -64,6 +59,15 @@ export default function CategoryPage({ category }: { category: ApiCategory }) {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-[#0a0a0a]" />
         </div>
+
+        {/* Back Button */}
+        <button
+          onClick={() => router.back()}
+          className="absolute top-24 md:top-32 left-8 md:left-24 z-50 flex items-center gap-2 text-white/60 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" strokeWidth={1} />
+          <span className="text-[10px] uppercase tracking-[0.3em]">Back</span>
+        </button>
 
         <div className="relative z-10 max-w-[1720px] mx-auto px-8 md:px-24 w-full pt-32">
           <div className="max-w-4xl cat-fade-in">
@@ -98,13 +102,14 @@ export default function CategoryPage({ category }: { category: ApiCategory }) {
             <p className="text-white/40 text-[10px] uppercase tracking-[0.3em]">No collections yet.</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
-              {subs.map((sub) => (
+              {subs.map((sub, idx) => (
                 <Link
                   key={sub.id}
                   href={`/explore/${category.slug}/${sub.slug}`}
-                  className="group cursor-pointer"
+                  className="group cursor-pointer cat-item-fade-up"
+                  style={{ animationDelay: `${idx * 0.1}s` }}
                 >
-                  <div className="aspect-[4/5] overflow-hidden bg-[#111] mb-6 relative">
+                  <div className="aspect-[4/5] overflow-hidden bg-[#111] mb-6 relative rounded-sm shadow-xl">
                     <Image
                       src={sub.image || FALLBACK_IMAGE}
                       alt={sub.name}
@@ -118,7 +123,7 @@ export default function CategoryPage({ category }: { category: ApiCategory }) {
                       </div>
                     </div>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-2 text-center md:text-left mt-4 md:mt-0">
                     <h2 className="text-lg md:text-xl font-display font-light uppercase tracking-[0.2em] group-hover:text-[#c5a059] transition-colors">
                       {sub.name}
                     </h2>
@@ -137,8 +142,16 @@ export default function CategoryPage({ category }: { category: ApiCategory }) {
         .cat-fade-in {
           animation: catFadeIn 1.5s ease-out forwards;
         }
+        .cat-item-fade-up {
+          opacity: 0;
+          animation: catItemFadeUp 0.8s ease-out forwards;
+        }
         @keyframes catFadeIn {
           from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes catItemFadeUp {
+          from { opacity: 0; transform: translateY(40px); }
           to { opacity: 1; transform: translateY(0); }
         }
       `}</style>

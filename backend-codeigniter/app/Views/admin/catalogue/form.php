@@ -207,7 +207,7 @@ $tagList = $isEdit && is_array($item['tags']) ? $item['tags'] : [];
   </a>
 </div>
 
-<form action="<?= $action ?>" method="post" enctype="multipart/form-data">
+<form action="<?= $action ?>" method="post" enctype="multipart/form-data" onsubmit="showLoader()">
 <?= csrf_field() ?>
 
 <!-- Page heading -->
@@ -224,9 +224,9 @@ $tagList = $isEdit && is_array($item['tags']) ? $item['tags'] : [];
       <option value="published" <?= ($item['status'] ?? 'published') === 'published' ? 'selected' : '' ?>>✦ Published</option>
       <option value="draft"     <?= ($item['status'] ?? '') === 'draft'     ? 'selected' : '' ?>>◌ Draft</option>
     </select>
-    <button type="submit" class="cf-header-save">
-      <i class="bi bi-check-lg"></i>
-      <?= $isEdit ? 'Save Catalogue' : 'Create Catalogue' ?>
+    <button type="submit" class="cf-header-save" id="save-catalogue-btn">
+      <i class="bi bi-check-lg" id="save-btn-icon"></i>
+      <span id="save-btn-text"><?= $isEdit ? 'Save Catalogue' : 'Create Catalogue' ?></span>
     </button>
   </div>
 </div>
@@ -569,6 +569,23 @@ function removeTag(btn) {
   document.getElementById('tags-hidden').value =
     Array.from(document.querySelectorAll('#tag-chips .tag-chip-text'))
       .map(s => s.textContent.trim()).join(', ');
+}
+
+function showLoader() {
+  const btn = document.getElementById('save-catalogue-btn');
+  const icon = document.getElementById('save-btn-icon');
+  const text = document.getElementById('save-btn-text');
+  
+  if (btn) {
+    btn.style.opacity = '0.7';
+    btn.style.pointerEvents = 'none';
+  }
+  if (icon) {
+    icon.className = 'spinner-border spinner-border-sm';
+  }
+  if (text) {
+    text.innerText = 'Saving...';
+  }
 }
 </script>
 

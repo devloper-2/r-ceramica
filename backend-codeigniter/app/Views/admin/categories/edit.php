@@ -335,10 +335,12 @@
         </div>
         <div class="cef-card-body">
           <?php if (!empty($category['image'])): ?>
-            <img src="<?= esc($category['image'], 'attr') ?>" class="cef-img-preview" alt="">
+            <img src="<?= esc($category['image'], 'attr') ?>" class="cef-img-preview" alt="" id="preview_image">
+          <?php else: ?>
+            <img src="" class="cef-img-preview d-none" alt="" id="preview_image">
           <?php endif; ?>
           <div class="cef-upload-zone">
-            <input type="file" name="image" accept="image/*">
+            <input type="file" name="image" accept="image/*" onchange="previewUploadZone(this, 'preview_image')">
             <i class="bi bi-cloud-arrow-up cef-upload-zone-icon"></i>
             <div class="cef-upload-zone-text"><strong>Click to upload</strong> or drag &amp; drop<br>JPG, PNG, WEBP — up to 15 MB</div>
           </div>
@@ -357,10 +359,12 @@
         </div>
         <div class="cef-card-body">
           <?php if (!empty($category['hero_image'])): ?>
-            <img src="<?= esc($category['hero_image'], 'attr') ?>" class="cef-img-preview" alt="">
+            <img src="<?= esc($category['hero_image'], 'attr') ?>" class="cef-img-preview" alt="" id="preview_hero_image">
+          <?php else: ?>
+            <img src="" class="cef-img-preview d-none" alt="" id="preview_hero_image">
           <?php endif; ?>
           <div class="cef-upload-zone">
-            <input type="file" name="hero_image" accept="image/*">
+            <input type="file" name="hero_image" accept="image/*" onchange="previewUploadZone(this, 'preview_hero_image')">
             <i class="bi bi-cloud-arrow-up cef-upload-zone-icon"></i>
             <div class="cef-upload-zone-text"><strong>Click to upload</strong> or drag &amp; drop<br>JPG, PNG, WEBP — up to 15 MB</div>
           </div>
@@ -423,6 +427,7 @@
                     data-description="<?= esc($sub['description'] ?? '', 'attr') ?>"
                     data-sort="<?= (int) $sub['sort_order'] ?>"
                     data-status="<?= esc($sub['status'], 'attr') ?>"
+                    data-image="<?= esc($sub['image'] ?? '', 'attr') ?>"
                     data-bs-toggle="modal" data-bs-target="#editSubModal">
               <i class="bi bi-pencil"></i>
             </button>
@@ -450,7 +455,7 @@
       </div>
       <form action="/admin/categories/<?= (int) $category['id'] ?>/subcategories" method="post" enctype="multipart/form-data">
         <?= csrf_field() ?>
-        <div class="modal-body"><?= $this->include('admin/categories/_sub_fields') ?></div>
+        <div class="modal-body"><?= view('admin/categories/_sub_fields', ['prefix' => '']) ?></div>
         <div class="modal-footer">
           <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
           <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-check-lg me-1"></i> Add</button>
@@ -470,7 +475,7 @@
       </div>
       <form id="editSubForm" method="post" enctype="multipart/form-data">
         <?= csrf_field() ?>
-        <div class="modal-body"><?= $this->include('admin/categories/_sub_fields', ['prefix' => 'edit_']) ?></div>
+        <div class="modal-body"><?= view('admin/categories/_sub_fields', ['prefix' => 'edit_']) ?></div>
         <div class="modal-footer">
           <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
           <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-check-lg me-1"></i> Update</button>
@@ -503,16 +508,39 @@
 <script>
 const CAT_ID = <?= (int) $category['id'] ?>;
 
+function setVal(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.value = value;
+}
+
 document.querySelectorAll('.sub-edit-btn').forEach(function (btn) {
   btn.addEventListener('click', function () {
     const d = btn.dataset;
     document.getElementById('editSubForm').action = '/admin/categories/' + CAT_ID + '/subcategories/' + d.id;
-    document.getElementById('edit_name').value        = d.name || '';
-    document.getElementById('edit_slug').value        = d.slug || '';
-    document.getElementById('edit_subtitle').value    = d.subtitle || '';
-    document.getElementById('edit_description').value = d.description || '';
-    document.getElementById('edit_sort_order').value  = d.sort || 0;
-    document.getElementById('edit_status').value      = d.status || 'published';
+
+    setVal('edit_name', d.name || '');
+    setVal('edit_slug', d.slug || '');
+    setVal('edit_subtitle', d.subtitle || '');
+    setVal('edit_description', d.description || '');
+    setVal('edit_sort_order', d.sort || 0);
+    setVal('edit_status', d.status || 'published');
+
+    const imgPreview   = document.getElementById('edit_image_preview');
+    const imgContainer = document.getElementById('edit_image_preview_container');
+    const fileInput    = document.getElementById('edit_image');
+    if (fileInput) fileInput.value = '';
+
+    if (imgPreview && imgContainer) {
+      if (d.image && d.image.trim() !== '') {
+        imgPreview.src = d.image;
+        imgPreview.dataset.originalSrc = d.image;
+        imgContainer.classList.remove('d-none');
+      } else {
+        imgPreview.src = '';
+        imgPreview.dataset.originalSrc = '';
+        imgContainer.classList.add('d-none');
+      }
+    }
   });
 });
 
@@ -522,6 +550,38 @@ document.querySelectorAll('.sub-del-btn').forEach(function (btn) {
     document.getElementById('delSubName').textContent = '"' + btn.dataset.name + '"';
   });
 });
+
+function previewSubImage(input, previewId) {
+  const preview   = document.getElementById(previewId);
+  const container = document.getElementById(previewId + '_container');
+  if (!preview || !container) return;
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      preview.src = e.target.result;
+      container.classList.remove('d-none');
+    };
+    reader.readAsDataURL(input.files[0]);
+  } else if (preview.dataset.originalSrc) {
+    preview.src = preview.dataset.originalSrc;
+    container.classList.remove('d-none');
+  } else {
+    container.classList.add('d-none');
+  }
+}
+
+function previewUploadZone(input, previewId) {
+  const preview = document.getElementById(previewId);
+  if (!preview) return;
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      preview.src = e.target.result;
+      preview.classList.remove('d-none');
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
 </script>
 
 <?= $this->endSection() ?>

@@ -35,6 +35,9 @@ $prefix = $prefix ?? '';
 </div>
 <div class="mb-1">
   <label class="admin-label" for="<?= $prefix ?>image">Image</label>
-  <input type="file" id="<?= $prefix ?>image" name="image" accept="image/*" class="form-control admin-input">
+  <div class="mb-2 d-none" id="<?= $prefix ?>image_preview_container">
+    <img id="<?= $prefix ?>image_preview" src="" alt="Preview" style="max-height: 120px; border-radius: 4px; object-fit: cover; border: 1px solid var(--admin-border); width: 100%;">
+  </div>
+  <input type="file" id="<?= $prefix ?>image" name="image" accept="image/*" class="form-control admin-input" onchange="previewSubImage(this, '<?= $prefix ?>image_preview')">
   <div class="form-text">Optional. On edit, leave empty to keep the current image.</div>
 </div>

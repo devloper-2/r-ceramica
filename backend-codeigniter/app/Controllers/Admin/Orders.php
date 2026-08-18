@@ -7,7 +7,7 @@ use App\Models\OrderModel;
 
 class Orders extends BaseAdminController
 {
-    private const STATUSES = ['pending', 'paid', 'processing', 'shipped', 'transit', 'delivered', 'cancelled', 'refunded'];
+    private const STATUSES = ['pending', 'paid', 'shipped', 'transit', 'delivered', 'cancelled'];
 
     public function index(): string
     {

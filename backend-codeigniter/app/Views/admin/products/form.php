@@ -227,6 +227,51 @@ $gallery = $product['images'] ?? [];
 .gallery-thumb input[type="radio"],
 .gallery-thumb input[type="checkbox"] { display: none; }
 
+/* ── Pending uploads — files chosen but not yet saved ── */
+.pending-head {
+  display: flex; align-items: center; gap: .4rem;
+  font-size: .78rem; font-weight: 700; color: var(--admin-primary);
+  text-transform: uppercase; letter-spacing: .04em; margin: 1rem 0 .7rem;
+}
+.gallery-thumb.is-pending { border-style: dashed; border-color: var(--admin-primary); background: #fffbf2; }
+.gallery-thumb.is-oversize { border-color: var(--admin-danger); background: #fef2f2; }
+.pending-badge {
+  background: var(--admin-primary); color: #3a2600;
+  font-size: .6rem; font-weight: 800; padding: 2px 8px;
+  border-radius: 20px; letter-spacing: .06em; text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15); white-space: nowrap;
+}
+.gallery-thumb .pending-badge { position: absolute; top: 8px; left: 8px; z-index: 2; }
+.gallery-thumb.is-oversize .pending-badge { background: var(--admin-danger); color: #fff; }
+.pending-drop {
+  position: absolute; top: 6px; right: 6px; z-index: 2;
+  width: 24px; height: 24px; border-radius: 50%; border: none;
+  background: rgba(220,38,38,.85); color: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: .65rem;
+  transition: background .14s;
+}
+.pending-drop:hover { background: var(--admin-danger); }
+.pending-name {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  background: rgba(0,0,0,.68); color: #fff;
+  font-size: .62rem; padding: 3px 6px; line-height: 1.3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Single-file preview (2D drawing) */
+.preview-single {
+  position: relative; border-radius: 8px; overflow: hidden;
+  border: 2px dashed var(--admin-primary); background: #fffbf2; margin-top: .7rem;
+}
+.preview-single img { width: 100%; max-height: 150px; object-fit: contain; display: block; padding: 6px; }
+.preview-foot {
+  padding: .45rem .7rem; display: flex; align-items: center; gap: .5rem;
+  border-top: 1px solid var(--admin-border); background: #fff;
+}
+.preview-foot .fname { flex: 1; font-size: .74rem; color: var(--admin-muted); word-break: break-all; }
+.preview-oversize { border-color: var(--admin-danger); background: #fef2f2; }
+.preview-oversize .pending-badge { background: var(--admin-danger); color: #fff; }
+
 /* Spec rows */
 .spec-row {
   display: grid; grid-template-columns: 200px 1fr 36px;
@@ -446,7 +491,7 @@ $gallery = $product['images'] ?? [];
           <?php endforeach; ?>
         </div>
         <?php else: ?>
-        <div style="text-align:center;padding:1.5rem;background:var(--admin-surface-soft);border-radius:10px;margin-bottom:1rem">
+        <div id="gallery-empty" style="text-align:center;padding:1.5rem;background:var(--admin-surface-soft);border-radius:10px;margin-bottom:1rem">
           <i class="bi bi-image" style="font-size:2rem;color:var(--admin-border);display:block;margin-bottom:.5rem"></i>
           <p style="font-size:.82rem;color:var(--admin-muted);margin:0">No gallery images yet. Upload below to display on the product page.</p>
         </div>
@@ -460,6 +505,13 @@ $gallery = $product['images'] ?? [];
             JPG, PNG, WEBP, GIF — up to 15 MB each — multiple allowed
           </div>
         </div>
+
+        <!-- Preview of files picked in this session — populated by JS -->
+        <div id="gallery-pending-wrap" class="d-none">
+          <p class="pending-head"><i class="bi bi-clock-history"></i> <span id="gallery-pending-count"></span> — uploads when you save</p>
+          <div class="gallery-grid" id="gallery-pending"></div>
+        </div>
+
         <p class="pf-hint mt-2">Existing images are kept unless you tick the trash icon above.</p>
       </div>
     </div>
@@ -501,6 +553,9 @@ $gallery = $product['images'] ?? [];
                 <i class="bi bi-file-image upload-zone-icon" style="font-size:1.2rem"></i>
                 <div class="upload-zone-text">Click to <?= !empty($product['image_2d']) ? 'replace' : 'upload' ?> 2D drawing</div>
               </div>
+
+              <!-- Preview of the file picked in this session — populated by JS -->
+              <div id="preview-2d" class="preview-single d-none"></div>
             </div>
           </div>
 
@@ -531,6 +586,9 @@ $gallery = $product['images'] ?? [];
                 <i class="bi bi-box upload-zone-icon" style="font-size:1.2rem"></i>
                 <div class="upload-zone-text">Click to <?= !empty($product['image_3d']) ? 'replace' : 'upload' ?> 3D model<br><span style="font-size:.7rem">GLB · GLTF · OBJ · FBX · STL</span></div>
               </div>
+
+              <!-- A model file has no image preview — show name/type/size instead -->
+              <div id="preview-3d" class="d-none mt-2"></div>
             </div>
           </div>
 
@@ -686,6 +744,152 @@ function removeThumb(id) {
   thumb.style.transform = 'scale(.85)';
   setTimeout(() => thumb.remove(), 260);
 }
+
+/* ── Upload previews — show what was picked before it is saved ──
+   The file inputs sit invisibly on top of the drop zones, so without a preview
+   there is no feedback at all that a file was selected. */
+(function () {
+  const MAX_BYTES = 15 * 1024 * 1024; // matches the server-side upload limit
+
+  function fmtSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  /* ── Gallery: many images, each droppable before save ── */
+  const galleryInput = document.querySelector('input[name="gallery[]"]');
+  const pendingWrap  = document.getElementById('gallery-pending-wrap');
+  const pendingGrid  = document.getElementById('gallery-pending');
+  const pendingCount = document.getElementById('gallery-pending-count');
+  const galleryEmpty = document.getElementById('gallery-empty'); // only on create
+
+  if (galleryInput && pendingGrid) {
+    galleryInput.addEventListener('change', renderGallery);
+
+    function renderGallery() {
+      const files = Array.from(galleryInput.files || []);
+      pendingGrid.innerHTML = '';
+      pendingWrap.classList.toggle('d-none', files.length === 0);
+      // The "no images yet" placeholder is misleading once files are queued.
+      if (galleryEmpty) galleryEmpty.classList.toggle('d-none', files.length > 0);
+      if (pendingCount) {
+        pendingCount.textContent = files.length + (files.length === 1 ? ' image selected' : ' images selected');
+      }
+
+      files.forEach((file, index) => {
+        const oversize = file.size > MAX_BYTES;
+
+        const cell = document.createElement('div');
+        cell.className = 'gallery-thumb is-pending' + (oversize ? ' is-oversize' : '');
+
+        const img = document.createElement('img');
+        img.alt = file.name;
+        img.src = URL.createObjectURL(file);
+        // Free the blob once the bitmap is decoded — matters for bulk uploads.
+        img.addEventListener('load', () => URL.revokeObjectURL(img.src));
+        cell.appendChild(img);
+
+        const badge = document.createElement('span');
+        badge.className = 'pending-badge';
+        badge.textContent = oversize ? 'Too large' : 'New';
+        cell.appendChild(badge);
+
+        const drop = document.createElement('button');
+        drop.type = 'button';
+        drop.className = 'pending-drop';
+        drop.title = 'Remove from selection';
+        drop.innerHTML = '<i class="bi bi-x-lg"></i>';
+        drop.addEventListener('click', () => dropAt(index));
+        cell.appendChild(drop);
+
+        const name = document.createElement('span');
+        name.className = 'pending-name';
+        // textContent, not innerHTML — a filename is untrusted input.
+        name.textContent = file.name + ' · ' + fmtSize(file.size);
+        cell.appendChild(name);
+
+        pendingGrid.appendChild(cell);
+      });
+    }
+
+    /* Rebuild the FileList without the dropped entry. A FileList is read-only,
+       so it has to be reassigned through a DataTransfer. */
+    function dropAt(index) {
+      const dt = new DataTransfer();
+      Array.from(galleryInput.files).forEach((f, i) => { if (i !== index) dt.items.add(f); });
+      galleryInput.files = dt.files;
+      renderGallery();
+    }
+  }
+
+  /* ── 2D drawing: single image ── */
+  const input2d = document.querySelector('input[name="image_2d"]');
+  const box2d   = document.getElementById('preview-2d');
+
+  if (input2d && box2d) {
+    input2d.addEventListener('change', () => {
+      const file = input2d.files && input2d.files[0];
+      box2d.innerHTML = '';
+      box2d.classList.toggle('d-none', !file);
+      if (!file) return;
+
+      const oversize = file.size > MAX_BYTES;
+      box2d.classList.toggle('preview-oversize', oversize);
+
+      const img = document.createElement('img');
+      img.alt = file.name;
+      img.src = URL.createObjectURL(file);
+      img.addEventListener('load', () => URL.revokeObjectURL(img.src));
+
+      const foot  = document.createElement('div');
+      foot.className = 'preview-foot';
+      const badge = document.createElement('span');
+      badge.className = 'pending-badge';
+      badge.textContent = oversize ? 'Too large' : 'New';
+      const name  = document.createElement('span');
+      name.className = 'fname';
+      name.textContent = file.name + ' · ' + fmtSize(file.size);
+      foot.append(badge, name);
+
+      box2d.append(img, foot);
+    });
+  }
+
+  /* ── 3D model: no image to show, so report type/name/size ── */
+  const input3d = document.querySelector('input[name="image_3d"]');
+  const box3d   = document.getElementById('preview-3d');
+
+  if (input3d && box3d) {
+    input3d.addEventListener('change', () => {
+      const file = input3d.files && input3d.files[0];
+      box3d.innerHTML = '';
+      box3d.classList.toggle('d-none', !file);
+      if (!file) return;
+
+      const oversize = file.size > MAX_BYTES;
+
+      const badgeRow = document.createElement('div');
+      badgeRow.className = 'file-badge';
+
+      const ext = document.createElement('span');
+      ext.className = 'ext-tag';
+      ext.textContent = (file.name.split('.').pop() || '?').toUpperCase();
+
+      const name = document.createElement('span');
+      name.className = 'filename';
+      name.textContent = file.name + ' · ' + fmtSize(file.size);
+
+      const state = document.createElement('span');
+      state.className = 'pending-badge';
+      state.textContent = oversize ? 'Too large' : 'New';
+      if (oversize) { state.style.background = 'var(--admin-danger)'; state.style.color = '#fff'; }
+
+      badgeRow.append(ext, name, state);
+      box3d.appendChild(badgeRow);
+    });
+  }
+})();
 
 /* ── Specifications key-value builder ── */
 (function () {

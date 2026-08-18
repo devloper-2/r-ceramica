@@ -123,7 +123,9 @@ export default function OrdersPage() {
                       </div>
                       <div className="od-list-info">
                         <div className="od-list-top">
-                          <span className="od-list-number">#{order.order_number}</span>
+                          <span className="od-list-number">
+                            {order.item_count === 1 ? "1 Item" : `${order.item_count || 0} Items`}
+                          </span>
                           <span className={`od-badge ${badge.cls}`}>{badge.label}</span>
                         </div>
                         <p className="od-list-date">

@@ -20,6 +20,8 @@ coverage/
 .next/
 out/
 build/
+frontend-nextjs/public/media/*
+!frontend-nextjs/public/media/.gitkeep
 
 # typescript
 *.tsbuildinfo

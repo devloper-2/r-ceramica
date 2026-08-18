@@ -150,11 +150,13 @@ export default function Navbar() {
   };
 
   const logout = () => {
-    authLogout();
-    setIsAuth(false);
-    setUserName("");
-    setLoginOpen(false);
-    router.push("/");
+    if (window.confirm("Are you sure you want to log out?")) {
+      authLogout();
+      setIsAuth(false);
+      setUserName("");
+      setLoginOpen(false);
+      router.push("/");
+    }
   };
 
   const navbarClass = [
@@ -531,16 +533,25 @@ export default function Navbar() {
               Sign In
             </Link>
           ) : (
-            <div className="py-4 border-b border-white/5">
-              <div className="flex items-center gap-3">
+            <div className="py-4 border-b border-white/5 flex flex-col gap-4">
+              <Link
+                href="/orders"
+                onClick={() => setMobileOpen(false)}
+                className="text-1xl font-light tracking-widest hover:text-gray-400 py-2 uppercase transition-colors flex items-center gap-3"
+              >
+                <span className="material-symbols-outlined text-[20px]">receipt_long</span>
+                My Orders
+              </Link>
+              <div className="flex items-center justify-between">
                 <span className="text-1xl font-light tracking-widest text-white uppercase truncate">
                   {userName}
                 </span>
                 <button
                   onClick={logout}
-                  className="text-white/40 hover:text-white transition-colors"
+                  className="text-white/40 hover:text-white transition-colors flex items-center gap-2"
                   aria-label="Sign out"
                 >
+                  <span className="text-xs uppercase tracking-widest">Sign Out</span>
                   <span className="material-symbols-outlined text-[20px]">logout</span>
                 </button>
               </div>

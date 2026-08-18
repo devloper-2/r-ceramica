@@ -7,6 +7,7 @@ import type { GetStaticPaths, GetStaticProps } from "next";
 import { siteConfig } from "@/config/site";
 import { api, type ApiProductListItem, type ApiSubcategoryDetail } from "@/lib/services/api";
 import { getCart, setCartQuantity } from "@/lib/services/cart";
+import { cmsStaticPaths, cmsStaticProps } from "@/lib/utils/static-paths";
 
 const CURRENCY_SYMBOLS: Record<string, string> = { INR: "₹", USD: "$", EUR: "€" };
 const fmtPrice = (price: number | string, currency: string) =>
@@ -69,21 +70,20 @@ function CheckboxOption({ label }: { label: string }) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths: { params: { category: string; subcategory: string } }[] = [];
-  try {
+export const getStaticPaths: GetStaticPaths = async () =>
+  cmsStaticPaths("/explore/[category]/[subcategory]", async () => {
     const categories = await api.getCategories();
+    // Sequential on purpose: the API sits behind a shared-hosting WAF that
+    // rate-limits bursts, and a blocked request fails the whole build.
+    const paths: { params: { category: string; subcategory: string } }[] = [];
     for (const cat of categories) {
       const full = await api.getCategory(cat.slug);
       for (const sub of full.subcategories ?? []) {
         paths.push({ params: { category: cat.slug, subcategory: sub.slug } });
       }
     }
-  } catch {
-    /* blocking fallback */
-  }
-  return { paths, fallback: false };
-};
+    return paths;
+  });
 
 export const getStaticProps: GetStaticProps<{
   subcategory: ApiSubcategoryDetail;
@@ -91,12 +91,10 @@ export const getStaticProps: GetStaticProps<{
 }> = async ({ params }) => {
   const categorySlug = String(params?.category);
   const subSlug = String(params?.subcategory);
-  try {
-    const subcategory = await api.getSubcategory(subSlug);
-    return { props: { subcategory, categorySlug } };
-  } catch {
-    return { notFound: true };
-  }
+  return cmsStaticProps(`/explore/${categorySlug}/${subSlug}`, async () => ({
+    subcategory: await api.getSubcategory(subSlug),
+    categorySlug,
+  }));
 };
 
 type AccordionKey = "price" | "area" | "color" | "mounting" | "range" | "shape";
@@ -207,7 +205,7 @@ export default function SubcategoryProductsPage({
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="canonical" href={`${siteConfig.url}/explore/${categorySlug}/${subcategory.slug}`} />
+        <link rel="canonical" href={`${siteConfig.url}/explore/${categorySlug}/${subcategory.slug}/`} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={siteConfig.ogImage} />
