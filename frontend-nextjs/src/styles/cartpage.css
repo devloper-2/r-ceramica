@@ -41,3 +41,135 @@ input[type="number"].cart-qty {
 .cart-slide-up {
   animation: cartSlideUp 0.8s ease-out forwards;
 }
+/* =========================================================
+   CART — LUXURY PRODUCT ANIMATIONS
+   ========================================================= */
+
+.cart-item-row {
+  opacity: 0;
+  animation:
+    cartRowReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1)
+    forwards;
+}
+
+.cart-image-reveal {
+  overflow: hidden;
+  position: relative;
+}
+
+.cart-image-reveal img {
+  transform: scale(1.08);
+  opacity: 0;
+
+  animation:
+    cartImageReveal 1s cubic-bezier(0.22, 1, 0.36, 1)
+    0.15s forwards;
+}
+
+
+/* ─────────────────────────────────────────────
+   PRODUCT ROW
+   ───────────────────────────────────────────── */
+
+@keyframes cartRowReveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ─────────────────────────────────────────────
+   PRODUCT IMAGE
+   ───────────────────────────────────────────── */
+
+@keyframes cartImageReveal {
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+/* ─────────────────────────────────────────────
+   CART GLASS
+   ───────────────────────────────────────────── */
+
+.cart-glass {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0.015)
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.25);
+
+  transition:
+    border-color 0.5s ease,
+    box-shadow 0.5s ease;
+}
+
+.cart-glass:hover {
+  border-color: rgba(197, 160, 89, 0.14);
+
+  box-shadow:
+    0 35px 90px rgba(0, 0, 0, 0.32);
+}
+
+
+/* ─────────────────────────────────────────────
+   QUANTITY INPUT
+   ───────────────────────────────────────────── */
+
+.cart-qty::-webkit-inner-spin-button,
+.cart-qty::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.cart-qty {
+  appearance: textfield;
+}
+
+
+/* ─────────────────────────────────────────────
+   MOBILE
+   ───────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .cart-item-row {
+    animation-duration: 0.7s;
+  }
+
+  .cart-image-reveal img {
+    animation-duration: 0.8s;
+  }
+}
+
+
+/* ─────────────────────────────────────────────
+   ACCESSIBILITY
+   ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .cart-item-row,
+  .cart-image-reveal img {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
