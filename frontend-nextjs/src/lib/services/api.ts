@@ -183,10 +183,21 @@ async function fetchWithRetry(url: string): Promise<Response> {
   );
 }
 
+/** Carries the HTTP status so callers can tell "absent" (404) from "broken" (5xx). */
+export class ApiHttpError extends Error {
+  constructor(
+    message: string,
+    readonly status: number
+  ) {
+    super(message);
+    this.name = "ApiHttpError";
+  }
+}
+
 async function apiGet<T>(path: string): Promise<T> {
   const res = await fetchWithRetry(`${BASE}${path}`);
   if (!res.ok) {
-    throw new Error(`Content API ${path} responded ${res.status}`);
+    throw new ApiHttpError(`Content API ${path} responded ${res.status}`, res.status);
   }
   const json = (await res.json()) as { data: T };
   loadMediaMap();

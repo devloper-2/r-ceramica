@@ -5,6 +5,7 @@ import { EXPLORE_SECTIONS } from "@/lib/constants/explore";
 import { explorePageSchema } from "@/lib/schemas";
 import { siteConfig } from "@/config/site";
 import { api, type ApiCategory } from "@/lib/services/api";
+import { cmsRequiredProps } from "@/lib/utils/static-paths";
 
 const TITLE = `Explore Collections | ${siteConfig.name}`;
 const DESCRIPTION =
@@ -45,17 +46,24 @@ function categoryToSection(cat: ApiCategory, i: number): ExploreItem {
   } as ExploreItem;
 }
 
-export const getStaticProps: GetStaticProps<{ sections: ExploreItem[] }> = async () => {
-  try {
-    const categories = await api.getCategories();
-    if (categories.length) {
-      return { props: { sections: categories.map(categoryToSection) } };
-    }
-  } catch (err) {
-    console.error("[explore] category API failed, using static fallback:", err);
-  }
-  return { props: { sections: EXPLORE_SECTIONS as unknown as ExploreItem[] } };
-};
+export const getStaticProps: GetStaticProps<{ sections: ExploreItem[] }> = async () =>
+  cmsRequiredProps(
+    "/explore",
+    async () => {
+      const categories = await api.getCategories();
+      // 0 published categories means the page would render nothing useful —
+      // treat that as a build failure rather than publishing an empty /explore.
+      if (!Array.isArray(categories) || categories.length === 0) {
+        throw new Error(
+          "content API returned no published categories — check that at least one " +
+            "category has status = published"
+        );
+      }
+      return { sections: categories.map(categoryToSection) };
+    },
+    // next dev only — a production build throws above instead of using this.
+    () => ({ sections: EXPLORE_SECTIONS as unknown as ExploreItem[] })
+  );
 
 export default function ExplorePage({ sections }: { sections: ExploreItem[] }) {
   return (

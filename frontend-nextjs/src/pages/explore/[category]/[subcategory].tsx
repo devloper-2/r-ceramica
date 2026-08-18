@@ -7,7 +7,7 @@ import type { GetStaticPaths, GetStaticProps } from "next";
 import { siteConfig } from "@/config/site";
 import { api, type ApiProductListItem, type ApiSubcategoryDetail } from "@/lib/services/api";
 import { getCart, setCartQuantity } from "@/lib/services/cart";
-import { cmsStaticPaths } from "@/lib/utils/static-paths";
+import { cmsStaticPaths, cmsStaticProps } from "@/lib/utils/static-paths";
 
 const CURRENCY_SYMBOLS: Record<string, string> = { INR: "₹", USD: "$", EUR: "€" };
 const fmtPrice = (price: number | string, currency: string) =>
@@ -91,12 +91,10 @@ export const getStaticProps: GetStaticProps<{
 }> = async ({ params }) => {
   const categorySlug = String(params?.category);
   const subSlug = String(params?.subcategory);
-  try {
-    const subcategory = await api.getSubcategory(subSlug);
-    return { props: { subcategory, categorySlug } };
-  } catch {
-    return { notFound: true };
-  }
+  return cmsStaticProps(`/explore/${categorySlug}/${subSlug}`, async () => ({
+    subcategory: await api.getSubcategory(subSlug),
+    categorySlug,
+  }));
 };
 
 type AccordionKey = "price" | "area" | "color" | "mounting" | "range" | "shape";

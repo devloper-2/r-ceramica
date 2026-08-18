@@ -66,3 +66,77 @@ export async function cmsStaticPaths<P extends Params>(
 
   return { paths, fallback: false };
 }
+
+/**
+ * Load one page's props, refusing to silently drop it from the export.
+ *
+ * `getStaticProps` used to end in `catch { return { notFound: true } }`. Under
+ * `output: export` a notFound page is omitted with NO error, so a content API
+ * that 500s on one endpoint quietly deleted those pages from the site while the
+ * build still reported success — which is how every subcategory that actually
+ * had products vanished from staging while the empty ones shipped fine.
+ *
+ * A real 404 from the API still means "this page does not exist" and is
+ * honoured. Anything else (5xx, network) fails the build with the real status.
+ */
+export async function cmsStaticProps<T extends object>(
+  label: string,
+  load: () => Promise<T>
+): Promise<{ props: T } | { notFound: true }> {
+  try {
+    return { props: await load() };
+  } catch (err) {
+    const status = (err as { status?: number }).status;
+
+    // The API explicitly says this slug is not published — a legitimate 404.
+    if (status === 404) return { notFound: true };
+
+    const detail = `content API error — ${(err as Error).message}`;
+    if (isBuild && !allowEmpty) {
+      throw new Error(
+        `getStaticProps(${label}): ${detail}\n` +
+          `  CONTENT_API_URL = ${apiUrl}\n` +
+          `  Aborting the build. Dropping this page instead would remove it from the\n` +
+          `  site with no error at all — fix the endpoint, or set\n` +
+          `  ALLOW_EMPTY_STATIC_PATHS=true to build without it on purpose.`
+      );
+    }
+    console.warn(`[static-props] ${label}: ${detail} — page skipped.`);
+    return { notFound: true };
+  }
+}
+
+/**
+ * Load props for a page that must ALWAYS exist and must ALWAYS reflect the CMS
+ * (e.g. /explore). Unlike cmsStaticProps there is no notFound escape: any
+ * failure fails the build.
+ *
+ * This exists because /explore used to `catch` an API failure and render a
+ * hardcoded EXPLORE_SECTIONS constant instead. The build then "succeeded" and
+ * published editorial placeholder copy — with dead links — over the real
+ * categories. Shipping fake content is worse than not shipping.
+ *
+ * In `next dev` the caller's fallback is still used so the UI runs with the
+ * backend switched off.
+ */
+export async function cmsRequiredProps<T extends object>(
+  label: string,
+  load: () => Promise<T>,
+  devFallback: () => T
+): Promise<{ props: T }> {
+  try {
+    return { props: await load() };
+  } catch (err) {
+    const detail = `content API error — ${(err as Error).message}`;
+    if (isBuild && !allowEmpty) {
+      throw new Error(
+        `getStaticProps(${label}): ${detail}\n` +
+          `  CONTENT_API_URL = ${apiUrl}\n` +
+          `  Aborting the build. Falling back to hardcoded content here would\n` +
+          `  publish placeholder copy over the live CMS data without any error.`
+      );
+    }
+    console.warn(`[static-props] ${label}: ${detail} — using local fallback content.`);
+    return { props: devFallback() };
+  }
+}

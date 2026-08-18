@@ -6,7 +6,7 @@ import { siteConfig } from "@/config/site";
 import { api, type ApiCategory } from "@/lib/services/api";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/router";
-import { cmsStaticPaths } from "@/lib/utils/static-paths";
+import { cmsStaticPaths, cmsStaticProps } from "@/lib/utils/static-paths";
 
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=1600";
@@ -19,12 +19,9 @@ export const getStaticPaths: GetStaticPaths = async () =>
 
 export const getStaticProps: GetStaticProps<{ category: ApiCategory }> = async ({ params }) => {
   const slug = String(params?.category);
-  try {
-    const category = await api.getCategory(slug);
-    return { props: { category } };
-  } catch {
-    return { notFound: true };
-  }
+  return cmsStaticProps(`/explore/${slug}`, async () => ({
+    category: await api.getCategory(slug),
+  }));
 };
 
 export default function CategoryPage({ category }: { category: ApiCategory }) {

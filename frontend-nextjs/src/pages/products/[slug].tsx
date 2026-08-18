@@ -9,7 +9,7 @@ import type { GetStaticPaths, GetStaticProps } from "next";
 import { siteConfig } from "@/config/site";
 import { api } from "@/lib/services/api";
 import { addToCart } from "@/lib/services/cart";
-import { cmsStaticPaths } from "@/lib/utils/static-paths";
+import { cmsStaticPaths, cmsStaticProps } from "@/lib/utils/static-paths";
 
 // model-viewer web component type declaration
 declare global {
@@ -83,7 +83,7 @@ export const getStaticPaths: GetStaticPaths = async () =>
 
 export const getStaticProps: GetStaticProps<{ product: Product; related: RelatedItem[] }> = async ({ params }) => {
   const slug = String(params?.slug);
-  try {
+  return cmsStaticProps(`/products/${slug}`, async () => {
     const product = (await api.getProduct(slug)) as unknown as Product;
     let related: RelatedItem[] = [];
     if (product.subcategory_slug) {
@@ -93,10 +93,8 @@ export const getStaticProps: GetStaticProps<{ product: Product; related: Related
         .slice(0, 4)
         .map((p) => ({ slug: p.slug, name: p.name, price: p.price, currency: p.currency, image: p.image }));
     }
-    return { props: { product, related } };
-  } catch {
-    return { notFound: true };
-  }
+    return { product, related };
+  });
 };
 
 export default function ProductDetailPage({ product, related }: { product: Product; related: RelatedItem[] }) {
