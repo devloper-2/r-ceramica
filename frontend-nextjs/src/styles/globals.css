@@ -71,23 +71,38 @@
  */
 
 /* white/5, white/10 → white/30 floor */
-.text-white\/5  { color: rgba(255,255,255,0.30) !important; }
-.text-white\/10 { color: rgba(255,255,255,0.35) !important; }
+.text-white\/5 {
+  color: rgba(255, 255, 255, 0.3) !important;
+}
+.text-white\/10 {
+  color: rgba(255, 255, 255, 0.35) !important;
+}
 
 /* white/20 → white/45 */
-.text-white\/20 { color: rgba(255,255,255,0.45) !important; }
+.text-white\/20 {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
 
 /* white/30 → white/55 */
-.text-white\/30 { color: rgba(255,255,255,0.55) !important; }
+.text-white\/30 {
+  color: rgba(255, 255, 255, 0.55) !important;
+}
 
 /* white/40 → white/62 */
-.text-white\/40 { color: rgba(255,255,255,0.62) !important; }
-
+.text-white\/40 {
+  color: rgba(255, 255, 255, 0.62) !important;
+}
 
 /* Borders — keep decorative borders subtle but just a touch more visible */
-.border-white\/5  { border-color: rgba(255,255,255,0.10) !important; }
-.border-white\/10 { border-color: rgba(255,255,255,0.14) !important; }
-.border-white\/20 { border-color: rgba(255,255,255,0.5) !important; }
+.border-white\/5 {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.border-white\/10 {
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+.border-white\/20 {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
 
 /* ─── Base Reset ──────────────────────────────────────────────────────── */
 *,
@@ -197,7 +212,7 @@ body {
   pointer-events: none;
   transition: all 0.5s ease-in-out;
 }
-button:hover{
+button:hover {
   cursor: pointer;
 }
 
@@ -293,7 +308,7 @@ button:hover{
   transform: translateY(0);
 }
 .globalheader {
-    flex: inherit;
+  flex: inherit;
 }
 .globalheader ul {
   list-style: none;
@@ -302,19 +317,19 @@ button:hover{
   display: flex;
   gap: 30px;
 }
-.globalheader ul li{
+.globalheader ul li {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-.globalheader ul li a{
+.globalheader ul li a {
   display: block;
-} 
-
-.ctainfoicon:hover .lucide{
-  color: rgba(0,0,0,0.62);
 }
-.ctainfoicon:hover .rounded-full.border{
+
+.ctainfoicon:hover .lucide {
+  color: rgba(0, 0, 0, 0.62);
+}
+.ctainfoicon:hover .rounded-full.border {
   background-color: #fff;
 }
 @keyframes glassShine {
@@ -325,4 +340,1446 @@ button:hover{
   100% {
     left: 130%;
   }
+}
+
+/* =========================================================
+   SOCIAL FEED — LUXURY EDITORIAL GALLERY
+   R CERAMICA
+   ========================================================= */
+
+/* =========================================================
+   ROOT SECTION
+   ========================================================= */
+
+.social-feed-section {
+  --social-bg: var(--color-bg-alt, #0a0a0a);
+  --social-card-bg: #111111;
+
+  --social-border: rgba(255, 255, 255, 0.09);
+  --social-border-hover: rgba(255, 255, 255, 0.28);
+
+  --social-white: rgba(255, 255, 255, 0.95);
+  --social-soft: rgba(255, 255, 255, 0.65);
+  --social-muted: rgba(255, 255, 255, 0.38);
+  --social-faint: rgba(255, 255, 255, 0.18);
+
+  position: relative;
+
+  width: 100%;
+  max-width: 100vw;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 15%,
+      rgba(255, 255, 255, 0.035),
+      transparent 32%
+    ),
+    var(--social-bg);
+
+  color: white;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* =========================================================
+   BACKGROUND NOISE
+   ========================================================= */
+
+.social-feed-noise {
+  position: absolute;
+  inset: 0;
+
+  z-index: 0;
+
+  pointer-events: none;
+
+  opacity: 0.025;
+
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='.8'/%3E%3C/svg%3E");
+}
+
+/* =========================================================
+   BACKGROUND GLOW
+   ========================================================= */
+
+.social-feed-glow {
+  position: absolute;
+
+  width: 500px;
+  height: 500px;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  filter: blur(120px);
+
+  opacity: 0.055;
+}
+
+.social-feed-glow-left {
+  top: 25%;
+  left: -350px;
+
+  background: white;
+}
+
+.social-feed-glow-right {
+  right: -350px;
+  bottom: 10%;
+
+  background: #9b8975;
+}
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
+
+.social-feed-container {
+  position: relative;
+
+  z-index: 2;
+
+  width: 100%;
+  max-width: 1600px;
+
+  margin: 0 auto;
+
+  padding-top: clamp(90px, 9vw, 145px);
+
+  padding-bottom: clamp(65px, 7vw, 110px);
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.social-feed-header {
+  position: relative;
+
+  z-index: 2;
+
+  text-align: center;
+
+  padding: 0 24px;
+
+  margin-bottom: clamp(55px, 6vw, 90px);
+
+  animation: socialHeaderReveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* =========================================================
+   EYEBROW
+   ========================================================= */
+
+.social-feed-eyebrow {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 15px;
+
+  margin-bottom: 22px;
+
+  color: var(--social-muted);
+
+  font-size: 9px;
+
+  font-weight: 500;
+
+  line-height: 1;
+
+  letter-spacing: 0.55em;
+
+  text-transform: uppercase;
+}
+
+.social-feed-eyebrow-line {
+  display: block;
+
+  width: 26px;
+
+  height: 1px;
+
+  background: rgba(255, 255, 255, 0.22);
+
+  transform-origin: center;
+
+  animation: socialEyebrowLine 1.2s 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.social-feed-title {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin: 0;
+
+  color: white;
+
+  font-size: clamp(30px, 4vw, 58px);
+
+  font-weight: 300;
+
+  line-height: 1.05;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.social-feed-title-word {
+  display: block;
+
+  animation: socialTitleReveal 1s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.social-feed-title-muted {
+  margin-top: 8px;
+
+  color: rgba(255, 255, 255, 0.58);
+
+  font-size: 0.72em;
+
+  letter-spacing: 0.16em;
+
+  animation-delay: 0.2s;
+}
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.social-feed-description {
+  max-width: 470px;
+
+  margin: 26px auto 0;
+
+  color: rgba(255, 255, 255, 0.38);
+
+  font-size: 12px;
+
+  font-weight: 400;
+
+  line-height: 1.8;
+
+  letter-spacing: 0.06em;
+
+  animation: socialDescriptionReveal 1s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* =========================================================
+   GALLERY WRAPPER
+   ========================================================= */
+
+.social-feed-gallery-wrapper {
+  position: relative;
+
+  width: 100%;
+  max-width: 100vw;
+
+  overflow: hidden;
+}
+
+/* =========================================================
+   LEFT / RIGHT FADE
+   ========================================================= */
+
+.social-feed-edge {
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+
+  z-index: 10;
+
+  width: 120px;
+
+  pointer-events: none;
+}
+
+.social-feed-edge-left {
+  left: 0;
+
+  background: linear-gradient(
+    90deg,
+    var(--social-bg) 0%,
+    rgba(10, 10, 10, 0.82) 22%,
+    rgba(10, 10, 10, 0.35) 58%,
+    transparent 100%
+  );
+}
+
+.social-feed-edge-right {
+  right: 0;
+
+  background: linear-gradient(
+    270deg,
+    var(--social-bg) 0%,
+    rgba(10, 10, 10, 0.82) 22%,
+    rgba(10, 10, 10, 0.35) 58%,
+    transparent 100%
+  );
+}
+
+/* =========================================================
+   ACTUAL HORIZONTAL SCROLL CONTAINER
+   ========================================================= */
+
+.social-feed-gallery {
+  display: flex;
+
+  align-items: center;
+
+  width: 100%;
+  max-width: 100vw;
+
+  gap: clamp(16px, 2vw, 30px);
+
+  padding-top: 25px;
+
+  padding-bottom: 45px;
+
+  /*
+   * This creates space before the first card
+   * and after the last card.
+   */
+  padding-left: max(5vw, calc((100vw - 1500px) / 2));
+
+  padding-right: max(5vw, calc((100vw - 1500px) / 2));
+
+  overflow-x: auto;
+
+  overflow-y: hidden;
+
+  /*
+   * IMPORTANT:
+   * Gallery itself scrolls.
+   */
+  scroll-snap-type: x proximity;
+
+  scroll-behavior: smooth;
+
+  overscroll-behavior-x: contain;
+
+  -webkit-overflow-scrolling: touch;
+
+  /*
+   * Desktop scrollbar.
+   */
+  scrollbar-width: thin;
+
+  scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.06);
+}
+
+/* =========================================================
+   WEBKIT SCROLLBAR
+   ========================================================= */
+
+.social-feed-gallery::-webkit-scrollbar {
+  height: 3px;
+}
+
+.social-feed-gallery::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.social-feed-gallery::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+
+  border-radius: 999px;
+
+  transition: background 0.3s ease;
+}
+
+.social-feed-gallery::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.social-card {
+  position: relative;
+
+  display: block;
+
+  /*
+   * VERY IMPORTANT.
+   *
+   * Cards don't shrink.
+   * Gallery becomes horizontally scrollable.
+   */
+  flex: 0 0 clamp(270px, 25vw, 365px);
+
+  width: clamp(270px, 25vw, 365px);
+
+  aspect-ratio: 0.82;
+
+  overflow: hidden;
+
+  scroll-snap-align: center;
+
+  border: 1px solid var(--social-border);
+
+  background: var(--social-card-bg);
+
+  text-decoration: none;
+
+  transform: translateY(0) scale(1);
+
+  opacity: 0;
+
+  animation: socialCardReveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  transition:
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.5s ease,
+    box-shadow 0.7s ease;
+}
+
+/* =========================================================
+   CARD STAGGER
+   ========================================================= */
+
+.social-card-0 {
+  animation-delay: 0.08s;
+}
+
+.social-card-1 {
+  animation-delay: 0.16s;
+}
+
+.social-card-2 {
+  animation-delay: 0.24s;
+}
+
+.social-card-3 {
+  animation-delay: 0.32s;
+}
+
+.social-card-4 {
+  animation-delay: 0.4s;
+}
+
+/* =========================================================
+   CARD VERTICAL POSITION
+   ========================================================= */
+
+.social-card-0 {
+  margin-top: 18px;
+}
+
+.social-card-1 {
+  margin-top: -4px;
+}
+
+.social-card-2 {
+  margin-top: 28px;
+}
+
+.social-card-3 {
+  margin-top: -12px;
+}
+
+.social-card-4 {
+  margin-top: 18px;
+}
+
+/* =========================================================
+   CARD HOVER
+   ========================================================= */
+
+.social-card:hover {
+  z-index: 20;
+
+  transform: translateY(-18px) scale(1.035);
+
+  border-color: var(--social-border-hover);
+
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+/* =========================================================
+   CARD MEDIA
+   ========================================================= */
+
+.social-card-media {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+}
+
+/* =========================================================
+   IMAGE / VIDEO
+   ========================================================= */
+
+.social-card-image {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  filter: brightness(0.72) saturate(0.82);
+
+  transform: scale(1.01);
+
+  transition:
+    transform 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.8s ease;
+}
+
+.social-card:hover .social-card-image {
+  transform: scale(1.1);
+
+  filter: brightness(0.92) saturate(1);
+}
+
+/* =========================================================
+   IMAGE OVERLAY
+   ========================================================= */
+
+.social-card-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.2) 0%,
+    transparent 28%,
+    transparent 48%,
+    rgba(0, 0, 0, 0.82) 100%
+  );
+
+  transition: background 0.8s ease;
+}
+
+.social-card:hover .social-card-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.08) 0%,
+    transparent 30%,
+    transparent 45%,
+    rgba(0, 0, 0, 0.88) 100%
+  );
+}
+
+/* =========================================================
+   CARD NUMBER
+   ========================================================= */
+
+.social-card-number {
+  position: absolute;
+
+  top: 20px;
+
+  left: 20px;
+
+  z-index: 3;
+
+  color: rgba(255, 255, 255, 0.65);
+
+  font-size: 9px;
+
+  font-weight: 400;
+
+  letter-spacing: 0.25em;
+
+  transition:
+    color 0.4s ease,
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.social-card:hover .social-card-number {
+  color: white;
+
+  transform: translateX(5px);
+}
+
+/* =========================================================
+   CARD ARROW
+   ========================================================= */
+
+.social-card-icon {
+  position: absolute;
+
+  top: 18px;
+
+  right: 18px;
+
+  z-index: 3;
+
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.22);
+
+  border-radius: 50%;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  background: rgba(0, 0, 0, 0.08);
+
+  backdrop-filter: blur(12px);
+
+  -webkit-backdrop-filter: blur(12px);
+
+  opacity: 0;
+
+  transform: scale(0.75) rotate(-12deg);
+
+  transition:
+    opacity 0.45s ease,
+    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.4s ease;
+}
+
+.social-card-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.social-card:hover .social-card-icon {
+  opacity: 1;
+
+  transform: scale(1) rotate(0deg);
+
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* =========================================================
+   CARD BOTTOM CONTENT
+   ========================================================= */
+
+.social-card-content {
+  position: absolute;
+
+  left: 22px;
+
+  right: 22px;
+
+  bottom: 22px;
+
+  z-index: 3;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+
+  transform: translateY(14px);
+
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.social-card:hover .social-card-content {
+  transform: translateY(0);
+}
+
+/* =========================================================
+   CARD LABEL
+   ========================================================= */
+
+.social-card-label {
+  color: rgba(255, 255, 255, 0.45);
+
+  font-size: 8px;
+
+  font-weight: 500;
+
+  line-height: 1;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.35em;
+}
+
+/* =========================================================
+   CARD ACTION
+   ========================================================= */
+
+.social-card-action {
+  color: white;
+
+  font-size: 11px;
+
+  font-weight: 400;
+
+  line-height: 1.2;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.2em;
+
+  opacity: 0;
+
+  transform: translateY(8px);
+
+  transition:
+    opacity 0.5s ease 0.08s,
+    transform 0.6s 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.social-card:hover .social-card-action {
+  opacity: 1;
+
+  transform: translateY(0);
+}
+
+/* =========================================================
+   CARD BOTTOM LINE
+   ========================================================= */
+
+.social-card-line {
+  position: absolute;
+
+  left: 0;
+
+  bottom: 0;
+
+  z-index: 4;
+
+  width: 0;
+
+  height: 2px;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.social-card:hover .social-card-line {
+  width: 100%;
+}
+
+/* =========================================================
+   BOTTOM INFORMATION
+   ========================================================= */
+
+.social-feed-bottom {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 30px;
+
+  width: 100%;
+
+  margin-top: 15px;
+
+  padding-left: max(5vw, calc((100vw - 1500px) / 2));
+
+  padding-right: max(5vw, calc((100vw - 1500px) / 2));
+}
+
+/* =========================================================
+   SCROLL TEXT
+   ========================================================= */
+
+.social-feed-scroll {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color: rgba(255, 255, 255, 0.3);
+
+  font-size: 8px;
+
+  line-height: 1;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.25em;
+}
+
+.social-feed-scroll-dot {
+  width: 5px;
+
+  height: 5px;
+
+  flex: 0 0 5px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.7);
+
+  animation: socialPulse 1.8s ease-in-out infinite;
+}
+
+/* =========================================================
+   SOCIAL PLATFORMS
+   ========================================================= */
+
+.social-feed-platforms {
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  color: rgba(255, 255, 255, 0.32);
+
+  font-size: 8px;
+
+  line-height: 1;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.2em;
+}
+
+.social-feed-divider {
+  width: 3px;
+
+  height: 3px;
+
+  flex: 0 0 3px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* =========================================================
+   PROGRESS BAR
+   ========================================================= */
+
+.social-feed-progress {
+  position: relative;
+
+  width: 100px;
+
+  height: 1px;
+
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.social-feed-progress span {
+  position: absolute;
+
+  top: 0;
+
+  left: 0;
+
+  width: 35%;
+
+  height: 100%;
+
+  background: rgba(255, 255, 255, 0.7);
+
+  animation: socialProgress 4s ease-in-out infinite;
+}
+
+/* =========================================================
+   DESKTOP SCROLL BEHAVIOR
+   ========================================================= */
+
+@media (min-width: 901px) {
+  .social-feed-gallery {
+    cursor: grab;
+
+    /*
+     * Prevent vertical scrolling from
+     * accidentally affecting the gallery.
+     */
+    overscroll-behavior-x: contain;
+  }
+
+  .social-feed-gallery:active {
+    cursor: grabbing;
+  }
+}
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1400px) {
+  .social-feed-gallery {
+    gap: 30px;
+  }
+
+  .social-card {
+    flex-basis: 365px;
+
+    width: 365px;
+  }
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .social-feed-edge {
+    width: 90px;
+  }
+
+  .social-feed-gallery {
+    padding-left: 40px;
+
+    padding-right: 40px;
+  }
+
+  .social-feed-bottom {
+    padding-left: 40px;
+
+    padding-right: 40px;
+  }
+
+  .social-feed-platforms {
+    display: none;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+  /* -------------------------------------------------------
+     SECTION
+     ------------------------------------------------------- */
+
+  .social-feed-section {
+    width: 100%;
+
+    max-width: 100vw;
+
+    overflow: hidden;
+  }
+
+  /* -------------------------------------------------------
+     CONTAINER
+     ------------------------------------------------------- */
+
+  .social-feed-container {
+    width: 100%;
+
+    max-width: 100vw;
+
+    padding-top: 70px;
+
+    padding-bottom: 55px;
+  }
+
+  /* -------------------------------------------------------
+     HEADER
+     ------------------------------------------------------- */
+
+  .social-feed-header {
+    padding-left: 20px;
+
+    padding-right: 20px;
+
+    margin-bottom: 42px;
+  }
+
+  .social-feed-eyebrow {
+    gap: 10px;
+
+    font-size: 8px;
+
+    letter-spacing: 0.4em;
+  }
+
+  .social-feed-eyebrow-line {
+    width: 18px;
+  }
+
+  .social-feed-title {
+    font-size: 28px;
+
+    letter-spacing: 0.08em;
+  }
+
+  .social-feed-title-muted {
+    margin-top: 7px;
+
+    font-size: 0.64em;
+
+    letter-spacing: 0.13em;
+  }
+
+  .social-feed-description {
+    max-width: 310px;
+
+    margin-top: 20px;
+
+    font-size: 10px;
+
+    line-height: 1.8;
+  }
+
+  /* -------------------------------------------------------
+     GALLERY WRAPPER
+     ------------------------------------------------------- */
+
+  .social-feed-gallery-wrapper {
+    width: 100%;
+
+    max-width: 100vw;
+
+    overflow: hidden;
+  }
+
+  /* -------------------------------------------------------
+     MOBILE GALLERY
+     ------------------------------------------------------- */
+
+  .social-feed-gallery {
+    /*
+     * CRITICAL:
+     * width stays 100%.
+     *
+     * The gallery becomes the viewport.
+     */
+    width: 100%;
+
+    max-width: 100vw;
+
+    min-width: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding-top: 15px;
+
+    padding-bottom: 32px;
+
+    padding-left: 28px;
+
+    padding-right: 28px;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    /*
+     * Native mobile horizontal scrolling.
+     */
+    touch-action: pan-x;
+
+    -webkit-overflow-scrolling: touch;
+
+    scroll-snap-type: x mandatory;
+
+    scroll-padding-left: 28px;
+
+    scroll-padding-right: 28px;
+
+    /*
+     * Hide mobile scrollbar.
+     */
+    scrollbar-width: none;
+  }
+
+  .social-feed-gallery::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* -------------------------------------------------------
+     MOBILE CARD
+     ------------------------------------------------------- */
+
+  .social-card {
+    /*
+     * 76vw means one large card
+     * + part of next card is visible.
+     */
+    flex: 0 0 76vw;
+
+    width: 76vw;
+
+    max-width: 320px;
+
+    min-width: 250px;
+
+    aspect-ratio: 0.82;
+
+    scroll-snap-align: center;
+
+    margin-top: 0;
+  }
+
+  /* -------------------------------------------------------
+     REMOVE DESKTOP STAGGER
+     ------------------------------------------------------- */
+
+  .social-card-0,
+  .social-card-1,
+  .social-card-2,
+  .social-card-3,
+  .social-card-4 {
+    margin-top: 0;
+  }
+
+  /* -------------------------------------------------------
+     MOBILE HOVER
+     ------------------------------------------------------- */
+
+  .social-card:hover {
+    transform: translateY(-6px) scale(1.01);
+
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  }
+
+  /* -------------------------------------------------------
+     MOBILE IMAGE
+     ------------------------------------------------------- */
+
+  .social-card-image {
+    filter: brightness(0.76) saturate(0.88);
+  }
+
+  .social-card:hover .social-card-image {
+    transform: scale(1.04);
+
+    filter: brightness(0.82) saturate(0.92);
+  }
+
+  /* -------------------------------------------------------
+     MOBILE ARROW
+     ------------------------------------------------------- */
+
+  .social-card-icon {
+    width: 34px;
+
+    height: 34px;
+
+    top: 16px;
+
+    right: 16px;
+
+    opacity: 0.85;
+
+    transform: scale(1);
+  }
+
+  /* -------------------------------------------------------
+     MOBILE CONTENT
+     ------------------------------------------------------- */
+
+  .social-card-content {
+    left: 18px;
+
+    right: 18px;
+
+    bottom: 18px;
+
+    transform: translateY(0);
+  }
+
+  .social-card-label {
+    font-size: 7px;
+
+    letter-spacing: 0.3em;
+  }
+
+  .social-card-action {
+    font-size: 9px;
+
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+
+  /* -------------------------------------------------------
+     MOBILE NUMBER
+     ------------------------------------------------------- */
+
+  .social-card-number {
+    top: 17px;
+
+    left: 17px;
+
+    font-size: 8px;
+  }
+
+  /* -------------------------------------------------------
+     EDGE FADE
+     ------------------------------------------------------- */
+
+  .social-feed-edge {
+    width: 45px;
+  }
+
+  .social-feed-edge-left {
+    background: linear-gradient(
+      90deg,
+      var(--social-bg) 0%,
+      rgba(10, 10, 10, 0.65) 38%,
+      transparent 100%
+    );
+  }
+
+  .social-feed-edge-right {
+    background: linear-gradient(
+      270deg,
+      var(--social-bg) 0%,
+      rgba(10, 10, 10, 0.65) 38%,
+      transparent 100%
+    );
+  }
+
+  /* -------------------------------------------------------
+     BOTTOM
+     ------------------------------------------------------- */
+
+  .social-feed-bottom {
+    width: 100%;
+
+    padding-left: 28px;
+
+    padding-right: 28px;
+
+    margin-top: 0;
+  }
+
+  .social-feed-platforms {
+    display: none;
+  }
+
+  .social-feed-progress {
+    width: 65px;
+  }
+
+  .social-feed-scroll {
+    font-size: 7px;
+
+    letter-spacing: 0.2em;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+  .social-feed-container {
+    padding-top: 60px;
+
+    padding-bottom: 45px;
+  }
+
+  .social-feed-header {
+    margin-bottom: 35px;
+  }
+
+  .social-feed-title {
+    font-size: 25px;
+  }
+
+  .social-feed-description {
+    max-width: 280px;
+  }
+
+  .social-feed-gallery {
+    padding-left: 22px;
+
+    padding-right: 22px;
+
+    gap: 12px;
+
+    scroll-padding-left: 22px;
+
+    scroll-padding-right: 22px;
+  }
+
+  .social-card {
+    flex-basis: 80vw;
+
+    width: 80vw;
+
+    min-width: 230px;
+  }
+
+  .social-feed-bottom {
+    padding-left: 22px;
+
+    padding-right: 22px;
+  }
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes socialHeaderReveal {
+  from {
+    opacity: 0;
+
+    transform: translateY(35px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+@keyframes socialEyebrowLine {
+  from {
+    transform: scaleX(0);
+
+    opacity: 0;
+  }
+
+  to {
+    transform: scaleX(1);
+
+    opacity: 1;
+  }
+}
+
+@keyframes socialTitleReveal {
+  from {
+    opacity: 0;
+
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+@keyframes socialDescriptionReveal {
+  from {
+    opacity: 0;
+
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+@keyframes socialCardReveal {
+  from {
+    opacity: 0;
+
+    transform: translateY(70px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes socialPulse {
+  0%,
+  100% {
+    transform: scale(0.7);
+
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: scale(1.4);
+
+    opacity: 1;
+  }
+}
+
+@keyframes socialProgress {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  50% {
+    transform: translateX(180%);
+  }
+
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .social-feed-header,
+  .social-feed-title-word,
+  .social-feed-description,
+  .social-card,
+  .social-feed-progress span,
+  .social-feed-scroll-dot,
+  .social-feed-eyebrow-line {
+    animation: none !important;
+  }
+
+  .social-card,
+  .social-card-image,
+  .social-card-content,
+  .social-card-icon,
+  .social-card-line {
+    transition: none !important;
+  }
+}
+
+/* =========================================================
+   GLOBAL SAFETY
+   ========================================================= */
+
+/*
+ * Prevent the gallery from creating a horizontal
+ * scrollbar for the entire website.
+ */
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
 }

@@ -2,17 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import type { SocialPost } from "@/lib/types";
 
-/**
- * SocialFeed — a horizontally scrolling gallery of social posts plus a row of
- * social-platform links.
- *
- * REUSABLE: pass any list of `posts`. The heading text is configurable too.
- * The platform icons below are global brand links, so they live in this file.
- */
-
-// ─── Brand icons (global — same on every page) ───────────────────────────────
-
-
 interface SocialFeedProps {
   posts: SocialPost[];
   eyebrow?: string;
@@ -25,59 +14,142 @@ export default function SocialFeed({
   heading = "Follow us on Social Media",
 }: SocialFeedProps) {
   return (
-    <section className="py-12 md:py-32 bg-[var(--color-bg-alt)] border-t border-white/5 overflow-hidden"
+    <section
+      className="social-feed-section"
       aria-label="Follow R Ceramica on Social Media"
     >
-      <div className="max-w-content mx-auto px-[var(--section-px)]">
-        {/* Header */}
-        <div className="flex flex-col items-center text-center mb-16">
-          <span className="text-[9px] uppercase tracking-[0.5em] text-white/30 mb-4 font-medium">
-            {eyebrow}
-          </span>
-          <h2 className="text-xl md:text-2xl font-display font-light text-white uppercase tracking-[0.2em]">
-            {heading}
+      {/* Decorative background */}
+      <div className="social-feed-noise" />
+      <div className="social-feed-glow social-feed-glow-left" />
+      <div className="social-feed-glow social-feed-glow-right" />
+
+      <div className="social-feed-container">
+        {/* ───────────────── HEADER ───────────────── */}
+        <div className="social-feed-header">
+          <div className="social-feed-eyebrow">
+            <span className="social-feed-eyebrow-line" />
+            <span>{eyebrow}</span>
+            <span className="social-feed-eyebrow-line" />
+          </div>
+
+          <h2 className="social-feed-title">
+            <span className="social-feed-title-word">Follow us</span>
+            <span className="social-feed-title-word social-feed-title-muted">
+              on Social Media
+            </span>
           </h2>
+
+          <p className="social-feed-description">
+            A glimpse into our world of refined spaces, timeless surfaces and
+            modern living.
+          </p>
         </div>
 
-        {/* Feed Gallery */}
-        <div
-          className="flex gap-4 md:gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scroll-smooth no-scrollbar"
-          role="list"
-          aria-label="Social media posts"
-        >
-          {posts.map((post) => (
-            <Link
-              key={post.id}
-              href="/explore"
-              role="listitem"
-              aria-label={post.imageAlt}
-              className="min-w-[280px] md:min-w-[320px] aspect-square bg-[var(--color-bg-card)] snap-center relative group/post overflow-hidden rounded-sm border border-white/5 flex-shrink-0 block"
-            >
-              {post.imageSrc.match(/\.(mp4|webm|mov)(\?.*)?$/i) ? (
-                <video
-                  src={post.imageSrc}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="object-cover opacity-60 group-hover/post:opacity-80 transition-all duration-700 group-hover/post:scale-105 w-full h-full"
-                />
-              ) : (
-                <Image
-                  src={post.imageSrc}
-                  alt={post.imageAlt}
-                  fill
-                  sizes="320px"
-                  className="object-cover opacity-60 group-hover/post:opacity-80 transition-all duration-700 group-hover/post:scale-105"
-                />
-              )}
-              <div className="absolute inset-0 bg-black/0 group-hover/post:bg-black/20 transition-all duration-500 flex items-center justify-center">
-                <span className="text-[9px] uppercase tracking-[0.4em] text-white opacity-0 group-hover/post:opacity-100 transition-all duration-500 translate-y-2 group-hover/post:translate-y-0">
-                  View Collection
-                </span>
-              </div>
-            </Link>
-          ))}
+        {/* ───────────────── GALLERY ───────────────── */}
+        <div className="social-feed-gallery-wrapper">
+          {/* Left fade */}
+          <div
+            className="social-feed-edge social-feed-edge-left"
+            aria-hidden="true"
+          />
+
+          {/* Right fade */}
+          <div
+            className="social-feed-edge social-feed-edge-right"
+            aria-hidden="true"
+          />
+
+          <div
+            className="social-feed-gallery"
+            role="list"
+            aria-label="Social media posts"
+          >
+            {posts.map((post, index) => {
+              const isVideo = /\.(mp4|webm|mov)(\?.*)?$/i.test(post.imageSrc);
+
+              return (
+                <Link
+                  key={post.id}
+                  href="/explore"
+                  role="listitem"
+                  aria-label={post.imageAlt}
+                  className={`social-card social-card-${index % 5}`}
+                >
+                  <div className="social-card-media">
+                    {isVideo ? (
+                      <video
+                        src={post.imageSrc}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="social-card-image"
+                      />
+                    ) : (
+                      <Image
+                        src={post.imageSrc}
+                        alt={post.imageAlt}
+                        fill
+                        sizes="(max-width: 640px) 76vw, 320px"
+                        className="social-card-image"
+                      />
+                    )}
+
+                    <div className="social-card-overlay" />
+
+                    <div className="social-card-number">
+                      {String(index + 1).padStart(2, "0")}
+                    </div>
+
+                    <div className="social-card-icon">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M7 17L17 7"
+                          stroke="currentColor"
+                          strokeWidth="1.3"
+                        />
+                        <path
+                          d="M8 7H17V16"
+                          stroke="currentColor"
+                          strokeWidth="1.3"
+                        />
+                      </svg>
+                    </div>
+
+                    <div className="social-card-content">
+                      <span className="social-card-label">R Ceramica</span>
+
+                      <span className="social-card-action">
+                        Explore Collection
+                      </span>
+                    </div>
+
+                    <div className="social-card-line" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ───────────────── BOTTOM ───────────────── */}
+        <div className="social-feed-bottom">
+          <div className="social-feed-scroll">
+            <span className="social-feed-scroll-dot" />
+            <span>Scroll to explore</span>
+          </div>
+
+          <div className="social-feed-platforms">
+            <span>Instagram</span>
+            <span className="social-feed-divider" />
+            <span>Pinterest</span>
+            <span className="social-feed-divider" />
+            <span>Facebook</span>
+          </div>
+
+          <div className="social-feed-progress">
+            <span />
+          </div>
         </div>
       </div>
     </section>
