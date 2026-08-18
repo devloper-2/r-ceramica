@@ -3,7 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState, FormEvent } from "react";
-import { ArrowLeft, Lock, Check, ChevronRight, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  Lock,
+  Check,
+  ChevronRight,
+  ChevronDown,
+  ShieldCheck,
+} from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { getCart, clearCart, cartSubtotal, type CartLine } from "@/lib/services/cart";
 import { payWithRazorpay, type CheckoutResult } from "@/lib/services/checkout";
@@ -16,7 +23,122 @@ function fmt(n: number) {
 
 type Step = 1 | 2 | 3;
 const STEP_LABELS = ["Ship", "Pay", "Confirm"] as const;
+interface CustomSelectProps {
+  label: string;
+  value: string;
+  placeholder: string;
+  options: { label: string; value: string }[];
+  onChange: (value: string) => void;
+  disabled?: boolean;
+}
 
+function CustomSelect({
+  label,
+  value,
+  placeholder,
+  options,
+  onChange,
+  disabled = false,
+}: CustomSelectProps) {
+  const [open, setOpen] = useState(false);
+
+  const selectedOption = options.find(
+    (option) => option.value === value
+  );
+
+  useEffect(() => {
+    if (disabled) {
+      setOpen(false);
+    }
+  }, [disabled]);
+
+  return (
+    <div className="relative">
+      <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">
+        {label}
+      </label>
+
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => setOpen((prev) => !prev)}
+        className={`
+          checkout-input
+          w-full
+          flex
+          items-center
+          justify-between
+          text-left
+          ${disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}
+        `}
+      >
+        <span
+          className={
+            selectedOption ? "text-white" : "text-white/30"
+          }
+        >
+          {selectedOption?.label || placeholder}
+        </span>
+
+        <ChevronDown
+          size={15}
+          className={`text-white/40 transition-transform ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      {open && !disabled && (
+        <>
+          <div
+            className="fixed inset-0 z-[90]"
+            onClick={() => setOpen(false)}
+          />
+
+          <div className="absolute left-0 right-0 top-full mt-2 z-[100] overflow-hidden rounded-xl border border-white/10 bg-[#151515] shadow-2xl">
+            <div className="max-h-64 overflow-y-auto custom-dropdown-scroll">
+              {options.length > 0 ? (
+                options.map((option) => {
+                  const selected = option.value === value;
+
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => {
+                        onChange(option.value);
+                        setOpen(false);
+                      }}
+                      className={`
+                        w-full
+                        px-4
+                        py-3
+                        text-left
+                        text-[11px]
+                        transition-colors
+                        ${
+                          selected
+                            ? "bg-[#c5a059]/15 text-[#c5a059]"
+                            : "text-white/70 hover:bg-white/5 hover:text-white"
+                        }
+                      `}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })
+              ) : (
+                <div className="px-4 py-4 text-[10px] uppercase tracking-widest text-white/30">
+                  No cities available
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 export default function CheckoutPage() {
   const router = useRouter();
   const [step, setStep] = useState<Step>(1);
@@ -212,29 +334,75 @@ export default function CheckoutPage() {
                     <input className="checkout-input" type="text" placeholder="Street, Building, Area" required
                       value={shipping.address} onChange={(e) => setShipping({ ...shipping, address: e.target.value })} />
                   </div>
-                  <div className="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6">
-                    <div>
-                      <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">State</label>
-                      <select className="checkout-input appearance-none bg-black" required
-                        value={shipping.state} onChange={(e) => setShipping({ ...shipping, state: e.target.value, city: "" })}>
-                        <option value="">Select State</option>
-                        {states.map(s => <option key={s.isoCode} value={s.name}>{s.name}</option>)}
-                      </select>
-                    </div>
-                    <div className="col-span-1 md:col-span-1">
-                      <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">City</label>
-                      <select className="checkout-input appearance-none bg-black" required
-                        value={shipping.city} onChange={(e) => setShipping({ ...shipping, city: e.target.value })}>
-                        <option value="">Select City</option>
-                        {cities.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">PIN Code</label>
-                      <input className="checkout-input" type="text" placeholder="363642" required
-                        value={shipping.zip} onChange={(e) => setShipping({ ...shipping, zip: e.target.value })} />
-                    </div>
-                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+
+  {/* STATE */}
+  <CustomSelect
+    label="State"
+    placeholder="Select State"
+    value={shipping.state}
+    options={states.map((state) => ({
+      label: state.name,
+      value: state.name,
+    }))}
+    onChange={(stateName) => {
+      setShipping((prev) => ({
+        ...prev,
+        state: stateName,
+        city: "",
+      }));
+    }}
+  />
+
+  {/* CITY */}
+  <CustomSelect
+    label="City"
+    placeholder={
+      shipping.state ? "Select City" : "Select State First"
+    }
+    value={shipping.city}
+    disabled={!shipping.state}
+    options={cities.map((city) => ({
+      label: city.name,
+      value: city.name,
+    }))}
+    onChange={(cityName) => {
+      setShipping((prev) => ({
+        ...prev,
+        city: cityName,
+      }));
+    }}
+  />
+
+  {/* PIN CODE */}
+  <div>
+    <label className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-2">
+      PIN Code
+    </label>
+
+    <input
+      className="checkout-input w-full"
+      type="text"
+      inputMode="numeric"
+      autoComplete="postal-code"
+      maxLength={6}
+      placeholder="363642"
+      required
+      value={shipping.zip}
+      onChange={(e) => {
+        const value = e.target.value
+          .replace(/\D/g, "")
+          .slice(0, 6);
+
+        setShipping((prev) => ({
+          ...prev,
+          zip: value,
+        }));
+      }}
+    />
+  </div>
+
+</div>
                   <div className="pt-4">
                     <button type="submit"
                       className="w-full bg-white text-black py-5 rounded-full text-[10px] md:text-[11px] font-bold tracking-[0.35em] uppercase hover:bg-neutral-200 transition-all active:scale-[0.98] flex items-center justify-center gap-3">
